@@ -3,109 +3,110 @@ import { PageShell } from "@/components/layout/PageShell";
 export default function MethodsPage() {
   return (
     <PageShell
-      title="Methods & coverage"
-      intro="A high-level overview of how HealthArchive.ca will capture, store, and replay selected public health web content from Canadian federal sources."
+      eyebrow="Methods & coverage"
+      title="How HealthArchive.ca is being built"
+      intro="This page outlines the emerging approach for capturing, preserving, and replaying public health web content. It reflects an early-stage design and will be expanded as the infrastructure matures."
     >
-      <div className="grid gap-6 md:grid-cols-2">
-        <section className="ha-card ha-section">
-          <h2 className="ha-section-heading">Capture</h2>
-          <div className="ha-section-body">
-            <p>
-              The project will use browser-based crawlers to snapshot selected areas of
-              federal public health websites. Initial focus will be on sources such as the
-              Public Health Agency of Canada and Health Canada, with a priority on pages
-              that:
-            </p>
-            <ul className="ha-list-disc">
-              <li>Provide clinical or public-facing guidance.</li>
-              <li>
-                Contain data tables, dashboards, or regular epidemiological updates.
-              </li>
-              <li>
-                Summarize policies, directives, or surveillance findings that are likely
-                to change over time.
-              </li>
-            </ul>
-            <p>
-              Capture frequency and scope will be tuned to the stability and importance of
-              each resource.
-            </p>
-          </div>
-        </section>
+      <section className="space-y-3">
+        <h2 className="ha-section-heading">Scope of the archive (early phase)</h2>
+        <p className="text-sm leading-relaxed text-ha-muted">
+          The initial focus is on federal Canadian public health sites whose
+          content directly underpins clinical guidance, surveillance, or
+          high-impact public communication. Examples include:
+        </p>
+        <ul className="list-disc pl-5 text-sm text-ha-muted">
+          <li>
+            Public Health Agency of Canada (e.g., disease pages, surveillance
+            reports, immunization guidance).
+          </li>
+          <li>
+            Health Canada (e.g., vaccine and drug pages, environmental and
+            product safety information).
+          </li>
+        </ul>
+        <p className="text-sm leading-relaxed text-ha-muted">
+          Future iterations may consider provincial/territorial sources or
+          selected international comparators where appropriate, but the backbone
+          will remain Canadian public health information.
+        </p>
+      </section>
 
-        <section className="ha-card ha-section">
-          <h2 className="ha-section-heading">Preserve & replay</h2>
-          <div className="ha-section-body">
-            <p>
-              Captures will be stored in standard web archive formats suitable for
-              long-term preservation. A replay service will present archived pages with:
-            </p>
-            <ul className="ha-list-disc">
-              <li>Clear capture timestamps.</li>
-              <li>Original URLs and source agency.</li>
-              <li>
-                Prominent labelling that content may be outdated, incomplete, or
-                superseded.
-              </li>
-            </ul>
-            <p>
-              Where interactive dashboards or embedded visualizations cannot be fully
-              replayed, this will be explicitly noted.
-            </p>
-          </div>
-        </section>
+      <section className="space-y-3">
+        <h2 className="ha-section-heading">Capture methods</h2>
+        <p className="text-sm leading-relaxed text-ha-muted">
+          The live system is intended to use browser-based crawlers and
+          standards-based web archive formats. Conceptually, each capture works
+          as follows:
+        </p>
+        <ol className="list-decimal pl-5 text-sm text-ha-muted">
+          <li>
+            Seed URLs are defined for each target domain and path, including
+            rules about what to include or exclude.
+          </li>
+          <li>
+            A browser-based crawler (for example, one compatible with WARC
+            output) visits each page, executing JavaScript and recording
+            responses.
+          </li>
+          <li>
+            Responses are stored in archive files alongside metadata such as
+            capture time, HTTP status, and content type.
+          </li>
+        </ol>
+        <p className="text-sm leading-relaxed text-ha-muted">
+          For the demo, this is simulated with a small hand-curated dataset and
+          static HTML snapshots served from the <code>public/demo-archive</code>{" "}
+          directory.
+        </p>
+      </section>
 
-        <section className="ha-card ha-section">
-          <h2 className="ha-section-heading">Scope & coverage</h2>
-          <div className="ha-section-body">
-            <p>
-              Early phases will focus on a defined set of domains and paths. Coverage
-              notes will describe:
-            </p>
-            <ul className="ha-list-disc">
-              <li>Which domains and sections are in scope.</li>
-              <li>Known gaps (for example, missing file types or paths).</li>
-              <li>
-                Approximate capture windows and frequencies for major content areas.
-              </li>
-            </ul>
-            <p>
-              These notes are important so users can correctly interpret what the presence
-              or absence of a given page in the archive actually means.
-            </p>
-          </div>
-        </section>
+      <section className="space-y-3">
+        <h2 className="ha-section-heading">Storage & replay</h2>
+        <p className="text-sm leading-relaxed text-ha-muted">
+          In a full deployment, the archive would rely on dedicated storage for
+          WARC files and a replay engine such as pywb to render historical
+          snapshots in a browser. The goals for replay are:
+        </p>
+        <ul className="list-disc pl-5 text-sm text-ha-muted">
+          <li>Preserve the original URL structure where possible.</li>
+          <li>
+            Clearly label capture timestamps and make it obvious that the view
+            is archival, not live.
+          </li>
+          <li>
+            Maintain interactive elements (e.g., dashboards) as faithfully as
+            technical constraints allow.
+          </li>
+        </ul>
+        <p className="text-sm leading-relaxed text-ha-muted">
+          The demo interface is intentionally conservative: it shows that
+          snapshot-based replay is possible while acknowledging that the
+          underlying infrastructure is still being built.
+        </p>
+      </section>
 
-        <section className="ha-card ha-section">
-          <h2 className="ha-section-heading">Limitations</h2>
-          <div className="ha-section-body">
-            <p>
-              Even with careful tooling, web archives have intrinsic limitations. Some of
-              the key ones for HealthArchive.ca will include:
-            </p>
-            <ul className="ha-list-disc">
-              <li>
-                <strong>Incomplete captures:</strong> Certain embedded resources,
-                third-party scripts, or media may not be archived or may not replay as
-                originally seen.
-              </li>
-              <li>
-                <strong>Sampling effects:</strong> Not every page change can be captured.
-                A snapshot only shows the state of a page at specific times.
-              </li>
-              <li>
-                <strong>Non-authoritative copies:</strong> Archived copies are for
-                reference; the authoritative source remains the original agency.
-              </li>
-            </ul>
-            <p className="ha-muted">
-              Detailed technical documentation—covering crawling configuration, formats,
-              and replay behaviour—will be published as the archive moves from prototype
-              to production.
-            </p>
-          </div>
-        </section>
-      </div>
+      <section className="ha-callout">
+        <h3 className="ha-callout-title">Limitations and interpretation</h3>
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed sm:text-sm">
+          <li>
+            <strong>Not official guidance:</strong> Archived content reflects
+            what public sites showed at the time of capture. It may be
+            incomplete, outdated, or superseded, and should not be treated as
+            current clinical guidance.
+          </li>
+          <li>
+            <strong>Sampling and coverage:</strong> Early phases focus on
+            specific high-value domains and paths. Coverage gaps and known
+            limitations will be documented so that “absence” of an archived page
+            is not misinterpreted.
+          </li>
+          <li>
+            <strong>Technical artefacts:</strong> Some interactive dashboards,
+            embedded visualizations, or third-party assets may not replay
+            perfectly because of JavaScript, API, or hosting constraints.
+          </li>
+        </ul>
+      </section>
     </PageShell>
   );
 }
