@@ -1,21 +1,32 @@
 export function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="mt-8 border-t border-slate-200 bg-slate-50">
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-5 text-xs text-slate-500 sm:px-6 sm:py-6 sm:text-[0.8rem] lg:px-8">
+    <footer className="border-t border-slate-200 bg-white/70">
+      <div className="ha-container space-y-3 py-6 text-xs text-ha-muted sm:flex sm:flex-col">
         <p className="leading-relaxed">
-          <span className="font-semibold text-slate-600">Disclaimer:</span>{" "}
-          HealthArchive.ca is an independent project and is not affiliated with,
-          endorsed by, or associated with the Public Health Agency of Canada,
-          Health Canada, or any other government agency. Archived content is
-          provided for reference and research purposes only and may be
-          incomplete, outdated, or superseded. Nothing on this site should be
+          <strong className="font-semibold text-slate-800">
+            Disclaimer:
+          </strong>{" "}
+          HealthArchive.ca is an independent project and is not affiliated
+          with, endorsed by, or associated with the Public Health Agency of
+          Canada, Health Canada, or any other government agency. Archived
+          content is provided for reference and research purposes only and may
+          be incomplete, outdated, or superseded. Nothing on this site should be
           interpreted as medical advice.
         </p>
-
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <p>© 2025 HealthArchive.ca Project.</p>
-          <p className="text-slate-400">
-            Not an official government website.
+        <div className="flex flex-col gap-1 text-[11px] text-ha-muted sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {year} HealthArchive.ca Project.{" "}
+            <span className="font-medium text-slate-800">
+              Not an official government website.
+            </span>
+          </p>
+          <p className="text-[11px]">
+            This site is in an{" "}
+            <span className="font-medium text-amber-800">early demo phase</span>
+            . Coverage, data, and functionality are incomplete and subject to
+            change.
           </p>
         </div>
       </div>

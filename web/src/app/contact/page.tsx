@@ -1,43 +1,60 @@
+import Link from "next/link";
 import { PageShell } from "@/components/layout/PageShell";
 
 export default function ContactPage() {
   return (
     <PageShell
-      title="Contact & follow"
-      intro="If you are interested in following HealthArchive.ca or exploring potential collaborations, this page will provide simple ways to stay connected."
+      eyebrow="Contact & follow"
+      title="Staying in touch with the project"
+      intro="HealthArchive.ca is currently a volunteer-led effort in an early demo phase. If you are interested in following the work or exploring collaboration, the options below are a starting point."
     >
-      <div className="grid gap-6 md:grid-cols-2 text-sm text-slate-600">
-        <section className="ha-card ha-section">
-          <h2 className="ha-section-heading">Project updates</h2>
-          <div className="ha-section-body">
-            <p>
-              As the archive infrastructure matures, public updates and technical notes
-              will be shared via the project repositories and this website. Links to
-              specific channels (for example, a project blog or mailing list) will be
-              added here once they are established.
-            </p>
-          </div>
-        </section>
+      <section className="ha-grid-2">
+        <div className="ha-card p-4 sm:p-5">
+          <h2 className="text-sm font-semibold text-slate-900">
+            Email (placeholder)
+          </h2>
+          <p className="mt-2 text-sm text-ha-muted">
+            For now, the simplest way to express interest or ask questions is by
+            email.
+          </p>
+          <p className="mt-3 text-sm">
+            <a
+              href="mailto:contact@healtharchive.ca"
+              className="font-medium text-ha-accent hover:text-blue-700"
+            >
+              contact@healtharchive.ca
+            </a>
+          </p>
+          <p className="mt-2 text-xs text-ha-muted">
+            Please note that this address may change as the project&apos;s
+            governance and infrastructure evolve.
+          </p>
+        </div>
 
-        <section className="ha-card ha-section">
-          <h2 className="ha-section-heading">Email</h2>
-          <div className="ha-section-body">
-            <p>
-              A dedicated project email address (for example,
-              <span className="font-mono text-xs text-slate-700">
-                {" "}
-                contact@healtharchive.ca
-              </span>
-              ) will be published here once the initial infrastructure and governance are
-              in place.
-            </p>
-            <p className="ha-muted">
-              For now, this page serves as a placeholder so layout and navigation can be
-              finalized without implying a live support channel.
-            </p>
-          </div>
-        </section>
-      </div>
+        <div className="ha-card p-4 sm:p-5">
+          <h2 className="text-sm font-semibold text-slate-900">
+            GitHub repository
+          </h2>
+          <p className="mt-2 text-sm text-ha-muted">
+            The frontend you are viewing is open source. If you&apos;re
+            comfortable with GitHub, you can watch the repository to follow
+            changes.
+          </p>
+          <p className="mt-3 text-sm">
+            <Link
+              href="https://github.com/jerdaw/healtharchive-frontend"
+              className="font-medium text-ha-accent hover:text-blue-700"
+            >
+              github.com/jerdaw/healtharchive-frontend
+            </Link>
+          </p>
+          <p className="mt-2 text-xs text-ha-muted">
+            Contributions are welcome, particularly from people with experience
+            in web archiving, public health, or accessible interface design.
+            Please open an issue first to discuss substantial changes.
+          </p>
+        </div>
+      </section>
     </PageShell>
   );
 }

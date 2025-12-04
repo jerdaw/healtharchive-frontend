@@ -1,119 +1,442 @@
 @import "tailwindcss";
 
-/* Base typography + page chrome */
-@layer base {
-  :root {
-    color-scheme: light;
-  }
+/*
+  Global styles for HealthArchive.ca
+  - Tailwind is available via @import "tailwindcss"
+  - The .ha-* classes below are plain CSS (no @apply),
+    adapted from your original static styles.css and the new design.
+*/
 
-  body {
-    @apply min-h-screen bg-slate-50 text-slate-900 antialiased;
-  }
+/* Design tokens via CSS variables */
+:root {
+  --page-bg: #f3f4f6;
+  --card-bg: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+}
 
-  a {
-    @apply text-sky-700 underline-offset-2 hover:text-sky-900 hover:underline;
-  }
+/* Basic reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-semibold tracking-tight text-slate-900;
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
 
-  p {
-    @apply text-sm leading-relaxed text-slate-700 sm:text-base;
+/* Base body styles */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--page-bg);
+  color: var(--text);
+}
+
+/* Utility used by the Next starter */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Links */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ====================================
+   Layout container & page chrome
+   ==================================== */
+
+/* Shared width constraint used in header, pages, footer */
+.ha-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-inline: 1.25rem;
+}
+
+/* Eyebrow label above page titles / sections */
+.ha-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Section headings & subtitles */
+.ha-section-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ha-section-subtitle {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+/* ====================================
+   Header & navigation (legacy, mostly unused)
+   ==================================== */
+
+.ha-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(10px);
+  background-color: rgba(243, 244, 246, 0.95);
+  border-bottom: 1px solid var(--border);
+}
+
+.ha-header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.ha-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ha-logo-icon {
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+.ha-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ha-logo-main {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.ha-logo-sub {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.ha-nav {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.ha-nav a {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.ha-nav a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* active link helper class (legacy) */
+.ha-nav-link-active {
+  color: var(--accent);
+}
+
+/* ====================================
+   Hero & main layout (legacy helpers)
+   ==================================== */
+
+.ha-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3rem;
+}
+
+.ha-page-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+.ha-hero {
+  padding: 2rem 0 2.5rem;
+}
+
+.ha-hero-inner {
+  max-width: 720px;
+}
+
+.ha-hero h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+.ha-hero p {
+  margin: 0.35rem 0;
+  font-size: 1rem;
+}
+
+.ha-hero-status {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.ha-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+/* ====================================
+   Buttons
+   ==================================== */
+
+/* New button classes used in React components */
+.ha-btn-primary,
+.ha-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.35rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ha-btn-primary {
+  background-color: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+}
+
+.ha-btn-primary:hover {
+  background-color: var(--accent-hover);
+  text-decoration: none;
+}
+
+.ha-btn-secondary {
+  background-color: #ffffff;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.ha-btn-secondary:hover {
+  background-color: #f9fafb;
+  text-decoration: none;
+}
+
+/* Legacy button names kept for safety */
+.ha-button-primary {
+  composes: ha-btn-primary;
+}
+
+.ha-button-secondary {
+  composes: ha-btn-secondary;
+}
+
+/* ====================================
+   Sections & text
+   ==================================== */
+
+.ha-section {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.ha-section p {
+  margin: 0.35rem 0;
+  font-size: 0.98rem;
+}
+
+.ha-list {
+  margin: 0.5rem 0 0.5rem 1.25rem;
+  padding: 0;
+  font-size: 0.98rem;
+}
+
+.ha-list li {
+  margin: 0.25rem 0;
+}
+
+.ha-muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ====================================
+   Cards & badges
+   ==================================== */
+
+.ha-card {
+  background-color: var(--card-bg);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 1rem 1.25rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+}
+
+.ha-card-elevated {
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
+.ha-card-title {
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.ha-card-meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+
+.ha-card-body {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Simple tag/pill style for topics, statuses, etc. */
+.ha-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.78rem;
+  background-color: #e5edff;
+  color: #1d4ed8;
+  margin-right: 0.35rem;
+}
+
+/* New badge style used in archive & home */
+.ha-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  background-color: #e5edff;
+  color: #1d4ed8;
+}
+
+.ha-badge-amber {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* ====================================
+   Callout panels
+   ==================================== */
+
+.ha-callout {
+  border-radius: 0.75rem;
+  border: 1px solid #e0e7ff;
+  background-color: #f5f7ff;
+  padding: 1rem 1.25rem;
+}
+
+.ha-callout-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ====================================
+   Simple grid helpers
+   ==================================== */
+
+.ha-grid-2 {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.ha-grid-3 {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .ha-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ha-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@layer components {
-  /* Overall page shell */
-  .ha-page-shell {
-    @apply flex min-h-screen flex-col bg-slate-50 text-slate-900;
-  }
+/* ====================================
+   Footer
+   ==================================== */
 
-  /* Generic centered content width */
-  .ha-container {
-    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
-  }
-
-  /* Standard page wrapper for primary content pages */
-  .ha-page {
-    @apply mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8;
-  }
-
-  .ha-page-header {
-    @apply mb-6;
-  }
-
-  .ha-page-title {
-    @apply text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl;
-  }
-
-  .ha-page-intro {
-    @apply mt-2 max-w-2xl text-sm text-slate-600 sm:text-base;
-  }
-
-  /* Cards & sections */
-  .ha-card {
-    @apply rounded-xl border border-slate-200 bg-white/95 p-4 shadow-sm sm:p-5;
-  }
-
-  .ha-card-title {
-    @apply text-sm font-semibold text-slate-900;
-  }
-
-  .ha-card-body {
-    @apply mt-1 text-sm leading-relaxed text-slate-600;
-  }
-
-  .ha-section {
-    @apply space-y-2;
-  }
-
-  .ha-section-heading {
-    @apply text-base font-semibold text-slate-900;
-  }
-
-  .ha-section-body {
-    @apply space-y-2 text-sm text-slate-700 sm:text-[0.95rem];
-  }
-
-  .ha-list-disc {
-    @apply list-disc space-y-1 pl-5 text-sm text-slate-700 sm:text-[0.95rem];
-  }
+.ha-footer {
+  border-top: 1px solid var(--border);
+  background-color: #f9fafb;
 }
 
-/* Small utility helpers specific to HealthArchive */
-@layer utilities {
-  .ha-badge {
-    @apply inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-xs font-medium text-sky-800 ring-1 ring-sky-100;
+.ha-footer-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 2rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.ha-footer-disclaimer {
+  margin: 0 0 0.75rem;
+}
+
+.ha-footer-meta {
+  margin: 0;
+}
+
+/* ====================================
+   Responsive tweaks
+   ==================================== */
+
+@media (max-width: 640px) {
+  .ha-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 
-  .ha-pill-muted {
-    @apply inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 ring-1 ring-slate-200;
+  .ha-nav {
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
-  .ha-muted {
-    @apply text-xs text-slate-500 sm:text-sm;
+  .ha-hero h1 {
+    font-size: 1.7rem;
   }
 
-  .ha-prose {
-    @apply space-y-3 text-sm leading-relaxed text-slate-700 sm:text-[0.95rem];
-  }
-
-  .ha-prose h2 {
-    @apply mt-4 text-lg font-semibold text-slate-900;
-  }
-
-  .ha-prose ul {
-    @apply list-disc space-y-1 pl-5;
-  }
-
-  .ha-prose strong {
-    @apply font-semibold text-slate-900;
+  .ha-main {
+    padding-inline: 1.25rem;
   }
 }
 
