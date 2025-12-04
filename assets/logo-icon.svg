@@ -1,0 +1,14 @@
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="ha-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="32" height="32" rx="8" fill="url(#ha-grad)"/>
+  <path d="M14 12h10l4 4v12c0 1.1-.9 2-2 2H14a2 2 0 0 1-2-2V14c0-1.1.9-2 2-2z" fill="white" fill-opacity="0.95"/>
+  <path d="M24 12v4h4" fill="#E5F0FF"/>
+  <path d="M20 17.5c.55 0 1 .45 1 1v2.5h2.5a1 1 0 1 1 0 2H21v2.5a1 1 0 1 1-2 0V23h-2.5a1 1 0 1 1 0-2H19v-2.5c0-.55.45-1 1-1z"
+        fill="#2563EB"/>
+</svg>
+
