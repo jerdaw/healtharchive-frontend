@@ -102,6 +102,18 @@ a:hover {
   padding: 2.5rem 1.5rem 3rem;
 }
 
+/* Interior pages (search, browse, etc.) */
+.ha-main--page {
+  padding-top: 2rem;
+}
+
+.ha-main--page .ha-section {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 1.5rem;
+}
+
+/* Landing hero */
 .ha-hero {
   padding: 2rem 0 2.5rem;
 }
@@ -132,6 +144,21 @@ a:hover {
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 1.25rem;
+}
+
+/* Page headers (search/browse/etc.) */
+.ha-page-header {
+  margin-bottom: 1.25rem;
+}
+
+.ha-page-header h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.7rem;
+}
+
+.ha-page-header p {
+  margin: 0;
+  font-size: 0.97rem;
 }
 
 /* Search form (hero + search page) */
@@ -165,7 +192,7 @@ a:hover {
 }
 
 .ha-search-hint {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 /* Buttons */
@@ -206,7 +233,7 @@ a:hover {
 }
 
 .ha-button-compact {
-  padding: 0.45rem 1.0rem;
+  padding: 0.45rem 1rem;
   font-size: 0.9rem;
 }
 
@@ -242,6 +269,15 @@ a:hover {
   font-size: 0.9rem;
 }
 
+/* Little inline code chip (for query suggestions) */
+.ha-inline-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.85em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
+  background-color: #e5e7eb;
+}
+
 /* Search results */
 .ha-search-results {
   margin-top: 1.5rem;
@@ -253,7 +289,7 @@ a:hover {
 .ha-result-card {
   background-color: var(--card-bg);
   border-radius: 0.75rem;
-  padding: 1.0rem 1.25rem;
+  padding: 1rem 1.25rem;
   border: 1px solid var(--border);
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
 }
@@ -411,6 +447,10 @@ a:hover {
 
   .ha-search-input {
     width: 100%;
+  }
+
+  .ha-page-header h1 {
+    font-size: 1.5rem;
   }
 }
 

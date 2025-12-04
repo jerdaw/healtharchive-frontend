@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Search results – HealthArchive.ca</title>
+  <title>Search demo archive – HealthArchive.ca</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles.css">
   <script defer src="search.js"></script>
@@ -27,9 +27,16 @@
     </div>
   </header>
 
-  <main class="ha-main">
+  <main class="ha-main ha-main--page">
     <section class="ha-section">
-      <h1>Search results</h1>
+      <div class="ha-page-header">
+        <h1>Search demo archive</h1>
+        <p class="ha-muted">
+          This is a demo search experience backed by a small placeholder dataset that simulates archived pages
+          from Canadian public health websites.
+        </p>
+      </div>
+
       <form class="ha-search-form" id="search-form" action="search.html" method="get">
         <input
           id="search-input"
@@ -41,9 +48,12 @@
         >
         <button class="ha-button-primary" type="submit">Search</button>
       </form>
+
       <p class="ha-muted ha-search-hint">
-        This search uses a small demo dataset that simulates archived pages from Canadian public health websites.
+        Try terms like <span class="ha-inline-code">COVID</span>, <span class="ha-inline-code">influenza</span>,
+        <span class="ha-inline-code">HIV</span>, or <span class="ha-inline-code">food</span>.
       </p>
+
       <p class="ha-muted" id="search-meta"></p>
       <div id="search-results" class="ha-search-results"></div>
     </section>

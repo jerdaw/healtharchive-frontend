@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Browse sources – HealthArchive.ca</title>
+  <title>Browse by source – HealthArchive.ca</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles.css">
   <script defer src="browse.js"></script>
@@ -27,13 +27,16 @@
     </div>
   </header>
 
-  <main class="ha-main">
+  <main class="ha-main ha-main--page">
     <section class="ha-section">
-      <h1>Browse by source (demo)</h1>
-      <p class="ha-muted">
-        This view is built on placeholder data to demonstrate how browsing by source will work. In the full system,
-        you’ll be able to browse archived pages by agency, topic, and time period.
-      </p>
+      <div class="ha-page-header">
+        <h1>Browse by source (demo)</h1>
+        <p class="ha-muted">
+          This page lists sources represented in the demo dataset, such as PHAC and Health Canada. In the full
+          system, you’ll be able to browse archived pages by agency, topic, and time period.
+        </p>
+      </div>
+
       <div id="source-cards" class="ha-source-grid"></div>
     </section>
   </main>
