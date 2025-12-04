@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Search results – HealthArchive.ca</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="search.js"></script>
+</head>
+<body>
+  <header class="ha-header">
+    <div class="ha-header-inner">
+      <a href="index.html" class="ha-logo" aria-label="HealthArchive.ca">
+        <img src="assets/logo-icon.svg" alt="" class="ha-logo-icon">
+        <span class="ha-logo-text">
+          <span class="ha-logo-main">HealthArchive.ca</span>
+          <span class="ha-logo-sub">Independent archive of Canadian public health information</span>
+        </span>
+      </a>
+      <nav class="ha-nav">
+        <a href="index.html#about">About</a>
+        <a href="browse.html">Browse</a>
+        <a href="search.html">Search</a>
+        <a href="index.html#methods">Methods</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="ha-main">
+    <section class="ha-section">
+      <h1>Search results</h1>
+      <form class="ha-search-form" id="search-form" action="search.html" method="get">
+        <input
+          id="search-input"
+          name="q"
+          type="search"
+          placeholder="Search demo archived public health content..."
+          class="ha-search-input"
+          aria-label="Search demo archived public health content"
+        >
+        <button class="ha-button-primary" type="submit">Search</button>
+      </form>
+      <p class="ha-muted ha-search-hint">
+        This search uses a small demo dataset that simulates archived pages from Canadian public health websites.
+      </p>
+      <p class="ha-muted" id="search-meta"></p>
+      <div id="search-results" class="ha-search-results"></div>
+    </section>
+  </main>
+
+  <footer class="ha-footer">
+    <div class="ha-footer-inner">
+      <p class="ha-footer-disclaimer">
+        <strong>Disclaimer:</strong> HealthArchive.ca is an independent project and is not affiliated with,
+        endorsed by, or associated with any government agency. Archived content is provided for reference and
+        research purposes only and may be incomplete, outdated, or superseded. Nothing on this site should be
+        interpreted as medical advice.
+      </p>
+      <p class="ha-footer-meta">
+        © 2025 HealthArchive.ca Project · Not an official government website.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
+

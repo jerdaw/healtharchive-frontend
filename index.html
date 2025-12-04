@@ -10,8 +10,7 @@
 <body>
   <header class="ha-header">
     <div class="ha-header-inner">
-      <a href="/" class="ha-logo" aria-label="HealthArchive.ca">
-        <!-- Logo SVG will be referenced here later -->
+      <a href="index.html" class="ha-logo" aria-label="HealthArchive.ca">
         <img src="assets/logo-icon.svg" alt="" class="ha-logo-icon">
         <span class="ha-logo-text">
           <span class="ha-logo-main">HealthArchive.ca</span>
@@ -19,10 +18,11 @@
         </span>
       </a>
       <nav class="ha-nav">
-        <a href="#about">About</a>
-        <a href="#methods">Methods</a>
-        <a href="#status">Status</a>
-        <a href="#contact">Contact</a>
+        <a href="index.html#about">About</a>
+        <a href="browse.html">Browse</a>
+        <a href="search.html">Search</a>
+        <a href="index.html#methods">Methods</a>
+        <a href="index.html#contact">Contact</a>
       </nav>
     </div>
   </header>
@@ -39,8 +39,23 @@
         <p class="ha-hero-status">
           <strong>Project status:</strong> Early development – archive infrastructure is currently being built.
         </p>
+
+        <form class="ha-search-form" action="search.html" method="get">
+          <input
+            class="ha-search-input"
+            type="search"
+            name="q"
+            placeholder="Search demo archived public health content..."
+            aria-label="Search demo archived public health content"
+          >
+          <button class="ha-button-primary" type="submit">Search demo archive</button>
+        </form>
+        <p class="ha-hero-note ha-muted">
+          Search currently uses a small demo dataset while the full archive is being developed.
+        </p>
+
         <div class="ha-hero-actions">
-          <a href="#about" class="ha-button-primary">Learn more</a>
+          <a href="#about" class="ha-button-secondary">Learn more</a>
           <a href="#contact" class="ha-button-secondary">Follow the project</a>
         </div>
       </div>
@@ -63,7 +78,7 @@
     <section class="ha-section" id="methods">
       <h2>How this will work</h2>
       <ul class="ha-list">
-        <li><strong>Capture:</strong> We use browser-based crawlers to archive public-facing pages on Canadian public health websites.</li>
+        <li><strong>Capture:</strong> Browser-based crawlers archive public-facing pages on Canadian public health websites.</li>
         <li><strong>Preserve:</strong> Archived content is stored in standard web archive formats designed for long-term preservation.</li>
         <li><strong>Replay:</strong> An archive explorer will allow users to search and view past versions of pages, with clear timestamps and source information.</li>
       </ul>
@@ -83,7 +98,7 @@
         <li>Publishing transparent documentation of methods, scope, and limitations.</li>
       </ul>
       <p class="ha-muted">
-        This landing page is a preview of the project. The public archive explorer will be released once core infrastructure is stable.
+        This landing page and demo search experience are previews of the project. The public archive explorer will be released once core infrastructure is stable.
       </p>
     </section>
 
@@ -93,7 +108,7 @@
         If you are interested in following the project or exploring potential collaboration, you can:
       </p>
       <ul class="ha-list">
-        <li>Watch the project code on GitHub (link to be added).</li>
+        <li>Watch the project code on GitHub (repository links to be published).</li>
         <li>Reach out via email: <a href="mailto:contact@healtharchive.ca">contact@healtharchive.ca</a> (placeholder).</li>
       </ul>
     </section>
