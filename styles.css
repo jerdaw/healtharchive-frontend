@@ -134,6 +134,41 @@ a:hover {
   margin-top: 1.25rem;
 }
 
+/* Search form (hero + search page) */
+.ha-search-form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.ha-search-input {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+  background-color: #ffffff;
+}
+
+.ha-search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2);
+}
+
+.ha-hero-note {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.ha-search-hint {
+  margin-top: 0.5rem;
+}
+
+/* Buttons */
 .ha-button-primary,
 .ha-button-secondary {
   display: inline-flex;
@@ -170,6 +205,12 @@ a:hover {
   text-decoration: none;
 }
 
+.ha-button-compact {
+  padding: 0.45rem 1.0rem;
+  font-size: 0.9rem;
+}
+
+/* Sections */
 .ha-section {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
@@ -201,6 +242,129 @@ a:hover {
   font-size: 0.9rem;
 }
 
+/* Search results */
+.ha-search-results {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ha-result-card {
+  background-color: var(--card-bg);
+  border-radius: 0.75rem;
+  padding: 1.0rem 1.25rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+}
+
+.ha-result-title {
+  display: inline-block;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--accent);
+}
+
+.ha-result-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.ha-result-snippet {
+  margin: 0.5rem 0 0.35rem;
+  font-size: 0.95rem;
+}
+
+.ha-result-url {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #4b5563;
+  word-break: break-all;
+}
+
+.ha-result-tags {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.ha-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid var(--border);
+  background-color: #f9fafb;
+  color: #4b5563;
+}
+
+/* Browse sources */
+.ha-source-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.ha-source-card {
+  background-color: var(--card-bg);
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+}
+
+.ha-source-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.ha-source-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.ha-source-topics {
+  margin: 0.6rem 0 0.4rem;
+  font-size: 0.9rem;
+}
+
+.ha-source-actions {
+  margin-top: 0.6rem;
+}
+
+/* Demo archive pages */
+.ha-archive-demo {
+  background-color: #ffffff;
+}
+
+.ha-archive-header {
+  background-color: #eff6ff;
+  border-bottom: 1px solid #dbeafe;
+  padding: 1rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.ha-archive-header a {
+  color: #1d4ed8;
+}
+
+.ha-archive-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+}
+
+.ha-archive-main h1 {
+  margin-top: 0;
+  font-size: 1.7rem;
+}
+
 /* Footer */
 .ha-footer {
   border-top: 1px solid var(--border);
@@ -223,6 +387,7 @@ a:hover {
   margin: 0;
 }
 
+/* Responsive */
 @media (max-width: 640px) {
   .ha-header-inner {
     flex-direction: column;
@@ -237,6 +402,15 @@ a:hover {
 
   .ha-hero h1 {
     font-size: 1.7rem;
+  }
+
+  .ha-search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ha-search-input {
+    width: 100%;
   }
 }
 
