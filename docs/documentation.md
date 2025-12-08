@@ -185,9 +185,12 @@ Tailwind is mainly used for:
 `src/app/globals.css`:
 
 * Imports Tailwind via `@import "tailwindcss";`.
-* Defines design tokens as CSS variables on `:root`:
+* Defines design tokens as CSS variables on `:root` (light theme) and overrides them under `html[data-theme="dark"]`:
 
-  * `--page-bg`, `--card-bg`, `--border`, `--text`, `--muted`, `--accent`, `--accent-hover`, `--brand`, `--brand-subtle`, `--font-sans`.
+  * Core tokens: `--page-bg`, `--card-bg`, `--surface-bg`, `--surface-bg-soft`, `--border`, `--text`, `--muted`.
+  * Brand tokens: `--accent`, `--accent-hover`, `--brand`, `--brand-subtle`.
+  * Callout tokens: `--callout-bg`, `--callout-border`.
+  * Typography: `--font-sans`.
 * Base reset & `body` styling (background, font family).
 * Global link styles.
 
@@ -214,6 +217,28 @@ Then defines a small **design system** with `.ha-*` classes:
 
   * `.ha-footer`, `.ha-footer-inner`, `.ha-footer-disclaimer`, `.ha-footer-meta`.
 * Responsive tweaks for small viewports, especially header, nav, and hero.
+
+### 5.3 Color modes & theme toggle
+
+Color theming is handled via CSS variables and a `data-theme` attribute on `<html>`:
+
+* Light theme (default) is defined on `:root`.
+* Dark theme overrides live under `html[data-theme="dark"]` and are derived from a Dark Reader–style palette (soft near-black backgrounds, high-contrast text, tuned accents).
+* The theme switch:
+
+  * On first load, an inline script in `layout.tsx`:
+
+    * Reads `localStorage["ha-theme"]` (if present).
+    * Falls back to `window.matchMedia("(prefers-color-scheme: dark)")`.
+    * Sets `document.documentElement.dataset.theme = "light" | "dark"` **before** React hydrates to avoid mismatches.
+  * The header theme toggle updates:
+
+    * `document.documentElement.dataset.theme`.
+    * `localStorage["ha-theme"]`.
+
+* Most components consume theme-aware tokens via `.ha-*` classes rather than hard-coded colors, so light/dark adjustments flow through the entire UI.
+
+There are also Tailwind overrides scoped under `html[data-theme="dark"]` (e.g., `.bg-white`, `.border-slate-200`, `.text-slate-*`) so existing Tailwind utility classes remain readable in dark mode.
 
 Accessibility-related helpers:
 
@@ -274,7 +299,7 @@ Key features:
 * Logo block with:
 
   * `next/image`-rendered logo (`/public/healtharchive-logo.webp`).
-  * Project title “HealthArchive.ca” in a brand blue (`#11588f`).
+  * Project title “HealthArchive.ca” in a brand blue (`#11588f`), which gently scales down as the header condenses on scroll.
   * Subtitle “Independent archive of Canadian public health information”.
 * “Early demo” pill next to logo on desktop.
 * Desktop nav: `Home`, `Browse`, `Methods`, `Researchers`, `About`, `Contact`.
@@ -287,10 +312,20 @@ Key features:
   * Compact button that toggles between hamburger and X icon.
   * `aria-expanded`, `aria-controls`, and `aria-label` updated based on open state.
   * When open, a vertical nav list, using the same active styling and closing the menu on click.
-* Mobile nav:
+* Theme toggle:
 
-  * Compact button that toggles between hamburger and X icon.
-  * When open, a vertical nav list, using the same active styling and closing the menu on click.
+  * Small, icon-only slider control (sun/moon) in the header.
+  * Tapping/clicking toggles between light and dark themes and persists the choice in `localStorage`.
+
+* Scroll-aware behavior:
+
+  * Header is fixed to the top of the viewport.
+  * As the user scrolls down, a `--ha-header-shrink` CSS variable (0 → 1) drives:
+
+    * Reduced vertical padding on the header shell.
+    * A smaller logo and title.
+    * The subtitle smoothly fading out and collapsing so the compact header takes up less vertical space.
+  * The header background uses a translucent token (`--surface-bg-soft`) plus `backdrop-filter: blur(...)` so page content behind the header is subtly blurred while still visible.
 
 ### 6.3 `<Footer />`: `src/components/layout/Footer.tsx`
 
