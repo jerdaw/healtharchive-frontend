@@ -112,6 +112,10 @@ export default async function SnapshotPage({
           <div className="border-b border-ha-border px-4 py-3 text-xs text-ha-muted sm:px-5">
             <span className="font-medium text-slate-900">Archived content</span>{" "}
             · served from <code>{record.snapshotPath}</code> for this demo.
+            <span className="sr-only">
+              {" "}
+              The following section is an embedded snapshot of the archived page.
+            </span>
           </div>
           <div className="flex-1">
             <iframe
@@ -125,4 +129,3 @@ export default async function SnapshotPage({
     </PageShell>
   );
 }
-
