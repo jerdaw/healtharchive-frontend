@@ -57,17 +57,14 @@ export default async function ArchivePage({
           </h2>
           <p className="mt-1 text-xs text-ha-muted">
             Adjust these filters and re-run the search on the right. In the full
-            archive, more granular options (e.g., date ranges) will be
-            available.
+            archive, more granular options such as date ranges and jurisdictions
+            would be available.
           </p>
 
           <form className="mt-4 space-y-4" method="get">
             {/* Text search */}
             <div className="space-y-1">
-              <label
-                htmlFor="q"
-                className="text-xs font-medium text-slate-800"
-              >
+              <label htmlFor="q" className="text-xs font-medium text-slate-800">
                 Keywords
               </label>
               <input
@@ -78,6 +75,9 @@ export default async function ArchivePage({
                 placeholder="e.g. influenza, naloxone, HIV"
                 className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
               />
+              <p className="text-[11px] text-ha-muted">
+                Search across titles, snippets, sources, topics, and language.
+              </p>
             </div>
 
             {/* Source select */}
@@ -191,7 +191,14 @@ export default async function ArchivePage({
               <div className="ha-card p-4 sm:p-5">
                 <p className="text-sm text-ha-muted">
                   No demo records match the current filters. Try removing some
-                  filters or using broader keywords.
+                  filters, using broader keywords, or{" "}
+                  <Link
+                    href="/archive"
+                    className="font-medium text-ha-accent hover:text-blue-700"
+                  >
+                    resetting the search
+                  </Link>
+                  .
                 </p>
               </div>
             ) : (
@@ -247,4 +254,3 @@ export default async function ArchivePage({
     </PageShell>
   );
 }
-

@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
 
 const navItems = [
   { href: "/", label: "Home" },
-  { href: "/archive", label: "Browse & search" },
+  { href: "/archive", label: "Browse" },
   { href: "/methods", label: "Methods" },
-  { href: "/researchers", label: "For researchers" },
+  { href: "/researchers", label: "Researchers" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -28,15 +29,23 @@ export function Header() {
     <header className="fixed inset-x-0 top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
       <div className="ha-container flex items-center justify-between gap-4 py-3">
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 text-sm font-semibold text-blue-700 shadow-sm">
-              HA
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold tracking-tight text-slate-900">
+          <Link
+            href="/"
+            className="group flex items-center gap-3 no-underline hover:no-underline"
+          >
+            <Image
+              src="/healtharchive-logo.webp"
+              alt="HealthArchive.ca logo"
+              width={72}
+              height={60}
+              className="h-12 w-auto transform transition-transform duration-150 ease-out group-hover:scale-105 sm:h-14 md:h-16"
+              priority
+            />
+            <div className="flex flex-col leading-tight">
+              <span className="text-2xl md:text-3xl font-semibold tracking-tight text-[#11588f]">
                 HealthArchive.ca
               </span>
-              <span className="text-xs text-ha-muted">
+              <span className="text-[11px] md:text-xs font-medium text-[#53616e]">
                 Independent archive of Canadian public health information
               </span>
             </div>
@@ -47,14 +56,17 @@ export function Header() {
         </div>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-4 text-sm font-medium text-ha-muted md:flex">
+        <nav
+          className="hidden items-center gap-3 text-xs md:text-sm font-medium text-ha-muted md:flex"
+          aria-label="Primary"
+        >
           {navItems.map((item) => {
             const active = isActivePath(pathname, item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-full px-3 py-1 ${
+                className={`rounded-full px-2.5 py-1 whitespace-nowrap ${
                   active
                     ? "bg-blue-50 text-blue-700"
                     : "text-ha-muted hover:bg-slate-100 hover:text-slate-900"
@@ -72,6 +84,7 @@ export function Header() {
           className="inline-flex items-center justify-center rounded-full border border-ha-border bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50 md:hidden"
           aria-label="Toggle navigation"
           aria-expanded={mobileOpen}
+          aria-controls="primary-navigation"
           onClick={() => setMobileOpen((open) => !open)}
         >
           <span className="sr-only">Toggle navigation</span>
@@ -103,7 +116,10 @@ export function Header() {
       {/* Mobile nav panel */}
       {mobileOpen && (
         <div className="border-t border-slate-200 bg-white md:hidden">
-          <nav className="ha-container flex flex-col gap-1 py-3 text-sm font-medium text-ha-muted">
+          <nav
+            id="primary-navigation"
+            className="ha-container flex flex-col gap-1 py-3 text-sm font-medium text-ha-muted"
+          >
             {navItems.map((item) => {
               const active = isActivePath(pathname, item.href);
               return (
@@ -127,4 +143,3 @@ export function Header() {
     </header>
   );
 }
-

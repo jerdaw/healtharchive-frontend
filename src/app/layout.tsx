@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     "HealthArchive.ca – Independent archive of Canadian public health information",
   description:
     "HealthArchive.ca is an independent, non-governmental project preserving snapshots of key Canadian public health websites so that clinicians, researchers, journalists, and the public can see what was published even after it changes or disappears.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -25,4 +28,3 @@ export default function RootLayout({
     </html>
   );
 }
-
