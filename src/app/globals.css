@@ -234,6 +234,7 @@ a:focus-visible {
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
+  outline: none;
 }
 
 .ha-btn-primary {
@@ -256,6 +257,12 @@ a:focus-visible {
 .ha-btn-secondary:hover {
   background-color: #f9fafb;
   text-decoration: none;
+}
+
+.ha-btn-primary:focus-visible,
+.ha-btn-secondary:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 
 /* Legacy button names kept for safety */
@@ -447,5 +454,12 @@ a:focus-visible {
 
   .ha-main {
     padding-inline: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ha-card {
+    transition: none;
+    transform: none;
   }
 }

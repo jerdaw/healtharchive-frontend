@@ -66,7 +66,8 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-full px-2.5 py-1 whitespace-nowrap ${
+                aria-current={active ? "page" : undefined}
+                className={`rounded-full px-2.5 py-1 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                   active
                     ? "bg-blue-50 text-blue-700"
                     : "text-ha-muted hover:bg-slate-100 hover:text-slate-900"
@@ -81,8 +82,8 @@ export function Header() {
         {/* Mobile menu button */}
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-full border border-ha-border bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50 md:hidden"
-          aria-label="Toggle navigation"
+          className="inline-flex items-center justify-center rounded-full border border-ha-border bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white md:hidden"
+          aria-label={mobileOpen ? "Close main navigation" : "Open main navigation"}
           aria-expanded={mobileOpen}
           aria-controls="primary-navigation"
           onClick={() => setMobileOpen((open) => !open)}
@@ -126,7 +127,8 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`rounded-full px-3 py-2 ${
+                  aria-current={active ? "page" : undefined}
+                  className={`rounded-full px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                     active
                       ? "bg-blue-50 text-blue-700"
                       : "text-ha-muted hover:bg-slate-100 hover:text-slate-900"

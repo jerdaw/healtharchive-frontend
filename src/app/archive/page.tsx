@@ -73,9 +73,10 @@ export default async function ArchivePage({
                 type="search"
                 defaultValue={q}
                 placeholder="e.g. influenza, naloxone, HIV"
-                className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                aria-describedby="archive-keywords-help"
+                className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
               />
-              <p className="text-[11px] text-ha-muted">
+              <p id="archive-keywords-help" className="text-[11px] text-ha-muted">
                 Search across titles, snippets, sources, topics, and language.
               </p>
             </div>
@@ -92,7 +93,7 @@ export default async function ArchivePage({
                 id="source"
                 name="source"
                 defaultValue={source}
-                className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
               >
                 <option value="">All sources</option>
                 <option value="phac">Public Health Agency of Canada</option>
@@ -112,7 +113,7 @@ export default async function ArchivePage({
                 id="topic"
                 name="topic"
                 defaultValue={topic}
-                className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
               >
                 <option value="">All topics</option>
                 {allTopics.map((t) => (
@@ -174,7 +175,7 @@ export default async function ArchivePage({
                   type="search"
                   defaultValue={q}
                   placeholder="Search within demo snapshots…"
-                  className="flex-1 rounded-full border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 rounded-full border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
                 />
                 {/* Keep filters in sync */}
                 <input type="hidden" name="source" value={source} />
