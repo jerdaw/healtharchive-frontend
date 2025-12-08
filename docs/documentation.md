@@ -103,6 +103,7 @@ From the repo root:
 ├── eslint.config.mjs
 ├── next-env.d.ts
 ├── public/
+│   ├── healtharchive-logo.webp    # Primary logo used in header
 │   ├── demo-archive/
 │   │   ├── hc/
 │   │   │   ├── 2022-09-30-water-quality.html
@@ -121,7 +122,7 @@ From the repo root:
 │   ├── next.svg
 │   ├── window.svg
 │   ├── vercel.svg
-│   └── styles.css             # Basic CSS used by the stock Next starter (not heavily used)
+│   └── styles.css                 # Basic CSS used by the stock Next starter (not heavily used)
 └── src/
     ├── app/
     │   ├── layout.tsx
@@ -148,8 +149,12 @@ From the repo root:
     │       ├── Header.tsx
     │       ├── Footer.tsx
     │       └── PageShell.tsx
-    └── data/
-        └── demo-records.ts
+    ├── data/
+    │   └── demo-records.ts
+    └── assets/
+        ├── healtharchive-favicon.ico
+        ├── healtharchive-logo.webp
+        └── healtharchive-logo.xcf
 ```
 
 ---
@@ -182,7 +187,7 @@ Tailwind is mainly used for:
 * Imports Tailwind via `@import "tailwindcss";`.
 * Defines design tokens as CSS variables on `:root`:
 
-  * `--page-bg`, `--card-bg`, `--border`, `--text`, `--muted`, `--accent`, `--accent-hover`, `--font-sans`.
+  * `--page-bg`, `--card-bg`, `--border`, `--text`, `--muted`, `--accent`, `--accent-hover`, `--brand`, `--brand-subtle`, `--font-sans`.
 * Base reset & `body` styling (background, font family).
 * Global link styles.
 
@@ -210,6 +215,12 @@ Then defines a small **design system** with `.ha-*` classes:
   * `.ha-footer`, `.ha-footer-inner`, `.ha-footer-disclaimer`, `.ha-footer-meta`.
 * Responsive tweaks for small viewports, especially header, nav, and hero.
 
+Accessibility-related helpers:
+
+* Global `a:focus-visible` outline using the brand color.
+* `.ha-btn-primary` / `.ha-btn-secondary` include `:focus-visible` outlines.
+* `.ha-card` transitions are disabled under `prefers-reduced-motion: reduce`.
+
 **Important:** There was previously a Tailwind class usage like `bg-ha-bg` that broke Tailwind validation. That’s been removed; we now use pure CSS classes for colors (`ha-*`) instead of Tailwind’s `bg-*` custom colors in `globals.css`.
 
 ---
@@ -231,8 +242,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:text-slate-900 focus:shadow-lg"
+        >
+          Skip to main content
+        </a>
         <Header />
-        <main className="pt-20 pb-10 sm:pt-24 sm:pb-12">{children}</main>
+        <main
+          id="main-content"
+          className="pt-20 pb-10 sm:pt-24 sm:pb-12"
+        >
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
@@ -251,13 +273,20 @@ Key features:
 
 * Logo block with:
 
-  * “HA” rounded square.
-  * Project title “HealthArchive.ca”.
+  * `next/image`-rendered logo (`/public/healtharchive-logo.webp`).
+  * Project title “HealthArchive.ca” in a brand blue (`#11588f`).
   * Subtitle “Independent archive of Canadian public health information”.
 * “Early demo” pill next to logo on desktop.
-* Desktop nav: `Home`, `Browse & search`, `Methods`, `For researchers`, `About`, `Contact`.
+* Desktop nav: `Home`, `Browse`, `Methods`, `Researchers`, `About`, `Contact`.
 
   * Active link styling vs inactive (blue background for active).
+  * `aria-current="page"` set on the active link.
+  * `aria-label="Primary"` on the `<nav>` for semantic clarity.
+* Mobile nav:
+
+  * Compact button that toggles between hamburger and X icon.
+  * `aria-expanded`, `aria-controls`, and `aria-label` updated based on open state.
+  * When open, a vertical nav list, using the same active styling and closing the menu on click.
 * Mobile nav:
 
   * Compact button that toggles between hamburger and X icon.
@@ -415,7 +444,6 @@ All in `src/data/demo-records.ts`:
 
   1. **Hero section:**
 
-     * Eyebrow: “Independent public health web archive”
      * H1: “See what Canadian public health websites used to say…”
      * Paragraph describing project.
      * “Early development” pill.
@@ -754,6 +782,13 @@ We followed an 8-phase plan. Status:
 
   * All data is static (`demoRecords` array).
   * No `/api` routes currently — everything is server-rendered using local data.
+* **Accessibility primitives:**
+
+  * Skip link to `#main-content` before the header.
+  * Main content wrapped in a `<main id="main-content">` landmark.
+  * `aria-current="page"` for active nav links, and labeled primary nav.
+  * Focus-visible outlines on buttons, links, and nav items using the brand color.
+  * `prefers-reduced-motion` respected for card transitions.
 
 ---
 
@@ -777,9 +812,8 @@ If you’re continuing dev, some clear next steps could be:
 
 4. **Accessibility audit**:
 
-   * Ensure headings are in correct order.
-   * Add aria labels to forms and navigation.
-   * Confirm color contrast ratios.
+   * A first pass has been completed (skip link, nav landmarks, focus-visible styles, and basic ARIA).
+   * Future work could include automated testing (e.g., axe), screen reader testing across platforms, and deeper contrast audits.
 
 5. **Analytics / logging** (if desired):
 
@@ -822,4 +856,3 @@ Explanation:
   * Adds a blank line separator.
 
 You can hand this command plus the repo to another LLM if you want it to see all file contents programmatically.
-
