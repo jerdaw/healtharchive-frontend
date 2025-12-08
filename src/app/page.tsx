@@ -8,10 +8,9 @@ export default function HomePage() {
   return (
     <div className="ha-container space-y-10">
       {/* Hero */}
-      <section className="grid gap-10 pb-4 pt-4 lg:grid-cols-[minmax(0,1.7fr),minmax(0,1fr)] lg:items-center">
+      <section className="grid gap-10 pb-6 pt-6 lg:grid-cols-[minmax(0,1.7fr),minmax(0,1fr)] lg:items-center">
         <div className="space-y-5">
-          <p className="ha-eyebrow">Independent public health web archive</p>
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl md:text-[2.6rem] md:leading-snug">
             See what Canadian public health websites{" "}
             <span className="text-ha-accent">used to say</span>, even after
             they change.
@@ -176,4 +175,3 @@ export default function HomePage() {
     </div>
   );
 }
-

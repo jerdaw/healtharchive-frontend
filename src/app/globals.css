@@ -16,6 +16,8 @@
   --muted: #6b7280;
   --accent: #2563eb;
   --accent-hover: #1d4ed8;
+  --brand: #11588f;
+  --brand-subtle: #153055;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
 }
@@ -56,6 +58,11 @@ a:hover {
   text-decoration: underline;
 }
 
+a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
 /* ====================================
    Layout container & page chrome
    ==================================== */
@@ -86,6 +93,7 @@ a:hover {
 .ha-section-subtitle {
   font-size: 0.95rem;
   color: var(--muted);
+  max-width: 40rem;
 }
 
 /* ====================================
@@ -299,6 +307,7 @@ a:hover {
   border: 1px solid var(--border);
   padding: 1rem 1.25rem;
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
 }
 
 .ha-card-elevated {
@@ -359,6 +368,7 @@ a:hover {
   border: 1px solid #e0e7ff;
   background-color: #f5f7ff;
   padding: 1rem 1.25rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
 
 .ha-callout-title {
@@ -439,4 +449,3 @@ a:hover {
     padding-inline: 1.25rem;
   }
 }
-
