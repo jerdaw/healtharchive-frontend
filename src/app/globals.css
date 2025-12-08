@@ -11,6 +11,8 @@
 :root {
   --page-bg: #f3f4f6;
   --card-bg: #ffffff;
+  --surface-bg: #ffffff;
+  --surface-bg-soft: rgba(255, 255, 255, 0.93);
   --border: #e5e7eb;
   --text: #111827;
   --muted: #6b7280;
@@ -18,8 +20,35 @@
   --accent-hover: #1d4ed8;
   --brand: #11588f;
   --brand-subtle: #153055;
+  --callout-bg: #f5f7ff;
+  --callout-border: #e0e7ff;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
+}
+
+html[data-theme="dark"] {
+  /* Background layers derived from Dark Reader */
+  --page-bg: #1e2022;
+  --surface-bg: #181a1b;
+  --surface-bg-soft: rgba(24, 26, 27, 0.93);
+  --card-bg: #181a1b;
+
+  /* Text and muted */
+  --text: #e8e6e3;
+  --muted: #b2aba1;
+
+  /* Borders */
+  --border: #363b3d;
+
+  /* Brand and accents */
+  --accent: #388fed;
+  --accent-hover: #4693ef;
+  --brand: #7cbeef;
+  --brand-subtle: #153055;
+
+  /* Callouts */
+  --callout-bg: #1b1d1e;
+  --callout-border: #27374c;
 }
 
 /* Basic reset */
@@ -55,12 +84,17 @@ a {
 }
 
 a:hover {
+  color: var(--accent-hover);
   text-decoration: underline;
 }
 
 a:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
+}
+
+.text-ha-accent {
+  color: var(--accent);
 }
 
 /* ====================================
@@ -72,6 +106,92 @@ a:focus-visible {
   max-width: 1120px;
   margin: 0 auto;
   padding-inline: 1.25rem;
+}
+
+.ha-shell-header-inner {
+  padding-block: calc(1rem - 0.5rem * var(--ha-header-shrink, 0));
+  transition: padding-block 180ms ease-out;
+}
+
+.ha-shell-header {
+  border-bottom: 1px solid var(--border);
+  background-color: var(--surface-bg-soft);
+  backdrop-filter: blur(26px);
+  -webkit-backdrop-filter: blur(26px);
+}
+
+.ha-shell-footer {
+  border-top: 1px solid var(--border);
+  background-color: var(--surface-bg);
+}
+
+/* Theme toggle slider */
+.ha-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background-color: transparent;
+}
+
+.ha-theme-toggle-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 44px;
+  height: 22px;
+  border-radius: 999px;
+  background-color: rgba(148, 163, 184, 0.35);
+  transition: background-color 150ms ease-out;
+}
+
+.ha-theme-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
+  transition: transform 150ms ease-out, background-color 150ms ease-out;
+}
+
+.ha-theme-toggle-icon {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  fill: #9ca3af;
+}
+
+.ha-theme-toggle-icon-sun {
+  left: 5px;
+}
+
+.ha-theme-toggle-icon-moon {
+  right: 5px;
+}
+
+.ha-header-title {
+  color: var(--brand);
+  font-size: calc(1.5rem + 0.35rem * (1 - var(--ha-header-shrink, 0)));
+  line-height: 1.1;
+  transition: font-size 200ms ease-out;
+}
+
+.ha-header-subtitle {
+  color: var(--muted);
+  opacity: calc(1 - var(--ha-header-shrink, 0));
+  max-height: calc(2.8rem * (1 - var(--ha-header-shrink, 0)));
+  overflow: hidden;
+  transition: opacity 200ms ease-out, max-height 200ms ease-out;
+}
+
+.ha-header-logo {
+  height: calc(3.2rem - 1.3rem * var(--ha-header-shrink, 0));
+  transition: height 200ms ease-out, transform 200ms ease-out;
 }
 
 /* Eyebrow label above page titles / sections */
@@ -245,17 +365,19 @@ a:focus-visible {
 
 .ha-btn-primary:hover {
   background-color: var(--accent-hover);
+  color: #ffffff;
   text-decoration: none;
 }
 
 .ha-btn-secondary {
-  background-color: #ffffff;
+  background-color: var(--surface-bg);
   color: var(--text);
   border-color: var(--border);
 }
 
 .ha-btn-secondary:hover {
   background-color: #f9fafb;
+  color: var(--text);
   text-decoration: none;
 }
 
@@ -372,8 +494,8 @@ a:focus-visible {
 
 .ha-callout {
   border-radius: 0.75rem;
-  border: 1px solid #e0e7ff;
-  background-color: #f5f7ff;
+  border: 1px solid var(--callout-border);
+  background-color: var(--callout-bg);
   padding: 1rem 1.25rem;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
@@ -462,4 +584,81 @@ a:focus-visible {
     transition: none;
     transform: none;
   }
+}
+
+/* ====================================
+   Dark theme Tailwind overrides
+   ==================================== */
+
+html[data-theme="dark"] .bg-white {
+  background-color: var(--card-bg) !important;
+}
+
+html[data-theme="dark"] .border-slate-200 {
+  border-color: var(--border) !important;
+}
+
+html[data-theme="dark"] .text-slate-900,
+html[data-theme="dark"] .text-slate-800 {
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] .text-slate-700 {
+  color: var(--muted) !important;
+}
+
+html[data-theme="dark"] .bg-blue-50 {
+  background-color: #1d1f20 !important;
+}
+
+html[data-theme="dark"] .bg-amber-50 {
+  background-color: #2f2600 !important;
+}
+
+html[data-theme="dark"] .text-amber-800 {
+  color: #ffa162 !important;
+}
+
+html[data-theme="dark"] .hover\:bg-slate-100:hover {
+  background-color: #1e2021 !important;
+}
+
+html[data-theme="dark"] .hover\:bg-slate-50:hover {
+  background-color: #1b1d1e !important;
+}
+
+html[data-theme="dark"] .ha-tag,
+html[data-theme="dark"] .ha-badge {
+  background-color: #1e293b;
+  color: #bfdbfe;
+}
+
+html[data-theme="dark"] .ha-badge-amber {
+  background-color: #78350f;
+  color: #fed7aa;
+}
+
+html[data-theme="dark"] .text-ha-accent {
+  color: var(--accent) !important;
+}
+
+html[data-theme="dark"] .hover\:text-blue-700:hover {
+  color: var(--accent-hover) !important;
+}
+
+html[data-theme="dark"] .ha-btn-secondary:hover {
+  background-color: #1e2021;
+}
+
+html[data-theme="dark"] .ha-theme-toggle-track {
+  background-color: rgba(30, 64, 175, 0.45);
+}
+
+html[data-theme="dark"] .ha-theme-toggle-thumb {
+  background-color: #020617;
+  transform: translateX(22px);
+}
+
+html[data-theme="dark"] .ha-theme-toggle-icon {
+  fill: #e5e7eb;
 }

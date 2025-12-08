@@ -2,7 +2,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-slate-200 bg-white/80">
+    <footer className="ha-shell-footer">
       <div className="ha-container space-y-4 py-6 text-xs text-ha-muted sm:flex sm:flex-col">
         <div className="space-y-1">
           <p className="leading-relaxed">

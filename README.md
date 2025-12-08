@@ -25,6 +25,15 @@ This repository contains the **Next.js frontend** for the public site at:
 - **Package manager:** npm
 - **Hosting:** Vercel
 
+### Key UI/UX features
+
+- Sticky, scroll-aware header that gently condenses on scroll and uses a blurred, translucent background so it stays present without obscuring content.
+- Accessible light/dark theme toggle:
+  - Uses CSS variables and a `data-theme="light" | "dark"` attribute on `<html>`.
+  - Respects the user’s OS preference (`prefers-color-scheme`) on first load.
+  - Persists the user’s choice in `localStorage` for subsequent visits.
+- Shared `.ha-*` design system for cards, buttons, badges, and page shells to keep the site visually consistent.
+
 ---
 
 ## Getting started
