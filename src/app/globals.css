@@ -12,89 +12,89 @@
   --page-bg: #f3f4f6;
   --card-bg: #ffffff;
   --surface-bg: #ffffff;
-  --surface-bg-soft: rgba(255, 255, 255, 0.93);
-  --border: #e5e7eb;
-  --text: #111827;
-  --muted: #6b7280;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --brand: #11588f;
-  --brand-subtle: #153055;
-  --callout-bg: #f5f7ff;
-  --callout-border: #e0e7ff;
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Segoe UI", sans-serif;
+  --surface-bg-soft: rgba(255, 255, 255, 0.9);
+    --border: #e5e7eb;
+    --text: #111827;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --brand: #1d6ae9;
+    --brand-subtle: #153055;
+    --callout-bg: #f5f7ff;
+    --callout-border: #e0e7ff;
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
 }
 
 html[data-theme="dark"] {
   /* Background layers derived from Dark Reader */
   --page-bg: #1e2022;
   --surface-bg: #181a1b;
-  --surface-bg-soft: rgba(24, 26, 27, 0.93);
-  --card-bg: #181a1b;
+  --surface-bg-soft: rgba(24, 26, 27, 0.9);
+    --card-bg: #181a1b;
 
-  /* Text and muted */
-  --text: #e8e6e3;
-  --muted: #b2aba1;
+    /* Text and muted */
+    --text: #e8e6e3;
+    --muted: #b2aba1;
 
-  /* Borders */
-  --border: #363b3d;
+    /* Borders */
+    --border: #363b3d;
 
-  /* Brand and accents */
-  --accent: #388fed;
-  --accent-hover: #4693ef;
-  --brand: #7cbeef;
-  --brand-subtle: #153055;
+    /* Brand and accents */
+    --accent: #388fed;
+    --accent-hover: #4693ef;
+    --brand: #388fed;
+    --brand-subtle: #153055;
 
-  /* Callouts */
-  --callout-bg: #1b1d1e;
-  --callout-border: #27374c;
+    /* Callouts */
+    --callout-bg: #1b1d1e;
+    --callout-border: #27374c;
 }
 
 /* Basic reset */
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
 body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
 }
 
 /* Base body styles */
 body {
-  font-family: var(--font-sans);
-  background-color: var(--page-bg);
-  color: var(--text);
+    font-family: var(--font-sans);
+    background-color: var(--page-bg);
+    color: var(--text);
 }
 
 /* Utility used by the Next starter */
 .text-balance {
-  text-wrap: balance;
+    text-wrap: balance;
 }
 
 /* Links */
 a {
-  color: var(--accent);
-  text-decoration: none;
+    color: var(--accent);
+    text-decoration: none;
 }
 
 a:hover {
-  color: var(--accent-hover);
-  text-decoration: underline;
+    color: var(--accent-hover);
+    text-decoration: underline;
 }
 
 a:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
 }
 
 .text-ha-accent {
-  color: var(--accent);
+    color: var(--accent);
 }
 
 /* ====================================
@@ -103,71 +103,70 @@ a:focus-visible {
 
 /* Shared width constraint used in header, pages, footer */
 .ha-container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding-inline: 1.25rem;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding-inline: 1.25rem;
 }
 
 .ha-shell-header-inner {
-  padding-block: calc(1rem - 0.5rem * var(--ha-header-shrink, 0));
-  transition: padding-block 180ms ease-out;
+    padding-block: calc(1rem - 0.5rem * var(--ha-header-shrink, 0));
+    transition: padding-block 180ms ease-out;
 }
 
 .ha-shell-header {
-  border-bottom: 1px solid var(--border);
-  background-color: var(--surface-bg-soft);
-  backdrop-filter: blur(26px);
-  -webkit-backdrop-filter: blur(26px);
+    border-bottom: 1px solid var(--border);
+    background-color: var(--surface-bg-soft);
+    backdrop-filter: blur(4px);
 }
 
 .ha-shell-footer {
-  border-top: 1px solid var(--border);
-  background-color: var(--surface-bg);
+    border-top: 1px solid var(--border);
+    background-color: var(--surface-bg);
 }
 
 /* Theme toggle slider */
 .ha-theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background-color: transparent;
 }
 
 .ha-theme-toggle-track {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 44px;
-  height: 22px;
-  border-radius: 999px;
-  background-color: rgba(148, 163, 184, 0.35);
-  transition: background-color 150ms ease-out;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 44px;
+    height: 22px;
+    border-radius: 999px;
+    background-color: rgba(148, 163, 184, 0.35);
+    transition: background-color 150ms ease-out;
 }
 
 .ha-theme-toggle-thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
-  transition: transform 150ms ease-out, background-color 150ms ease-out;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
+    transition: transform 150ms ease-out, background-color 150ms ease-out;
 }
 
 .ha-theme-toggle-icon {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  fill: #9ca3af;
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    fill: #9ca3af;
 }
 
 .ha-theme-toggle-icon-sun {
-  left: 5px;
+    left: 5px;
 }
 
 .ha-theme-toggle-icon-moon {
@@ -181,39 +180,43 @@ a:focus-visible {
   transition: font-size 200ms ease-out;
 }
 
+.ha-header-text {
+  justify-content: center;
+}
+
 .ha-header-subtitle {
-  color: var(--muted);
-  opacity: calc(1 - var(--ha-header-shrink, 0));
-  max-height: calc(2.8rem * (1 - var(--ha-header-shrink, 0)));
-  overflow: hidden;
-  transition: opacity 200ms ease-out, max-height 200ms ease-out;
+    color: var(--muted);
+    opacity: calc(1 - var(--ha-header-shrink, 0));
+    max-height: calc(2.8rem * (1 - var(--ha-header-shrink, 0)));
+    overflow: hidden;
+    transition: opacity 200ms ease-out, max-height 200ms ease-out;
 }
 
 .ha-header-logo {
-  height: calc(3.2rem - 1.3rem * var(--ha-header-shrink, 0));
-  transition: height 200ms ease-out, transform 200ms ease-out;
+    height: calc(3.2rem - 1.3rem * var(--ha-header-shrink, 0));
+    transition: height 200ms ease-out, transform 200ms ease-out;
 }
 
 /* Eyebrow label above page titles / sections */
 .ha-eyebrow {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--muted);
 }
 
 /* Section headings & subtitles */
 .ha-section-heading {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
 }
 
 .ha-section-subtitle {
-  font-size: 0.95rem;
-  color: var(--muted);
-  max-width: 40rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 40rem;
 }
 
 /* ====================================
@@ -221,71 +224,71 @@ a:focus-visible {
    ==================================== */
 
 .ha-header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  backdrop-filter: blur(10px);
-  background-color: rgba(243, 244, 246, 0.95);
-  border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    backdrop-filter: blur(10px);
+    background-color: rgba(243, 244, 246, 0.95);
+    border-bottom: 1px solid var(--border);
 }
 
 .ha-header-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0.75rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
 }
 
 .ha-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .ha-logo-icon {
-  width: 32px;
-  height: 32px;
-  display: block;
+    width: 32px;
+    height: 32px;
+    display: block;
 }
 
 .ha-logo-text {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .ha-logo-main {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: var(--text);
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text);
 }
 
 .ha-logo-sub {
-  font-size: 0.82rem;
-  color: var(--muted);
+    font-size: 0.82rem;
+    color: var(--muted);
 }
 
 .ha-nav {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.9rem;
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
 }
 
 .ha-nav a {
-  color: var(--muted);
-  font-weight: 500;
+    color: var(--muted);
+    font-weight: 500;
 }
 
 .ha-nav a:hover {
-  color: var(--accent);
-  text-decoration: none;
+    color: var(--accent);
+    text-decoration: none;
 }
 
 /* active link helper class (legacy) */
 .ha-nav-link-active {
-  color: var(--accent);
+    color: var(--accent);
 }
 
 /* ====================================
@@ -293,47 +296,47 @@ a:focus-visible {
    ==================================== */
 
 .ha-main {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2.5rem 1.5rem 3rem;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 3rem;
 }
 
 .ha-page-title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin: 0 0 0.75rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem;
 }
 
 .ha-hero {
-  padding: 2rem 0 2.5rem;
+    padding: 2rem 0 2.5rem;
 }
 
 .ha-hero-inner {
-  max-width: 720px;
+    max-width: 720px;
 }
 
 .ha-hero h1 {
-  font-size: 2rem;
-  line-height: 1.2;
-  margin: 0 0 1rem;
+    font-size: 2rem;
+    line-height: 1.2;
+    margin: 0 0 1rem;
 }
 
 .ha-hero p {
-  margin: 0.35rem 0;
-  font-size: 1rem;
+    margin: 0.35rem 0;
+    font-size: 1rem;
 }
 
 .ha-hero-status {
-  margin-top: 0.75rem;
-  font-size: 0.95rem;
-  color: var(--muted);
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--muted);
 }
 
 .ha-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
 }
 
 /* ====================================
@@ -343,57 +346,57 @@ a:focus-visible {
 /* New button classes used in React components */
 .ha-btn-primary,
 .ha-btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.55rem 1.35rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.35rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    outline: none;
 }
 
 .ha-btn-primary {
-  background-color: var(--accent);
-  color: #ffffff;
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+    background-color: var(--accent);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
 }
 
 .ha-btn-primary:hover {
-  background-color: var(--accent-hover);
-  color: #ffffff;
-  text-decoration: none;
+    background-color: var(--accent-hover);
+    color: #ffffff;
+    text-decoration: none;
 }
 
 .ha-btn-secondary {
-  background-color: var(--surface-bg);
-  color: var(--text);
-  border-color: var(--border);
+    background-color: var(--surface-bg);
+    color: var(--text);
+    border-color: var(--border);
 }
 
 .ha-btn-secondary:hover {
-  background-color: #f9fafb;
-  color: var(--text);
-  text-decoration: none;
+    background-color: #f9fafb;
+    color: var(--text);
+    text-decoration: none;
 }
 
 .ha-btn-primary:focus-visible,
 .ha-btn-secondary:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
 }
 
 /* Legacy button names kept for safety */
 .ha-button-primary {
-  composes: ha-btn-primary;
+    composes: ha-btn-primary;
 }
 
 .ha-button-secondary {
-  composes: ha-btn-secondary;
+    composes: ha-btn-secondary;
 }
 
 /* ====================================
@@ -401,29 +404,29 @@ a:focus-visible {
    ==================================== */
 
 .ha-section {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
 }
 
 .ha-section p {
-  margin: 0.35rem 0;
-  font-size: 0.98rem;
+    margin: 0.35rem 0;
+    font-size: 0.98rem;
 }
 
 .ha-list {
-  margin: 0.5rem 0 0.5rem 1.25rem;
-  padding: 0;
-  font-size: 0.98rem;
+    margin: 0.5rem 0 0.5rem 1.25rem;
+    padding: 0;
+    font-size: 0.98rem;
 }
 
 .ha-list li {
-  margin: 0.25rem 0;
+    margin: 0.25rem 0;
 }
 
 .ha-muted {
-  color: var(--muted);
-  font-size: 0.9rem;
+    color: var(--muted);
+    font-size: 0.9rem;
 }
 
 /* ====================================
@@ -431,61 +434,61 @@ a:focus-visible {
    ==================================== */
 
 .ha-card {
-  background-color: var(--card-bg);
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-  padding: 1rem 1.25rem;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
-  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+    background-color: var(--card-bg);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+    transition: box-shadow 150ms ease-out, transform 150ms ease-out;
 }
 
 .ha-card-elevated {
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
 }
 
 .ha-card-title {
-  font-weight: 600;
-  margin: 0 0 0.25rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
 }
 
 .ha-card-meta {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
 }
 
 .ha-card-body {
-  font-size: 0.95rem;
-  margin: 0;
+    font-size: 0.95rem;
+    margin: 0;
 }
 
 /* Simple tag/pill style for topics, statuses, etc. */
 .ha-tag {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 0.15rem 0.6rem;
-  font-size: 0.78rem;
-  background-color: #e5edff;
-  color: #1d4ed8;
-  margin-right: 0.35rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.78rem;
+    background-color: #e5edff;
+    color: #1d4ed8;
+    margin-right: 0.35rem;
 }
 
 /* New badge style used in archive & home */
 .ha-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  background-color: #e5edff;
-  color: #1d4ed8;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    background-color: #e5edff;
+    color: #1d4ed8;
 }
 
 .ha-badge-amber {
-  background-color: #fef3c7;
-  color: #92400e;
+    background-color: #fef3c7;
+    color: #92400e;
 }
 
 /* ====================================
@@ -493,17 +496,17 @@ a:focus-visible {
    ==================================== */
 
 .ha-callout {
-  border-radius: 0.75rem;
-  border: 1px solid var(--callout-border);
-  background-color: var(--callout-bg);
-  padding: 1rem 1.25rem;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    border-radius: 0.75rem;
+    border: 1px solid var(--callout-border);
+    background-color: var(--callout-bg);
+    padding: 1rem 1.25rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
 
 .ha-callout-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
 }
 
 /* ====================================
@@ -511,22 +514,22 @@ a:focus-visible {
    ==================================== */
 
 .ha-grid-2 {
-  display: grid;
-  gap: 1.25rem;
+    display: grid;
+    gap: 1.25rem;
 }
 
 .ha-grid-3 {
-  display: grid;
-  gap: 1.25rem;
+    display: grid;
+    gap: 1.25rem;
 }
 
 @media (min-width: 768px) {
-  .ha-grid-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .ha-grid-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+    .ha-grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ha-grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 /* ====================================
@@ -534,24 +537,24 @@ a:focus-visible {
    ==================================== */
 
 .ha-footer {
-  border-top: 1px solid var(--border);
-  background-color: #f9fafb;
+    border-top: 1px solid var(--border);
+    background-color: #f9fafb;
 }
 
 .ha-footer-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 1.5rem 1.5rem 2rem;
-  font-size: 0.85rem;
-  color: var(--muted);
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 2rem;
+    font-size: 0.85rem;
+    color: var(--muted);
 }
 
 .ha-footer-disclaimer {
-  margin: 0 0 0.75rem;
+    margin: 0 0 0.75rem;
 }
 
 .ha-footer-meta {
-  margin: 0;
+    margin: 0;
 }
 
 /* ====================================
@@ -559,31 +562,31 @@ a:focus-visible {
    ==================================== */
 
 @media (max-width: 640px) {
-  .ha-header-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
+    .ha-header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
 
-  .ha-nav {
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
+    .ha-nav {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
 
-  .ha-hero h1 {
-    font-size: 1.7rem;
-  }
+    .ha-hero h1 {
+        font-size: 1.7rem;
+    }
 
-  .ha-main {
-    padding-inline: 1.25rem;
-  }
+    .ha-main {
+        padding-inline: 1.25rem;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ha-card {
-    transition: none;
-    transform: none;
-  }
+    .ha-card {
+        transition: none;
+        transform: none;
+    }
 }
 
 /* ====================================
@@ -591,74 +594,74 @@ a:focus-visible {
    ==================================== */
 
 html[data-theme="dark"] .bg-white {
-  background-color: var(--card-bg) !important;
+    background-color: var(--card-bg) !important;
 }
 
 html[data-theme="dark"] .border-slate-200 {
-  border-color: var(--border) !important;
+    border-color: var(--border) !important;
 }
 
 html[data-theme="dark"] .text-slate-900,
 html[data-theme="dark"] .text-slate-800 {
-  color: var(--text) !important;
+    color: var(--text) !important;
 }
 
 html[data-theme="dark"] .text-slate-700 {
-  color: var(--muted) !important;
+    color: var(--muted) !important;
 }
 
 html[data-theme="dark"] .bg-blue-50 {
-  background-color: #1d1f20 !important;
+    background-color: #1d1f20 !important;
 }
 
 html[data-theme="dark"] .bg-amber-50 {
-  background-color: #2f2600 !important;
+    background-color: #2f2600 !important;
 }
 
 html[data-theme="dark"] .text-amber-800 {
-  color: #ffa162 !important;
+    color: #ffa162 !important;
 }
 
 html[data-theme="dark"] .hover\:bg-slate-100:hover {
-  background-color: #1e2021 !important;
+    background-color: #1e2021 !important;
 }
 
 html[data-theme="dark"] .hover\:bg-slate-50:hover {
-  background-color: #1b1d1e !important;
+    background-color: #1b1d1e !important;
 }
 
 html[data-theme="dark"] .ha-tag,
 html[data-theme="dark"] .ha-badge {
-  background-color: #1e293b;
-  color: #bfdbfe;
+    background-color: #1e293b;
+    color: #bfdbfe;
 }
 
 html[data-theme="dark"] .ha-badge-amber {
-  background-color: #78350f;
-  color: #fed7aa;
+    background-color: #78350f;
+    color: #fed7aa;
 }
 
 html[data-theme="dark"] .text-ha-accent {
-  color: var(--accent) !important;
+    color: var(--accent) !important;
 }
 
 html[data-theme="dark"] .hover\:text-blue-700:hover {
-  color: var(--accent-hover) !important;
+    color: var(--accent-hover) !important;
 }
 
 html[data-theme="dark"] .ha-btn-secondary:hover {
-  background-color: #1e2021;
+    background-color: #1e2021;
 }
 
 html[data-theme="dark"] .ha-theme-toggle-track {
-  background-color: rgba(30, 64, 175, 0.45);
+    background-color: rgba(30, 64, 175, 0.45);
 }
 
 html[data-theme="dark"] .ha-theme-toggle-thumb {
-  background-color: #020617;
-  transform: translateX(22px);
+    background-color: #020617;
+    transform: translateX(22px);
 }
 
 html[data-theme="dark"] .ha-theme-toggle-icon {
-  fill: #e5e7eb;
+    fill: #e5e7eb;
 }
