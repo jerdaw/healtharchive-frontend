@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HealthArchive.ca – Frontend (Next.js)
 
-## Getting Started
+HealthArchive.ca is an independent, non-governmental project to preserve and surface
+historical versions of **Canadian public health web content** (e.g., PHAC, Health Canada).
 
-First, run the development server:
+This repository contains the **Next.js frontend** for the public site at:
+
+- https://healtharchive.ca (production, early demo)
+- https://healtharchive.vercel.app (Vercel default domain)
+
+> **Status:** Early demo  
+> This frontend currently exposes a small curated demo dataset to prototype the
+> archive UI (search, browse, and snapshot viewing). The full crawling / storage /
+> replay infrastructure is being built separately.
+
+---
+
+## Tech stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Styling:**
+  - TailwindCSS for layout/spacing
+  - Custom `.ha-*` utility classes in `src/app/globals.css` for the design system
+- **Package manager:** npm
+- **Hosting:** Vercel
+
+---
+
+## Getting started
+
+### 1. Install dependencies
+
+```bash
+npm install
+````
+
+### 2. Run the dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Build for production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+(In production, Vercel runs the build and serves the app.)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure (high-level)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+.
+├── README.md
+├── docs/
+│   └── architecture.md        # Deep-dive architecture & project state
+├── package.json
+├── next.config.ts
+├── tailwind.config.mjs
+├── postcss.config.mjs
+├── tsconfig.json
+├── public/
+│   └── demo-archive/          # Static HTML stubs used by the snapshot viewer
+└── src/
+    ├── app/                   # Next.js App Router routes
+    │   ├── page.tsx           # Home
+    │   ├── archive/           # Search & browse
+    │   ├── methods/           # Methods & scope
+    │   ├── researchers/       # For researchers
+    │   ├── about/             # About the project
+    │   ├── contact/           # Contact info
+    │   └── snapshot/[id]/     # Snapshot viewer
+    ├── components/
+    │   └── layout/            # Header, Footer, PageShell
+    └── data/
+        └── demo-records.ts    # Demo dataset + search helpers
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Production is managed via Vercel:
+
+* GitHub repo: [https://github.com/jerdaw/healtharchive-frontend](https://github.com/jerdaw/healtharchive-frontend)
+* Production branch: `main`
+* Domains:
+
+  * `healtharchive.ca` (apex, A record → Vercel IP)
+  * `www.healtharchive.ca` (CNAME → Vercel DNS host)
+  * `healtharchive.vercel.app` (default Vercel URL)
+
+Any push to `main` triggers a new Vercel deployment.
+
+---
+
+## Further documentation
+
+* **Architecture & project state:**
+  See [`docs/architecture.md`](docs/architecture.md) for a detailed overview of
+  the data model, routes, design system, and planned future phases.
+
