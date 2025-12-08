@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "HealthArchive.ca is an independent, non-governmental project preserving snapshots of key Canadian public health websites so that clinicians, researchers, journalists, and the public can see what was published even after it changes or disappears.",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/healtharchive-favicon.png",
   },
 };
 
