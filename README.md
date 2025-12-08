@@ -60,16 +60,18 @@ npm start
 .
 ├── README.md
 ├── docs/
-│   └── architecture.md        # Deep-dive architecture & project state
+│   └── documentation.md       # Deep-dive architecture, design, and project state
 ├── package.json
 ├── next.config.ts
 ├── tailwind.config.mjs
 ├── postcss.config.mjs
 ├── tsconfig.json
 ├── public/
-│   └── demo-archive/          # Static HTML stubs used by the snapshot viewer
+│   ├── healtharchive-logo.webp  # Primary logo used in header/hero
+│   └── demo-archive/            # Static HTML stubs used by the snapshot viewer
 └── src/
     ├── app/                   # Next.js App Router routes
+    │   ├── favicon.ico        # Favicon wired via Next metadata
     │   ├── page.tsx           # Home
     │   ├── archive/           # Search & browse
     │   ├── methods/           # Methods & scope
@@ -104,6 +106,6 @@ Any push to `main` triggers a new Vercel deployment.
 ## Further documentation
 
 * **Architecture & project state:**
-  See [`docs/architecture.md`](docs/architecture.md) for a detailed overview of
-  the data model, routes, design system, and planned future phases.
-
+  See [`docs/documentation.md`](docs/documentation.md) for a detailed overview
+  of the data model, routes, design system, accessibility primitives, and
+  planned future phases.
