@@ -31,7 +31,7 @@ export function Header() {
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="group flex items-center gap-3 no-underline hover:no-underline"
+            className="group flex items-center gap-4 no-underline hover:no-underline"
           >
             <Image
               src="/healtharchive-logo.webp"
@@ -57,7 +57,7 @@ export function Header() {
 
         {/* Desktop nav */}
         <nav
-          className="hidden items-center gap-3 text-xs md:text-sm font-medium text-ha-muted md:flex"
+          className="hidden items-center gap-3 text-xs md:text-sm font-semibold text-ha-muted md:flex"
           aria-label="Primary"
         >
           {navItems.map((item) => {
@@ -119,7 +119,7 @@ export function Header() {
         <div className="border-t border-slate-200 bg-white md:hidden">
           <nav
             id="primary-navigation"
-            className="ha-container flex flex-col gap-1 py-3 text-sm font-medium text-ha-muted"
+            className="ha-container flex flex-col gap-1 py-3 text-sm font-semibold text-ha-muted"
           >
             {navItems.map((item) => {
               const active = isActivePath(pathname, item.href);
