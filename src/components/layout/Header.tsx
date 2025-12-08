@@ -42,7 +42,7 @@ export function Header() {
               priority
             />
             <div className="flex flex-col leading-tight">
-              <span className="text-2xl md:text-3xl font-semibold tracking-tight text-[#11588f]">
+              <span className="text-2xl md:text-3xl font-semibold tracking-tight text-[#1d6ae9]">
                 HealthArchive.ca
               </span>
               <span className="text-[11px] md:text-xs font-medium text-[#53616e]">
