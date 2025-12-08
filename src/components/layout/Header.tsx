@@ -74,10 +74,10 @@ export function Header() {
               alt="HealthArchive.ca logo"
               width={72}
               height={60}
-              className="ha-header-logo w-auto transform transition-transform duration-150 ease-out group-hover:scale-105"
+              className="ha-header-logo w-auto transform translate-y-[1px] transition-transform duration-150 ease-out group-hover:scale-105"
               priority
             />
-            <div className="flex flex-col leading-tight">
+            <div className="ha-header-text flex flex-col leading-tight">
               <span className="ha-header-title text-2xl md:text-3xl font-semibold tracking-tight">
                 HealthArchive.ca
               </span>

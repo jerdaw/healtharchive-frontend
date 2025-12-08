@@ -10,7 +10,7 @@ interface PageShellProps {
 export function PageShell({ title, intro, eyebrow, children }: PageShellProps) {
   return (
     <div className="ha-container">
-      <section className="pb-10">
+      <section className="pt-6 pb-10">
         <header className="mb-8 max-w-3xl space-y-3">
           {eyebrow && <p className="ha-eyebrow">{eyebrow}</p>}
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
@@ -27,4 +27,3 @@ export function PageShell({ title, intro, eyebrow, children }: PageShellProps) {
     </div>
   );
 }
-
