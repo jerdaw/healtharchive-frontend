@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 
 type Phase =
@@ -151,7 +152,7 @@ export function TrackChangesPhrase() {
 
     const renderBeforeWithCursor = (caretIndex: number | null) => {
         const deletedFromIndex = Math.max(beforeLength - deletedCount, 0);
-        const nodes: JSX.Element[] = [];
+        const nodes: ReactNode[] = [];
 
         for (let index = 0; index <= beforeLength; index += 1) {
             if (caretIndex === index) {
