@@ -856,38 +856,43 @@ If you’re continuing dev, some clear next steps could be:
 
 ---
 
-## 13. Command to print all project file paths & contents
+## 13. Command to print the key project files (code/docs only)
 
-The user specifically wanted this in the outline.
-
-⚠️ **This will be huge** if you include `node_modules` or `.git`. You almost never want that. Use exclusions.
-
-From the repo root, a **safer** command that prints **all tracked project files except some heavy directories**:
+The goal is to dump only the core files someone would read to understand the project (no deps or build output). From the repo root:
 
 ```bash
 # From /path/to/healtharchive-frontend
-find . \
-  \( -path "./node_modules" -o -path "./.next" -o -path "./.git" \) -prune -false -o \
-  -type f \
-  -print0 | while IFS= read -r -d '' f; do
+files=(
+  "README.md"
+  "docs/documentation.md"
+  "package.json"
+  "tsconfig.json"
+  "next.config.ts"
+  "tailwind.config.mjs"
+  "postcss.config.mjs"
+  "src/app/globals.css"
+  "src/app/layout.tsx"
+  "src/app/page.tsx"
+  "src/app/archive/page.tsx"
+  "src/app/archive/browse-by-source/page.tsx"
+  "src/app/methods/page.tsx"
+  "src/app/researchers/page.tsx"
+  "src/app/about/page.tsx"
+  "src/app/contact/page.tsx"
+  "src/app/snapshot/[id]/page.tsx"
+  "src/components/layout/Header.tsx"
+  "src/components/layout/Footer.tsx"
+  "src/components/layout/PageShell.tsx"
+  "src/data/demo-records.ts"
+)
+
+for f in "${files[@]}"; do
+  if [ -f "$f" ]; then
     echo "=== $f ==="
     cat "$f"
     echo
-  done
+  fi
+done
 ```
 
-Explanation:
-
-* `find .` – start at repo root.
-* `\( -path "./node_modules" -o -path "./.next" -o -path "./.git" \) -prune -false -o`:
-
-  * Prunes `node_modules`, `.next`, and `.git` entirely.
-* `-type f` – only regular files.
-* `-print0 | while ...` – iterates filenames robustly even if they contain spaces.
-* For each file:
-
-  * Prints a header `=== path ===`.
-  * `cat`s the file contents.
-  * Adds a blank line separator.
-
-You can hand this command plus the repo to another LLM if you want it to see all file contents programmatically.
+This is intentionally hardcoded to avoid pulling in `node_modules`, `.next`, or other generated content. Add/remove paths in the `files` array as needed if you introduce new core source files.
