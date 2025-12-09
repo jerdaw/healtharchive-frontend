@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { demoRecords } from "@/data/demo-records";
+import { TrackChangesPhrase } from "@/components/TrackChangesPhrase";
 
 export default function HomePage() {
     const recordCount = demoRecords.length;
@@ -13,8 +14,7 @@ export default function HomePage() {
                     <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl md:text-[2.6rem] md:leading-snug">
                         See what Canadian public health websites{" "}
                         <span className="text-ha-accent">used to say</span>,
-                        even after they{" "}
-                        <span className="text-ha-accent">change</span>.
+                        even <TrackChangesPhrase /> they change.
                     </h1>
                     <p className="text-sm leading-relaxed text-ha-muted sm:text-base">
                         HealthArchive.ca is a volunteer-led project preserving
