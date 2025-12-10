@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/layout/PageShell";
 import { getRecordById } from "@/data/demo-records";
+import { fetchSnapshotDetail } from "@/lib/api";
+import { SnapshotFrame } from "@/components/SnapshotFrame";
 
 function formatDate(iso: string): string {
   const [yearStr, monthStr, dayStr] = iso.split("-");
@@ -28,16 +30,46 @@ export default async function SnapshotPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  let snapshotMeta: Awaited<ReturnType<typeof fetchSnapshotDetail>> | null =
+    null;
+  let usingBackend = false;
+
+  // Attempt to fetch real snapshot metadata from the backend. If that fails
+  // (e.g., backend not running or this ID not present), fall back to the demo
+  // record lookup.
+  try {
+    const numericId = Number(id);
+    if (!Number.isNaN(numericId)) {
+      snapshotMeta = await fetchSnapshotDetail(numericId);
+      usingBackend = true;
+    }
+  } catch {
+    snapshotMeta = null;
+    usingBackend = false;
+  }
+
   const record = getRecordById(id);
 
-  if (!record) {
+  if (!snapshotMeta && !record) {
     return notFound();
   }
 
+  const title = snapshotMeta?.title ?? record?.title ?? "Snapshot";
+  const captureDate =
+    snapshotMeta?.captureDate ?? record?.captureDate ?? "Unknown";
+  const sourceName =
+    snapshotMeta?.sourceName ?? record?.sourceName ?? "Unknown source";
+  const language = snapshotMeta?.language ?? record?.language ?? "Unknown";
+  const originalUrl =
+    snapshotMeta?.originalUrl ?? record?.originalUrl ?? "Unknown URL";
+  const topics = snapshotMeta?.topics ?? record?.topics ?? [];
+  const rawSnapshotUrl =
+    snapshotMeta?.rawSnapshotUrl ?? record?.snapshotPath ?? null;
+
   return (
     <PageShell
-      eyebrow="Archived snapshot (demo)"
-      title={record.title}
+      eyebrow="Archived snapshot"
+      title={title}
       intro="This page shows how individual snapshots from the archive will appear. In the full system, this view would be powered by a dedicated web archive replay engine."
     >
       <section className="ha-grid-2">
@@ -45,34 +77,36 @@ export default async function SnapshotPage({
         <div className="space-y-4">
           <div className="ha-card p-4 sm:p-5">
             <p className="text-xs font-medium text-ha-muted">
-              Archived snapshot from {formatDate(record.captureDate)}.
+              Archived snapshot from {formatDate(captureDate)}.
             </p>
-            <p className="mt-1 text-xs text-ha-muted">
-              This is a demo view based on a small static snapshot stored under{" "}
-              <code>public/demo-archive</code>.
-            </p>
+            {!usingBackend && record && (
+              <p className="mt-1 text-xs text-ha-muted">
+                This is a demo view based on a small static snapshot stored under{" "}
+                <code>public/demo-archive</code>.
+              </p>
+            )}
             <dl className="mt-3 space-y-1 text-xs text-slate-800 sm:text-sm">
               <div className="flex gap-2">
                 <dt className="w-28 text-ha-muted">Source</dt>
-                <dd>{record.sourceName}</dd>
+                <dd>{sourceName}</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="w-28 text-ha-muted">Capture date</dt>
-                <dd>{formatDate(record.captureDate)}</dd>
+                <dd>{formatDate(captureDate)}</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="w-28 text-ha-muted">Language</dt>
-                <dd>{record.language}</dd>
+                <dd>{language}</dd>
               </div>
               <div className="flex gap-2">
                 <dt className="w-28 text-ha-muted">Original URL</dt>
-                <dd className="break-all">{record.originalUrl}</dd>
+                <dd className="break-all">{originalUrl}</dd>
               </div>
             </dl>
 
-            {record.topics.length > 0 && (
+            {topics.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1.5">
-                {record.topics.map((topic) => (
+                {topics.map((topic) => (
                   <span key={topic} className="ha-badge">
                     {topic}
                   </span>
@@ -82,16 +116,18 @@ export default async function SnapshotPage({
 
             <div className="mt-4 flex flex-wrap gap-2">
               <Link href="/archive" className="ha-btn-secondary text-xs">
-                ← Back to demo archive
+                ← Back to archive
               </Link>
-              <a
-                href={record.snapshotPath}
-                target="_blank"
-                rel="noreferrer"
-                className="ha-btn-primary text-xs"
-              >
-                Open raw snapshot
-              </a>
+              {rawSnapshotUrl && (
+                <a
+                  href={rawSnapshotUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="ha-btn-primary text-xs"
+                >
+                  Open raw snapshot
+                </a>
+              )}
             </div>
           </div>
 
@@ -111,18 +147,36 @@ export default async function SnapshotPage({
         <div className="ha-card ha-card-elevated flex min-h-[320px] flex-col">
           <div className="border-b border-ha-border px-4 py-3 text-xs text-ha-muted sm:px-5">
             <span className="font-medium text-slate-900">Archived content</span>{" "}
-            · served from <code>{record.snapshotPath}</code> for this demo.
+            {rawSnapshotUrl ? (
+              <>
+                {" "}
+                · served from{" "}
+                <code>
+                  {rawSnapshotUrl}
+                </code>{" "}
+                {usingBackend ? "from the live API." : "for this demo."}
+              </>
+            ) : (
+              <>
+                {" "}
+                · viewer integration for this snapshot is not yet available.
+              </>
+            )}
             <span className="sr-only">
               {" "}
               The following section is an embedded snapshot of the archived page.
             </span>
           </div>
           <div className="flex-1">
-            <iframe
-              src={record.snapshotPath}
-              title={record.title}
-              className="h-[480px] w-full border-0 sm:h-[560px]"
-            />
+            {rawSnapshotUrl ? (
+              <SnapshotFrame src={rawSnapshotUrl} title={title} />
+            ) : (
+              <div className="flex h-[320px] items-center justify-center px-4 text-center text-xs text-ha-muted sm:h-[560px] sm:text-sm">
+                Viewer for this snapshot will be powered by the full replay
+                engine in a future phase. For now, only demo snapshots stored
+                under <code>public/demo-archive</code> are embedded here.
+              </div>
+            )}
           </div>
         </div>
       </section>

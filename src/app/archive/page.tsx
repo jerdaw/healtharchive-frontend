@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { PageShell } from "@/components/layout/PageShell";
-import {
-  getAllTopics,
-  searchDemoRecords,
-  type SearchParams,
-} from "@/data/demo-records";
+import { getAllTopics, searchDemoRecords, getSourcesSummary } from "@/data/demo-records";
+import { fetchSources, searchSnapshots, type SearchParams as ApiSearchParams } from "@/lib/api";
 
 function formatDate(iso: string): string {
   const [yearStr, monthStr, dayStr] = iso.split("-");
@@ -25,7 +22,20 @@ type ArchiveSearchParams = {
   q?: string;
   source?: string;
   topic?: string;
+  page?: string;
+  pageSize?: string;
 };
+
+const DEFAULT_PAGE_SIZE = 10;
+const MAX_PAGE_SIZE = 50;
+
+function parsePositiveInt(value: string | undefined, fallback: number): number {
+  const parsed = Number(value);
+  if (Number.isNaN(parsed) || parsed <= 0) {
+    return fallback;
+  }
+  return parsed;
+}
 
 export default async function ArchivePage({
   searchParams,
@@ -36,12 +46,96 @@ export default async function ArchivePage({
   const q = params.q?.trim() ?? "";
   const source = params.source?.trim() ?? "";
   const topic = params.topic?.trim() ?? "";
+  const page = parsePositiveInt(params.page, 1);
+  const rawPageSize = parsePositiveInt(params.pageSize, DEFAULT_PAGE_SIZE);
+  const pageSize = Math.min(rawPageSize, MAX_PAGE_SIZE);
 
-  const allTopics = getAllTopics();
-  const results = searchDemoRecords({ q, source, topic } as SearchParams);
+  // Build source + topic options from backend if available; fall back to demo data.
+  let sourceOptions: { value: string; label: string }[] = [
+    { value: "phac", label: "Public Health Agency of Canada" },
+    { value: "hc", label: "Health Canada" },
+  ];
+  let allTopics = getAllTopics();
+
+  try {
+    const apiSources = await fetchSources();
+    if (apiSources.length > 0) {
+      sourceOptions = apiSources.map((s) => ({
+        value: s.sourceCode,
+        label: s.sourceName,
+      }));
+      const topicSet = new Set<string>();
+      apiSources.forEach((s) => s.topics.forEach((t) => topicSet.add(t)));
+      allTopics = Array.from(topicSet).sort((a, b) => a.localeCompare(b));
+    }
+  } catch {
+    const demoSources = getSourcesSummary();
+    sourceOptions = demoSources.map((s) => ({
+      value: s.sourceCode,
+      label: s.sourceName,
+    }));
+  }
+
+  let results = searchDemoRecords({ q, source, topic });
+  let totalResults = results.length;
+  let usingBackend = false;
+
+  // Attempt to use the backend search API if configured; fall back to the
+  // local demo dataset on any error or if the backend URL is not set.
+  try {
+    const backend = await searchSnapshots({
+      q: q || undefined,
+      source: source || undefined,
+      topic: topic || undefined,
+      page,
+      pageSize,
+    } as ApiSearchParams);
+    results = backend.results.map((r) => ({
+      id: String(r.id),
+      title: r.title ?? "",
+      sourceCode: r.sourceCode as "phac" | "hc",
+      sourceName: r.sourceName,
+      language: r.language ?? "",
+      topics: r.topics,
+      captureDate: r.captureDate,
+      originalUrl: r.originalUrl,
+      snippet: r.snippet ?? "",
+    }));
+    totalResults = backend.total;
+    usingBackend = true;
+  } catch {
+    usingBackend = false;
+    totalResults = results.length;
+  }
+
+  // Apply simple pagination in fallback mode (demo data).
+  const fallbackPageSize = results.length || DEFAULT_PAGE_SIZE;
+  const paginationSize = usingBackend ? pageSize : fallbackPageSize;
+  const pageCount = Math.max(
+    1,
+    Math.ceil(totalResults / paginationSize),
+  );
+  const effectivePage = Math.min(Math.max(1, page), pageCount);
+  const paginatedResults = usingBackend
+    ? results
+    : results.slice(
+        (effectivePage - 1) * paginationSize,
+        effectivePage * paginationSize,
+      );
 
   const resultCountText =
-    results.length === 1 ? "1 demo snapshot" : `${results.length} demo snapshots`;
+    totalResults === 1 ? "1 snapshot" : `${totalResults} snapshots`;
+
+  const buildPageHref = (targetPage: number) => {
+    const qs = new URLSearchParams();
+    if (q) qs.set("q", q);
+    if (source) qs.set("source", source);
+    if (topic) qs.set("topic", topic);
+    if (targetPage > 1) qs.set("page", String(targetPage));
+    if (pageSize !== DEFAULT_PAGE_SIZE) qs.set("pageSize", String(pageSize));
+    const queryString = qs.toString();
+    return queryString ? `/archive?${queryString}` : "/archive";
+  };
 
   return (
     <PageShell
@@ -53,7 +147,7 @@ export default async function ArchivePage({
         {/* Filters panel */}
         <aside className="ha-card p-4 sm:p-5">
           <h2 className="text-sm font-semibold text-slate-900">
-            Filters (demo dataset)
+            Filters {usingBackend ? "(live API)" : "(demo dataset fallback)"}
           </h2>
           <p className="mt-1 text-xs text-ha-muted">
             Adjust these filters and re-run the search on the right. In the full
@@ -62,6 +156,8 @@ export default async function ArchivePage({
           </p>
 
           <form className="mt-4 space-y-4" method="get">
+            <input type="hidden" name="page" value={String(effectivePage)} />
+            <input type="hidden" name="pageSize" value={String(pageSize)} />
             {/* Text search */}
             <div className="space-y-1">
               <label htmlFor="q" className="text-xs font-medium text-slate-800">
@@ -96,8 +192,11 @@ export default async function ArchivePage({
                 className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
               >
                 <option value="">All sources</option>
-                <option value="phac">Public Health Agency of Canada</option>
-                <option value="hc">Health Canada</option>
+                {sourceOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -155,6 +254,11 @@ export default async function ArchivePage({
                     </>
                   )}
                 </p>
+                {!usingBackend && (
+                  <p className="text-[11px] font-medium text-amber-800">
+                    Backend unavailable; showing demo data.
+                  </p>
+                )}
               </div>
               <Link
                 href="/archive/browse-by-source"
@@ -180,18 +284,47 @@ export default async function ArchivePage({
                 {/* Keep filters in sync */}
                 <input type="hidden" name="source" value={source} />
                 <input type="hidden" name="topic" value={topic} />
+                <input type="hidden" name="page" value={String(effectivePage)} />
+                <input type="hidden" name="pageSize" value={String(pageSize)} />
                 <button type="submit" className="ha-btn-secondary text-xs">
                   Search
                 </button>
               </form>
+
+              {usingBackend && (
+                <form className="flex items-center gap-2" method="get">
+                  <input type="hidden" name="q" value={q} />
+                  <input type="hidden" name="source" value={source} />
+                  <input type="hidden" name="topic" value={topic} />
+                  <input type="hidden" name="page" value="1" />
+                  <label htmlFor="pageSize" className="text-xs text-ha-muted">
+                    Results per page
+                  </label>
+                  <select
+                    id="pageSize"
+                    name="pageSize"
+                    defaultValue={String(pageSize)}
+                    className="rounded-lg border border-ha-border bg-white px-2 py-1 text-xs text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                  >
+                    {[10, 20, 50].map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="submit" className="ha-btn-secondary text-xs">
+                    Apply
+                  </button>
+                </form>
+              )}
             </div>
           </div>
 
           <div className="space-y-3">
-            {results.length === 0 ? (
+            {totalResults === 0 ? (
               <div className="ha-card p-4 sm:p-5">
                 <p className="text-sm text-ha-muted">
-                  No demo records match the current filters. Try removing some
+                  No records match the current filters. Try removing some
                   filters, using broader keywords, or{" "}
                   <Link
                     href="/archive"
@@ -203,7 +336,7 @@ export default async function ArchivePage({
                 </p>
               </div>
             ) : (
-              results.map((record) => (
+              paginatedResults.map((record) => (
                 <article
                   key={record.id}
                   className="ha-card ha-card-elevated p-4 sm:p-5"
@@ -250,6 +383,36 @@ export default async function ArchivePage({
               ))
             )}
           </div>
+
+          {pageCount > 1 && (
+            <div className="ha-card flex items-center justify-between gap-3 p-4 text-sm text-ha-muted sm:p-5">
+              <div>
+                Page {Math.min(effectivePage, pageCount)} of {pageCount}
+              </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  href={buildPageHref(Math.max(1, effectivePage - 1))}
+                  aria-disabled={effectivePage <= 1}
+                  className={`ha-btn-secondary text-xs ${
+                    effectivePage <= 1 ? "pointer-events-none opacity-50" : ""
+                  }`}
+                >
+                  ← Prev
+                </Link>
+                <Link
+                  href={buildPageHref(Math.min(pageCount, effectivePage + 1))}
+                  aria-disabled={effectivePage >= pageCount}
+                  className={`ha-btn-secondary text-xs ${
+                    effectivePage >= pageCount
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }`}
+                >
+                  Next →
+                </Link>
+              </div>
+            </div>
+          )}
         </section>
       </div>
     </PageShell>

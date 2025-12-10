@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PageShell } from "@/components/layout/PageShell";
 import { getSourcesSummary } from "@/data/demo-records";
+import { fetchSources, type SourceSummary as ApiSourceSummary } from "@/lib/api";
 
 function formatDate(iso: string): string {
   const [yearStr, monthStr, dayStr] = iso.split("-");
@@ -16,15 +17,52 @@ function formatDate(iso: string): string {
   });
 }
 
-export default function BrowseBySourcePage() {
-  const summaries = getSourcesSummary();
+type SourceSummaryLike = {
+  sourceCode: string;
+  sourceName: string;
+  recordCount: number;
+  firstCapture: string;
+  lastCapture: string;
+  topics: string[];
+  latestRecordId: number | string | null;
+};
+
+export default async function BrowseBySourcePage() {
+  let summaries: SourceSummaryLike[] = getSourcesSummary();
+  let usingBackend = false;
+
+  // Try backend /api/sources first; fall back to the demo summary on error.
+  try {
+    const apiSummaries = await fetchSources();
+    summaries = apiSummaries.map((s: ApiSourceSummary) => ({
+      sourceCode: s.sourceCode,
+      sourceName: s.sourceName,
+      recordCount: s.recordCount,
+      firstCapture: s.firstCapture,
+      lastCapture: s.lastCapture,
+      topics: s.topics,
+      latestRecordId: s.latestRecordId,
+    }));
+    usingBackend = true;
+  } catch {
+    // Keep demo summaries if backend is unavailable.
+    usingBackend = false;
+  }
 
   return (
     <PageShell
       eyebrow="Archive explorer (demo)"
-      title="Browse demo records by source"
-      intro="This view summarizes which demo snapshots are currently available for each federal source. In the full archive, this would expand to a broader set of agencies and jurisdictions."
+      title="Browse records by source"
+      intro="This view summarizes which snapshots are available for each source. In a fuller archive, this would expand to a broader set of agencies and jurisdictions."
     >
+      {!usingBackend && (
+        <div className="ha-callout mb-6">
+          <h3 className="ha-callout-title">Backend unavailable</h3>
+          <p className="text-xs leading-relaxed sm:text-sm">
+            Showing demo data while the live API is unavailable.
+          </p>
+        </div>
+      )}
       <div className="ha-grid-2">
         {summaries.map((source) => (
           <article
@@ -78,4 +116,3 @@ export default function BrowseBySourcePage() {
     </PageShell>
   );
 }
-

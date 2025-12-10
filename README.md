@@ -85,7 +85,7 @@ npm run lint
   - Demo fallback: bundled sample records under `src/data/demo-records.ts` and static snapshots under `public/demo-archive/**` when the API is unavailable.
 - API client: `src/lib/api.ts` (uses `NEXT_PUBLIC_API_BASE_URL`, defaulting to `http://localhost:8001`).
 - Pages:
-  - `/archive`: uses backend search with pagination; falls back to demo data and shows a fallback notice.
+  - `/archive`: uses backend search with pagination and page-size selection; falls back to demo data and shows a fallback notice.
   - `/archive/browse-by-source`: uses backend source summaries; falls back to demo summaries with a notice.
   - `/snapshot/[id]`: fetches backend snapshot detail/raw URL first; falls back to demo record/static snapshot if needed.
 
