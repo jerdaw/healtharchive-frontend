@@ -62,6 +62,7 @@ npm run lint
 - `NEXT_PUBLIC_API_BASE_URL` – base URL for the backend API (e.g., `http://localhost:8001` for local dev, `https://api.healtharchive.ca` for staging/prod). If unset, the API client falls back to `http://localhost:8001`.
 - `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER` – when set to `true`, shows a small banner in the UI if `/api/health` fails (dev/staging helper).
 - `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE` – when set to `true`, logs a console warning if `/api/health` fails (dev/staging helper).
+- Topics/sources are built from backend data when available (topic labels are slugified for queries); fall back to demo lists otherwise.
 
 ### Frontend ↔ backend integration
 

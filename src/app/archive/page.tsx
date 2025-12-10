@@ -38,6 +38,14 @@ function parsePositiveInt(value: string | undefined, fallback: number): number {
   return parsed;
 }
 
+function slugifyTopic(label: string): string {
+  return label
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export default async function ArchivePage({
   searchParams,
 }: {
@@ -57,7 +65,7 @@ export default async function ArchivePage({
     { value: "hc", label: "Health Canada" },
   ];
   let topicOptions: { value: string; label: string }[] = getAllTopics().map((t) => ({
-    value: t,
+    value: slugifyTopic(t) || t,
     label: t,
   }));
 
@@ -72,7 +80,7 @@ export default async function ArchivePage({
       apiSources.forEach((s) => s.topics.forEach((t) => topicSet.add(t)));
       topicOptions = Array.from(topicSet)
         .sort((a, b) => a.localeCompare(b))
-        .map((t) => ({ value: t, label: t }));
+        .map((t) => ({ value: slugifyTopic(t) || t, label: t }));
     }
   } catch {
     const demoSources = getSourcesSummary();
