@@ -91,6 +91,12 @@ npm run lint
 - Health diagnostics (optional): set `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a small banner when the backend health check fails (useful in dev/staging).
   - If the health banner is off, you can still log failures by setting `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` (dev-only).
 - Topics/sources: topic dropdown and source options come from the backend when available; fall back to demo lists otherwise.
+
+### Pre-release smoke (recommended)
+
+- Search (`/archive`): keywords + source/topic filters, pagination (First/Prev/Next/Last), page-size selector.
+- Browse by source (`/archive/browse-by-source`): cards load with counts/topics.
+- Snapshot (`/snapshot/[id]`): metadata present; iframe loads or shows error overlay with raw/API links; missing ID returns notFound.
 - Topics/sources: topic dropdown and source options come from the backend when available; fall back to demo lists otherwise.
 
 This runs the Next.js/ESLint config for the app.

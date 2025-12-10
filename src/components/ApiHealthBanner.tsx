@@ -7,9 +7,19 @@ const ENABLE_HEALTH_BANNER =
   process.env.NEXT_PUBLIC_SHOW_API_HEALTH_BANNER === "true";
 const LOG_HEALTH_FAILURE =
   process.env.NEXT_PUBLIC_LOG_API_HEALTH_FAILURE === "true";
+const IS_DEV = process.env.NODE_ENV !== "production";
 
 export function ApiHealthBanner() {
   const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+
+  useEffect(() => {
+    if (!IS_DEV) return;
+    if (!ENABLE_HEALTH_BANNER && !LOG_HEALTH_FAILURE) {
+      console.info(
+        "[healtharchive] API health banner/logging disabled. Set NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true or NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true in dev/staging to surface failures.",
+      );
+    }
+  }, []);
 
   useEffect(() => {
     if (!ENABLE_HEALTH_BANNER && !LOG_HEALTH_FAILURE) return;

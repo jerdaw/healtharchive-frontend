@@ -84,6 +84,13 @@ npm run lint
 - `/snapshot/[id]`: loads metadata and iframe; iframe shows loading overlay, then content; error overlay when iframe fails; notFound on missing ID.
 - Dev-only debug: when iframe fails, “Open raw snapshot” and optional “View metadata JSON” links remain available.
 
+### Deployment env expectations (Vercel/staging)
+
+- `NEXT_PUBLIC_API_BASE_URL` must point at the backend for the environment.
+- Optional diagnostics:
+  - `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a UI banner on health failures (dev/staging).
+  - `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` to log health failures to the console (dev/staging).
+
 ---
 
 ## 3. Git & branch history
