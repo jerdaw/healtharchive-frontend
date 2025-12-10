@@ -57,6 +57,10 @@ npm start
 npm run lint
 ```
 
+### Environment variables
+
+- `NEXT_PUBLIC_API_BASE_URL` – base URL for the backend API (e.g., `http://localhost:8001` for local dev, `https://api.healtharchive.ca` for staging/prod). If unset, the API client falls back to `http://localhost:8001`.
+
 ---
 
 ## 3. Git & branch history
