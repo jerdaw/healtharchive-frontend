@@ -72,7 +72,7 @@ npm run lint
 - Pages:
   - `/archive`: prefers backend search results with pagination; falls back to the demo dataset with a fallback notice.
   - `/archive/browse-by-source`: prefers backend source summaries; falls back to demo summaries with a notice.
-  - `/snapshot/[id]`: prefers backend snapshot detail/raw URL; falls back to the demo record/static snapshot if missing.
+  - `/snapshot/[id]`: prefers backend snapshot detail/raw URL; falls back to the demo record/static snapshot if missing. The viewer shows a friendly error if the iframe fails to load.
 - Fallback behavior keeps the UI usable when the backend is unreachable or not configured.
 
 ---
