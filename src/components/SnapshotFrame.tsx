@@ -54,6 +54,7 @@ export function SnapshotFrame({ src, title, rawLink, apiLink }: SnapshotFramePro
         <iframe
           src={src}
           title={title}
+          sandbox="allow-same-origin allow-scripts"
           className="h-[480px] w-full border-0 sm:h-[560px]"
           onLoad={() => setStatus("loaded")}
           onError={() => setStatus("error")}
