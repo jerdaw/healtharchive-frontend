@@ -24,15 +24,12 @@ function isActivePath(pathname: string, href: string): boolean {
 export function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [shrink, setShrink] = useState(0);
-
-  useEffect(() => {
-    if (typeof document === "undefined") return;
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    if (typeof document === "undefined") return "light";
     const root = document.documentElement;
-    const current = root.dataset.theme === "dark" ? "dark" : "light";
-    setTheme(current);
-  }, []);
+    return root.dataset.theme === "dark" ? "dark" : "light";
+  });
+  const [shrink, setShrink] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

@@ -12,17 +12,19 @@ type Phase =
     | "final";
 
 function usePrefersReducedMotion() {
-    const [reduced, setReduced] = useState(false);
+    const [reduced, setReduced] = useState<boolean>(() => {
+        if (typeof window === "undefined" || !window.matchMedia) {
+            return false;
+        }
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    });
 
     useEffect(() => {
         if (typeof window === "undefined" || !window.matchMedia) {
             return;
         }
 
-        const mediaQuery = window.matchMedia(
-            "(prefers-reduced-motion: reduce)",
-        );
-        setReduced(mediaQuery.matches);
+        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
         const handleChange = (event: MediaQueryListEvent) => {
             setReduced(event.matches);
@@ -46,16 +48,19 @@ export function TrackChangesPhrase() {
     const beforeLength = beforeChars.length;
     const afterLength = afterWord.length;
 
-    const [phase, setPhase] = useState<Phase>("initial");
-    const [deletedCount, setDeletedCount] = useState(0);
-    const [typedAfterLength, setTypedAfterLength] = useState(0);
-    const [hasAnimated, setHasAnimated] = useState(false);
+    const [phase, setPhase] = useState<Phase>(() =>
+        prefersReducedMotion ? "final" : "initial",
+    );
+    const [deletedCount, setDeletedCount] = useState(() =>
+        prefersReducedMotion ? beforeLength : 0,
+    );
+    const [typedAfterLength, setTypedAfterLength] = useState(() =>
+        prefersReducedMotion ? afterLength : 0,
+    );
+    const [hasAnimated, setHasAnimated] = useState(prefersReducedMotion);
 
     useEffect(() => {
         if (prefersReducedMotion || hasAnimated) {
-            setPhase("final");
-            setDeletedCount(beforeLength);
-            setTypedAfterLength(afterLength);
             return;
         }
 
@@ -63,6 +68,8 @@ export function TrackChangesPhrase() {
         let typingIntervalId: number | null = null;
         const timeouts: number[] = [];
 
+        // Reset to the starting animation state.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPhase("initial");
         setDeletedCount(0);
         setTypedAfterLength(0);
