@@ -5,9 +5,11 @@ import { useState } from "react";
 type SnapshotFrameProps = {
   src: string;
   title: string;
+  rawLink?: string;
+  apiLink?: string;
 };
 
-export function SnapshotFrame({ src, title }: SnapshotFrameProps) {
+export function SnapshotFrame({ src, title, rawLink, apiLink }: SnapshotFrameProps) {
   const [status, setStatus] = useState<"loading" | "loaded" | "error">(
     "loading",
   );
@@ -24,6 +26,28 @@ export function SnapshotFrame({ src, title }: SnapshotFrameProps) {
               The snapshot failed to load. Try opening the raw snapshot link
               above or reloading the page.
             </p>
+            <div className="flex justify-center gap-2 text-[11px] font-medium">
+              {rawLink && (
+                <a
+                  href={rawLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-ha-accent hover:text-blue-700"
+                >
+                  Open raw snapshot →
+                </a>
+              )}
+              {apiLink && (
+                <a
+                  href={apiLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-ha-accent hover:text-blue-700"
+                >
+                  View metadata JSON
+                </a>
+              )}
+            </div>
           </div>
         </div>
       ) : (

@@ -61,6 +61,7 @@ npm run lint
 
 - `NEXT_PUBLIC_API_BASE_URL` – base URL for the backend API (e.g., `http://localhost:8001` for local dev, `https://api.healtharchive.ca` for staging/prod). If unset, the API client falls back to `http://localhost:8001`.
 - `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER` – when set to `true`, shows a small banner in the UI if `/api/health` fails (dev/staging helper).
+- `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE` – when set to `true`, logs a console warning if `/api/health` fails (dev/staging helper).
 
 ### Frontend ↔ backend integration
 
@@ -81,6 +82,7 @@ npm run lint
 - `/archive`: search with and without filters; verify pagination/Next/Prev/First/Last and page-size selector; see fallback notice if API is down.
 - `/archive/browse-by-source`: cards load with counts/topics; fallback notice if API is down.
 - `/snapshot/[id]`: loads metadata and iframe; iframe shows loading overlay, then content; error overlay when iframe fails; notFound on missing ID.
+- Dev-only debug: when iframe fails, “Open raw snapshot” and optional “View metadata JSON” links remain available.
 
 ---
 

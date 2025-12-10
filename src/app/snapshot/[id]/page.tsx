@@ -65,6 +65,11 @@ export default async function SnapshotPage({
   const topics = snapshotMeta?.topics ?? record?.topics ?? [];
   const rawSnapshotUrl =
     snapshotMeta?.rawSnapshotUrl ?? record?.snapshotPath ?? null;
+  const rawLink = rawSnapshotUrl ?? undefined;
+  const apiLink =
+    usingBackend && snapshotMeta?.id != null
+      ? `/api/snapshot/${snapshotMeta.id}`
+      : undefined;
 
   return (
     <PageShell
@@ -169,7 +174,7 @@ export default async function SnapshotPage({
           </div>
           <div className="flex-1">
             {rawSnapshotUrl ? (
-              <SnapshotFrame src={rawSnapshotUrl} title={title} />
+              <SnapshotFrame src={rawSnapshotUrl} title={title} rawLink={rawLink} apiLink={apiLink} />
             ) : (
               <div className="flex h-[320px] items-center justify-center px-4 text-center text-xs text-ha-muted sm:h-[560px] sm:text-sm">
                 Viewer for this snapshot will be powered by the full replay
