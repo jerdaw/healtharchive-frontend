@@ -5,19 +5,28 @@ import { fetchHealth } from "@/lib/api";
 
 const ENABLE_HEALTH_BANNER =
   process.env.NEXT_PUBLIC_SHOW_API_HEALTH_BANNER === "true";
+const LOG_HEALTH_FAILURE =
+  process.env.NEXT_PUBLIC_LOG_API_HEALTH_FAILURE === "true";
 
 export function ApiHealthBanner() {
   const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
 
   useEffect(() => {
-    if (!ENABLE_HEALTH_BANNER) return;
+    if (!ENABLE_HEALTH_BANNER && !LOG_HEALTH_FAILURE) return;
     let cancelled = false;
     fetchHealth()
       .then(() => {
         if (!cancelled) setStatus("ok");
       })
       .catch(() => {
-        if (!cancelled) setStatus("error");
+        if (!cancelled) {
+          setStatus("error");
+          if (LOG_HEALTH_FAILURE) {
+            console.warn(
+              "[healtharchive] API health check failed. Verify NEXT_PUBLIC_API_BASE_URL.",
+            );
+          }
+        }
       });
     return () => {
       cancelled = true;
