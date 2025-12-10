@@ -76,6 +76,19 @@ npm start
 npm run lint
 ```
 
+### 6. Tests (mocked, no backend required)
+
+```bash
+npm test
+```
+
+Vitest + Testing Library with mocked fetch; no live backend needed.
+
+### CI / deployment notes
+
+- Ensure `NEXT_PUBLIC_API_BASE_URL` is set per environment (Vercel/staging/prod).
+- Optional diagnostics envs are normally disabled in CI to keep logs quiet.
+
 ---
 
 ## Backend integration overview

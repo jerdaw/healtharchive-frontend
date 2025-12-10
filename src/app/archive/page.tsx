@@ -77,10 +77,20 @@ export default async function ArchivePage({
         label: s.sourceName,
       }));
       const topicSet = new Set<string>();
-      apiSources.forEach((s) => s.topics.forEach((t) => topicSet.add(t)));
+      apiSources.forEach((s: any) => {
+        // Allow backend to return either string labels or {slug,label}
+        s.topics?.forEach((t: any) => {
+          if (t && typeof t === "object" && "slug" in t && "label" in t) {
+            topicSet.add(JSON.stringify({ slug: t.slug, label: t.label }));
+          } else if (typeof t === "string") {
+            topicSet.add(JSON.stringify({ slug: slugifyTopic(t) || t, label: t }));
+          }
+        });
+      });
       topicOptions = Array.from(topicSet)
-        .sort((a, b) => a.localeCompare(b))
-        .map((t) => ({ value: slugifyTopic(t) || t, label: t }));
+        .map((json) => JSON.parse(json) as { slug: string; label: string })
+        .sort((a, b) => a.label.localeCompare(b.label))
+        .map((t) => ({ value: t.slug, label: t.label }));
     }
   } catch {
     const demoSources = getSourcesSummary();

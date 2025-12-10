@@ -55,6 +55,9 @@ npm start
 
 # Lint (ESLint)
 npm run lint
+
+# Tests (Vitest + RTL, mocked fetch)
+npm test
 ```
 
 ### Environment variables
@@ -91,6 +94,7 @@ npm run lint
 - Optional diagnostics:
   - `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a UI banner on health failures (dev/staging).
   - `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` to log health failures to the console (dev/staging).
+- Tests mock fetch; no live backend needed. If health diagnostics are disabled, a console info may appear in dev but is silenced in test runs.
 
 ---
 
