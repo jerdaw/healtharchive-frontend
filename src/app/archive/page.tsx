@@ -56,7 +56,10 @@ export default async function ArchivePage({
     { value: "phac", label: "Public Health Agency of Canada" },
     { value: "hc", label: "Health Canada" },
   ];
-  let allTopics = getAllTopics();
+  let topicOptions: { value: string; label: string }[] = getAllTopics().map((t) => ({
+    value: t,
+    label: t,
+  }));
 
   try {
     const apiSources = await fetchSources();
@@ -67,7 +70,9 @@ export default async function ArchivePage({
       }));
       const topicSet = new Set<string>();
       apiSources.forEach((s) => s.topics.forEach((t) => topicSet.add(t)));
-      allTopics = Array.from(topicSet).sort((a, b) => a.localeCompare(b));
+      topicOptions = Array.from(topicSet)
+        .sort((a, b) => a.localeCompare(b))
+        .map((t) => ({ value: t, label: t }));
     }
   } catch {
     const demoSources = getSourcesSummary();
@@ -217,9 +222,9 @@ export default async function ArchivePage({
                 className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
               >
                 <option value="">All topics</option>
-                {allTopics.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
+                {topicOptions.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
                   </option>
                 ))}
               </select>
