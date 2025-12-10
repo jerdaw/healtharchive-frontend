@@ -65,16 +65,24 @@ npm test
 - `NEXT_PUBLIC_API_BASE_URL` – base URL for the backend API (e.g., `http://localhost:8001` for local dev, `https://api.healtharchive.ca` for staging/prod). If unset, the API client falls back to `http://localhost:8001`.
 - `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER` – when set to `true`, shows a small banner in the UI if `/api/health` fails (dev/staging helper).
 - `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE` – when set to `true`, logs a console warning if `/api/health` fails (dev/staging helper).
-- Topics/sources are built from backend data when available (topic labels are slugified for queries); fall back to demo lists otherwise.
+- `NEXT_PUBLIC_SHOW_API_BASE_HINT` – when set to `true` in development, logs the effective API base URL to the browser console via `ApiHealthBanner` (dev-only helper; silenced in tests and production). This should remain disabled in production and CI to avoid noisy logs.
+- Topics and sources are built from backend data when available. Topics are
+  exposed by the backend as `{slug, label}` pairs; demo/fallback data
+  internally slugifies labels to mimic the same contract so the UI can always
+  use `slug` for queries and `label` for display.
 
 ### Frontend ↔ backend integration
 
-- API client lives at `src/lib/api.ts` and calls:
+- API client lives at `src/lib/api.ts` and calls **public** backend endpoints:
   - `GET /api/search` (search with `q`, `source`, `topic`, `page`, `pageSize`)
   - `GET /api/sources` (per-source summaries)
+  - `GET /api/topics` (canonical topic list used for filters, when available)
   - `GET /api/snapshot/{id}` (snapshot detail)
   - `GET /api/snapshots/raw/{id}` (raw HTML for the viewer)
   - `GET /api/health` (health check)
+- The frontend does **not** call admin or observability endpoints such as
+  `/api/admin/**` or `/metrics`; those are reserved for backend operators and
+  monitoring systems.
 - Pages:
   - `/archive`: prefers backend search results with pagination; falls back to the demo dataset with a fallback notice.
   - `/archive/browse-by-source`: prefers backend source summaries; falls back to demo summaries with a notice.
@@ -88,12 +96,34 @@ npm test
 - `/snapshot/[id]`: loads metadata and iframe; iframe shows loading overlay, then content; error overlay when iframe fails; notFound on missing ID.
 - Dev-only debug: when iframe fails, “Open raw snapshot” and optional “View metadata JSON” links remain available.
 
+### CI expectations
+
+- GitHub Actions (`frontend-ci.yml`) runs on pushes to `main` and on pull requests:
+
+  - `npm ci`
+  - `npm run lint`
+  - `npm test`
+
+- Tests mock network calls and do not require a live backend.
+- In CI, diagnostics env vars (`NEXT_PUBLIC_SHOW_API_HEALTH_BANNER`,
+  `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE`, `NEXT_PUBLIC_SHOW_API_BASE_HINT`) are
+  disabled to keep output quiet and deterministic.
+
 ### Deployment env expectations (Vercel/staging)
 
 - `NEXT_PUBLIC_API_BASE_URL` must point at the backend for the environment.
-- Optional diagnostics:
-  - `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a UI banner on health failures (dev/staging).
-  - `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` to log health failures to the console (dev/staging).
+
+  Suggested values:
+
+  * **Local dev:** `NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8001`
+  * **Preview / staging:** `NEXT_PUBLIC_API_BASE_URL=https://api-staging.healtharchive.ca` (or re-use `https://api.healtharchive.ca` if you don’t have a separate staging API)
+  * **Production:** `NEXT_PUBLIC_API_BASE_URL=https://api.healtharchive.ca`
+
+- Optional diagnostics (usually enabled in dev/staging, disabled in production/CI):
+  - `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a UI banner on health failures.
+  - `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` to log health failures to the console.
+  - `NEXT_PUBLIC_SHOW_API_BASE_HINT=true` to log the effective API base URL once in the browser console (via `ApiHealthBanner`).
+
 - Tests mock fetch; no live backend needed. If health diagnostics are disabled, a console info may appear in dev but is silenced in test runs.
 
 ---
@@ -454,7 +484,49 @@ Key fields:
 
 Each record’s `snapshotPath` is a valid file in `public/demo-archive/**`.
 
-### 7.3 Helper functions
+### 7.3 Topic handling (backend + frontend)
+
+Topics are handled consistently across the backend, frontend, and demo data:
+
+- **Canonical shape from the backend**:
+
+  * All public APIs that expose topics (`/api/sources`, `/api/search`, `/api/snapshot/{id}`) return topics as:
+
+    ```ts
+    type TopicRef = {
+      slug: string;   // machine-readable identifier (used in URLs / query params)
+      label: string;  // human-readable label shown in the UI
+    };
+    ```
+
+  * The `topic` query parameter for `/api/search` is always the **topic slug**
+    (`?topic=covid-19`).
+
+- **Frontend usage**:
+
+  * Dropdowns and filters use `value = slug` and display `label`.
+  * Topic badges in `/archive` and `/snapshot/[id]` show `label`.
+  * Links or filters that refer to a topic use the slug in the URL
+    (`?topic=<slug>`).
+
+- **Demo / fallback behavior**:
+
+  * In demo mode, topics on `DemoRecord` are simple strings (labels).
+  * A shared `slugifyTopic(label)` helper in `src/data/demo-records.ts`
+    converts labels into slugs using the same rules as the backend
+    (lowercase, non-alphanumerics → `-`, trimmed).
+  * `searchDemoRecords`:
+
+    * Treats `topic` primarily as a slug.
+    * For each record, slugifies each label and matches when
+      `slugifyTopic(label) === topic` (or `label === topic` for
+      backward-compat).
+
+This ensures that the UI behaves the same way whether it is backed by the live
+API or the bundled demo dataset: URLs use slugs, and the user sees readable
+labels.
+
+### 7.4 Helper functions
 
 All in `src/data/demo-records.ts`:
 
@@ -471,7 +543,10 @@ All in `src/data/demo-records.ts`:
    Logic:
 
    * `source`: if provided, filters `record.sourceCode === source`.
-   * `topic`: if provided, filters `record.topics.includes(topic)`.
+   * `topic`: if provided, treats it primarily as a **topic slug**:
+
+     * For each record, slugifies each topic label using the same rules as the backend (lowercase, non-alphanumerics → `-`, trimmed).
+     * A record matches if **any** of its topic slugs equals `topic` **or** any raw topic label equals `topic` (for backward-compat).
    * `q`: if not provided, returns all records passing above filters.
    * If `q` provided:
 

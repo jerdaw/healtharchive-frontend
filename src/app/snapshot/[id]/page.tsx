@@ -1,27 +1,42 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/layout/PageShell";
-import { getRecordById } from "@/data/demo-records";
+import { getRecordById, slugifyTopic } from "@/data/demo-records";
 import { fetchSnapshotDetail } from "@/lib/api";
 import { SnapshotFrame } from "@/components/SnapshotFrame";
 
-function formatDate(iso: string): string {
-  const [yearStr, monthStr, dayStr] = iso.split("-");
-  const year = Number(yearStr);
-  const month = Number(monthStr);
-  const day = Number(dayStr);
+function formatDate(iso: string | undefined | null): string {
+  if (!iso) return "Unknown";
 
-  if (!year || !month || !day) {
-    return iso;
+  const parts = iso.split("-");
+  if (parts.length === 3) {
+    const [yearStr, monthStr, dayStr] = parts;
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    const day = Number(dayStr);
+
+    if (year && month && day) {
+      const d = new Date(year, month - 1, day);
+      if (!Number.isNaN(d.getTime())) {
+        return d.toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+    }
   }
 
-  const d = new Date(year, month - 1, day);
+  const parsed = new Date(iso);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
 
-  return d.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  return iso;
 }
 
 export default async function SnapshotPage({
@@ -62,7 +77,14 @@ export default async function SnapshotPage({
   const language = snapshotMeta?.language ?? record?.language ?? "Unknown";
   const originalUrl =
     snapshotMeta?.originalUrl ?? record?.originalUrl ?? "Unknown URL";
-  const topics = snapshotMeta?.topics ?? record?.topics ?? [];
+  const topics =
+    snapshotMeta?.topics ??
+    (record?.topics
+      ? record.topics.map((label) => ({
+          slug: slugifyTopic(label),
+          label,
+        }))
+      : []);
   const rawSnapshotUrl =
     snapshotMeta?.rawSnapshotUrl ?? record?.snapshotPath ?? null;
   const rawLink = rawSnapshotUrl ?? undefined;
@@ -112,8 +134,8 @@ export default async function SnapshotPage({
             {topics.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {topics.map((topic) => (
-                  <span key={topic} className="ha-badge">
-                    {topic}
+                  <span key={topic.slug} className="ha-badge">
+                    {topic.label}
                   </span>
                 ))}
               </div>
@@ -164,7 +186,10 @@ export default async function SnapshotPage({
             ) : (
               <>
                 {" "}
-                · viewer integration for this snapshot is not yet available.
+                ·{" "}
+                {usingBackend && snapshotMeta
+                  ? "archived HTML for this snapshot is not currently available; metadata remains accessible below."
+                  : "viewer integration for this snapshot is not yet available."}
               </>
             )}
             <span className="sr-only">
@@ -177,9 +202,33 @@ export default async function SnapshotPage({
               <SnapshotFrame src={rawSnapshotUrl} title={title} rawLink={rawLink} apiLink={apiLink} />
             ) : (
               <div className="flex h-[320px] items-center justify-center px-4 text-center text-xs text-ha-muted sm:h-[560px] sm:text-sm">
-                Viewer for this snapshot will be powered by the full replay
-                engine in a future phase. For now, only demo snapshots stored
-                under <code>public/demo-archive</code> are embedded here.
+                {usingBackend && snapshotMeta ? (
+                  <>
+                    Archived HTML content for this snapshot is not currently
+                    available.{" "}
+                    {apiLink && (
+                      <>
+                        You can still{" "}
+                        <a
+                          href={apiLink}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-medium text-ha-accent hover:text-blue-700"
+                        >
+                          view metadata JSON
+                        </a>
+                        .
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    Viewer for this snapshot will be powered by the full replay
+                    engine in a future phase. For now, only demo snapshots
+                    stored under <code>public/demo-archive</code> are embedded
+                    here.
+                  </>
+                )}
               </div>
             )}
           </div>

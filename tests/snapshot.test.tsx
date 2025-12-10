@@ -61,7 +61,7 @@ describe("/snapshot/[id]", () => {
       sourceCode: "phac",
       sourceName: "PHAC",
       language: "en",
-      topics: ["COVID-19"],
+      topics: [{ slug: "covid-19", label: "COVID-19" }],
       captureDate: "2024-01-02",
       originalUrl: "https://example.com",
       snippet: "Summary",
@@ -84,7 +84,7 @@ describe("/snapshot/[id]", () => {
       sourceCode: "phac",
       sourceName: "PHAC",
       language: "en",
-      topics: ["COVID-19"],
+      topics: [{ slug: "covid-19", label: "COVID-19" }],
       captureDate: "2024-01-02",
       originalUrl: "https://example.com",
       snippet: "Summary",
@@ -99,6 +99,29 @@ describe("/snapshot/[id]", () => {
     expect(screen.getByText(/Archived content unavailable/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Open raw snapshot/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/View metadata JSON/i)).toBeInTheDocument();
+  });
+
+  it("handles backend metadata without raw snapshot URL", async () => {
+    mockFetchSnapshotDetail.mockResolvedValue({
+      id: 44,
+      title: "Snapshot No Raw",
+      sourceCode: "phac",
+      sourceName: "PHAC",
+      language: "en",
+      topics: [{ slug: "covid-19", label: "COVID-19" }],
+      captureDate: "2024-01-03",
+      originalUrl: "https://example.com",
+      snippet: "Summary",
+      rawSnapshotUrl: null,
+      mimeType: "text/html",
+      statusCode: 200,
+    });
+
+    const ui = await SnapshotPage({ params: Promise.resolve({ id: "44" }) });
+    render(ui);
+
+    // Should render metadata title even when raw content is missing.
+    expect(screen.getAllByText(/Snapshot No Raw/i).length).toBeGreaterThan(0);
   });
 
   it("calls notFound when no snapshot exists", async () => {

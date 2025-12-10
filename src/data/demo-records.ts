@@ -11,6 +11,14 @@ export type DemoRecord = {
   snippet: string;
 };
 
+export function slugifyTopic(label: string): string {
+  return label
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export const demoRecords: DemoRecord[] = [
   {
     id: "phac-2025-02-15-covid-epi",
@@ -172,7 +180,13 @@ export function searchDemoRecords(params: SearchParams): DemoRecord[] {
 
   return demoRecords.filter((record) => {
     if (source && record.sourceCode !== source) return false;
-    if (topic && !record.topics.includes(topic)) return false;
+    if (topic) {
+      const matchesTopic = record.topics.some((t) => {
+        const slug = slugifyTopic(t);
+        return slug === topic || t === topic;
+      });
+      if (!matchesTopic) return false;
+    }
 
     if (!q) return true;
 
@@ -248,4 +262,3 @@ export function getAllTopics(): string[] {
 export function getRecordById(id: string): DemoRecord | undefined {
   return demoRecords.find((r) => r.id === id);
 }
-
