@@ -61,6 +61,14 @@ npm start
 
 (In production, Vercel runs the build and serves the app.)
 
+### 4. Lint (recommended)
+
+```bash
+npm run lint
+```
+
+This runs the Next.js/ESLint config for the app.
+
 ---
 
 ## Project structure (high-level)
