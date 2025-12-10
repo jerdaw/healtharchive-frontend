@@ -89,6 +89,27 @@ npm test
   - `/snapshot/[id]`: prefers backend snapshot detail/raw URL; falls back to the demo record/static snapshot if missing. The viewer shows a loading overlay and a friendly error if the iframe fails to load.
 - Fallback behavior keeps the UI usable when the backend is unreachable or not configured.
 
+### Security & browser hardening
+
+- Responses from the frontend are served with conservative security headers
+  configured via `next.config.ts`:
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+  - `X-Content-Type-Options: nosniff`
+  - `X-Frame-Options: SAMEORIGIN`
+  - `Permissions-Policy: geolocation=(), microphone=(), camera=()`
+- A `Content-Security-Policy-Report-Only` header is also set to help tune a
+  CSP in staging without breaking users. The policy:
+  - Restricts scripts and styles to `self` (with inline styles allowed).
+  - Restricts `connect-src` and `frame-src` to the frontend itself plus
+    `https://api.healtharchive.ca` and `https://api-staging.healtharchive.ca`.
+  - Limits `frame-ancestors` to `self`, `base-uri` to `self`, and `form-action`
+    to `self`.
+- The snapshot viewer (`SnapshotFrame`) loads archived HTML in an `<iframe>`
+  with a `sandbox="allow-same-origin allow-scripts"` attribute to constrain
+  what captured content can do in the browser. Raw snapshot URLs are served
+  from the backend API origin, and CSP further limits where frames can be
+  embedded from.
+
 ### QA checklist (quick smoke)
 
 - `/archive`: search with and without filters; verify pagination/Next/Prev/First/Last and page-size selector; see fallback notice if API is down.

@@ -115,6 +115,11 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
   - Runs `npm run lint`.
   - Runs `npm test` (Vitest + Testing Library with mocked fetch; no live backend
     required).
+   - Runs a lightweight dependency security audit:
+
+     ```bash
+     npm audit --audit-level=high
+     ```
 
 - Ensure `NEXT_PUBLIC_API_BASE_URL` is set per environment (Vercel/staging/prod).
 - Optional diagnostics envs (`NEXT_PUBLIC_SHOW_API_HEALTH_BANNER`,
