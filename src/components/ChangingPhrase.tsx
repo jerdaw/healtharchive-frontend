@@ -34,17 +34,19 @@ function toLeet(value: string) {
 }
 
 function usePrefersReducedMotion() {
-    const [reduced, setReduced] = useState(false);
+    const [reduced, setReduced] = useState<boolean>(() => {
+        if (typeof window === "undefined" || !window.matchMedia) {
+            return false;
+        }
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    });
 
     useEffect(() => {
         if (typeof window === "undefined" || !window.matchMedia) {
             return;
         }
 
-        const mediaQuery = window.matchMedia(
-            "(prefers-reduced-motion: reduce)",
-        );
-        setReduced(mediaQuery.matches);
+        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
         const handler = (event: MediaQueryListEvent) => {
             setReduced(event.matches);
@@ -65,13 +67,12 @@ export function ChangingPhrase({ text, className }: ChangingPhraseProps) {
     const finalChars = useMemo(() => text.split(""), [text]);
     const leetChars = useMemo(() => toLeet(text).split(""), [text]);
     const [displayedChars, setDisplayedChars] = useState<string[]>(finalChars);
-    const [hasAnimated, setHasAnimated] = useState(false);
+    const [hasAnimated, setHasAnimated] = useState(prefersReducedMotion);
     const resolveIntervalRef = useRef<number | null>(null);
     const resolveTimeoutRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (prefersReducedMotion || hasAnimated) {
-            setDisplayedChars(finalChars);
             return;
         }
 
@@ -91,6 +92,8 @@ export function ChangingPhrase({ text, className }: ChangingPhraseProps) {
         let pointer = 0;
         let cancelled = false;
 
+        // Intentionally set initial scrambled state before starting the animation.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setDisplayedChars(leetChars);
 
         resolveTimeoutRef.current = window.setTimeout(() => {
