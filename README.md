@@ -9,9 +9,9 @@ This repository contains the **Next.js frontend** for the public site at:
 - https://healtharchive.vercel.app (Vercel default domain)
 
 > **Status:** Early demo  
-> This frontend currently exposes a small curated demo dataset to prototype the
-> archive UI (search, browse, and snapshot viewing). The full crawling / storage /
-> replay infrastructure is being built separately.
+> The UI now prefers live backend APIs for search, browse, and snapshot detail
+> (configured via `NEXT_PUBLIC_API_BASE_URL`), and gracefully falls back to the
+> bundled demo dataset when the API is unreachable.
 
 ---
 
@@ -44,9 +44,9 @@ This repository contains the **Next.js frontend** for the public site at:
 npm install
 ````
 
-### 2. Configure API base URL (optional for dev)
+### 2. Configure API base URL
 
-Create a `.env` (copy from `.env.example`) if you want to point the frontend at a live backend. By default the API client falls back to `http://localhost:8001`.
+Create a `.env` (copy from `.env.example`) to point the frontend at a live backend. By default the API client falls back to `http://localhost:8001`.
 
 ```bash
 cp .env.example .env
@@ -75,6 +75,19 @@ npm start
 ```bash
 npm run lint
 ```
+
+---
+
+## Backend integration overview
+
+- Data sources:
+  - Live APIs (preferred): `/api/search`, `/api/sources`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`, `/api/health`.
+  - Demo fallback: bundled sample records under `src/data/demo-records.ts` and static snapshots under `public/demo-archive/**` when the API is unavailable.
+- API client: `src/lib/api.ts` (uses `NEXT_PUBLIC_API_BASE_URL`, defaulting to `http://localhost:8001`).
+- Pages:
+  - `/archive`: uses backend search with pagination; falls back to demo data and shows a fallback notice.
+  - `/archive/browse-by-source`: uses backend source summaries; falls back to demo summaries with a notice.
+  - `/snapshot/[id]`: fetches backend snapshot detail/raw URL first; falls back to demo record/static snapshot if needed.
 
 This runs the Next.js/ESLint config for the app.
 
