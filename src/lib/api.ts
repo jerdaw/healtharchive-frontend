@@ -4,7 +4,7 @@ export type SourceSummary = {
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
-  topics: string[];
+  topics: string[]; // labels from backend
   latestRecordId: number | null;
 };
 
@@ -14,7 +14,7 @@ export type SnapshotSummary = {
   sourceCode: string;
   sourceName: string;
   language: string | null;
-  topics: string[];
+  topics: string[]; // labels
   captureDate: string;
   originalUrl: string;
   snippet: string | null;
@@ -34,7 +34,7 @@ export type SnapshotDetail = {
   sourceCode: string;
   sourceName: string;
   language: string | null;
-  topics: string[];
+  topics: string[]; // labels
   captureDate: string;
   originalUrl: string;
   snippet: string | null;

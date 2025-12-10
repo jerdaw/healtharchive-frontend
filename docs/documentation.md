@@ -76,6 +76,12 @@ npm run lint
   - `/snapshot/[id]`: prefers backend snapshot detail/raw URL; falls back to the demo record/static snapshot if missing. The viewer shows a loading overlay and a friendly error if the iframe fails to load.
 - Fallback behavior keeps the UI usable when the backend is unreachable or not configured.
 
+### QA checklist (quick smoke)
+
+- `/archive`: search with and without filters; verify pagination/Next/Prev/First/Last and page-size selector; see fallback notice if API is down.
+- `/archive/browse-by-source`: cards load with counts/topics; fallback notice if API is down.
+- `/snapshot/[id]`: loads metadata and iframe; iframe shows loading overlay, then content; error overlay when iframe fails; notFound on missing ID.
+
 ---
 
 ## 3. Git & branch history
