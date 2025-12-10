@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageShell } from "@/components/layout/PageShell";
 import { getAllTopics, searchDemoRecords, getSourcesSummary } from "@/data/demo-records";
 import { fetchSources, searchSnapshots, type SearchParams as ApiSearchParams } from "@/lib/api";
+import { ApiHealthBanner } from "@/components/ApiHealthBanner";
 
 function formatDate(iso: string): string {
   const [yearStr, monthStr, dayStr] = iso.split("-");
@@ -143,6 +144,7 @@ export default async function ArchivePage({
       title="Browse & search demo snapshots"
       intro="This is a prototype view showing how the archive explorer will behave. Search and filters are powered by a small demo dataset from selected Public Health Agency of Canada and Health Canada pages."
     >
+      <ApiHealthBanner />
       <div className="grid gap-8 lg:grid-cols-[minmax(0,260px),minmax(0,1fr)] lg:items-start">
         {/* Filters panel */}
         <aside className="ha-card p-4 sm:p-5">
@@ -385,11 +387,29 @@ export default async function ArchivePage({
           </div>
 
           {pageCount > 1 && (
-            <div className="ha-card flex items-center justify-between gap-3 p-4 text-sm text-ha-muted sm:p-5">
-              <div>
-                Page {Math.min(effectivePage, pageCount)} of {pageCount}
+            <div className="ha-card flex flex-wrap items-center justify-between gap-3 p-4 text-sm text-ha-muted sm:p-5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span>
+                  Page {Math.min(effectivePage, pageCount)} of {pageCount}
+                </span>
+                {usingBackend && (
+                  <span className="text-[11px] text-ha-muted">
+                    Showing {(effectivePage - 1) * paginationSize + 1}-
+                    {Math.min(effectivePage * paginationSize, totalResults)} of{" "}
+                    {totalResults}
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-2">
+                <Link
+                  href={buildPageHref(1)}
+                  aria-disabled={effectivePage <= 1}
+                  className={`ha-btn-secondary text-xs ${
+                    effectivePage <= 1 ? "pointer-events-none opacity-50" : ""
+                  }`}
+                >
+                  « First
+                </Link>
                 <Link
                   href={buildPageHref(Math.max(1, effectivePage - 1))}
                   aria-disabled={effectivePage <= 1}
@@ -409,6 +429,17 @@ export default async function ArchivePage({
                   }`}
                 >
                   Next →
+                </Link>
+                <Link
+                  href={buildPageHref(pageCount)}
+                  aria-disabled={effectivePage >= pageCount}
+                  className={`ha-btn-secondary text-xs ${
+                    effectivePage >= pageCount
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }`}
+                >
+                  Last »
                 </Link>
               </div>
             </div>
