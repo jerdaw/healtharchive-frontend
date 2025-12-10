@@ -61,6 +61,20 @@ npm run lint
 
 - `NEXT_PUBLIC_API_BASE_URL` – base URL for the backend API (e.g., `http://localhost:8001` for local dev, `https://api.healtharchive.ca` for staging/prod). If unset, the API client falls back to `http://localhost:8001`.
 
+### Frontend ↔ backend integration
+
+- API client lives at `src/lib/api.ts` and calls:
+  - `GET /api/search` (search with `q`, `source`, `topic`, `page`, `pageSize`)
+  - `GET /api/sources` (per-source summaries)
+  - `GET /api/snapshot/{id}` (snapshot detail)
+  - `GET /api/snapshots/raw/{id}` (raw HTML for the viewer)
+  - `GET /api/health` (health check)
+- Pages:
+  - `/archive`: prefers backend search results with pagination; falls back to the demo dataset with a fallback notice.
+  - `/archive/browse-by-source`: prefers backend source summaries; falls back to demo summaries with a notice.
+  - `/snapshot/[id]`: prefers backend snapshot detail/raw URL; falls back to the demo record/static snapshot if missing.
+- Fallback behavior keeps the UI usable when the backend is unreachable or not configured.
+
 ---
 
 ## 3. Git & branch history
