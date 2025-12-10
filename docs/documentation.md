@@ -52,6 +52,9 @@ npm run build
 
 # Production start (typically handled by Vercel)
 npm start
+
+# Lint (ESLint)
+npm run lint
 ```
 
 ---
