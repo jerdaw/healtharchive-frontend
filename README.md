@@ -88,6 +88,7 @@ npm run lint
   - `/archive`: uses backend search with pagination and page-size selection; falls back to demo data and shows a fallback notice.
   - `/archive/browse-by-source`: uses backend source summaries; falls back to demo summaries with a notice.
   - `/snapshot/[id]`: fetches backend snapshot detail/raw URL first; falls back to demo record/static snapshot if needed. The viewer shows a loading overlay and a friendly error state if the iframe fails.
+- Health diagnostics (optional): set `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a small banner when the backend health check fails (useful in dev/staging).
 
 This runs the Next.js/ESLint config for the app.
 
