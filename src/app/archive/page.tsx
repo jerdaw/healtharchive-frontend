@@ -6,6 +6,7 @@ import {
   getSourcesSummary,
   slugifyTopic,
 } from "@/data/demo-records";
+import type { DemoRecord } from "@/data/demo-records";
 import {
   fetchSources,
   fetchTopics,
@@ -58,6 +59,8 @@ type ArchiveSearchParams = {
 const DEFAULT_PAGE_SIZE = 10;
 const MAX_PAGE_SIZE = 50;
 
+type ArchiveListRecord = Omit<DemoRecord, "snapshotPath">;
+
 function parsePositiveInt(value: string | undefined, fallback: number): number {
   const parsed = Number(value);
   if (Number.isNaN(parsed) || parsed <= 0) {
@@ -84,12 +87,25 @@ export default async function ArchivePage({
     { value: "phac", label: "Public Health Agency of Canada" },
     { value: "hc", label: "Health Canada" },
   ];
-  let topicOptions: { value: string; label: string }[] = getAllTopics().map((t) => ({
-    value: slugifyTopic(t) || t,
-    label: t,
-  }));
+  let topicOptions: { value: string; label: string }[] = getAllTopics().map(
+    (t) => ({
+      value: slugifyTopic(t) || t,
+      label: t,
+    }),
+  );
   let sourcesFromBackend = false;
   let topicsFromBackend = false;
+
+  // Start with demo search results and project them into a shape that does not
+  // depend on `snapshotPath`, so we can reuse the same type for backend
+  // results and demo fallback.
+  let results: ArchiveListRecord[] = searchDemoRecords({
+    q,
+    source,
+    topic,
+  }).map(({ snapshotPath: _ignored, ...rest }) => rest);
+  let totalResults = results.length;
+  let usingBackend = false;
 
   try {
     const [apiSources, apiTopics] = await Promise.all([
@@ -135,10 +151,6 @@ export default async function ArchivePage({
     sourcesFromBackend = false;
     topicsFromBackend = false;
   }
-
-  let results = searchDemoRecords({ q, source, topic });
-  let totalResults = results.length;
-  let usingBackend = false;
 
   // Attempt to use the backend search API if configured; fall back to the
   // local demo dataset on any error or if the backend URL is not set.
