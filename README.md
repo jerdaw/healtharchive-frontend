@@ -46,12 +46,34 @@ npm install
 
 ### 2. Configure API base URL
 
-Create a `.env` (copy from `.env.example`) to point the frontend at a live backend. By default the API client falls back to `http://localhost:8001`.
+The frontend talks to the backend via `NEXT_PUBLIC_API_BASE_URL`. If this is
+unset, the client falls back to `http://localhost:8001`, which is convenient
+for local development but **not** appropriate for staging/production.
+
+For local development, create a `.env.local` (git-ignored) with:
 
 ```bash
-cp .env.example .env
-# edit .env and set NEXT_PUBLIC_API_BASE_URL if your backend is not on localhost:8001
+cp .env.example .env.local
 ```
+
+Then edit `.env.local` and set:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8001
+```
+
+On Vercel (staging/production), set `NEXT_PUBLIC_API_BASE_URL` via the Vercel
+UI under **Settings → Environment Variables**. Recommended values:
+
+| Environment | Frontend URL                         | Backend URL                        | `NEXT_PUBLIC_API_BASE_URL`           |
+|------------|--------------------------------------|------------------------------------|--------------------------------------|
+| Local      | `http://localhost:3000`              | `http://127.0.0.1:8001`           | `http://127.0.0.1:8001`             |
+| Preview    | `https://healtharchive.vercel.app`   | `https://api-staging.healtharchive.ca` (or prod) | `https://api-staging.healtharchive.ca` |
+| Production | `https://healtharchive.ca` / `www`   | `https://api.healtharchive.ca`     | `https://api.healtharchive.ca`      |
+
+> `NEXT_PUBLIC_BACKEND_URL` is still supported for backward-compatibility, but
+> `NEXT_PUBLIC_API_BASE_URL` is the preferred and documented way to configure
+> the API base.
 
 ### 3. Run the dev server
 
@@ -86,8 +108,18 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
 
 ### CI / deployment notes
 
+- A GitHub Actions workflow (`.github/workflows/frontend-ci.yml`) runs on pushes
+  to `main` and on pull requests:
+
+  - Installs dependencies via `npm ci`.
+  - Runs `npm run lint`.
+  - Runs `npm test` (Vitest + Testing Library with mocked fetch; no live backend
+    required).
+
 - Ensure `NEXT_PUBLIC_API_BASE_URL` is set per environment (Vercel/staging/prod).
-- Optional diagnostics envs are normally disabled in CI to keep logs quiet.
+- Optional diagnostics envs (`NEXT_PUBLIC_SHOW_API_HEALTH_BANNER`,
+  `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE`, `NEXT_PUBLIC_SHOW_API_BASE_HINT`) are
+  normally disabled in CI and production to keep logs quiet.
 
 ---
 
@@ -103,14 +135,20 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
   - `/snapshot/[id]`: fetches backend snapshot detail/raw URL first; falls back to demo record/static snapshot if needed. The viewer shows a loading overlay and a friendly error state if the iframe fails.
 - Health diagnostics (optional): set `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a small banner when the backend health check fails (useful in dev/staging).
   - If the health banner is off, you can still log failures by setting `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` (dev-only).
-- Topics/sources: topic dropdown and source options come from the backend when available; fall back to demo lists otherwise.
+- Topics/sources: topic dropdown and source options come from the backend when
+  available. Topics use backend‑provided `{slug, label}` pairs (slug in query
+  params, label in the UI); demo mode slugifies labels internally to mimic the
+  same contract.
 
 ### Pre-release smoke (recommended)
 
 - Search (`/archive`): keywords + source/topic filters, pagination (First/Prev/Next/Last), page-size selector.
 - Browse by source (`/archive/browse-by-source`): cards load with counts/topics.
 - Snapshot (`/snapshot/[id]`): metadata present; iframe loads or shows error overlay with raw/API links; missing ID returns notFound.
-- Topics/sources: topic dropdown and source options come from the backend when available; fall back to demo lists otherwise.
+- Topics/sources: topic dropdown and source options come from the backend when
+  available, with topics using `{slug, label}` from the API. In demo mode,
+  labels are slugified client‑side so the UI can keep using topic slugs in
+  URLs.
 
 This runs the Next.js/ESLint config for the app.
 

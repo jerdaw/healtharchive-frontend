@@ -1,10 +1,15 @@
+export type TopicRef = {
+  slug: string;
+  label: string;
+};
+
 export type SourceSummary = {
   sourceCode: string;
   sourceName: string;
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
-  topics: string[]; // labels from backend
+  topics: TopicRef[];
   latestRecordId: number | null;
 };
 
@@ -14,7 +19,7 @@ export type SnapshotSummary = {
   sourceCode: string;
   sourceName: string;
   language: string | null;
-  topics: string[]; // labels
+  topics: TopicRef[];
   captureDate: string;
   originalUrl: string;
   snippet: string | null;
@@ -34,7 +39,7 @@ export type SnapshotDetail = {
   sourceCode: string;
   sourceName: string;
   language: string | null;
-  topics: string[]; // labels
+  topics: TopicRef[];
   captureDate: string;
   originalUrl: string;
   snippet: string | null;
@@ -51,7 +56,7 @@ export type HealthResponse = {
 const API_BASE_ENV =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.NEXT_PUBLIC_BACKEND_URL;
 
-function getApiBaseUrl(): string {
+export function getApiBaseUrl(): string {
   if (API_BASE_ENV) {
     return API_BASE_ENV.replace(/\/+$/, "");
   }
@@ -79,6 +84,10 @@ async function fetchJson<T>(path: string, query?: URLSearchParams): Promise<T> {
 
 export async function fetchSources(): Promise<SourceSummary[]> {
   return fetchJson<SourceSummary[]>("/api/sources");
+}
+
+export async function fetchTopics(): Promise<TopicRef[]> {
+  return fetchJson<TopicRef[]>("/api/topics");
 }
 
 export type SearchParams = {

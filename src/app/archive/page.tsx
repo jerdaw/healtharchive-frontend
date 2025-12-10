@@ -1,22 +1,50 @@
 import Link from "next/link";
 import { PageShell } from "@/components/layout/PageShell";
-import { getAllTopics, searchDemoRecords, getSourcesSummary } from "@/data/demo-records";
-import { fetchSources, searchSnapshots, type SearchParams as ApiSearchParams } from "@/lib/api";
+import {
+  getAllTopics,
+  searchDemoRecords,
+  getSourcesSummary,
+  slugifyTopic,
+} from "@/data/demo-records";
+import {
+  fetchSources,
+  fetchTopics,
+  searchSnapshots,
+  type SearchParams as ApiSearchParams,
+} from "@/lib/api";
 import { ApiHealthBanner } from "@/components/ApiHealthBanner";
 
-function formatDate(iso: string): string {
-  const [yearStr, monthStr, dayStr] = iso.split("-");
-  const year = Number(yearStr);
-  const month = Number(monthStr);
-  const day = Number(dayStr);
+function formatDate(iso: string | undefined | null): string {
+  if (!iso) return "Unknown";
 
-  if (!year || !month || !day) return iso;
-  const d = new Date(year, month - 1, day);
-  return d.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const parts = iso.split("-");
+  if (parts.length === 3) {
+    const [yearStr, monthStr, dayStr] = parts;
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    const day = Number(dayStr);
+    if (year && month && day) {
+      const d = new Date(year, month - 1, day);
+      if (!Number.isNaN(d.getTime())) {
+        return d.toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+    }
+  }
+
+  const parsed = new Date(iso);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+
+  return iso;
 }
 
 type ArchiveSearchParams = {
@@ -36,14 +64,6 @@ function parsePositiveInt(value: string | undefined, fallback: number): number {
     return fallback;
   }
   return parsed;
-}
-
-function slugifyTopic(label: string): string {
-  return label
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 }
 
 export default async function ArchivePage({
@@ -68,29 +88,43 @@ export default async function ArchivePage({
     value: slugifyTopic(t) || t,
     label: t,
   }));
+  let sourcesFromBackend = false;
+  let topicsFromBackend = false;
 
   try {
-    const apiSources = await fetchSources();
+    const [apiSources, apiTopics] = await Promise.all([
+      fetchSources(),
+      fetchTopics(),
+    ]);
+
     if (apiSources.length > 0) {
+      sourcesFromBackend = true;
       sourceOptions = apiSources.map((s) => ({
         value: s.sourceCode,
         label: s.sourceName,
       }));
-      const topicSet = new Set<string>();
-      apiSources.forEach((s: any) => {
-        // Allow backend to return either string labels or {slug,label}
-        s.topics?.forEach((t: any) => {
-          if (t && typeof t === "object" && "slug" in t && "label" in t) {
-            topicSet.add(JSON.stringify({ slug: t.slug, label: t.label }));
-          } else if (typeof t === "string") {
-            topicSet.add(JSON.stringify({ slug: slugifyTopic(t) || t, label: t }));
-          }
-        });
-      });
-      topicOptions = Array.from(topicSet)
-        .map((json) => JSON.parse(json) as { slug: string; label: string })
+    }
+
+    const canonicalTopics = apiTopics ?? [];
+    if (canonicalTopics.length > 0) {
+      topicsFromBackend = true;
+      topicOptions = canonicalTopics
+        .slice()
         .sort((a, b) => a.label.localeCompare(b.label))
         .map((t) => ({ value: t.slug, label: t.label }));
+    } else if (apiSources.length > 0) {
+      const topicMap = new Map<string, string>();
+      apiSources.forEach((s) => {
+        s.topics?.forEach((t) => {
+          topicMap.set(t.slug, t.label);
+        });
+      });
+      if (topicMap.size > 0) {
+        topicsFromBackend = true;
+        topicOptions = Array.from(topicMap.entries())
+          .sort((a, b) => a[1].localeCompare(b[1]))
+          .map(([slug, label]) => ({ value: slug, label }));
+      }
     }
   } catch {
     const demoSources = getSourcesSummary();
@@ -98,6 +132,8 @@ export default async function ArchivePage({
       value: s.sourceCode,
       label: s.sourceName,
     }));
+    sourcesFromBackend = false;
+    topicsFromBackend = false;
   }
 
   let results = searchDemoRecords({ q, source, topic });
@@ -120,7 +156,7 @@ export default async function ArchivePage({
       sourceCode: r.sourceCode as "phac" | "hc",
       sourceName: r.sourceName,
       language: r.language ?? "",
-      topics: r.topics,
+      topics: r.topics.map((t) => t.label),
       captureDate: r.captureDate,
       originalUrl: r.originalUrl,
       snippet: r.snippet ?? "",
@@ -377,8 +413,15 @@ export default async function ArchivePage({
                         </Link>
                       </h3>
                       <p className="text-xs text-ha-muted">
-                        {record.sourceName} · captured {formatDate(record.captureDate)} ·{" "}
-                        {record.language}
+                        {[
+                          record.sourceName,
+                          record.captureDate
+                            ? `captured ${formatDate(record.captureDate)}`
+                            : null,
+                          record.language || null,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")}
                       </p>
                     </div>
                     <Link
@@ -389,7 +432,7 @@ export default async function ArchivePage({
                     </Link>
                   </div>
                   <p className="mt-3 text-xs leading-relaxed text-slate-800 sm:text-sm">
-                    {record.snippet}
+                    {record.snippet || "No summary available for this snapshot yet."}
                   </p>
                   <p className="mt-2 text-[11px] text-ha-muted">
                     Original URL:{" "}

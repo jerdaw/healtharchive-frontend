@@ -3,18 +3,34 @@ import { PageShell } from "@/components/layout/PageShell";
 import { getSourcesSummary } from "@/data/demo-records";
 import { fetchSources, type SourceSummary as ApiSourceSummary } from "@/lib/api";
 
-function formatDate(iso: string): string {
-  const [yearStr, monthStr, dayStr] = iso.split("-");
-  const year = Number(yearStr);
-  const month = Number(monthStr);
-  const day = Number(dayStr);
-  if (!year || !month || !day) return iso;
-  const d = new Date(year, month - 1, day);
-  return d.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+function formatDate(iso: string | undefined | null): string {
+  if (!iso) return "Unknown";
+  const parts = iso.split("-");
+  if (parts.length === 3) {
+    const [yearStr, monthStr, dayStr] = parts;
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    const day = Number(dayStr);
+    if (year && month && day) {
+      const d = new Date(year, month - 1, day);
+      if (!Number.isNaN(d.getTime())) {
+        return d.toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+    }
+  }
+  const parsed = new Date(iso);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+  return iso;
 }
 
 type SourceSummaryLike = {
@@ -40,7 +56,7 @@ export default async function BrowseBySourcePage() {
       recordCount: s.recordCount,
       firstCapture: s.firstCapture,
       lastCapture: s.lastCapture,
-      topics: s.topics,
+      topics: s.topics.map((t) => t.label),
       latestRecordId: s.latestRecordId,
     }));
     usingBackend = true;
@@ -73,10 +89,9 @@ export default async function BrowseBySourcePage() {
               {source.sourceName}
             </h2>
             <p className="mt-1 text-xs text-ha-muted">
-              {source.recordCount} demo snapshot
+              {source.recordCount} {usingBackend ? "snapshot" : "demo snapshot"}
               {source.recordCount === 1 ? "" : "s"} captured between{" "}
-              {formatDate(source.firstCapture)} and{" "}
-              {formatDate(source.lastCapture)}.
+              {formatDate(source.firstCapture)} and {formatDate(source.lastCapture)}.
             </p>
 
             {source.topics.length > 0 && (
