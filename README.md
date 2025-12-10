@@ -44,7 +44,16 @@ This repository contains the **Next.js frontend** for the public site at:
 npm install
 ````
 
-### 2. Run the dev server
+### 2. Configure API base URL (optional for dev)
+
+Create a `.env` (copy from `.env.example`) if you want to point the frontend at a live backend. By default the API client falls back to `http://localhost:8001`.
+
+```bash
+cp .env.example .env
+# edit .env and set NEXT_PUBLIC_API_BASE_URL if your backend is not on localhost:8001
+```
+
+### 3. Run the dev server
 
 ```bash
 npm run dev
@@ -52,7 +61,7 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 3. Build for production
+### 4. Build for production
 
 ```bash
 npm run build
@@ -61,7 +70,7 @@ npm start
 
 (In production, Vercel runs the build and serves the app.)
 
-### 4. Lint (recommended)
+### 5. Lint (recommended)
 
 ```bash
 npm run lint
