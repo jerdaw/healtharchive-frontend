@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/layout/PageShell";
 import { getRecordById, slugifyTopic } from "@/data/demo-records";
-import { fetchSnapshotDetail } from "@/lib/api";
+import { fetchSnapshotDetail, getApiBaseUrl } from "@/lib/api";
 import { SnapshotFrame } from "@/components/SnapshotFrame";
 
 function formatDate(iso: string | undefined | null): string {
@@ -85,8 +85,16 @@ export default async function SnapshotPage({
           label,
         }))
       : []);
+  // For backend-backed snapshots, rawSnapshotUrl is a path (e.g.
+  // "/api/snapshots/raw/{id}") relative to the backend host. Prefix it with
+  // the configured API base URL so the iframe/link always point at the backend
+  // origin, not the frontend origin. For demo records, fall back to the local
+  // static snapshot path under /public.
+  const apiBaseUrl = getApiBaseUrl();
   const rawSnapshotUrl =
-    snapshotMeta?.rawSnapshotUrl ?? record?.snapshotPath ?? null;
+    snapshotMeta?.rawSnapshotUrl != null
+      ? `${apiBaseUrl}${snapshotMeta.rawSnapshotUrl}`
+      : record?.snapshotPath ?? null;
   const rawLink = rawSnapshotUrl ?? undefined;
   const apiLink =
     usingBackend && snapshotMeta?.id != null
