@@ -152,7 +152,8 @@ If the headers are missing, ensure:
 
 3. Confirm the iframe has:
 
-   - `src` pointing to the backend raw snapshot URL, e.g.:
+   - `src` pointing to the backend raw snapshot URL (constructed from
+     `NEXT_PUBLIC_API_BASE_URL` and the `rawSnapshotUrl` path), e.g.:
 
      ```text
      https://api-staging.healtharchive.ca/api/snapshots/raw/42
@@ -165,7 +166,12 @@ If the headers are missing, ensure:
      ```
 
 4. In the Network tab, click the iframe’s request (the `GET /api/snapshots/raw/{id}`
-   call) and confirm the same backend security headers as in `/api/health`.
+   call) and confirm:
+
+   - The request is sent to the backend host defined by `NEXT_PUBLIC_API_BASE_URL`.
+   - The same backend security headers as in `/api/health` are present, **except**
+     that `X-Frame-Options` is intentionally omitted for this route so the
+     snapshot can be embedded cross-origin inside the frontend’s iframe.
 
 ---
 
@@ -218,4 +224,3 @@ After these checks pass in staging, you can safely apply the same configuration
 to production, and later switch the CSP header from `Report-Only` to a
 fully-enforced `Content-Security-Policy` once you’re confident it does not
 block legitimate traffic.
-
