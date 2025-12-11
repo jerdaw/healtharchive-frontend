@@ -951,10 +951,14 @@ We followed an 8-phase plan. Status:
 
     * Prefer using existing `.ha-*` primitives for visual consistency.
     * Use Tailwind mostly for layout/spacing tweaks.
-* **No real backend yet:**
+* **Backend integration + demo fallback:**
 
-  * All data is static (`demoRecords` array).
-  * No `/api` routes currently — everything is server-rendered using local data.
+  * The UI prefers live backend APIs (`/api/search`, `/api/sources`,
+    `/api/topics`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`) via
+    `NEXT_PUBLIC_API_BASE_URL`, and falls back to the static `demoRecords`
+    dataset when the API is unreachable.
+  * There are no Next.js API routes in this repo; all calls go directly to the
+    external backend (or local dev backend) using `src/lib/api.ts`.
 * **Accessibility primitives:**
 
   * Skip link to `#main-content` before the header.
