@@ -9,10 +9,10 @@
 
 /* Design tokens via CSS variables */
 :root {
-  --page-bg: #f3f4f6;
-  --card-bg: #ffffff;
-  --surface-bg: #ffffff;
-  --surface-bg-soft: rgba(255, 255, 255, 0.9);
+    --page-bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --surface-bg: #ffffff;
+    --surface-bg-soft: rgba(255, 255, 255, 0.9);
     --border: #e5e7eb;
     --text: #111827;
     --muted: #6b7280;
@@ -27,10 +27,10 @@
 }
 
 html[data-theme="dark"] {
-  /* Background layers derived from Dark Reader */
-  --page-bg: #1e2022;
-  --surface-bg: #181a1b;
-  --surface-bg-soft: rgba(24, 26, 27, 0.9);
+    /* Background layers derived from Dark Reader */
+    --page-bg: #1e2022;
+    --surface-bg: #181a1b;
+    --surface-bg-soft: rgba(24, 26, 27, 0.9);
     --card-bg: #181a1b;
 
     /* Text and muted */
@@ -114,9 +114,30 @@ a:focus-visible {
 }
 
 .ha-shell-header {
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
     background-color: var(--surface-bg-soft);
-    backdrop-filter: blur(4px);
+    background-color: color-mix(
+        in srgb,
+        var(--surface-bg-soft) 82%,
+        transparent
+    );
+    backdrop-filter: blur(8px) saturate(1.1);
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.04);
+}
+
+.ha-shell-header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -21px;
+    height: 27px;
+    pointer-events: none;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 23, 42, 0.025) 0%,
+        rgba(15, 23, 42, 0) 100%
+    );
 }
 
 .ha-shell-footer {
@@ -169,7 +190,7 @@ a:focus-visible {
 }
 
 .ha-theme-toggle-icon-moon {
-  right: 5px;
+    right: 5px;
 }
 
 .ha-typing-caret {
@@ -177,27 +198,135 @@ a:focus-visible {
 }
 
 .ha-header-title {
-  color: var(--brand);
-  font-size: calc(1.5rem + 0.35rem * (1 - var(--ha-header-shrink, 0)));
-  line-height: 1.1;
-  transition: font-size 200ms ease-out;
+    color: var(--brand);
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.9rem);
+    line-height: 1.1;
+    transition: font-size 200ms ease-out;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0.12rem;
 }
 
 .ha-header-text {
-  justify-content: center;
+    justify-content: center;
 }
 
 .ha-header-subtitle {
     color: var(--muted);
     opacity: calc(1 - var(--ha-header-shrink, 0));
-    max-height: calc(2.8rem * (1 - var(--ha-header-shrink, 0)));
+    max-height: calc(2.6rem * (1 - var(--ha-header-shrink, 0)));
     overflow: hidden;
+    max-width: 24rem;
     transition: opacity 200ms ease-out, max-height 200ms ease-out;
 }
 
 .ha-header-logo {
-    height: calc(3.2rem - 1.3rem * var(--ha-header-shrink, 0));
+    height: calc(3.1rem - 1.2rem * var(--ha-header-shrink, 0));
     transition: height 200ms ease-out, transform 200ms ease-out;
+}
+
+.ha-header-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.ha-header-link:hover {
+    text-decoration: none;
+}
+
+.ha-header-link:hover .ha-header-title {
+    color: var(--brand);
+}
+
+.ha-header-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 1.5px;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--accent), var(--brand));
+    opacity: 0;
+    transition:
+        width 180ms ease-out,
+        opacity 180ms ease-out;
+}
+
+.ha-header-link:hover .ha-header-title::after {
+    width: 100%;
+    opacity: 1;
+}
+
+.ha-header-link:hover .ha-header-subtitle {
+    color: var(--text);
+}
+
+.ha-nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem 0.85rem;
+    position: relative;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background-color 150ms ease-out, color 150ms ease-out,
+        box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+
+.ha-nav-link:hover {
+    color: var(--text);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.ha-nav-link:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+
+.ha-nav-link--active {
+    color: var(--accent);
+}
+
+.ha-nav-link--primary {
+    background-color: var(--accent);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+}
+
+.ha-nav-link--primary:hover {
+    background-color: var(--accent-hover);
+    color: #ffffff;
+}
+
+.ha-nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.35rem;
+    color: var(--accent);
+}
+
+.ha-nav-active-indicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 2.1rem;
+    border-radius: 999px;
+    background-color: rgba(148, 163, 184, 0.16);
+    transform: translateY(-50%);
+    z-index: 0;
+    opacity: 0;
+    transition: left 180ms ease-out, width 180ms ease-out,
+        opacity 120ms ease-out;
+}
+
+.ha-nav-active-indicator--visible {
+    opacity: 1;
 }
 
 /* Eyebrow label above page titles / sections */
@@ -590,6 +719,10 @@ a:focus-visible {
         transition: none;
         transform: none;
     }
+
+    .ha-nav-active-indicator {
+        transition: none;
+    }
 }
 
 /* ====================================
@@ -667,4 +800,20 @@ html[data-theme="dark"] .ha-theme-toggle-thumb {
 
 html[data-theme="dark"] .ha-theme-toggle-icon {
     fill: #e5e7eb;
+}
+
+html[data-theme="dark"] .ha-nav-link {
+    color: var(--muted);
+}
+
+html[data-theme="dark"] .ha-nav-link:hover {
+    color: var(--text);
+}
+
+html[data-theme="dark"] .ha-nav-link--active {
+    color: var(--accent);
+}
+
+html[data-theme="dark"] .ha-nav-active-indicator {
+    background-color: rgba(148, 163, 184, 0.32);
 }
