@@ -7,7 +7,10 @@
 - Styling:
   - TailwindCSS for layout/spacing/typography utilities.
   - A custom design system via `.ha-*` classes in `src/app/globals.css` for colors, cards, buttons, etc.
--- Primary documentation for humans and agents:
+- Homepage surfaces and CTAs:
+  - Use `ha-home-hero` for featured sections; `ha-home-hero-plain` drops the gradient on follow-up sections while keeping padding/border/shadow; `ha-home-panel` for inset cards.
+  - `ha-btn-glow` with `HoverGlowLink` / `HoverGlowButton` provides the subtle cursor-follow highlight on primary/secondary buttons.
+- Primary documentation for humans and agents:
   - `docs/documentation.md` → architecture, routes, styling system, deployment details.
   - `docs/staging-verification.md` → staging CSP/CORS/snapshot viewer verification.
 
