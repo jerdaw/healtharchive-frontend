@@ -34,6 +34,8 @@ export function Header() {
   const [indicatorVisible, setIndicatorVisible] = useState(false);
   const navRef = useRef<HTMLElement | null>(null);
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const mobilePanelRef = useRef<HTMLDivElement | null>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -86,6 +88,22 @@ export function Header() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (
+        (mobilePanelRef.current && mobilePanelRef.current.contains(target)) ||
+        (mobileToggleRef.current && mobileToggleRef.current.contains(target))
+      ) {
+        return;
+      }
+      setMobileOpen(false);
+    };
+    document.addEventListener("pointerdown", handlePointerDown, true);
+    return () => document.removeEventListener("pointerdown", handlePointerDown, true);
+  }, [mobileOpen]);
 
   function moveIndicatorToHref(href: string) {
     if (typeof window === "undefined") return;
@@ -259,6 +277,7 @@ export function Header() {
             aria-expanded={mobileOpen}
             aria-controls="primary-navigation"
             onClick={() => setMobileOpen((open) => !open)}
+            ref={mobileToggleRef}
           >
             <span className="sr-only">Toggle navigation</span>
             <svg
@@ -289,7 +308,10 @@ export function Header() {
 
       {/* Mobile nav panel */}
       {mobileOpen && (
-        <div className="border-t border-slate-200 bg-white lg:hidden">
+        <div
+          ref={mobilePanelRef}
+          className="border-t border-slate-200 bg-white lg:hidden"
+        >
           <nav
             id="primary-navigation"
             className="ha-container flex flex-col gap-3 py-3 text-sm font-semibold text-ha-muted"
