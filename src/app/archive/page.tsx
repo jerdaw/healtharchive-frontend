@@ -297,7 +297,7 @@ export default async function ArchivePage({
             </div>
 
             <div className="flex items-center justify-between gap-2 pt-1">
-              <button type="submit" className="ha-btn-primary text-xs">
+              <button type="submit" className="ha-btn-primary ha-btn-glow text-xs">
                 Apply filters
               </button>
               <Link
