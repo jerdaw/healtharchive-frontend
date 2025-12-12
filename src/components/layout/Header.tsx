@@ -352,7 +352,6 @@ export function Header() {
               })}
             </div>
             <div className="flex items-center justify-between pt-1">
-              <span className="text-xs text-ha-muted">Appearance</span>
               <button
                 type="button"
                 onClick={toggleTheme}
