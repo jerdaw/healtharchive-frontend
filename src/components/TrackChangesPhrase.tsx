@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Phase =
     | "initial"
@@ -58,6 +58,7 @@ export function TrackChangesPhrase() {
         prefersReducedMotion ? afterLength : 0,
     );
     const [hasAnimated, setHasAnimated] = useState(prefersReducedMotion);
+    const hasNotifiedRef = useRef(false);
 
     useEffect(() => {
         if (prefersReducedMotion || hasAnimated) {
@@ -152,6 +153,15 @@ export function TrackChangesPhrase() {
             }
         };
     }, [afterLength, beforeLength, prefersReducedMotion, hasAnimated]);
+
+    useEffect(() => {
+        if (phase === "final" && !hasNotifiedRef.current) {
+            hasNotifiedRef.current = true;
+            window.dispatchEvent(
+                new CustomEvent("ha-trackchanges-finished"),
+            );
+        }
+    }, [phase]);
 
     const caret = (
         <span className="inline-block h-[1.1em] w-px ha-typing-caret align-middle" />
