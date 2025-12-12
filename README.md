@@ -33,6 +33,12 @@ This repository contains the **Next.js frontend** for the public site at:
   - Respects the user’s OS preference (`prefers-color-scheme`) on first load.
   - Persists the user’s choice in `localStorage` for subsequent visits.
 - Shared `.ha-*` design system for cards, buttons, badges, and page shells to keep the site visually consistent.
+  - Header/nav: pill-style links with a sliding active indicator and a gradient underline on the brand mark that animates in-line with the metric bars.
+  - Homepage surfaces: `ha-home-hero` for card-like sections; `ha-home-hero-plain` to drop the gradient on follow-up sections; `ha-home-band-*` and `ha-home-panel` remain available for muted shells.
+  - Metrics: `ha-metric-*` helpers and animated bars used in the “Project snapshot” card.
+  - Audience/explainer sections: `ha-audience-*` helpers plus `ha-section-lede` for readable intro copy.
+  - CTA glow: `ha-btn-glow` with `HoverGlowLink` / `HoverGlowButton` provides a subtle cursor-follow highlight on primary/secondary actions.
+  - Hero before/after phrase includes a `<noscript>` fallback so the intended text remains clear for non-JS crawlers/users.
 
 ---
 

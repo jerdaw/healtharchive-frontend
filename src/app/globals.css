@@ -9,10 +9,10 @@
 
 /* Design tokens via CSS variables */
 :root {
-  --page-bg: #f3f4f6;
-  --card-bg: #ffffff;
-  --surface-bg: #ffffff;
-  --surface-bg-soft: rgba(255, 255, 255, 0.9);
+    --page-bg: #f3f4f6;
+    --card-bg: #ffffff;
+    --surface-bg: #ffffff;
+    --surface-bg-soft: rgba(255, 255, 255, 0.9);
     --border: #e5e7eb;
     --text: #111827;
     --muted: #6b7280;
@@ -27,10 +27,10 @@
 }
 
 html[data-theme="dark"] {
-  /* Background layers derived from Dark Reader */
-  --page-bg: #1e2022;
-  --surface-bg: #181a1b;
-  --surface-bg-soft: rgba(24, 26, 27, 0.9);
+    /* Background layers derived from Dark Reader */
+    --page-bg: #1e2022;
+    --surface-bg: #181a1b;
+    --surface-bg-soft: rgba(24, 26, 27, 0.9);
     --card-bg: #181a1b;
 
     /* Text and muted */
@@ -114,9 +114,30 @@ a:focus-visible {
 }
 
 .ha-shell-header {
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
     background-color: var(--surface-bg-soft);
-    backdrop-filter: blur(4px);
+    background-color: color-mix(
+        in srgb,
+        var(--surface-bg-soft) 82%,
+        transparent
+    );
+    backdrop-filter: blur(8px) saturate(1.1);
+    box-shadow: 0 8px 16px rgba(15, 23, 42, 0.04);
+}
+
+.ha-shell-header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -21px;
+    height: 27px;
+    pointer-events: none;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 23, 42, 0.025) 0%,
+        rgba(15, 23, 42, 0) 100%
+    );
 }
 
 .ha-shell-footer {
@@ -126,7 +147,6 @@ a:focus-visible {
 
 /* Theme toggle slider */
 .ha-theme-toggle {
-    display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0;
@@ -170,31 +190,177 @@ a:focus-visible {
 }
 
 .ha-theme-toggle-icon-moon {
-  right: 5px;
+    right: 5px;
+}
+
+.ha-typing-caret {
+    background-color: var(--accent);
 }
 
 .ha-header-title {
-  color: var(--brand);
-  font-size: calc(1.5rem + 0.35rem * (1 - var(--ha-header-shrink, 0)));
-  line-height: 1.1;
-  transition: font-size 200ms ease-out;
+    color: var(--brand);
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.9rem);
+    line-height: 1.1;
+    transition: font-size 200ms ease-out;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0.12rem;
 }
 
 .ha-header-text {
-  justify-content: center;
+    justify-content: center;
 }
 
 .ha-header-subtitle {
     color: var(--muted);
     opacity: calc(1 - var(--ha-header-shrink, 0));
-    max-height: calc(2.8rem * (1 - var(--ha-header-shrink, 0)));
+    max-height: calc(2.6rem * (1 - var(--ha-header-shrink, 0)));
     overflow: hidden;
+    max-width: 24rem;
     transition: opacity 200ms ease-out, max-height 200ms ease-out;
 }
 
 .ha-header-logo {
-    height: calc(3.2rem - 1.3rem * var(--ha-header-shrink, 0));
+    height: calc(3.1rem - 1.2rem * var(--ha-header-shrink, 0));
     transition: height 200ms ease-out, transform 200ms ease-out;
+}
+
+.ha-header-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.ha-header-link:hover {
+    text-decoration: none;
+}
+
+.ha-header-link:hover .ha-header-title {
+    color: var(--brand);
+}
+
+.ha-header-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1.5px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--accent) 85%, var(--brand) 15%) 0%,
+        color-mix(in srgb, var(--accent) 60%, var(--brand) 40%) 52%,
+        color-mix(in srgb, var(--brand) 20%, var(--surface-bg) 80%) 72%,
+        var(--surface-bg) 100%
+    );
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 650ms ease-out, opacity 220ms ease-out;
+}
+
+.ha-header-link:hover .ha-header-title::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.ha-header-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1.5px;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--accent) 85%, var(--brand) 15%) 0%,
+        color-mix(in srgb, var(--accent) 60%, var(--brand) 40%) 52%,
+        color-mix(in srgb, var(--brand) 20%, var(--surface-bg) 80%) 72%,
+        var(--surface-bg) 100%
+    );
+    filter: blur(8px);
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 650ms ease-out, opacity 220ms ease-out;
+    pointer-events: none;
+}
+
+.ha-header-link:hover .ha-header-title::before {
+    opacity: 0.28;
+    transform: scaleX(1);
+}
+
+.ha-header-link:hover .ha-header-subtitle {
+    color: var(--text);
+}
+
+.ha-nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem 0.85rem;
+    position: relative;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background-color 150ms ease-out, color 150ms ease-out,
+        box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+
+.ha-nav-link:hover {
+    color: var(--text);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.ha-nav-link:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+
+.ha-nav-link--active {
+    color: var(--accent);
+}
+
+.ha-nav-link--primary {
+    background-color: var(--accent);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+}
+
+.ha-nav-link--primary:hover {
+    background-color: var(--accent-hover);
+    color: #ffffff;
+}
+
+.ha-nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.35rem;
+    color: var(--accent);
+}
+
+.ha-nav-active-indicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 2.1rem;
+    border-radius: 999px;
+    background-color: rgba(148, 163, 184, 0.16);
+    transform: translateY(-50%);
+    z-index: 0;
+    opacity: 0;
+    transition: left 180ms ease-out, width 180ms ease-out,
+        opacity 120ms ease-out;
+}
+
+.ha-nav-active-indicator--visible {
+    opacity: 1;
 }
 
 /* Eyebrow label above page titles / sections */
@@ -216,7 +382,19 @@ a:focus-visible {
 .ha-section-subtitle {
     font-size: 0.95rem;
     color: var(--muted);
-    max-width: 40rem;
+    line-height: 1.65;
+}
+
+.ha-section-lede {
+    color: var(--text);
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+@media (min-width: 640px) {
+    .ha-section-lede {
+        font-size: 1.12rem;
+    }
 }
 
 /* ====================================
@@ -339,6 +517,208 @@ a:focus-visible {
     margin-top: 1.25rem;
 }
 
+/* Homepage bands & homepage-specific styling */
+
+.ha-home-hero {
+    margin-top: 0;
+    padding: 2rem 1.5rem 2.4rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    background: radial-gradient(
+            160% 160% at 0% 0%,
+            rgba(37, 99, 235, 0.06),
+            transparent 55%
+        ),
+        radial-gradient(
+            160% 160% at 100% 0%,
+            rgba(37, 99, 235, 0.03),
+            transparent 55%
+        ),
+        var(--surface-bg);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.ha-home-band-muted {
+    margin-top: 0;
+    padding: 2rem 0 2.2rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    background-color: color-mix(
+        in srgb,
+        var(--page-bg) 88%,
+        var(--surface-bg) 12%
+    );
+}
+
+.ha-home-band-shell {
+    margin-top: 0;
+    padding: 2rem 1.5rem 2.4rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-bg);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.ha-home-hero h1 {
+    margin: 0;
+}
+
+.ha-home-hero p {
+    margin: 0;
+}
+
+.ha-home-hero-plain {
+    background: var(--surface-bg);
+}
+
+.ha-home-hero-eyebrow {
+    margin-bottom: 0.4rem;
+}
+
+.ha-home-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    align-items: center;
+}
+
+.ha-home-hero-meta span:first-child {
+    margin-right: 0.25rem;
+}
+
+.ha-home-hero-meta-text {
+    max-width: 32rem;
+}
+
+.ha-home-hero-lede {
+    margin-top: 1.25rem !important;
+    margin-bottom: 2.4rem !important;
+    padding: 0;
+    line-height: 1.7;
+}
+
+.ha-home-hero .ha-section-subtitle {
+    margin-bottom: 2rem !important;
+}
+
+.ha-home-hero p + p {
+    margin-top: 1.25rem;
+}
+
+.ha-home-panel {
+    padding: 2rem 1.5rem 2.4rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    background-color: var(--surface-bg);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.ha-audience-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.ha-audience-card-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.ha-audience-body {
+    margin-top: 0.2rem;
+    line-height: 1.7;
+}
+
+.ha-audience-icon {
+    flex-shrink: 0;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(
+            circle at 30% 20%,
+            rgba(37, 99, 235, 0.14),
+            rgba(37, 99, 235, 0) 65%
+        ),
+        color-mix(in srgb, var(--accent) 8%, var(--surface-bg) 92%);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border) 55%);
+    color: color-mix(in srgb, var(--accent) 85%, #0f172a 15%);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.16);
+}
+
+.ha-audience-icon svg {
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.ha-metric-grid {
+    display: grid;
+    gap: 0.85rem 1.1rem;
+}
+
+.ha-metric-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ha-metric-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.ha-metric-primary {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+}
+
+.ha-metric-primary-value {
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.ha-metric-primary-unit {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+.ha-metric-secondary {
+    font-size: 0.75rem;
+    color: var(--text);
+}
+
+.ha-metric-bar {
+    margin-top: 0.35rem;
+    height: 0.3rem;
+    border-radius: 999px;
+    background-color: rgba(148, 163, 184, 0.3);
+    overflow: hidden;
+}
+
+.ha-metric-bar-fill {
+    height: 100%;
+    width: 65%;
+    border-radius: inherit;
+    background: linear-gradient(
+        to right,
+        rgba(37, 99, 235, 0.85),
+        rgba(37, 99, 235, 0.45)
+    );
+    transition: width 900ms ease-out;
+}
+
 /* ====================================
    Buttons
    ==================================== */
@@ -370,6 +750,38 @@ a:focus-visible {
     background-color: var(--accent-hover);
     color: #ffffff;
     text-decoration: none;
+}
+
+.ha-btn-glow {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.ha-btn-glow::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background: radial-gradient(
+        circle at var(--ha-glow-x, 50%) var(--ha-glow-y, 50%),
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.05) 26%,
+        rgba(255, 255, 255, 0) 48%
+    );
+    opacity: 0;
+    transition: opacity 140ms ease-out, transform 200ms ease-out;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.ha-btn-glow:hover::before {
+    opacity: 1;
+    transform: scale(1.002);
+}
+
+.ha-btn-glow > * {
+    position: relative;
+    z-index: 1;
 }
 
 .ha-btn-secondary {
@@ -587,6 +999,10 @@ a:focus-visible {
         transition: none;
         transform: none;
     }
+
+    .ha-nav-active-indicator {
+        transition: none;
+    }
 }
 
 /* ====================================
@@ -664,4 +1080,78 @@ html[data-theme="dark"] .ha-theme-toggle-thumb {
 
 html[data-theme="dark"] .ha-theme-toggle-icon {
     fill: #e5e7eb;
+}
+
+html[data-theme="dark"] .ha-nav-link {
+    color: var(--muted);
+}
+
+html[data-theme="dark"] .ha-nav-link:hover {
+    color: var(--text);
+}
+
+html[data-theme="dark"] .ha-nav-link--active {
+    color: var(--accent);
+}
+
+html[data-theme="dark"] .ha-nav-active-indicator {
+    background-color: rgba(148, 163, 184, 0.32);
+}
+
+html[data-theme="dark"] .ha-home-hero {
+    border-color: rgba(54, 59, 61, 0.9);
+    background: radial-gradient(
+            160% 160% at 0% 0%,
+            rgba(56, 143, 237, 0.28),
+            transparent 55%
+        ),
+        radial-gradient(
+            160% 160% at 100% 0%,
+            rgba(56, 143, 237, 0.18),
+            transparent 55%
+        ),
+        var(--surface-bg);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
+}
+
+html[data-theme="dark"] .ha-home-band-muted {
+    background-color: #181a1b;
+    border-color: rgba(54, 59, 61, 0.9);
+}
+
+html[data-theme="dark"] .ha-home-band-shell {
+    background-color: #181a1b;
+    border-color: rgba(54, 59, 61, 0.9);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
+}
+
+html[data-theme="dark"] .ha-home-panel {
+    border-color: rgba(54, 59, 61, 0.9);
+    background-color: #181a1b;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
+}
+
+html[data-theme="dark"] .ha-home-hero-plain {
+    background: #181a1b;
+}
+
+html[data-theme="dark"] .ha-audience-icon {
+    background: radial-gradient(
+        circle at 30% 10%,
+        rgba(56, 143, 237, 0.85),
+        transparent 55%
+    );
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+}
+
+html[data-theme="dark"] .ha-metric-bar {
+    background-color: rgba(148, 163, 184, 0.45);
+}
+
+html[data-theme="dark"] .ha-metric-bar-fill {
+    background: linear-gradient(
+        to right,
+        rgba(56, 143, 237, 0.95),
+        rgba(56, 143, 237, 0.6)
+    );
 }

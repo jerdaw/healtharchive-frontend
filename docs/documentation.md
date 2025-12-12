@@ -339,6 +339,20 @@ Accessibility-related helpers:
 * `.ha-btn-primary` / `.ha-btn-secondary` include `:focus-visible` outlines.
 * `.ha-card` transitions are disabled under `prefers-reduced-motion: reduce`.
 
+### 5.4 Header, nav, and homepage surface helpers
+
+* Header/nav:
+  * `.ha-nav-link` pills with `.ha-nav-link--active` and a sliding `.ha-nav-active-indicator` that positions under the current/hovered link (animations disabled under `prefers-reduced-motion`).
+  * Brand underline on `.ha-header-title::after` uses a gradient, rounded bar that scales in on hover; ties visually to the metric bars.
+  * Mobile panel closes when tapping/clicking outside the open menu.
+  * Theme toggle: desktop stays in the top bar; mobile/tablet toggle lives in the mobile menu under an “Appearance” label.
+* Homepage surfaces and typography:
+  * `.ha-home-hero` for the main card/band surface; `.ha-home-hero-plain` to drop the gradient on follow-up sections; `.ha-home-band-muted`, `.ha-home-band-shell`, `.ha-home-panel` remain as variants but the homepage uses `ha-home-hero` for consistency.
+  * `.ha-metric-*` helpers for the mini dashboard (“Project snapshot”), including animated bar fills.
+  * `.ha-audience-*` helpers for audience cards and icons; `.ha-section-lede` for higher-contrast intro copy in sections like “Who is this for?” and the explainer band.
+  * CTA glow: `.ha-btn-glow` plus `HoverGlowLink` / `HoverGlowButton` for a subtle cursor-follow highlight on primary/secondary actions.
+  * Animated hero phrase (`TrackChangesPhrase`) includes a `<noscript>` fallback so the final “after” wording is present for non-JS crawlers/users.
+
 **Important:** There was previously a Tailwind class usage like `bg-ha-bg` that broke Tailwind validation. That’s been removed; we now use pure CSS classes for colors (`ha-*`) instead of Tailwind’s `bg-*` custom colors in `globals.css`.
 
 ---
