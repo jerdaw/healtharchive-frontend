@@ -247,6 +247,9 @@ export function TrackChangesPhrase() {
                 )}
             </span>
             <span className="sr-only">after they change</span>
+            <noscript>
+                <span className="inline text-ha-accent">after</span>
+            </noscript>
         </span>
     );
 }
