@@ -80,6 +80,9 @@ next-env.d.ts
 
 # REPL / history
 .node_repl_history
+*.swp
+*.swo
+*.orig
 
 # Package artifacts
 *.tgz
