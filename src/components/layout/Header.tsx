@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 const navItems = [
@@ -30,6 +30,10 @@ export function Header() {
     return root.dataset.theme === "dark" ? "dark" : "light";
   });
   const [shrink, setShrink] = useState(0);
+  const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | null>(null);
+  const [indicatorVisible, setIndicatorVisible] = useState(false);
+  const navRef = useRef<HTMLElement | null>(null);
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -42,6 +46,62 @@ export function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const nav = navRef.current;
+    if (!nav) return;
+    const navRect = nav.getBoundingClientRect();
+    if (navRect.width === 0) return;
+    const activeItem = navItems.find((item) => isActivePath(pathname, item.href));
+    if (!activeItem) return;
+    const link = linkRefs.current[activeItem.href];
+    if (!link) return;
+    const linkRect = link.getBoundingClientRect();
+    setIndicatorStyle({
+      left: linkRect.left - navRect.left,
+      width: linkRect.width,
+    });
+    setIndicatorVisible(true);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleResize = () => {
+      const nav = navRef.current;
+      if (!nav) return;
+      const navRect = nav.getBoundingClientRect();
+      if (navRect.width === 0) return;
+      const activeItem = navItems.find((item) => isActivePath(pathname, item.href));
+      if (!activeItem) return;
+      const link = linkRefs.current[activeItem.href];
+      if (!link) return;
+      const linkRect = link.getBoundingClientRect();
+      setIndicatorStyle({
+        left: linkRect.left - navRect.left,
+        width: linkRect.width,
+      });
+      setIndicatorVisible(true);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [pathname]);
+
+  function moveIndicatorToHref(href: string) {
+    if (typeof window === "undefined") return;
+    const nav = navRef.current;
+    if (!nav) return;
+    const navRect = nav.getBoundingClientRect();
+    if (navRect.width === 0) return;
+    const link = linkRefs.current[href];
+    if (!link) return;
+    const linkRect = link.getBoundingClientRect();
+    setIndicatorStyle({
+      left: linkRect.left - navRect.left,
+      width: linkRect.width,
+    });
+    setIndicatorVisible(true);
+  }
 
   function toggleTheme() {
     const next = theme === "light" ? "dark" : "light";
@@ -64,7 +124,7 @@ export function Header() {
         <div className="flex flex-1 min-w-0 items-center gap-3">
           <Link
             href="/"
-            className="group flex items-center gap-4 no-underline hover:no-underline"
+            className="group ha-header-link flex items-center gap-4"
           >
             <Image
               src="/healtharchive-logo.webp"
@@ -91,22 +151,62 @@ export function Header() {
         <div className="flex flex-shrink-0 items-center gap-2">
           {/* Desktop nav */}
           <nav
-            className="hidden items-center gap-3 text-xs lg:text-sm font-semibold text-ha-muted lg:flex"
+            ref={navRef}
+            className="relative hidden items-center gap-2 lg:gap-3 text-xs lg:text-sm font-semibold text-ha-muted lg:flex"
             aria-label="Primary"
+            onMouseLeave={() => {
+              const activeItem = navItems.find((item) => isActivePath(pathname, item.href));
+              if (activeItem) {
+                moveIndicatorToHref(activeItem.href);
+              }
+            }}
           >
+            {indicatorStyle && (
+              <span
+                className={`ha-nav-active-indicator ${
+                  indicatorVisible ? "ha-nav-active-indicator--visible" : ""
+                }`}
+                style={{
+                  width: `${indicatorStyle.width}px`,
+                  left: `${indicatorStyle.left}px`,
+                }}
+              />
+            )}
             {navItems.map((item) => {
               const active = isActivePath(pathname, item.href);
+              const isBrowse = item.href === "/archive";
+              const baseClasses = ["ha-nav-link"];
+              if (active) {
+                baseClasses.push("ha-nav-link--active");
+              }
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`rounded-full px-2.5 py-1 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
-                    active
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-ha-muted hover:bg-slate-100 hover:text-slate-900"
-                  }`}
+                  className={baseClasses.join(" ")}
+                  ref={(element) => {
+                    if (element) {
+                      linkRefs.current[item.href] = element;
+                    }
+                  }}
+                  onMouseEnter={() => moveIndicatorToHref(item.href)}
+                  onFocus={() => moveIndicatorToHref(item.href)}
                 >
+                  {isBrowse && (
+                    <span className="ha-nav-icon" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 20 20"
+                        className="h-[1.05rem] w-[1.05rem]"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M8.5 3.5a5 5 0 0 1 3.9 8.1l2.7 2.7a.75.75 0 1 1-1.06 1.06l-2.7-2.7A5 5 0 1 1 8.5 3.5zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                  )}
                   {item.label}
                 </Link>
               );
@@ -197,18 +297,33 @@ export function Header() {
             <div className="flex flex-col gap-1">
               {navItems.map((item) => {
                 const active = isActivePath(pathname, item.href);
+                const isBrowse = item.href === "/archive";
+                const baseClasses = ["ha-nav-link"];
+                if (active) {
+                  baseClasses.push("ha-nav-link--active");
+                }
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded-full px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
-                      active
-                        ? "bg-blue-50 text-blue-700"
-                        : "text-ha-muted hover:bg-slate-100 hover:text-slate-900"
-                    }`}
+                    className={baseClasses.join(" ")}
                     onClick={() => setMobileOpen(false)}
                   >
+                    {isBrowse && (
+                      <span className="ha-nav-icon" aria-hidden="true">
+                        <svg
+                          viewBox="0 0 20 20"
+                          className="h-[1.05rem] w-[1.05rem]"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M8.5 3.5a5 5 0 0 1 3.9 8.1l2.7 2.7a.75.75 0 1 1-1.06 1.06l-2.7-2.7A5 5 0 1 1 8.5 3.5zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </span>
+                    )}
                     {item.label}
                   </Link>
                 );
