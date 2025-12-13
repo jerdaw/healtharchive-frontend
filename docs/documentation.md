@@ -790,7 +790,7 @@ All text is stable, but can be refined later.
 
 * Two cards:
 
-  * Email: `contact@healtharchive.ca` (placeholder).
+  * Email: `contact@healtharchive.ca`, `jeremy@healtharchive.ca` (forwarding to the maintainer).
   * GitHub: `https://github.com/jerdaw/healtharchive-frontend`.
 
 ### 8.8 Snapshot viewer `/snapshot/[id]` – `src/app/snapshot/[id]/page.tsx`
