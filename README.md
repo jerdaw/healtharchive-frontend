@@ -115,6 +115,13 @@ npm test
 
 Vitest + Testing Library with mocked fetch; no live backend needed.
 
+---
+
+## Contact
+
+- `contact@healtharchive.ca`
+- `jeremy@healtharchive.ca`
+
 ### CI / deployment notes
 
 - A GitHub Actions workflow (`.github/workflows/frontend-ci.yml`) runs on pushes

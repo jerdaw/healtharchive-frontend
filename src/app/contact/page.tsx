@@ -23,25 +23,32 @@ export default function ContactPage() {
                 </svg>
               </span>
               <h2 className="text-sm font-semibold text-slate-900">
-                Email (placeholder)
+                Email
               </h2>
             </div>
             <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
-              For now, the simplest way to express interest or ask questions is by
-              email.
+              The simplest way to express interest, report an issue, or ask
+              questions is by email. Both addresses below currently forward to
+              the project maintainer.
             </p>
-            <p className="text-sm sm:text-base">
-              <a
-                href="mailto:contact@healtharchive.ca"
-                className="font-medium text-ha-accent hover:text-blue-700"
-              >
-                contact@healtharchive.ca
-              </a>
-            </p>
-            <p className="text-xs sm:text-sm text-ha-muted leading-relaxed">
-              Please note that this address may change as the project&apos;s
-              governance and infrastructure evolve.
-            </p>
+            <div className="text-sm sm:text-base space-y-1">
+              <p>
+                <a
+                  href="mailto:contact@healtharchive.ca"
+                  className="font-medium text-ha-accent hover:text-blue-700"
+                >
+                  contact@healtharchive.ca
+                </a>
+              </p>
+              <p>
+                <a
+                  href="mailto:jeremy@healtharchive.ca"
+                  className="font-medium text-ha-accent hover:text-blue-700"
+                >
+                  jeremy@healtharchive.ca
+                </a>
+              </p>
+            </div>
           </div>
 
           <div className="ha-card ha-home-panel p-4 sm:p-5 space-y-3">
