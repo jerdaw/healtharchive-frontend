@@ -232,6 +232,6 @@ Any push to `main` triggers a new Vercel deployment.
 ## Further documentation
 
 -   **Architecture & project state:**
-    See [`docs/documentation.md`](docs/documentation.md) for a detailed overview
+    See [`docs/implementation-guide.md`](docs/implementation-guide.md) for a detailed overview
     of the data model, routes, design system, accessibility primitives, and
     planned future phases.
