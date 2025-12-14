@@ -149,6 +149,7 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
     -   Live APIs (preferred): `/api/search`, `/api/sources`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`, `/api/health`.
     -   Demo fallback: bundled sample records under `src/data/demo-records.ts` and static snapshots under `public/demo-archive/**` when the API is unavailable.
 -   API client: `src/lib/api.ts` (uses `NEXT_PUBLIC_API_BASE_URL`, defaulting to `http://localhost:8001`).
+-   Production backend: single Hetzner VPS (Nuremberg) running Postgres + API + worker + Caddy; SSH is Tailscale-only; public ports are 80/443 only. Full runbook lives in `healtharchive-backend/docs/production-single-vps.md`.
 -   Pages:
     -   `/archive`: uses backend search with pagination and page-size selection; falls back to demo data and shows a fallback notice.
     -   `/archive/browse-by-source`: uses backend source summaries; falls back to demo summaries with a notice.
@@ -165,6 +166,7 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
 -   Search (`/archive`): keywords + source/topic filters, pagination (First/Prev/Next/Last), page-size selector.
 -   Browse by source (`/archive/browse-by-source`): cards load with counts/topics.
 -   Snapshot (`/snapshot/[id]`): metadata present; iframe loads or shows error overlay with raw/API links; missing ID returns notFound.
+-   Some API calls happen server-side in Next.js; if you don’t see requests in the browser Network tab, tail backend logs or call the API directly to confirm connectivity.
 -   Topics/sources: topic dropdown and source options come from the backend when
     available, with topics using `{slug, label}` from the API. In demo mode,
     labels are slugified client‑side so the UI can keep using topic slugs in
