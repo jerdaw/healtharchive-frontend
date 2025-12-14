@@ -15,10 +15,10 @@
   - `ha-trackchanges-finished` is dispatched by `TrackChangesPhrase` after the “before → after” typing sequence completes.
   - “Project snapshot” metrics start on that event and dispatch `ha-project-snapshot-finished` after all metric animations complete (used to trigger the final “before” fade-out).
 - Primary documentation for humans and agents:
-  - `docs/documentation.md` → architecture, routes, styling system, deployment details.
-  - `docs/deployment-verification.md` → Preview/Production CSP/CORS/snapshot viewer verification.
+  - `docs/implementation-guide.md` → architecture, routes, styling system, deployment details.
+  - `docs/deployment/verification.md` → Preview/Production CSP/CORS/snapshot viewer verification.
 
-When you’re unsure about architecture, routes, or design decisions, **read `docs/documentation.md` first instead of guessing**.
+When you’re unsure about architecture, routes, or design decisions, **read `docs/implementation-guide.md` first instead of guessing**.
 
 ---
 
@@ -141,7 +141,7 @@ Aim to keep those passing.
   - Remove or weaken disclaimers about independence / non-authoritative status in the header/footer.
   - Call or expose admin API endpoints or `/metrics` to the browser.
 - Be cautious editing:
-  - `docs/documentation.md` – it’s the main architecture doc. Propose changes in chat unless explicitly asked to modify it.
+  - `docs/implementation-guide.md` – it’s the main architecture doc. Propose changes in chat unless explicitly asked to modify it.
   - The snapshot viewer iframe sandboxing or CSP-related configs in `next.config.ts`. These are intentionally conservative for security.
 - Demo HTML files in `public/demo-archive/**`:
   - Treat as curated examples. Only add/change these when explicitly asked, and keep paths consistent with `snapshotPath` in `src/data/demo-records.ts`.

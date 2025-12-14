@@ -1,3 +1,14 @@
+# HealthArchive Frontend – Implementation Guide
+
+This is the canonical “how it works” guide for the `healtharchive-frontend`
+repo. It covers:
+
+- Tech stack and environment variables
+- API integration + demo fallback behavior
+- Styling system (`.ha-*` classes) and key UI components
+- Routes/pages and the snapshot viewer
+- Deployment notes (Vercel + DNS)
+
 ## 1. High-level project summary
 
 **Project name:** HealthArchive.ca frontend
@@ -1054,7 +1065,9 @@ The goal is to dump only the core files someone would read to understand the pro
 # From /path/to/healtharchive-frontend
 files=(
   "README.md"
-  "docs/documentation.md"
+  "docs/README.md"
+  "docs/implementation-guide.md"
+  "docs/deployment/verification.md"
   "package.json"
   "tsconfig.json"
   "next.config.ts"
