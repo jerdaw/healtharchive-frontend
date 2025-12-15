@@ -91,10 +91,12 @@ export default async function ArchivePage({
         const apiSources = await fetchSources();
 
         if (apiSources.length > 0) {
-            sourceOptions = apiSources.map((s) => ({
-                value: s.sourceCode,
-                label: s.sourceName,
-            }));
+            sourceOptions = apiSources
+                .filter((s) => s.sourceCode !== "test")
+                .map((s) => ({
+                    value: s.sourceCode,
+                    label: s.sourceName,
+                }));
         }
     } catch {
         const demoSources = getSourcesSummary();

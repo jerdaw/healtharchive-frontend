@@ -57,6 +57,7 @@ export default async function BrowseBySourcePage() {
       lastCapture: s.lastCapture,
       latestRecordId: s.latestRecordId,
     }));
+    summaries = summaries.filter((s) => s.sourceCode !== "test");
     usingBackend = true;
   } catch {
     // Keep demo summaries if backend is unavailable.
