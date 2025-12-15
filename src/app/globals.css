@@ -985,27 +985,6 @@ a:focus-visible {
     border: 1px solid var(--border);
     padding: 1rem 1.1rem 0.8rem;
     box-shadow: none;
-    border-left-width: 4px;
-}
-
-.ha-result-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 18%, var(--border));
-}
-
-.ha-result-accent--hc {
-    border-left-color: color-mix(in srgb, var(--brand) 92%, white);
-}
-
-.ha-result-accent--phac {
-    border-left-color: #0f766e;
-}
-
-.ha-result-accent--cihr {
-    border-left-color: #7c3aed;
-}
-
-.ha-result-accent--default {
-    border-left-color: color-mix(in srgb, var(--border) 65%, var(--muted));
 }
 
 .ha-result-row {
@@ -1086,10 +1065,6 @@ a:focus-visible {
 
 .ha-result-url-row {
     margin-top: 0.45rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
 }
 
 .ha-result-url {
@@ -1111,6 +1086,7 @@ a:focus-visible {
         "Liberation Mono", "Courier New", monospace;
     display: block;
     min-width: 0;
+    flex: 1 1 auto;
     font-size: 0.78rem;
     color: var(--text);
     text-decoration: none;
@@ -1131,6 +1107,37 @@ a:focus-visible {
 
 .ha-result-url-rest {
     color: var(--muted);
+}
+
+.ha-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background-color: color-mix(in srgb, var(--surface-bg) 92%, transparent);
+    color: var(--muted);
+    transition: background-color 150ms ease-out, color 150ms ease-out;
+    flex: 0 0 auto;
+}
+
+.ha-icon-btn:hover {
+    background-color: color-mix(in srgb, var(--surface-bg) 80%, transparent);
+    color: color-mix(in srgb, var(--text) 85%, var(--muted));
+    text-decoration: none;
+}
+
+.ha-icon-btn:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+
+.ha-icon-btn svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
 }
 
 .ha-result-topics {
