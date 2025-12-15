@@ -924,7 +924,7 @@ a:focus-visible {
     margin: 0;
 }
 
-/* Simple tag/pill style for topics, statuses, etc. */
+/* Simple tag/pill style for small labels. */
 .ha-tag {
     display: inline-flex;
     align-items: center;
@@ -1132,13 +1132,6 @@ a:focus-visible {
     fill: currentColor;
 }
 
-.ha-result-topics {
-    margin-top: 0.75rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-}
-
 .ha-result-badge {
     display: inline-flex;
     align-items: center;
@@ -1155,10 +1148,6 @@ a:focus-visible {
     background-color: color-mix(in srgb, var(--brand) 13%, transparent);
     border-color: color-mix(in srgb, var(--brand) 22%, var(--border));
     color: color-mix(in srgb, var(--text) 88%, var(--muted));
-}
-
-.ha-result-badge--topic {
-    background-color: color-mix(in srgb, var(--accent) 9%, transparent);
 }
 
 /* ====================================

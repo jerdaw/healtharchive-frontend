@@ -12,7 +12,7 @@ export default function ResearchersPage() {
         <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
           <li>
             <strong>Policy and guideline history:</strong> Tracking how public
-            health guidance on topics such as COVID-19 vaccination, seasonal
+            health guidance on subjects such as COVID-19 vaccination, seasonal
             influenza, or naloxone distribution has changed over time.
           </li>
           <li>
@@ -38,11 +38,11 @@ export default function ResearchersPage() {
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
           The archive explorer and snapshot viewer are designed to support
           research workflows, but the interface is still evolving. Coverage is
-          expanding, and some pages or topics may be missing or incomplete.
+          expanding, and some pages may be missing or incomplete.
         </p>
         <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
           <li>
-            Keyword search with filters by source and topic.
+            Keyword search with filters by source.
           </li>
           <li>
             A pages view (latest capture per URL) and a snapshots view (all
@@ -101,7 +101,7 @@ export default function ResearchersPage() {
             </li>
             <li>
               Machine-readable exports describing changes over time for selected
-              URLs or topics.
+              URLs or search queries.
             </li>
             <li>
               Lightweight APIs for programmatic querying of snapshot metadata,

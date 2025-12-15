@@ -11,7 +11,6 @@ export type SearchResultCardRecord = {
     sourceCode: string;
     sourceName: string;
     language?: string;
-    topics: string[];
     captureDate?: string | null;
     originalUrl: string;
     snippet?: string | null;
@@ -170,8 +169,6 @@ export function SearchResultCard({
     const snippetNodes = highlightText(snippet, queryTokens);
 
     const urlParts = formatUrlParts(record.originalUrl);
-    const displayTopics = record.topics.slice(0, 6);
-    const overflowCount = Math.max(0, record.topics.length - displayTopics.length);
 
     return (
         <article className="ha-result-card">
@@ -240,21 +237,6 @@ export function SearchResultCard({
                     </CopyButton>
                 </div>
             </div>
-
-            {displayTopics.length > 0 && (
-                <div className="ha-result-topics" aria-label="Topics">
-                    {displayTopics.map((t) => (
-                        <span key={t} className="ha-result-badge ha-result-badge--topic">
-                            {t}
-                        </span>
-                    ))}
-                    {overflowCount > 0 && (
-                        <span className="ha-result-badge ha-result-badge--topic">
-                            +{overflowCount} more
-                        </span>
-                    )}
-                </div>
-            )}
         </article>
     );
 }

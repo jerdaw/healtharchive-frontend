@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/layout/PageShell";
-import { getRecordById, slugifyTopic } from "@/data/demo-records";
+import { getRecordById } from "@/data/demo-records";
 import { fetchSnapshotDetail, getApiBaseUrl } from "@/lib/api";
 import { SnapshotFrame } from "@/components/SnapshotFrame";
 
@@ -77,14 +77,6 @@ export default async function SnapshotPage({
   const language = snapshotMeta?.language ?? record?.language ?? "Unknown";
   const originalUrl =
     snapshotMeta?.originalUrl ?? record?.originalUrl ?? "Unknown URL";
-  const topics =
-    snapshotMeta?.topics ??
-    (record?.topics
-      ? record.topics.map((label) => ({
-          slug: slugifyTopic(label),
-          label,
-        }))
-      : []);
   // For backend-backed snapshots, rawSnapshotUrl is a path (e.g.
   // "/api/snapshots/raw/{id}") relative to the backend host. Prefix it with
   // the configured API base URL so the iframe/link always point at the backend
@@ -138,16 +130,6 @@ export default async function SnapshotPage({
                 <dd className="break-all">{originalUrl}</dd>
               </div>
             </dl>
-
-            {topics.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {topics.map((topic) => (
-                  <span key={topic.slug} className="ha-badge">
-                    {topic.label}
-                  </span>
-                ))}
-              </div>
-            )}
 
             <div className="mt-4 flex flex-wrap gap-2">
               <Link href="/archive" className="ha-btn-secondary text-xs">

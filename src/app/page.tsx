@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AnimatedMetric } from "@/components/home/AnimatedMetric";
 import { HoverGlowLink } from "@/components/home/HoverGlowLink";
 import { ProjectSnapshotOrchestrator } from "@/components/home/ProjectSnapshotOrchestrator";
-import { fetchArchiveStats, fetchTopicsCached } from "@/lib/api";
+import { fetchArchiveStats } from "@/lib/api";
 
 function formatDate(iso: string | undefined | null): string {
     if (!iso) return "Unknown";
@@ -42,16 +42,18 @@ export default async function HomePage() {
     const fallbackRecordCount = demoRecords.length;
     const fallbackPageCount = new Set(demoRecords.map((r) => r.originalUrl)).size;
     const fallbackSourceCount = new Set(demoRecords.map((r) => r.sourceName)).size;
-    const fallbackTopicCount = new Set(demoRecords.flatMap((r) => r.topics)).size;
 
     const stats = await fetchArchiveStats().catch(() => null);
     const usingBackendStats = stats != null;
-    const topics = await fetchTopicsCached().catch(() => null);
     const recordCount = stats?.snapshotsTotal ?? fallbackRecordCount;
     const pageCount = stats?.pagesTotal ?? fallbackPageCount;
     const sourceCount = stats?.sourcesTotal ?? fallbackSourceCount;
     const latestCaptureDate = stats?.latestCaptureDate ?? null;
-    const topicCount = topics?.length ?? fallbackTopicCount;
+    const latestCaptureAgeDays = stats?.latestCaptureAgeDays ?? null;
+    const recencyBarPercent =
+        latestCaptureAgeDays == null
+            ? 0
+            : Math.max(0, 100 - (latestCaptureAgeDays / 365) * 100);
 
     return (
         <div className="ha-container space-y-14 pt-3 sm:pt-4">
@@ -99,7 +101,7 @@ export default async function HomePage() {
                     {/* Side card */}
                     <div className="ha-card ha-card-elevated p-4 sm:p-5">
                         <ProjectSnapshotOrchestrator
-                            expectedIds={["records", "pages", "sources", "topics"]}
+                            expectedIds={["records", "pages", "sources", "recency"]}
                         />
                         <div className="flex items-center justify-between gap-3">
                             <div>
@@ -145,11 +147,11 @@ export default async function HomePage() {
                                 completeEvent="ha-metric-finished"
                             />
                             <AnimatedMetric
-                                id="topics"
-                                label="Topics"
-                                value={topicCount}
-                                unit="topics"
-                                barPercent={Math.min(100, (topicCount / 200) * 100)}
+                                id="recency"
+                                label="Days since capture"
+                                value={latestCaptureAgeDays ?? 0}
+                                unit="days"
+                                barPercent={recencyBarPercent}
                                 start={false}
                                 startEvent="ha-trackchanges-finished"
                                 completeEvent="ha-metric-finished"
@@ -193,7 +195,7 @@ export default async function HomePage() {
                                 </h3>
                             </div>
                             <p className="ha-audience-body text-sm sm:text-base text-ha-muted">
-                                Revisit past guidance on topics such as COVID-19
+                                Revisit past guidance on subjects such as COVID-19
                                 vaccination, seasonal influenza, naloxone
                                 distribution, or mpox to understand how
                                 recommendations have evolved.

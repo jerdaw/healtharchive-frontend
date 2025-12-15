@@ -29,10 +29,6 @@ describe("/archive/browse-by-source", () => {
         recordCount: 2,
         firstCapture: "2024-01-01",
         lastCapture: "2024-02-01",
-        topics: [
-          { slug: "covid-19", label: "COVID-19" },
-          { slug: "influenza", label: "Influenza" },
-        ],
         latestRecordId: 10,
       },
     ]);
@@ -42,9 +38,6 @@ describe("/archive/browse-by-source", () => {
 
     expect(screen.getByText("PHAC")).toBeInTheDocument();
     expect(screen.getByText(/2 snapshot/i)).toBeInTheDocument();
-    // Topic labels from TopicRef[] should render as badges.
-    expect(screen.getByText("COVID-19")).toBeInTheDocument();
-    expect(screen.getByText("Influenza")).toBeInTheDocument();
   });
 
   it("shows fallback notice when backend fails", async () => {

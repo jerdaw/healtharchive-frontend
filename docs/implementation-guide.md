@@ -19,11 +19,11 @@ Core ideas:
 -   Preserve **snapshots** of Canadian public health pages (e.g., PHAC, Health Canada).
 -   Allow users to:
 
-    -   Browse/search snapshots by **keywords**, **source**, and **topic**.
-    -   Open a **snapshot viewer** that:
+	    -   Browse/search snapshots by **keywords** and **source**.
+	    -   Open a **snapshot viewer** that:
 
-        -   Shows clear metadata: source, capture date, topics, original URL.
-        -   Embeds the captured page (with an offline sample fallback in `/public/demo-archive`).
+	        -   Shows clear metadata: source, capture date, original URL.
+	        -   Embeds the captured page (with an offline sample fallback in `/public/demo-archive`).
 
 -   Be **explicitly non-governmental** and **non-authoritative**:
 
@@ -80,17 +80,14 @@ npm test
 -   `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER` – when set to `true`, shows a small banner in the UI if `/api/health` fails (dev/Preview helper).
 -   `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE` – when set to `true`, logs a console warning if `/api/health` fails (dev/Preview helper).
 -   `NEXT_PUBLIC_SHOW_API_BASE_HINT` – when set to `true` in development, logs the effective API base URL to the browser console via `ApiHealthBanner` (dev-only helper; silenced in tests and production). This should remain disabled in production and CI to avoid noisy logs.
--   Topics and sources are built from backend data when available. Topics are
-    exposed by the backend as `{slug, label}` pairs; demo/fallback data
-    internally slugifies labels to mimic the same contract so the UI can always
-    use `slug` for queries and `label` for display.
+-   Source options are built from backend data when available; the UI falls
+    back to a bundled offline sample when the API is unreachable.
 
 ### Frontend ↔ backend integration
 
 -   API client lives at `src/lib/api.ts` and calls **public** backend endpoints:
-    -   `GET /api/search` (search with `q`, `source`, `topic`, `page`, `pageSize`)
+    -   `GET /api/search` (search with `q`, `source`, `page`, `pageSize`)
     -   `GET /api/sources` (per-source summaries)
-    -   `GET /api/topics` (canonical topic list used for filters, when available)
     -   `GET /api/snapshot/{id}` (snapshot detail)
     -   `GET /api/snapshots/raw/{id}` (raw HTML for the viewer)
     -   `GET /api/stats` (lightweight archive totals used on the homepage)
@@ -128,7 +125,7 @@ npm test
 ### QA checklist (quick smoke)
 
 -   `/archive`: search with and without filters; verify pagination/Next/Prev/First/Last and page-size selector; see fallback notice if API is down.
--   `/archive/browse-by-source`: cards load with counts/topics; fallback notice if API is down.
+-   `/archive/browse-by-source`: cards load with counts; fallback notice if API is down.
 -   `/snapshot/[id]`: loads metadata and iframe; iframe shows loading overlay, then content; error overlay when iframe fails; notFound on missing ID.
 -   Dev-only debug: when iframe fails, “Open raw snapshot” and optional “View metadata JSON” links remain available.
 
@@ -523,7 +520,6 @@ export type DemoRecord = {
     sourceCode: "phac" | "hc";
     sourceName: string;
     language: string;
-    topics: string[];
     captureDate: string; // YYYY-MM-DD
     originalUrl: string;
     snapshotPath: string; // path under /public
@@ -535,7 +531,6 @@ Key fields:
 
 -   `id`: unique ID of snapshot, used in URL path `/snapshot/[id]`.
 -   `snapshotPath`: relative path to static HTML in `/public/demo-archive/...`.
--   `topics`: an array of topic tags used for filtering and badges.
 
 ### 7.2 Demo data records
 
@@ -558,48 +553,6 @@ Key fields:
 
 Each record’s `snapshotPath` is a valid file in `public/demo-archive/**`.
 
-### 7.3 Topic handling (backend + frontend)
-
-Topics are handled consistently across the backend, frontend, and demo data:
-
--   **Canonical shape from the backend**:
-
-    -   All public APIs that expose topics (`/api/sources`, `/api/search`, `/api/snapshot/{id}`) return topics as:
-
-        ```ts
-        type TopicRef = {
-            slug: string; // machine-readable identifier (used in URLs / query params)
-            label: string; // human-readable label shown in the UI
-        };
-        ```
-
-    -   The `topic` query parameter for `/api/search` is always the **topic slug**
-        (`?topic=covid-19`).
-
--   **Frontend usage**:
-
-    -   Dropdowns and filters use `value = slug` and display `label`.
-    -   Topic badges in `/archive` and `/snapshot/[id]` show `label`.
-    -   Links or filters that refer to a topic use the slug in the URL
-        (`?topic=<slug>`).
-
--   **Offline fallback behavior**:
-
-    -   In offline sample mode, topics on `DemoRecord` are simple strings (labels).
-    -   A shared `slugifyTopic(label)` helper in `src/data/demo-records.ts`
-        converts labels into slugs using the same rules as the backend
-        (lowercase, non-alphanumerics → `-`, trimmed).
-    -   `searchDemoRecords`:
-
-        -   Treats `topic` primarily as a slug.
-        -   For each record, slugifies each label and matches when
-            `slugifyTopic(label) === topic` (or `label === topic` for
-            backward-compat).
-
-This ensures that the UI behaves the same way whether it is backed by the live
-API or the bundled offline sample dataset: URLs use slugs, and the user sees readable
-labels.
-
 ### 7.4 Helper functions
 
 All in `src/data/demo-records.ts`:
@@ -610,25 +563,19 @@ All in `src/data/demo-records.ts`:
     export type SearchParams = {
         q?: string;
         source?: string;
-        topic?: string;
     };
     ```
 
     Logic:
 
     - `source`: if provided, filters `record.sourceCode === source`.
-    - `topic`: if provided, treats it primarily as a **topic slug**:
-
-        - For each record, slugifies each topic label using the same rules as the backend (lowercase, non-alphanumerics → `-`, trimmed).
-        - A record matches if **any** of its topic slugs equals `topic` **or** any raw topic label equals `topic` (for backward-compat).
-
     - `q`: if not provided, returns all records passing above filters.
     - If `q` provided:
 
         - Normalize to lowercase.
         - Build a haystack string from:
 
-            - `title`, `snippet`, `sourceName`, `topics.join(" ")`, `language`.
+            - `title`, `snippet`, `sourceName`, `language`.
 
         - Check if haystack contains normalized `q`.
 
@@ -641,20 +588,15 @@ All in `src/data/demo-records.ts`:
         recordCount: number;
         firstCapture: string;
         lastCapture: string;
-        topics: string[];
         latestRecordId: string | null;
     };
     ```
 
     - Aggregates `demoRecords` grouped by `sourceCode`.
-    - Tracks first/last capture, total records, unique topics, and the ID of the latest record.
+    - Tracks first/last capture, total records, and the ID of the latest record.
     - Returns array sorted by `sourceName`.
 
-3. **`getAllTopics(): string[]`**
-
-    - Collects all topics from all records into a Set, returns sorted alphabetically.
-
-4. **`getRecordById(id: string)`**
+3. **`getRecordById(id: string)`**
 
     - Finds a single record by `id` or returns `undefined`.
 
@@ -681,7 +623,7 @@ All in `src/data/demo-records.ts`:
 
     2. **Side card: “Project snapshot”**
 
-        - Displays live totals (snapshots, pages, sources, topics, latest capture date).
+        - Displays live totals (snapshots, pages, sources, days since capture) plus the latest capture date.
         - The animated metrics start after `ha-trackchanges-finished` and dispatch
           `ha-project-snapshot-finished` once all expected metric animations complete.
 
@@ -710,7 +652,6 @@ All in `src/data/demo-records.ts`:
     type ArchiveSearchParams = {
       q?: string;
       source?: string;
-      topic?: string;
       sort?: string;
       view?: string;
       includeNon2xx?: string;
@@ -726,7 +667,6 @@ All in `src/data/demo-records.ts`:
       const params = await searchParams;
       const q = params.q?.trim() ?? "";
       const source = params.source?.trim() ?? "";
-      const topic = params.topic?.trim() ?? "";
       ...
     }
     ```
@@ -754,7 +694,6 @@ All in `src/data/demo-records.ts`:
 
     -   Keywords (`input name="q"`).
     -   Source (`select name="source"` with values `""`, `"phac"`, `"hc"`).
-    -   Topic (`select name="topic"` built from `getAllTopics()`).
 
 -   “Apply filters” button (`type="submit"`).
 
@@ -768,7 +707,7 @@ All in `src/data/demo-records.ts`:
     -   Summary text: “X snapshot(s) matching “q””.
 
     -   Secondary search form that:
-        -   Reuses `q` but preserves `source` and `topic` via hidden inputs.
+        -   Reuses `q` but preserves `source` via hidden inputs.
         -   Allows user to quickly adjust keywords without re-choosing filters.
         -   Live API mode controls:
             -   Show toggle (`all snapshots` vs `pages (latest)`).
@@ -788,7 +727,6 @@ All in `src/data/demo-records.ts`:
             -   “View snapshot” button linking to same snapshot.
             -   Snippet paragraph.
             -   Original URL line.
-            -   Topic badges (`record.topics`).
 
 ### 8.3 Browse by source `/archive/browse-by-source` – `src/app/archive/browse-by-source/page.tsx`
 
@@ -806,7 +744,6 @@ All in `src/data/demo-records.ts`:
 
         -   `sourceName`
         -   “N snapshots captured between [first] and [last]”.
-        -   Top ~6 topics as badges + “+N more” if more topics exist.
         -   Buttons:
 
             -   “Browse records” → `/archive?source=${sourceCode}`
@@ -883,10 +820,9 @@ All text is stable, but can be refined later.
 
         - **Metadata card**:
 
-            - Capture date.
-            - Details: Source, capture date, language, original URL.
-            - Topics as badges.
-            - Buttons:
+	            - Capture date.
+	            - Details: Source, capture date, language, original URL.
+	            - Buttons:
 
                 - Back to `/archive`.
                 - “Open raw snapshot” (opens the backend `/api/snapshots/raw/{id}` when available; falls back to the offline sample HTML path).
@@ -1026,7 +962,7 @@ We followed an 8-phase plan. Status:
 -   **Backend integration + offline fallback:**
 
     -   The UI prefers live backend APIs (`/api/search`, `/api/sources`,
-        `/api/topics`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`, `/api/stats`) via
+        `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`, `/api/stats`) via
         `NEXT_PUBLIC_API_BASE_URL`, and falls back to the static `demoRecords`
         offline sample dataset when the API is unreachable.
     -   There are no Next.js API routes in this repo; all calls go directly to the
@@ -1056,16 +992,12 @@ If you’re continuing dev, some clear next steps could be:
     - Extend `DemoRecord` with `urlGroup` or similar.
     - Add a “View timeline” link on snapshot cards to show capture history for a given URL.
 
-3. **Improved topic handling**:
-
-    - Add grouping or hierarchy for topics (e.g., Infectious diseases → Respiratory → COVID-19).
-
-4. **Accessibility audit**:
+3. **Accessibility audit**:
 
     - A first pass has been completed (skip link, nav landmarks, focus-visible styles, and basic ARIA).
     - Future work could include automated testing (e.g., axe), screen reader testing across platforms, and deeper contrast audits.
 
-5. **Analytics / logging** (if desired):
+4. **Analytics / logging** (if desired):
 
     - E.g., simple pageview tracking or logging to a privacy-respecting service.
 
