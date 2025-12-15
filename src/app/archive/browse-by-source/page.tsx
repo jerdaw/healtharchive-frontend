@@ -67,19 +67,17 @@ export default async function BrowseBySourcePage() {
 
   return (
     <PageShell
-      eyebrow={usingBackend ? "Archive explorer" : "Archive explorer (demo)"}
+      eyebrow="Archive explorer"
       title="Browse records by source"
       intro={
-        usingBackend
-          ? "This view summarizes which snapshots are available for each source."
-          : "This view summarizes which snapshots are available for each source. In a fuller archive, this would expand to a broader set of agencies and jurisdictions."
+        "This view summarizes which snapshots are available for each source. Coverage and features are still expanding."
       }
     >
       {!usingBackend && (
         <div className="ha-callout mb-6">
-          <h3 className="ha-callout-title">Backend unavailable</h3>
+          <h3 className="ha-callout-title">Live API unavailable</h3>
           <p className="text-xs leading-relaxed sm:text-sm">
-            Showing demo data while the live API is unavailable.
+            Showing a limited offline sample while the live API is unavailable.
           </p>
         </div>
       )}
@@ -93,8 +91,8 @@ export default async function BrowseBySourcePage() {
               {source.sourceName}
             </h2>
             <p className="mt-1 text-xs text-ha-muted">
-              {source.recordCount} {usingBackend ? "snapshot" : "demo snapshot"}
-              {source.recordCount === 1 ? "" : "s"} captured between{" "}
+              {source.recordCount} snapshot{source.recordCount === 1 ? "" : "s"}{" "}
+              captured between{" "}
               {formatDate(source.firstCapture)} and {formatDate(source.lastCapture)}.
             </p>
 

@@ -4,10 +4,51 @@ import Link from "next/link";
 import { AnimatedMetric } from "@/components/home/AnimatedMetric";
 import { HoverGlowLink } from "@/components/home/HoverGlowLink";
 import { ProjectSnapshotOrchestrator } from "@/components/home/ProjectSnapshotOrchestrator";
+import { fetchArchiveStats } from "@/lib/api";
 
-export default function HomePage() {
-    const recordCount = demoRecords.length;
-    const sourceCount = new Set(demoRecords.map((r) => r.sourceName)).size;
+function formatDate(iso: string | undefined | null): string {
+    if (!iso) return "Unknown";
+    const parts = iso.split("-");
+    if (parts.length === 3) {
+        const [yearStr, monthStr, dayStr] = parts;
+        const year = Number(yearStr);
+        const month = Number(monthStr);
+        const day = Number(dayStr);
+        if (year && month && day) {
+            const d = new Date(year, month - 1, day);
+            if (!Number.isNaN(d.getTime())) {
+                return d.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                });
+            }
+        }
+    }
+
+    const parsed = new Date(iso);
+    if (!Number.isNaN(parsed.getTime())) {
+        return parsed.toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        });
+    }
+
+    return iso;
+}
+
+export default async function HomePage() {
+    const fallbackRecordCount = demoRecords.length;
+    const fallbackPageCount = new Set(demoRecords.map((r) => r.originalUrl)).size;
+    const fallbackSourceCount = new Set(demoRecords.map((r) => r.sourceName)).size;
+
+    const stats = await fetchArchiveStats().catch(() => null);
+    const usingBackendStats = stats != null;
+    const recordCount = stats?.snapshotsTotal ?? fallbackRecordCount;
+    const pageCount = stats?.pagesTotal ?? fallbackPageCount;
+    const sourceCount = stats?.sourcesTotal ?? fallbackSourceCount;
+    const latestCaptureDate = stats?.latestCaptureDate ?? null;
 
     return (
         <div className="ha-container space-y-14 pt-3 sm:pt-4">
@@ -36,18 +77,16 @@ export default function HomePage() {
                         </p>
                         <div className="ha-home-hero-meta text-xs text-ha-muted pt-1">
                             <span className="inline-flex items-center rounded-full bg-amber-50 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-amber-800">
-                                Early development
+                                In development
                             </span>
                             <span className="ha-home-hero-meta-text">
-                                Search and archive views are currently powered
-                                by a small demo dataset while the full
-                                infrastructure is being built.
+                                Coverage and features are expanding; archived
+                                content may be incomplete, outdated, or
+                                superseded.
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-3 pt-1">
-                            <HoverGlowLink href="/archive">
-                                Browse demo archive
-                            </HoverGlowLink>
+                            <HoverGlowLink href="/archive">Browse the archive</HoverGlowLink>
                             <Link href="/methods" className="ha-btn-secondary">
                                 Methods &amp; scope
                             </Link>
@@ -57,7 +96,7 @@ export default function HomePage() {
                     {/* Side card */}
                     <div className="ha-card ha-card-elevated p-4 sm:p-5">
                         <ProjectSnapshotOrchestrator
-                            expectedIds={["records", "sources"]}
+                            expectedIds={["records", "pages", "sources"]}
                         />
                         <div className="flex items-center justify-between gap-3">
                             <div>
@@ -65,50 +104,49 @@ export default function HomePage() {
                                     Project snapshot
                                 </h2>
                                 <p className="text-xs text-ha-muted">
-                                    Prototype archive for selected federal
-                                    public health pages.
+                                    {usingBackendStats
+                                        ? "Live metrics from the archive backend."
+                                        : "Showing a limited offline sample while the live API is unavailable."}
                                 </p>
                             </div>
-                            <span className="ha-badge ha-badge-amber">
-                                Demo phase
-                            </span>
                         </div>
                         <dl className="mt-4 ha-metric-grid ha-metric-grid-2 text-xs sm:text-sm">
                             <AnimatedMetric
                                 id="records"
-                                label="Sample records"
+                                label="Archived snapshots"
                                 value={recordCount}
-                                unit="entries"
-                                barPercent={Math.min(100, recordCount * 8)}
+                                unit="snapshots"
+                                barPercent={Math.min(100, (recordCount / 200_000) * 100)}
+                                start={false}
+                                startEvent="ha-trackchanges-finished"
+                                completeEvent="ha-metric-finished"
+                            />
+                            <AnimatedMetric
+                                id="pages"
+                                label="Unique pages"
+                                value={pageCount}
+                                unit="pages"
+                                barPercent={Math.min(100, (pageCount / 100_000) * 100)}
                                 start={false}
                                 startEvent="ha-trackchanges-finished"
                                 completeEvent="ha-metric-finished"
                             />
                             <AnimatedMetric
                                 id="sources"
-                                label="Federal sources"
+                                label="Sources"
                                 value={sourceCount}
-                                unit="sites"
-                                barPercent={Math.min(100, sourceCount * 22)}
+                                unit="sources"
+                                barPercent={Math.min(100, (sourceCount / 20) * 100)}
                                 start={false}
                                 startEvent="ha-trackchanges-finished"
                                 completeEvent="ha-metric-finished"
                             />
                             <div>
-                                <dt className="ha-metric-label">Focus</dt>
+                                <dt className="ha-metric-label">Latest capture</dt>
                                 <dd className="ha-metric-secondary">
-                                    COVID-19, influenza, HIV, climate, food
-                                    safety, water quality, and more.
-                                </dd>
-                            </div>
-                            <div>
-                                <dt className="ha-metric-label">
-                                    Intended users
-                                </dt>
-                                <dd className="ha-metric-secondary">
-                                    Clinicians, public health practitioners,
-                                    researchers, and data-curious members of
-                                    the public.
+                                    {latestCaptureDate
+                                        ? formatDate(latestCaptureDate)
+                                        : "Unknown"}
                                 </dd>
                             </div>
                         </dl>
@@ -237,19 +275,22 @@ export default function HomePage() {
                     </div>
                     <div className="ha-card ha-card-elevated p-4 sm:p-5 space-y-3">
                         <h3 className="text-sm font-semibold text-slate-900">
-                            What this demo is (and isn&apos;t)
+                            What this site is (and isn&apos;t)
                         </h3>
                         <ul className="list-disc space-y-2 pl-5 text-xs leading-relaxed sm:text-sm text-ha-muted">
                             <li>
-                                <strong>Is:</strong> a small, hand-curated demo
-                                showing how the future archive explorer and
-                                snapshot viewer will behave.
+                                <strong>Is:</strong> an independent archive of
+                                snapshots from Canadian public health websites,
+                                captured at specific points in time.
                             </li>
                             <li>
-                                <strong>Is not:</strong> a complete or
-                                authoritative copy of any public health site.
-                                Coverage is intentionally small and will be
-                                documented transparently as the project grows.
+                                <strong>Is not:</strong> an official government
+                                website, and it should not be used as
+                                up-to-date clinical guidance.
+                            </li>
+                            <li>
+                                Coverage is still expanding. If you can&apos;t
+                                find a page, it may not have been captured yet.
                             </li>
                             <li>
                                 For current guidance, always refer to the

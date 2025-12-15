@@ -5,13 +5,13 @@ historical versions of **Canadian public health web content** (e.g., PHAC, Healt
 
 This repository contains the **Next.js frontend** for the public site at:
 
--   https://healtharchive.ca (production, early demo)
+-   https://healtharchive.ca (production)
 -   https://healtharchive.vercel.app (Vercel default domain)
 
-> **Status:** Early demo  
+> **Status:** In development  
 > The UI now prefers live backend APIs for search, browse, and snapshot detail
 > (configured via `NEXT_PUBLIC_API_BASE_URL`), and gracefully falls back to the
-> bundled demo dataset when the API is unreachable.
+> bundled offline sample dataset when the API is unreachable.
 
 ---
 
@@ -41,7 +41,7 @@ This repository contains the **Next.js frontend** for the public site at:
     -   Hero before/after phrase includes a `<noscript>` fallback so the intended text remains clear for non-JS crawlers/users.
     -   Hero animation orchestration:
         -   `TrackChangesPhrase` dispatches `ha-trackchanges-finished` when the “before → after” typing sequence completes.
-        -   The homepage “Project snapshot” metrics start on that event and then dispatch `ha-project-snapshot-finished` after both metrics complete, which triggers the final “before” removal.
+        -   The homepage “Project snapshot” metrics start on that event and then dispatch `ha-project-snapshot-finished` after all metric animations complete, which triggers the final “before” removal.
 
 ---
 
@@ -81,7 +81,7 @@ UI under **Settings → Environment Variables**. Recommended values:
 | Production  | `https://healtharchive.ca` / `www` | `https://api.healtharchive.ca`                   | `https://api.healtharchive.ca`         |
 
 > Expected limitation (by design): branch preview URLs like
-> `https://healtharchive-git-...vercel.app` may fall back to demo mode until we
+> `https://healtharchive-git-...vercel.app` may fall back to offline sample mode until we
 > decide to loosen the backend CORS allowlist.
 
 > `NEXT_PUBLIC_BACKEND_URL` is still supported for backward-compatibility, but
@@ -150,19 +150,19 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
 ## Backend integration overview
 
 -   Data sources:
-    -   Live APIs (preferred): `/api/search`, `/api/sources`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`, `/api/health`.
-    -   Demo fallback: bundled sample records under `src/data/demo-records.ts` and static snapshots under `public/demo-archive/**` when the API is unavailable.
+    -   Live APIs (preferred): `/api/search`, `/api/sources`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`, `/api/stats`, `/api/health`.
+    -   Offline fallback: bundled sample records under `src/data/demo-records.ts` and static snapshots under `public/demo-archive/**` when the API is unavailable.
 -   API client: `src/lib/api.ts` (uses `NEXT_PUBLIC_API_BASE_URL`, defaulting to `http://localhost:8001`).
 -   Production backend: single Hetzner VPS (Nuremberg) running Postgres + API + worker + Caddy; SSH is Tailscale-only; public ports are 80/443 only. Full runbook lives in `healtharchive-backend/docs/production-single-vps.md`.
 -   Pages:
-    -   `/archive`: uses backend search with pagination and page-size selection; falls back to demo data and shows a fallback notice.
-    -   `/archive/browse-by-source`: uses backend source summaries; falls back to demo summaries with a notice.
-    -   `/snapshot/[id]`: fetches backend snapshot detail/raw URL first; falls back to demo record/static snapshot if needed. The viewer shows a loading overlay and a friendly error state if the iframe fails.
+    -   `/archive`: uses backend search with pagination and page-size selection; falls back to an offline sample dataset and shows a fallback notice.
+    -   `/archive/browse-by-source`: uses backend source summaries; falls back to offline sample summaries with a notice.
+    -   `/snapshot/[id]`: fetches backend snapshot detail/raw URL first; falls back to offline sample record/static snapshot if needed. The viewer shows a loading overlay and a friendly error state if the iframe fails.
 -   Health diagnostics (optional): set `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a small banner when the backend health check fails (useful in dev/staging).
     -   If the health banner is off, you can still log failures by setting `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` (dev-only).
 -   Topics/sources: topic dropdown and source options come from the backend when
     available. Topics use backend‑provided `{slug, label}` pairs (slug in query
-    params, label in the UI); demo mode slugifies labels internally to mimic the
+    params, label in the UI); offline sample mode slugifies labels internally to mimic the
     same contract.
 
 ### Pre-release smoke (recommended)
@@ -172,7 +172,7 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
 -   Snapshot (`/snapshot/[id]`): metadata present; iframe loads or shows error overlay with raw/API links; missing ID returns notFound.
 -   Some API calls happen server-side in Next.js; if you don’t see requests in the browser Network tab, tail backend logs or call the API directly to confirm connectivity.
 -   Topics/sources: topic dropdown and source options come from the backend when
-    available, with topics using `{slug, label}` from the API. In demo mode,
+    available, with topics using `{slug, label}` from the API. In offline sample mode,
     labels are slugified client‑side so the UI can keep using topic slugs in
     URLs.
 

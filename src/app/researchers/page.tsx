@@ -34,33 +34,31 @@ export default function ResearchersPage() {
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
-        <h2 className="ha-section-heading">Working with the demo archive</h2>
+        <h2 className="ha-section-heading">Working with the archive</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
-          The current demo offers a deliberately small, hand-curated dataset.
-          It&apos;s meant to illustrate how a future research-grade interface
-          could behave rather than to serve as a full corpus.
+          The archive explorer and snapshot viewer are designed to support
+          research workflows, but the interface is still evolving. Coverage is
+          expanding, and some pages or topics may be missing or incomplete.
         </p>
         <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
           <li>
-            A small set of example records from federal health sites (e.g.,
-            PHAC, Health Canada).
+            Keyword search with filters by source and topic.
           </li>
           <li>
-            A search interface that filters records by keywords, source, and
-            topic.
+            A pages view (latest capture per URL) and a snapshots view (all
+            captures).
           </li>
           <li>
-            A “browse by source” view summarizing which demo records exist for
-            each agency.
+            A “browse by source” view summarizing coverage for each source.
           </li>
           <li>
-            HTML snapshot stubs that stand in for real archived pages and show
-            how replay URLs will be structured.
+            Snapshot detail pages with capture metadata and the archived HTML
+            when available.
           </li>
         </ul>
         <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
-          In the live system, these demo components would be replaced by a real
-          index and replay service backed by WARC files and dedicated storage.
+          If you need bulk access, reproducible exports, or specific capture
+          coverage for a study, please reach out via the contact page.
         </p>
       </section>
 
