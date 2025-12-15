@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 
 import { CopyButton } from "@/components/archive/CopyButton";
 
@@ -82,7 +82,7 @@ function tokenizeQuery(q: string): string[] {
     return Array.from(new Set(tokens));
 }
 
-function highlightText(text: string, tokens: string[]): Array<string | JSX.Element> {
+function highlightText(text: string, tokens: string[]): Array<string | ReactElement> {
     const trimmed = text.trim();
     if (!trimmed || tokens.length === 0) return [trimmed];
 
@@ -90,7 +90,7 @@ function highlightText(text: string, tokens: string[]): Array<string | JSX.Eleme
     const re = new RegExp(`(${orderedTokens.map(escapeRegExp).join("|")})`, "gi");
     const parts = trimmed.split(re);
 
-    const nodes: Array<string | JSX.Element> = [];
+    const nodes: Array<string | ReactElement> = [];
     for (let idx = 0; idx < parts.length; idx++) {
         const part = parts[idx];
         if (!part) continue;
@@ -129,11 +129,11 @@ function ResultIcon({
     children,
 }: {
     children: ReactNode;
-}): JSX.Element {
+}): ReactElement {
     return <span className="ha-result-icon" aria-hidden="true">{children}</span>;
 }
 
-function CalendarIcon(): JSX.Element {
+function CalendarIcon(): ReactElement {
     return (
         <svg viewBox="0 0 20 20" fill="currentColor">
             <path d="M6 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3V3a1 1 0 0 1 1-1Zm9 6H5v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V8Z" />
@@ -141,7 +141,7 @@ function CalendarIcon(): JSX.Element {
     );
 }
 
-function GlobeIcon(): JSX.Element {
+function GlobeIcon(): ReactElement {
     return (
         <svg viewBox="0 0 20 20" fill="currentColor">
             <path d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm5.87-9H14.2a13.6 13.6 0 0 0-.93-4.18A6.01 6.01 0 0 1 15.87 9ZM12.1 9H7.9c.12-1.5.5-2.9 1.06-4.06.37-.75.75-1.14 1.04-1.14.29 0 .67.39 1.04 1.14.56 1.16.94 2.56 1.06 4.06ZM4.13 9a6.01 6.01 0 0 1 2.6-4.18A13.6 13.6 0 0 0 5.8 9H4.13Zm0 2H5.8c.15 1.44.5 2.82.93 4.02A6.01 6.01 0 0 1 4.13 11Zm3.77 0h4.2c-.12 1.44-.5 2.82-1.06 4.02-.37.8-.75 1.2-1.04 1.2-.29 0-.67-.4-1.04-1.2-.56-1.2-.94-2.58-1.06-4.02ZM13.27 15.02c.42-1.2.78-2.58.93-4.02h1.67a6.01 6.01 0 0 1-2.6 4.02Z" />
