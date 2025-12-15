@@ -52,7 +52,6 @@ From the repo root:
 - Public endpoints it should use:
   - `GET /api/search`
   - `GET /api/sources`
-  - `GET /api/topics`
   - `GET /api/snapshot/{id}`
   - `GET /api/snapshots/raw/{id}`
 - **Never call admin or observability endpoints** (`/api/admin/**`, `/metrics`) from the frontend.

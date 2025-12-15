@@ -39,7 +39,6 @@ type SourceSummaryLike = {
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
-  topics: string[];
   latestRecordId: number | string | null;
 };
 
@@ -56,7 +55,6 @@ export default async function BrowseBySourcePage() {
       recordCount: s.recordCount,
       firstCapture: s.firstCapture,
       lastCapture: s.lastCapture,
-      topics: s.topics.map((t) => t.label),
       latestRecordId: s.latestRecordId,
     }));
     usingBackend = true;
@@ -95,21 +93,6 @@ export default async function BrowseBySourcePage() {
               captured between{" "}
               {formatDate(source.firstCapture)} and {formatDate(source.lastCapture)}.
             </p>
-
-            {source.topics.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {source.topics.slice(0, 6).map((topic) => (
-                  <span key={topic} className="ha-badge">
-                    {topic}
-                  </span>
-                ))}
-                {source.topics.length > 6 && (
-                  <span className="ha-badge ha-badge-amber">
-                    +{source.topics.length - 6} more
-                  </span>
-                )}
-              </div>
-            )}
 
             <div className="mt-4 flex flex-wrap gap-2">
               <Link

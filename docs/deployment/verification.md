@@ -94,7 +94,6 @@ In Chrome or Firefox DevTools:
    like:
    - `/api/health`
    - `/api/sources`
-   - `/api/topics`
    - `/api/search?...`
 4. Click one of those requests and confirm in **Response headers**:
    - `Access-Control-Allow-Origin` matches the frontend origin
