@@ -97,6 +97,7 @@ export type SearchParams = {
   page?: number;
   pageSize?: number;
   sort?: "relevance" | "newest";
+  view?: "snapshots" | "pages";
   includeNon2xx?: boolean;
 };
 
@@ -107,6 +108,7 @@ export async function searchSnapshots(params: SearchParams): Promise<SearchRespo
   if (params.source) query.set("source", params.source);
   if (params.topic) query.set("topic", params.topic);
   if (params.sort) query.set("sort", params.sort);
+  if (params.view) query.set("view", params.view);
   if (params.includeNon2xx) query.set("includeNon2xx", "true");
   if (params.page && params.page > 1) query.set("page", String(params.page));
   if (params.pageSize) query.set("pageSize", String(params.pageSize));

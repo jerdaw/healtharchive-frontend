@@ -704,25 +704,34 @@ All in `src/data/demo-records.ts`:
 -   Async server component using App Router pattern where `searchParams` is a **Promise**:
 
     ```ts
-    type ArchiveSearchParams = { q?: string; source?: string; topic?: string; };
+    type ArchiveSearchParams = {
+      q?: string;
+      source?: string;
+      topic?: string;
+      sort?: string;
+      view?: string;
+      includeNon2xx?: string;
+      page?: string;
+      pageSize?: string;
+    };
 
-    export default async function ArchivePage({ searchParams }: { searchParams: Promise<ArchiveSearchParams>; }) {
+    export default async function ArchivePage({
+      searchParams,
+    }: {
+      searchParams: Promise<ArchiveSearchParams>;
+    }) {
       const params = await searchParams;
       const q = params.q?.trim() ?? "";
       const source = params.source?.trim() ?? "";
       const topic = params.topic?.trim() ?? "";
-
-      const allTopics = getAllTopics();
-      const results = searchDemoRecords({ q, source, topic });
       ...
     }
     ```
 
 -   Uses `<PageShell>` with:
 
-    -   Eyebrow: “Archive explorer (demo)”
-    -   Title: “Browse & search demo snapshots”
-    -   Intro explaining it’s a prototype.
+    -   Live API mode: “Archive explorer” / “Browse & search snapshots”.
+    -   Demo fallback: “Archive explorer (demo)” / “Browse & search demo snapshots”.
 
 -   Layout:
 
@@ -748,14 +757,18 @@ All in `src/data/demo-records.ts`:
 -   Top card shows:
 
     -   “Search results” header.
-    -   Summary text: “X demo snapshot(s) matching “q””.
+    -   Summary text: “X snapshot(s) matching “q””.
 
--   Secondary search form that:
+    -   Secondary search form that:
+        -   Reuses `q` but preserves `source` and `topic` via hidden inputs.
+        -   Allows user to quickly adjust keywords without re-choosing filters.
+        -   Live API mode controls:
+            -   Show toggle (`all snapshots` vs `pages (latest)`).
+            -   Sort toggle (`relevance` vs `newest`).
+            -   “Include error pages” toggle (includes non‑2xx captures).
+            -   Results-per-page selector.
 
-    -   Reuses `q` but preserves `source` and `topic` via hidden inputs.
-    -   Allows user to quickly adjust keywords without re-choosing filters.
-
--   Results list:
+    -   Results list:
 
     -   If empty: show explanatory message.
     -   Else: for each `record`:

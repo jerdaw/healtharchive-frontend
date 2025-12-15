@@ -54,6 +54,7 @@ type ArchiveSearchParams = {
     source?: string;
     topic?: string;
     sort?: string;
+    view?: string;
     includeNon2xx?: string;
     page?: string;
     pageSize?: string;
@@ -91,11 +92,19 @@ export default async function ArchivePage({
     const topic = params.topic?.trim() ?? "";
     const includeNon2xx = parseBoolean(params.includeNon2xx);
     const requestedSort = params.sort?.trim().toLowerCase() ?? "";
-    const defaultSort = q ? "relevance" : "newest";
     const sort =
         requestedSort === "newest" || requestedSort === "relevance"
             ? requestedSort
-            : defaultSort;
+            : q
+              ? "relevance"
+              : "newest";
+    const defaultSort = q ? "relevance" : "newest";
+    const requestedView = params.view?.trim().toLowerCase() ?? "";
+    const view =
+        requestedView === "pages" || requestedView === "snapshots"
+            ? requestedView
+            : "snapshots";
+    const defaultView = "snapshots";
     const page = parsePositiveInt(params.page, 1);
     const rawPageSize = parsePositiveInt(params.pageSize, DEFAULT_PAGE_SIZE);
     const pageSize = Math.min(rawPageSize, MAX_PAGE_SIZE);
@@ -170,6 +179,7 @@ export default async function ArchivePage({
             source: source || undefined,
             topic: topic || undefined,
             sort: sort === "relevance" || sort === "newest" ? sort : undefined,
+            view: view === "pages" || view === "snapshots" ? view : undefined,
             includeNon2xx: includeNon2xx || undefined,
             page,
             pageSize,
@@ -213,6 +223,7 @@ export default async function ArchivePage({
         if (source) qs.set("source", source);
         if (topic) qs.set("topic", topic);
         if (sort !== defaultSort) qs.set("sort", sort);
+        if (view !== defaultView) qs.set("view", view);
         if (includeNon2xx) qs.set("includeNon2xx", "true");
         if (targetPage > 1) qs.set("page", String(targetPage));
         if (pageSize !== DEFAULT_PAGE_SIZE)
@@ -264,6 +275,9 @@ export default async function ArchivePage({
                         />
                         {sort !== defaultSort && (
                             <input type="hidden" name="sort" value={sort} />
+                        )}
+                        {view !== defaultView && (
+                            <input type="hidden" name="view" value={view} />
                         )}
                         {includeNon2xx && (
                             <input
@@ -422,6 +436,27 @@ export default async function ArchivePage({
                                     name="topic"
                                     value={topic}
                                 />
+                                {sort !== defaultSort && (
+                                    <input
+                                        type="hidden"
+                                        name="sort"
+                                        value={sort}
+                                    />
+                                )}
+                                {view !== defaultView && (
+                                    <input
+                                        type="hidden"
+                                        name="view"
+                                        value={view}
+                                    />
+                                )}
+                                {includeNon2xx && (
+                                    <input
+                                        type="hidden"
+                                        name="includeNon2xx"
+                                        value="true"
+                                    />
+                                )}
                                 <input
                                     type="hidden"
                                     name="page"
@@ -432,20 +467,6 @@ export default async function ArchivePage({
                                     name="pageSize"
                                     value={String(pageSize)}
                                 />
-                                {sort !== defaultSort && (
-                                    <input
-                                        type="hidden"
-                                        name="sort"
-                                        value={sort}
-                                    />
-                                )}
-                                {includeNon2xx && (
-                                    <input
-                                        type="hidden"
-                                        name="includeNon2xx"
-                                        value="true"
-                                    />
-                                )}
                                 <HoverGlowButton
                                     type="submit"
                                     className="ha-btn-primary text-xs"
@@ -475,6 +496,23 @@ export default async function ArchivePage({
                                         name="page"
                                         value="1"
                                     />
+                                    <label
+                                        htmlFor="view"
+                                        className="text-xs text-ha-muted"
+                                    >
+                                        Show
+                                    </label>
+                                    <select
+                                        id="view"
+                                        name="view"
+                                        defaultValue={view}
+                                        className="rounded-lg border border-ha-border bg-white px-2 py-1 text-xs text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                                    >
+                                        <option value="snapshots">
+                                            All snapshots
+                                        </option>
+                                        <option value="pages">Pages (latest)</option>
+                                    </select>
                                     <label
                                         htmlFor="sort"
                                         className="text-xs text-ha-muted"
