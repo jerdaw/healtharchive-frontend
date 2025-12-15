@@ -20,7 +20,7 @@ describe("Homepage hero animation orchestration", () => {
 
         render(
             <ProjectSnapshotOrchestrator
-                expectedIds={["records", "pages", "sources"]}
+                expectedIds={["records", "pages", "sources", "topics"]}
             />,
         );
 
@@ -48,6 +48,16 @@ describe("Homepage hero animation orchestration", () => {
             window.dispatchEvent(
                 new CustomEvent("ha-metric-finished", {
                     detail: { id: "pages" },
+                }),
+            );
+        });
+
+        expect(handler).not.toHaveBeenCalled();
+
+        act(() => {
+            window.dispatchEvent(
+                new CustomEvent("ha-metric-finished", {
+                    detail: { id: "topics" },
                 }),
             );
         });
