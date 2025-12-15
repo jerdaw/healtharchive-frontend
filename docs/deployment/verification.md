@@ -22,7 +22,7 @@ frontend + backend with a focus on:
 Expected limitation (by design):
 
 - Branch preview URLs like `https://healtharchive-git-...vercel.app` may not be
-  allowed by CORS yet and can fall back to demo mode until we explicitly add
+  allowed by CORS yet and can fall back to offline sample mode until we explicitly add
   those origins.
 
 ---
@@ -88,8 +88,8 @@ In Chrome or Firefox DevTools:
 ### 3.1 Browser checks
 
 1. Open `https://www.healtharchive.ca/archive`.
-2. Confirm the page indicates **live API** mode (and does not show the demo
-   fallback notice).
+2. Confirm the page does not show the offline fallback notice (for example,
+   “Live API unavailable”).
 3. In **DevTools → Network**, look for requests to `https://api.healtharchive.ca`
    like:
    - `/api/health`

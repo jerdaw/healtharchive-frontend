@@ -42,11 +42,10 @@ export default function AboutPage() {
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Project status</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
-          At this stage, HealthArchive.ca is an early technical demo. It
-          illustrates how an archive explorer and snapshot viewer could behave,
-          using a small set of hand-curated records. Crawl pipelines, storage
-          strategies, and replay tooling are under active design and may change
-          substantially before any production archive is launched.
+          HealthArchive.ca is in development. The site is already capturing and
+          indexing snapshots from selected Canadian public health sources, and
+          coverage will expand over time. Search, replay, and curation features
+          are evolving and may change as the archive matures.
         </p>
         <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
           As the project matures, the methods, governance, and sustainability

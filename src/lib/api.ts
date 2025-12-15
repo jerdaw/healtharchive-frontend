@@ -53,6 +53,13 @@ export type HealthResponse = {
   checks?: Record<string, unknown>;
 };
 
+export type ArchiveStats = {
+  snapshotsTotal: number;
+  pagesTotal: number;
+  sourcesTotal: number;
+  latestCaptureDate: string | null;
+};
+
 const API_BASE_ENV =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -64,16 +71,27 @@ export function getApiBaseUrl(): string {
   return "http://localhost:8001";
 }
 
-async function fetchJson<T>(path: string, query?: URLSearchParams): Promise<T> {
+type FetchInit = RequestInit & {
+  next?: {
+    revalidate?: number;
+  };
+};
+
+async function fetchJson<T>(
+  path: string,
+  query?: URLSearchParams,
+  init?: FetchInit,
+): Promise<T> {
   const baseUrl = getApiBaseUrl();
   const url =
     query && String(query)
       ? `${baseUrl}${path}?${query.toString()}`
       : `${baseUrl}${path}`;
 
-  const res = await fetch(url, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    url,
+    ({ cache: "no-store", ...init } as unknown) as RequestInit,
+  );
 
   if (!res.ok) {
     throw new Error(`Backend request failed: ${res.status} ${res.statusText}`);
@@ -122,4 +140,11 @@ export async function fetchSnapshotDetail(id: number): Promise<SnapshotDetail> {
 
 export async function fetchHealth(): Promise<HealthResponse> {
   return fetchJson<HealthResponse>("/api/health");
+}
+
+export async function fetchArchiveStats(): Promise<ArchiveStats> {
+  return fetchJson<ArchiveStats>("/api/stats", undefined, {
+    cache: "force-cache",
+    next: { revalidate: 300 },
+  });
 }

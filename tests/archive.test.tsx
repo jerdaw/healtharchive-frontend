@@ -146,7 +146,7 @@ describe("/archive", () => {
     expect(harmOption.value).toBe("harm-reduction");
   });
 
-  it("falls back to demo data when backend search fails", async () => {
+  it("falls back to offline sample when backend search fails", async () => {
     mockFetchSources.mockRejectedValue(new Error("API down"));
     mockFetchTopics.mockRejectedValue(new Error("API down"));
     mockSearchSnapshots.mockRejectedValue(new Error("API down"));
@@ -157,10 +157,10 @@ describe("/archive", () => {
     render(ui);
 
     expect(
-      screen.getByText(/Backend unavailable; showing demo data/i),
+      screen.getByText(/Live API unavailable; showing a limited offline sample/i),
     ).toBeInTheDocument();
 
-    // Demo dataset includes a Naloxone record tagged with "Harm reduction",
+    // The bundled offline sample includes a Naloxone record tagged with "Harm reduction",
     // which slugifies to "harm-reduction".
     expect(
       screen.getByText(/Naloxone: Information for Canadians/i),

@@ -30,9 +30,9 @@ export function Footer() {
             </span>
           </p>
           <p className="text-[11px]">
-            This site is in an{" "}
-            <span className="font-medium text-amber-800">early demo phase</span>
-            . Coverage, data, and functionality are incomplete and subject to
+            This site is{" "}
+            <span className="font-medium text-amber-800">in development</span>.
+            {" "}Coverage, data, and functionality are incomplete and subject to
             change.
           </p>
         </div>

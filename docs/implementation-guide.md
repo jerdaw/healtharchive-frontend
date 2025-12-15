@@ -4,7 +4,7 @@ This is the canonical “how it works” guide for the `healtharchive-frontend`
 repo. It covers:
 
 - Tech stack and environment variables
-- API integration + demo fallback behavior
+- API integration + offline fallback behavior
 - Styling system (`.ha-*` classes) and key UI components
 - Routes/pages and the snapshot viewer
 - Deployment notes (Vercel + DNS)
@@ -23,7 +23,7 @@ Core ideas:
     -   Open a **snapshot viewer** that:
 
         -   Shows clear metadata: source, capture date, topics, original URL.
-        -   Embeds the captured page (demo: static HTML in `/public/demo-archive`).
+        -   Embeds the captured page (with an offline sample fallback in `/public/demo-archive`).
 
 -   Be **explicitly non-governmental** and **non-authoritative**:
 
@@ -33,7 +33,7 @@ Core ideas:
 You’re joining after:
 
 -   The project has been fully migrated from a static HTML/CSS site to a **Next.js 16 App Router** app.
--   A small demo dataset is wired through:
+-   A small offline sample dataset is wired through:
 
     -   A search UI (`/archive`) and browse-by-source UI (`/archive/browse-by-source`).
     -   A snapshot viewer route (`/snapshot/[id]`).
@@ -93,14 +93,15 @@ npm test
     -   `GET /api/topics` (canonical topic list used for filters, when available)
     -   `GET /api/snapshot/{id}` (snapshot detail)
     -   `GET /api/snapshots/raw/{id}` (raw HTML for the viewer)
+    -   `GET /api/stats` (lightweight archive totals used on the homepage)
     -   `GET /api/health` (health check)
 -   The frontend does **not** call admin or observability endpoints such as
     `/api/admin/**` or `/metrics`; those are reserved for backend operators and
     monitoring systems.
 -   Pages:
-    -   `/archive`: prefers backend search results with pagination; falls back to the demo dataset with a fallback notice.
-    -   `/archive/browse-by-source`: prefers backend source summaries; falls back to demo summaries with a notice.
-    -   `/snapshot/[id]`: prefers backend snapshot detail/raw URL; falls back to the demo record/static snapshot if missing. The viewer shows a loading overlay and a friendly error if the iframe fails to load.
+    -   `/archive`: prefers backend search results with pagination; falls back to the bundled offline sample dataset with a fallback notice when the API is unreachable.
+    -   `/archive/browse-by-source`: prefers backend source summaries; falls back to bundled offline sample summaries with a notice.
+    -   `/snapshot/[id]`: prefers backend snapshot detail/raw URL; falls back to the offline sample record/static snapshot if missing. The viewer shows a loading overlay and a friendly error if the iframe fails to load.
 -   Fallback behavior keeps the UI usable when the backend is unreachable or not configured.
 
 ### Security & browser hardening
@@ -441,7 +442,7 @@ Key features:
     -   Project title “HealthArchive.ca” in a brand blue (`#11588f`), which gently scales down as the header condenses on scroll.
     -   Subtitle “Independent archive of Canadian public health information”.
 
--   “Early demo” pill next to logo on desktop.
+-   No “mode” badge in the header; project status messaging lives on the home page.
 -   Desktop nav: `Home`, `Browse`, `Methods`, `Researchers`, `About`, `Contact`.
 
     -   Active link styling vs inactive (blue background for active).
@@ -478,7 +479,7 @@ Key features:
     -   Long disclaimer about independence and non-affiliation with government.
     -   Dynamic year.
     -   Statement: “Not an official government website.”
-    -   Extra note about early demo phase.
+    -   Extra note that the project is in development.
 
 ### 6.4 `<PageShell />`: `src/components/layout/PageShell.tsx`
 
@@ -509,7 +510,7 @@ Usage pattern:
 
 ---
 
-## 7. Data model & demo dataset
+## 7. Data model & offline sample dataset
 
 ### 7.1 DemoRecord type
 
@@ -582,9 +583,9 @@ Topics are handled consistently across the backend, frontend, and demo data:
     -   Links or filters that refer to a topic use the slug in the URL
         (`?topic=<slug>`).
 
--   **Demo / fallback behavior**:
+-   **Offline fallback behavior**:
 
-    -   In demo mode, topics on `DemoRecord` are simple strings (labels).
+    -   In offline sample mode, topics on `DemoRecord` are simple strings (labels).
     -   A shared `slugifyTopic(label)` helper in `src/data/demo-records.ts`
         converts labels into slugs using the same rules as the backend
         (lowercase, non-alphanumerics → `-`, trimmed).
@@ -596,7 +597,7 @@ Topics are handled consistently across the backend, frontend, and demo data:
             backward-compat).
 
 This ensures that the UI behaves the same way whether it is backed by the live
-API or the bundled demo dataset: URLs use slugs, and the user sees readable
+API or the bundled offline sample dataset: URLs use slugs, and the user sees readable
 labels.
 
 ### 7.4 Helper functions
@@ -663,10 +664,8 @@ All in `src/data/demo-records.ts`:
 
 ### 8.1 Home page `/` – `src/app/page.tsx`
 
--   Uses `demoRecords` to compute:
-
-    -   `recordCount = demoRecords.length`
-    -   `sourceCount = unique sourceName count`
+-   Fetches lightweight archive totals from `GET /api/stats` (via `fetchArchiveStats()` in `src/lib/api.ts`).
+-   If the backend API is unreachable, falls back to the bundled offline sample dataset (`demoRecords`).
 
 -   Content:
 
@@ -674,16 +673,17 @@ All in `src/data/demo-records.ts`:
 
         - H1: “See what Canadian public health websites used to say…”
         - Paragraph describing project.
-        - “Early development” pill.
+        - “In development” pill.
         - Buttons:
 
-            - `Browse demo archive` → `/archive`
+            - `Browse the archive` → `/archive`
             - `Methods & scope` → `/methods`
 
     2. **Side card: “Project snapshot”**
 
-        - Displays sample record and source counts.
-        - Summaries for focus and intended users.
+        - Displays live totals (snapshots, pages, sources, latest capture date).
+        - The animated metrics start after `ha-trackchanges-finished` and dispatch
+          `ha-project-snapshot-finished` once all expected metric animations complete.
 
     3. **“Who is this for?” section**
 
@@ -698,9 +698,9 @@ All in `src/data/demo-records.ts`:
         - Explains independence and non-governmental status.
         - Simple link to `/methods`.
 
-    5. **Callout: “What this demo is (and isn’t)”**
+    5. **Callout: “What this site is (and isn’t)”**
 
-        - Bullet list clarifying demo scope and limitations.
+        - Bullet list clarifying scope and limitations.
 
 ### 8.2 Archive search `/archive` – `src/app/archive/page.tsx`
 
@@ -733,8 +733,13 @@ All in `src/data/demo-records.ts`:
 
 -   Uses `<PageShell>` with:
 
-    -   Live API mode: “Archive explorer” / “Browse & search snapshots”.
-    -   Demo fallback: “Archive explorer (demo)” / “Browse & search demo snapshots”.
+    -   Eyebrow: “Archive explorer”
+    -   Title: “Browse & search snapshots”
+
+-   If the backend API is unreachable:
+
+    -   Shows a fallback notice (“Live API unavailable; showing a limited offline sample.”).
+    -   Falls back to the bundled offline sample dataset for filters and results.
 
 -   Layout:
 
@@ -787,19 +792,20 @@ All in `src/data/demo-records.ts`:
 
 ### 8.3 Browse by source `/archive/browse-by-source` – `src/app/archive/browse-by-source/page.tsx`
 
--   Server component using `getSourcesSummary()`.
+-   Server component that prefers backend `GET /api/sources` (via `fetchSources()`).
+-   Falls back to `getSourcesSummary()` from the bundled offline sample dataset when the API is unreachable.
 
 -   `<PageShell>` with:
 
-    -   Eyebrow: “Archive explorer (demo)”
-    -   Title: “Browse demo records by source”
+    -   Eyebrow: “Archive explorer”
+    -   Title: “Browse records by source”
 
 -   Displays a `.ha-grid-2` of cards, one per source:
 
     -   Card shows:
 
         -   `sourceName`
-        -   “N demo snapshots captured between [first] and [last]”.
+        -   “N snapshots captured between [first] and [last]”.
         -   Top ~6 topics as badges + “+N more” if more topics exist.
         -   Buttons:
 
@@ -859,21 +865,17 @@ All text is stable, but can be refined later.
         params: Promise<{ id: string }>;
     }) {
         const { id } = await params;
-        const record = getRecordById(id);
-
-        if (!record) {
-            return notFound();
-        }
-
-        // Render PageShell + metadata + iframe
+        // Prefer backend metadata/raw snapshot URL.
+        // Fall back to the offline sample dataset if the API is unavailable.
+        // If neither exists, return notFound().
     }
     ```
 
 -   Uses `<PageShell>` with:
 
-    -   Eyebrow: “Archived snapshot (demo)”
-    -   Title: `record.title`
-    -   Intro: Explains this is a demo view.
+    -   Eyebrow: “Archived snapshot”
+    -   Title: snapshot title (backend or offline sample)
+    -   Intro: short caveat about archived content being incomplete/outdated
 
 -   Layout: `.ha-grid-2`:
 
@@ -882,13 +884,12 @@ All text is stable, but can be refined later.
         - **Metadata card**:
 
             - Capture date.
-            - Explanation that it’s a static demo snapshot.
             - Details: Source, capture date, language, original URL.
             - Topics as badges.
             - Buttons:
 
                 - Back to `/archive`.
-                - “Open raw snapshot” (link to `record.snapshotPath`, opens in new tab).
+                - “Open raw snapshot” (opens the backend `/api/snapshots/raw/{id}` when available; falls back to the offline sample HTML path).
 
         - **Important note callout**:
 
@@ -896,12 +897,9 @@ All text is stable, but can be refined later.
 
     2. Right column:
 
-        - **Viewer card** with:
+        - **Viewer card** that embeds the archived HTML in an iframe (or shows a friendly placeholder if the HTML isn’t available for that record).
 
-            - Header: “Archived content · served from {snapshotPath} for this demo.”
-            - `<iframe src={record.snapshotPath} ...>` to render static HTML.
-
--   **Important**: `snapshotPath` is relative to `/public`, but used as absolute path in `href`/`src` (e.g., `/demo-archive/hc/2024-11-01-covid-vaccines.html`).
+-   **Important**: the offline sample `snapshotPath` is relative to `/public`, but used as an absolute path in `href`/`src` (e.g., `/demo-archive/hc/2024-11-01-covid-vaccines.html`).
 
 ---
 
@@ -1025,12 +1023,12 @@ We followed an 8-phase plan. Status:
         -   Prefer using existing `.ha-*` primitives for visual consistency.
         -   Use Tailwind mostly for layout/spacing tweaks.
 
--   **Backend integration + demo fallback:**
+-   **Backend integration + offline fallback:**
 
     -   The UI prefers live backend APIs (`/api/search`, `/api/sources`,
-        `/api/topics`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`) via
+        `/api/topics`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`, `/api/stats`) via
         `NEXT_PUBLIC_API_BASE_URL`, and falls back to the static `demoRecords`
-        dataset when the API is unreachable.
+        offline sample dataset when the API is unreachable.
     -   There are no Next.js API routes in this repo; all calls go directly to the
         external backend (or local dev backend) using `src/lib/api.ts`.
 

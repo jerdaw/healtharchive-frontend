@@ -161,9 +161,6 @@ export function Header() {
               </span>
             </div>
           </Link>
-          <span className="ml-2 hidden items-center rounded-full bg-amber-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-800 lg:inline-flex">
-            Early demo
-          </span>
         </div>
 
         <div className="flex flex-shrink-0 items-center gap-2">

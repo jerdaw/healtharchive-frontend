@@ -19,7 +19,9 @@ describe("Homepage hero animation orchestration", () => {
         window.addEventListener("ha-project-snapshot-finished", handler);
 
         render(
-            <ProjectSnapshotOrchestrator expectedIds={["records", "sources"]} />,
+            <ProjectSnapshotOrchestrator
+                expectedIds={["records", "pages", "sources"]}
+            />,
         );
 
         act(() => {
@@ -36,6 +38,16 @@ describe("Homepage hero animation orchestration", () => {
             window.dispatchEvent(
                 new CustomEvent("ha-metric-finished", {
                     detail: { id: "sources" },
+                }),
+            );
+        });
+
+        expect(handler).not.toHaveBeenCalled();
+
+        act(() => {
+            window.dispatchEvent(
+                new CustomEvent("ha-metric-finished", {
+                    detail: { id: "pages" },
                 }),
             );
         });
@@ -75,4 +87,3 @@ describe("Homepage hero animation orchestration", () => {
         expect(screen.getByText(/they change\./i)).toBeInTheDocument();
     });
 });
-

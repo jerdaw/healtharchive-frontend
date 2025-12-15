@@ -139,8 +139,8 @@ export default async function ArchivePage({
         }));
     }
 
-    // Attempt to use the backend search API if configured; fall back to the
-    // local demo dataset on any error or if the backend URL is not set.
+    // Attempt to use the backend search API; fall back to the bundled offline
+    // sample dataset on any error.
     try {
         const backend = await searchSnapshots({
             q: q || undefined,
@@ -205,27 +205,16 @@ export default async function ArchivePage({
 
     return (
         <PageShell
-            eyebrow={usingBackend ? "Archive explorer" : "Archive explorer (demo)"}
-            title={
-                usingBackend
-                    ? "Browse & search snapshots"
-                    : "Browse & search demo snapshots"
-            }
-            intro={
-                usingBackend
-                    ? "Browse and search archived snapshots by keyword, source, and topic. This is an early release — coverage and features are still expanding."
-                    : "This is a prototype view showing how the archive explorer will behave. Search and filters are powered by a small demo dataset from selected Public Health Agency of Canada and Health Canada pages."
-            }
+            eyebrow="Archive explorer"
+            title="Browse & search snapshots"
+            intro="Browse and search archived snapshots by keyword, source, and topic. This is an early release — coverage and features are still expanding."
         >
             <ApiHealthBanner />
             <div className="ha-home-hero grid gap-8 lg:grid-cols-[minmax(0,280px),minmax(0,1fr)] lg:items-start">
                 {/* Filters panel */}
                 <aside className="ha-card ha-home-panel p-4 sm:p-5 space-y-3">
                     <h2 className="text-sm font-semibold text-slate-900">
-                        Filters{" "}
-                        {usingBackend
-                            ? "(live API)"
-                            : "(demo dataset fallback)"}
+                        Filters
                     </h2>
                     <p className="text-sm leading-relaxed text-ha-muted">
                         Adjust these filters and re-run the search on the right.
@@ -368,7 +357,8 @@ export default async function ArchivePage({
                                 </p>
                                 {!usingBackend && (
                                     <p className="text-[11px] font-medium text-amber-800">
-                                        Backend unavailable; showing demo data.
+                                        Live API unavailable; showing a limited
+                                        offline sample.
                                     </p>
                                 )}
                             </div>
@@ -393,7 +383,7 @@ export default async function ArchivePage({
                                     name="q"
                                     type="search"
                                     defaultValue={q}
-                                    placeholder="Search within demo snapshots…"
+                                    placeholder="Search within results…"
                                     className="flex-1 rounded-full border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
                                 />
                                 {/* Keep filters in sync */}
