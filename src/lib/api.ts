@@ -1,15 +1,9 @@
-export type TopicRef = {
-  slug: string;
-  label: string;
-};
-
 export type SourceSummary = {
   sourceCode: string;
   sourceName: string;
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
-  topics: TopicRef[];
   latestRecordId: number | null;
 };
 
@@ -19,7 +13,6 @@ export type SnapshotSummary = {
   sourceCode: string;
   sourceName: string;
   language: string | null;
-  topics: TopicRef[];
   captureDate: string;
   originalUrl: string;
   snippet: string | null;
@@ -39,7 +32,6 @@ export type SnapshotDetail = {
   sourceCode: string;
   sourceName: string;
   language: string | null;
-  topics: TopicRef[];
   captureDate: string;
   originalUrl: string;
   snippet: string | null;
@@ -58,6 +50,7 @@ export type ArchiveStats = {
   pagesTotal: number;
   sourcesTotal: number;
   latestCaptureDate: string | null;
+  latestCaptureAgeDays: number | null;
 };
 
 const API_BASE_ENV =
@@ -104,21 +97,9 @@ export async function fetchSources(): Promise<SourceSummary[]> {
   return fetchJson<SourceSummary[]>("/api/sources");
 }
 
-export async function fetchTopics(): Promise<TopicRef[]> {
-  return fetchJson<TopicRef[]>("/api/topics");
-}
-
-export async function fetchTopicsCached(): Promise<TopicRef[]> {
-  return fetchJson<TopicRef[]>("/api/topics", undefined, {
-    cache: "force-cache",
-    next: { revalidate: 300 },
-  });
-}
-
 export type SearchParams = {
   q?: string;
   source?: string;
-  topic?: string;
   page?: number;
   pageSize?: number;
   sort?: "relevance" | "newest";
@@ -131,7 +112,6 @@ export async function searchSnapshots(params: SearchParams): Promise<SearchRespo
 
   if (params.q) query.set("q", params.q);
   if (params.source) query.set("source", params.source);
-  if (params.topic) query.set("topic", params.topic);
   if (params.sort) query.set("sort", params.sort);
   if (params.view) query.set("view", params.view);
   if (params.includeNon2xx) query.set("includeNon2xx", "true");

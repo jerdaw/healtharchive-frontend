@@ -4,20 +4,11 @@ export type DemoRecord = {
   sourceCode: "phac" | "hc";
   sourceName: string;
   language: string;
-  topics: string[];
   captureDate: string; // YYYY-MM-DD
   originalUrl: string;
   snapshotPath: string; // path under /public
   snippet: string;
 };
-
-export function slugifyTopic(label: string): string {
-  return label
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 export const demoRecords: DemoRecord[] = [
   {
@@ -26,7 +17,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "phac",
     sourceName: "Public Health Agency of Canada",
     language: "English",
-    topics: ["COVID-19", "Epidemiology", "Surveillance"],
     captureDate: "2025-02-15",
     originalUrl:
       "https://www.canada.ca/en/public-health/services/diseases/2019-novel-coronavirus-infection.html",
@@ -40,7 +30,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "phac",
     sourceName: "Public Health Agency of Canada",
     language: "English",
-    topics: ["Influenza", "Vaccination", "NACI"],
     captureDate: "2023-10-01",
     originalUrl:
       "https://www.canada.ca/en/public-health/services/immunization/national-advisory-committee-on-immunization-naci.html",
@@ -55,7 +44,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "phac",
     sourceName: "Public Health Agency of Canada",
     language: "French",
-    topics: ["Influenza", "Vaccination", "NACI", "Français"],
     captureDate: "2023-10-01",
     originalUrl:
       "https://www.canada.ca/fr/sante-publique/services/immunisation/comite-consultatif-national-immunisation-ccni.html",
@@ -69,7 +57,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "phac",
     sourceName: "Public Health Agency of Canada",
     language: "English",
-    topics: ["Mpox", "Outbreaks", "Zoonoses"],
     captureDate: "2024-07-10",
     originalUrl:
       "https://www.canada.ca/en/public-health/services/diseases/monkeypox.html",
@@ -83,7 +70,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "phac",
     sourceName: "Public Health Agency of Canada",
     language: "English",
-    topics: ["HIV", "Surveillance", "Sexual health"],
     captureDate: "2022-12-01",
     originalUrl:
       "https://www.canada.ca/en/public-health/services/publications/diseases-conditions/hiv-canada-surveillance-report.html",
@@ -97,7 +83,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "phac",
     sourceName: "Public Health Agency of Canada",
     language: "English",
-    topics: ["Climate change", "Environmental health"],
     captureDate: "2023-06-15",
     originalUrl:
       "https://www.canada.ca/en/public-health/services/publications/healthy-living/climate-change-health-risks.html",
@@ -111,7 +96,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "hc",
     sourceName: "Health Canada",
     language: "English",
-    topics: ["COVID-19", "Vaccination", "Regulatory"],
     captureDate: "2024-11-01",
     originalUrl:
       "https://www.canada.ca/en/health-canada/services/drugs-health-products/covid19-industry/vaccines.html",
@@ -125,7 +109,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "hc",
     sourceName: "Health Canada",
     language: "English",
-    topics: ["Opioids", "Naloxone", "Harm reduction"],
     captureDate: "2023-04-20",
     originalUrl:
       "https://www.canada.ca/en/health-canada/services/opioids/naloxone.html",
@@ -139,7 +122,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "hc",
     sourceName: "Health Canada",
     language: "English",
-    topics: ["Food safety", "Recalls"],
     captureDate: "2024-03-05",
     originalUrl:
       "https://recalls-rappels.canada.ca/en/food-recalls-and-safety-alerts",
@@ -153,7 +135,6 @@ export const demoRecords: DemoRecord[] = [
     sourceCode: "hc",
     sourceName: "Health Canada",
     language: "English",
-    topics: ["Water quality", "Environmental health"],
     captureDate: "2022-09-30",
     originalUrl:
       "https://www.canada.ca/en/health-canada/services/environmental-workplace-health/water-quality/drinking-water/canadian-drinking-water-guidelines.html",
@@ -166,7 +147,6 @@ export const demoRecords: DemoRecord[] = [
 export type SearchParams = {
   q?: string;
   source?: string;
-  topic?: string;
 };
 
 function normalize(str: string): string {
@@ -176,28 +156,16 @@ function normalize(str: string): string {
 export function searchDemoRecords(params: SearchParams): DemoRecord[] {
   const q = params.q?.trim();
   const source = params.source?.trim();
-  const topic = params.topic?.trim();
 
   return demoRecords.filter((record) => {
     if (source && record.sourceCode !== source) return false;
-    if (topic) {
-      const matchesTopic = record.topics.some((t) => {
-        const slug = slugifyTopic(t);
-        return slug === topic || t === topic;
-      });
-      if (!matchesTopic) return false;
-    }
 
     if (!q) return true;
 
     const haystack = normalize(
-      [
-        record.title,
-        record.snippet,
-        record.sourceName,
-        record.topics.join(" "),
-        record.language,
-      ].join(" "),
+      [record.title, record.snippet, record.sourceName, record.language].join(
+        " ",
+      ),
     );
 
     return haystack.includes(normalize(q));
@@ -210,7 +178,6 @@ export type SourceSummary = {
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
-  topics: string[];
   latestRecordId: string | null;
 };
 
@@ -226,7 +193,6 @@ export function getSourcesSummary(): SourceSummary[] {
         recordCount: 1,
         firstCapture: r.captureDate,
         lastCapture: r.captureDate,
-        topics: [...r.topics],
         latestRecordId: r.id,
       });
     } else {
@@ -238,25 +204,12 @@ export function getSourcesSummary(): SourceSummary[] {
         existing.lastCapture = r.captureDate;
         existing.latestRecordId = r.id;
       }
-      for (const topic of r.topics) {
-        if (!existing.topics.includes(topic)) {
-          existing.topics.push(topic);
-        }
-      }
     }
   }
 
   return Array.from(map.values()).sort((a, b) =>
     a.sourceName.localeCompare(b.sourceName),
   );
-}
-
-export function getAllTopics(): string[] {
-  const set = new Set<string>();
-  for (const r of demoRecords) {
-    r.topics.forEach((t) => set.add(t));
-  }
-  return Array.from(set).sort((a, b) => a.localeCompare(b));
 }
 
 export function getRecordById(id: string): DemoRecord | undefined {

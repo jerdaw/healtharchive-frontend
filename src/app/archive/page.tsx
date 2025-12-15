@@ -1,14 +1,11 @@
 import { PageShell } from "@/components/layout/PageShell";
 import {
-    getAllTopics,
     searchDemoRecords,
     getSourcesSummary,
-    slugifyTopic,
 } from "@/data/demo-records";
 import type { DemoRecord } from "@/data/demo-records";
 import {
     fetchSources,
-    fetchTopics,
     searchSnapshots,
     type SearchParams as ApiSearchParams,
 } from "@/lib/api";
@@ -20,7 +17,6 @@ import Link from "next/link";
 type ArchiveSearchParams = {
     q?: string;
     source?: string;
-    topic?: string;
     sort?: string;
     view?: string;
     includeNon2xx?: string;
@@ -57,7 +53,6 @@ export default async function ArchivePage({
     const params = await searchParams;
     const q = params.q?.trim() ?? "";
     const source = params.source?.trim() ?? "";
-    const topic = params.topic?.trim() ?? "";
     const includeNon2xx = parseBoolean(params.includeNon2xx);
     const requestedSort = params.sort?.trim().toLowerCase() ?? "";
     const sort =
@@ -77,59 +72,29 @@ export default async function ArchivePage({
     const rawPageSize = parsePositiveInt(params.pageSize, DEFAULT_PAGE_SIZE);
     const pageSize = Math.min(rawPageSize, MAX_PAGE_SIZE);
 
-    // Build source + topic options from backend if available; fall back to demo data.
+    // Build source options from backend if available; fall back to demo data.
     let sourceOptions: { value: string; label: string }[] = [
         { value: "phac", label: "Public Health Agency of Canada" },
         { value: "hc", label: "Health Canada" },
     ];
-    let topicOptions: { value: string; label: string }[] = getAllTopics().map(
-        (t) => ({
-            value: slugifyTopic(t) || t,
-            label: t,
-        })
-    );
 
     // Start with demo search results. `DemoRecord` is assignable to the
     // `ArchiveListRecord` view used for rendering (it has extra fields).
     let results: ArchiveListRecord[] = searchDemoRecords({
         q,
         source,
-        topic,
     });
     let totalResults = results.length;
     let usingBackend = false;
 
     try {
-        const [apiSources, apiTopics] = await Promise.all([
-            fetchSources(),
-            fetchTopics(),
-        ]);
+        const apiSources = await fetchSources();
 
         if (apiSources.length > 0) {
             sourceOptions = apiSources.map((s) => ({
                 value: s.sourceCode,
                 label: s.sourceName,
             }));
-        }
-
-        const canonicalTopics = apiTopics ?? [];
-        if (canonicalTopics.length > 0) {
-            topicOptions = canonicalTopics
-                .slice()
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((t) => ({ value: t.slug, label: t.label }));
-        } else if (apiSources.length > 0) {
-            const topicMap = new Map<string, string>();
-            apiSources.forEach((s) => {
-                s.topics?.forEach((t) => {
-                    topicMap.set(t.slug, t.label);
-                });
-            });
-            if (topicMap.size > 0) {
-                topicOptions = Array.from(topicMap.entries())
-                    .sort((a, b) => a[1].localeCompare(b[1]))
-                    .map(([slug, label]) => ({ value: slug, label }));
-            }
         }
     } catch {
         const demoSources = getSourcesSummary();
@@ -145,7 +110,6 @@ export default async function ArchivePage({
         const backend = await searchSnapshots({
             q: q || undefined,
             source: source || undefined,
-            topic: topic || undefined,
             sort: sort === "relevance" || sort === "newest" ? sort : undefined,
             view: view === "pages" || view === "snapshots" ? view : undefined,
             includeNon2xx: includeNon2xx || undefined,
@@ -158,7 +122,6 @@ export default async function ArchivePage({
             sourceCode: r.sourceCode,
             sourceName: r.sourceName,
             language: r.language ?? "",
-            topics: r.topics.map((t) => t.label),
             captureDate: r.captureDate,
             originalUrl: r.originalUrl,
             snippet: r.snippet ?? "",
@@ -192,7 +155,6 @@ export default async function ArchivePage({
         const qs = new URLSearchParams();
         if (q) qs.set("q", q);
         if (source) qs.set("source", source);
-        if (topic) qs.set("topic", topic);
         if (sort !== defaultSort) qs.set("sort", sort);
         if (view !== defaultView) qs.set("view", view);
         if (includeNon2xx) qs.set("includeNon2xx", "true");
@@ -207,7 +169,7 @@ export default async function ArchivePage({
         <PageShell
             eyebrow="Archive explorer"
             title="Browse & search snapshots"
-            intro="Browse and search archived snapshots by keyword, source, and topic. This is an early release — coverage and features are still expanding."
+            intro="Browse and search archived snapshots by keyword and source. This is an early release — coverage and features are still expanding."
         >
             <ApiHealthBanner />
             <div className="ha-home-hero grid gap-8 lg:grid-cols-[minmax(0,280px),minmax(0,1fr)] lg:items-start">
@@ -267,8 +229,8 @@ export default async function ArchivePage({
                                 id="archive-keywords-help"
                                 className="text-[11px] text-ha-muted"
                             >
-                                Search across titles, snippets, sources, topics,
-                                and language.
+                                Search across titles, snippets, sources, and
+                                language.
                             </p>
                         </div>
 
@@ -290,29 +252,6 @@ export default async function ArchivePage({
                                 {sourceOptions.map((opt) => (
                                     <option key={opt.value} value={opt.value}>
                                         {opt.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* Topic select */}
-                        <div className="space-y-1">
-                            <label
-                                htmlFor="topic"
-                                className="text-xs font-medium text-slate-800"
-                            >
-                                Topic
-                            </label>
-                            <select
-                                id="topic"
-                                name="topic"
-                                defaultValue={topic}
-                                className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
-                            >
-                                <option value="">All topics</option>
-                                {topicOptions.map((t) => (
-                                    <option key={t.value} value={t.value}>
-                                        {t.label}
                                     </option>
                                 ))}
                             </select>
@@ -392,11 +331,6 @@ export default async function ArchivePage({
                                     name="source"
                                     value={source}
                                 />
-                                <input
-                                    type="hidden"
-                                    name="topic"
-                                    value={topic}
-                                />
                                 {sort !== defaultSort && (
                                     <input
                                         type="hidden"
@@ -446,11 +380,6 @@ export default async function ArchivePage({
                                         type="hidden"
                                         name="source"
                                         value={source}
-                                    />
-                                    <input
-                                        type="hidden"
-                                        name="topic"
-                                        value={topic}
                                     />
                                     <input
                                         type="hidden"
