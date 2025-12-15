@@ -54,9 +54,10 @@ export default function MethodsPage() {
           </li>
         </ol>
         <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
-          For the demo, this is simulated with a small hand-curated dataset and
-          static HTML snapshots served from the <code>public/demo-archive</code>{" "}
-          directory.
+          HealthArchive.ca stores captures in standards-based web archive formats
+          (such as WARCs) and indexes them into a searchable database. The public
+          site replays archived HTML via the backend; replay fidelity varies by
+          site and content type.
         </p>
       </section>
 
@@ -79,9 +80,10 @@ export default function MethodsPage() {
           </li>
         </ul>
         <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
-          The demo interface is intentionally conservative: it shows that
-          snapshot-based replay is possible while acknowledging that the
-          underlying infrastructure is still being built.
+          The interface is intentionally conservative: it prioritizes clarity
+          that you are viewing archived content. Some interactive dashboards,
+          embedded visualizations, or third-party assets may not replay perfectly
+          because of JavaScript, API, or hosting constraints.
         </p>
       </section>
 

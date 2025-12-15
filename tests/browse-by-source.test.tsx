@@ -52,6 +52,6 @@ describe("/archive/browse-by-source", () => {
     const ui = await BrowseBySourcePage();
     render(ui);
 
-    expect(screen.getByText(/Backend unavailable/i)).toBeInTheDocument();
+    expect(screen.getByText(/Live API unavailable/i)).toBeInTheDocument();
   });
 });

@@ -105,7 +105,7 @@ export default async function SnapshotPage({
     <PageShell
       eyebrow="Archived snapshot"
       title={title}
-      intro="This page shows how individual snapshots from the archive will appear. In the full system, this view would be powered by a dedicated web archive replay engine."
+      intro="View a captured snapshot and its associated metadata. Archived content may be incomplete, outdated, or superseded."
     >
       <section className="ha-grid-2">
         {/* Metadata card */}
@@ -116,8 +116,8 @@ export default async function SnapshotPage({
             </p>
             {!usingBackend && record && (
               <p className="mt-1 text-xs text-ha-muted">
-                This is a demo view based on a small static snapshot stored under{" "}
-                <code>public/demo-archive</code>.
+                This snapshot is from a limited offline sample bundled with the
+                site.
               </p>
             )}
             <dl className="mt-3 space-y-1 text-xs text-slate-800 sm:text-sm">
@@ -189,7 +189,7 @@ export default async function SnapshotPage({
                 <code>
                   {rawSnapshotUrl}
                 </code>{" "}
-                {usingBackend ? "from the live API." : "for this demo."}
+                {usingBackend ? "from the live API." : "from the offline sample."}
               </>
             ) : (
               <>
@@ -231,10 +231,8 @@ export default async function SnapshotPage({
                   </>
                 ) : (
                   <>
-                    Viewer for this snapshot will be powered by the full replay
-                    engine in a future phase. For now, only demo snapshots
-                    stored under <code>public/demo-archive</code> are embedded
-                    here.
+                    Archived HTML content for this snapshot is not currently
+                    available in the embedded viewer.
                   </>
                 )}
               </div>

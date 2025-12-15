@@ -6,7 +6,7 @@ export default function ContactPage() {
         <PageShell
             eyebrow="Contact & follow"
             title="Staying in touch with the project"
-            intro="HealthArchive.ca is currently a volunteer-led effort in an early demo phase. If you are interested in following the work or exploring collaboration, the options below are a starting point."
+            intro="HealthArchive.ca is a volunteer-led project in development. If you are interested in following the work or exploring collaboration, the options below are a starting point."
         >
             <section className="ha-home-hero space-y-6">
                 <div className="ha-grid-2 gap-4 sm:gap-5">
