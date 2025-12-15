@@ -1069,14 +1069,14 @@ a:focus-visible {
 }
 
 .ha-result-snippet {
-    margin: 0.75rem 0 0;
+    margin: 0.95rem 0 0;
     font-size: 0.92rem;
     line-height: 1.45;
     color: color-mix(in srgb, var(--text) 82%, var(--muted));
 }
 
 .ha-result-url-row {
-    margin-top: 0.75rem;
+    margin-top: 0.55rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
