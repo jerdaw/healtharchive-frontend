@@ -681,7 +681,7 @@ All in `src/data/demo-records.ts`:
 
     2. **Side card: “Project snapshot”**
 
-        - Displays live totals (snapshots, pages, sources, latest capture date).
+        - Displays live totals (snapshots, pages, sources, topics, latest capture date).
         - The animated metrics start after `ha-trackchanges-finished` and dispatch
           `ha-project-snapshot-finished` once all expected metric animations complete.
 

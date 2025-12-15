@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AnimatedMetric } from "@/components/home/AnimatedMetric";
 import { HoverGlowLink } from "@/components/home/HoverGlowLink";
 import { ProjectSnapshotOrchestrator } from "@/components/home/ProjectSnapshotOrchestrator";
-import { fetchArchiveStats } from "@/lib/api";
+import { fetchArchiveStats, fetchTopicsCached } from "@/lib/api";
 
 function formatDate(iso: string | undefined | null): string {
     if (!iso) return "Unknown";
@@ -42,13 +42,16 @@ export default async function HomePage() {
     const fallbackRecordCount = demoRecords.length;
     const fallbackPageCount = new Set(demoRecords.map((r) => r.originalUrl)).size;
     const fallbackSourceCount = new Set(demoRecords.map((r) => r.sourceName)).size;
+    const fallbackTopicCount = new Set(demoRecords.flatMap((r) => r.topics)).size;
 
     const stats = await fetchArchiveStats().catch(() => null);
     const usingBackendStats = stats != null;
+    const topics = await fetchTopicsCached().catch(() => null);
     const recordCount = stats?.snapshotsTotal ?? fallbackRecordCount;
     const pageCount = stats?.pagesTotal ?? fallbackPageCount;
     const sourceCount = stats?.sourcesTotal ?? fallbackSourceCount;
     const latestCaptureDate = stats?.latestCaptureDate ?? null;
+    const topicCount = topics?.length ?? fallbackTopicCount;
 
     return (
         <div className="ha-container space-y-14 pt-3 sm:pt-4">
@@ -96,7 +99,7 @@ export default async function HomePage() {
                     {/* Side card */}
                     <div className="ha-card ha-card-elevated p-4 sm:p-5">
                         <ProjectSnapshotOrchestrator
-                            expectedIds={["records", "pages", "sources"]}
+                            expectedIds={["records", "pages", "sources", "topics"]}
                         />
                         <div className="flex items-center justify-between gap-3">
                             <div>
@@ -141,15 +144,23 @@ export default async function HomePage() {
                                 startEvent="ha-trackchanges-finished"
                                 completeEvent="ha-metric-finished"
                             />
-                            <div>
-                                <dt className="ha-metric-label">Latest capture</dt>
-                                <dd className="ha-metric-secondary">
-                                    {latestCaptureDate
-                                        ? formatDate(latestCaptureDate)
-                                        : "Unknown"}
-                                </dd>
-                            </div>
+                            <AnimatedMetric
+                                id="topics"
+                                label="Topics"
+                                value={topicCount}
+                                unit="topics"
+                                barPercent={Math.min(100, (topicCount / 200) * 100)}
+                                start={false}
+                                startEvent="ha-trackchanges-finished"
+                                completeEvent="ha-metric-finished"
+                            />
                         </dl>
+                        <p className="mt-3 text-xs text-ha-muted">
+                            Latest capture:{" "}
+                            <span className="font-medium text-slate-900">
+                                {latestCaptureDate ? formatDate(latestCaptureDate) : "Unknown"}
+                            </span>
+                        </p>
                     </div>
                 </div>
             </section>

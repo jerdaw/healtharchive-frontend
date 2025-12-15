@@ -108,6 +108,13 @@ export async function fetchTopics(): Promise<TopicRef[]> {
   return fetchJson<TopicRef[]>("/api/topics");
 }
 
+export async function fetchTopicsCached(): Promise<TopicRef[]> {
+  return fetchJson<TopicRef[]>("/api/topics", undefined, {
+    cache: "force-cache",
+    next: { revalidate: 300 },
+  });
+}
+
 export type SearchParams = {
   q?: string;
   source?: string;
