@@ -971,7 +971,7 @@ a:focus-visible {
     background-color: var(--card-bg);
     border-radius: 0.9rem;
     border: 1px solid var(--border);
-    padding: 1rem 1.1rem;
+    padding: 1rem 1.1rem 0.9rem;
     box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
     transition: box-shadow 160ms ease-out, transform 160ms ease-out,
         border-color 160ms ease-out;
@@ -1069,14 +1069,14 @@ a:focus-visible {
 }
 
 .ha-result-snippet {
-    margin: 0.95rem 0 0;
+    margin: 0.55rem 0 0 !important;
     font-size: 0.92rem;
     line-height: 1.45;
     color: color-mix(in srgb, var(--text) 82%, var(--muted));
 }
 
 .ha-result-url-row {
-    margin-top: 0.55rem;
+    margin-top: 0rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1122,7 +1122,7 @@ a:focus-visible {
 }
 
 .ha-result-topics {
-    margin-top: 0.75rem;
+    margin-top: 0.6rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0.35rem;
