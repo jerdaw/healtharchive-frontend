@@ -971,16 +971,13 @@ a:focus-visible {
     background-color: var(--card-bg);
     border-radius: 0.9rem;
     border: 1px solid var(--border);
-    padding: 1rem 1.1rem 0.9rem;
-    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
-    transition: box-shadow 160ms ease-out, transform 160ms ease-out,
-        border-color 160ms ease-out;
+    padding: 1rem 1.1rem 0.85rem;
+    box-shadow: none;
     border-left-width: 4px;
 }
 
 .ha-result-card:hover {
-    box-shadow: 0 16px 44px rgba(15, 23, 42, 0.1);
-    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--accent) 18%, var(--border));
 }
 
 .ha-result-accent--hc {
@@ -1122,7 +1119,7 @@ a:focus-visible {
 }
 
 .ha-result-topics {
-    margin-top: 0.6rem;
+    margin-top: 0.75rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0.35rem;
