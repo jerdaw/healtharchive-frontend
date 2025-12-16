@@ -17,6 +17,7 @@ vi.mock("next/navigation", () => ({
 vi.mock("@/lib/api", () => ({
   fetchSnapshotDetail: vi.fn(),
   fetchSourceEditions: vi.fn(),
+  resolveReplayUrl: vi.fn(),
   getApiBaseUrl: () => "https://api.example.test",
 }));
 

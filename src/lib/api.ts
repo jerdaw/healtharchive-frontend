@@ -18,6 +18,7 @@ export type SourceEdition = {
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
+  entryBrowseUrl?: string | null;
 };
 
 export type SnapshotSummary = {
@@ -70,6 +71,14 @@ export type ArchiveStats = {
   sourcesTotal: number;
   latestCaptureDate: string | null;
   latestCaptureAgeDays: number | null;
+};
+
+export type ReplayResolveResponse = {
+  found: boolean;
+  snapshotId: number | null;
+  captureTimestamp: string | null;
+  resolvedUrl: string | null;
+  browseUrl: string | null;
 };
 
 const API_BASE_ENV =
@@ -164,4 +173,17 @@ export async function fetchArchiveStats(): Promise<ArchiveStats> {
     cache: "force-cache",
     next: { revalidate: 300 },
   });
+}
+
+export async function resolveReplayUrl(params: {
+  jobId: number;
+  url: string;
+  timestamp14?: string | null;
+}): Promise<ReplayResolveResponse> {
+  const query = new URLSearchParams();
+  query.set("jobId", String(params.jobId));
+  query.set("url", params.url);
+  if (params.timestamp14) query.set("timestamp", params.timestamp14);
+
+  return fetchJson<ReplayResolveResponse>("/api/replay/resolve", query);
 }

@@ -11,6 +11,7 @@ vi.mock("next/link", () => ({
 
 vi.mock("@/lib/api", () => ({
   fetchSources: vi.fn(),
+  resolveReplayUrl: vi.fn(),
   getApiBaseUrl: () => "https://api.example.test",
 }));
 

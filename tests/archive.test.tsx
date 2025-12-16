@@ -13,6 +13,7 @@ vi.mock("@/lib/api", () => ({
   fetchSources: vi.fn(),
   searchSnapshots: vi.fn(),
   getApiBaseUrl: () => "https://api.example.test",
+  resolveReplayUrl: vi.fn(),
 }));
 
 import { fetchSources, searchSnapshots } from "@/lib/api";

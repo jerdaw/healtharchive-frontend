@@ -4,6 +4,7 @@ export type ReplayEdition = {
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
+  entryBrowseUrl?: string | null;
 };
 
 export function stripUrlFragment(url: string): string {
@@ -105,4 +106,3 @@ export function buildReplayUrl(
   }
   return `${base}/job-${jobId}/${cleanedOriginalUrl}`;
 }
-
