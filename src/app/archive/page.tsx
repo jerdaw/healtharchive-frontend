@@ -31,6 +31,18 @@ type ArchiveListRecord = Omit<DemoRecord, "snapshotPath" | "sourceCode"> & {
     sourceCode: string;
 };
 
+type SourceBrowseSummary = {
+    sourceCode: string;
+    sourceName: string;
+    baseUrl?: string | null;
+    description?: string | null;
+    recordCount: number;
+    firstCapture: string;
+    lastCapture: string;
+    latestRecordId: number | string | null;
+    entryRecordId: number | string | null;
+};
+
 function parsePositiveInt(value: string | undefined, fallback: number): number {
     const parsed = Number(value);
     if (Number.isNaN(parsed) || parsed <= 0) {
@@ -43,6 +55,37 @@ function parseBoolean(value: string | undefined): boolean {
     if (!value) return false;
     const normalized = value.trim().toLowerCase();
     return normalized === "1" || normalized === "true" || normalized === "on";
+}
+
+function formatDate(iso: string | undefined | null): string {
+    if (!iso) return "Unknown";
+    const parts = iso.split("-");
+    if (parts.length === 3) {
+        const [yearStr, monthStr, dayStr] = parts;
+        const year = Number(yearStr);
+        const month = Number(monthStr);
+        const day = Number(dayStr);
+        if (year && month && day) {
+            const d = new Date(year, month - 1, day);
+            if (!Number.isNaN(d.getTime())) {
+                return d.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                });
+            }
+        }
+    }
+
+    const parsed = new Date(iso);
+    if (!Number.isNaN(parsed.getTime())) {
+        return parsed.toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        });
+    }
+    return iso;
 }
 
 export default async function ArchivePage({
@@ -77,6 +120,7 @@ export default async function ArchivePage({
         { value: "phac", label: "Public Health Agency of Canada" },
         { value: "hc", label: "Health Canada" },
     ];
+    let sourceSummaries: SourceBrowseSummary[] = [];
 
     // Start with demo search results. `DemoRecord` is assignable to the
     // `ArchiveListRecord` view used for rendering (it has extra fields).
@@ -91,18 +135,40 @@ export default async function ArchivePage({
         const apiSources = await fetchSources();
 
         if (apiSources.length > 0) {
-            sourceOptions = apiSources
-                .filter((s) => s.sourceCode !== "test")
+            const filtered = apiSources.filter((s) => s.sourceCode !== "test");
+            sourceOptions = filtered
                 .map((s) => ({
                     value: s.sourceCode,
                     label: s.sourceName,
                 }));
+            sourceSummaries = filtered.map((s) => ({
+                sourceCode: s.sourceCode,
+                sourceName: s.sourceName,
+                baseUrl: s.baseUrl,
+                description: s.description,
+                recordCount: s.recordCount,
+                firstCapture: s.firstCapture,
+                lastCapture: s.lastCapture,
+                latestRecordId: s.latestRecordId,
+                entryRecordId: s.entryRecordId,
+            }));
         }
     } catch {
         const demoSources = getSourcesSummary();
         sourceOptions = demoSources.map((s) => ({
             value: s.sourceCode,
             label: s.sourceName,
+        }));
+        sourceSummaries = demoSources.map((s) => ({
+            sourceCode: s.sourceCode,
+            sourceName: s.sourceName,
+            baseUrl: null,
+            description: null,
+            recordCount: s.recordCount,
+            firstCapture: s.firstCapture,
+            lastCapture: s.lastCapture,
+            latestRecordId: s.latestRecordId,
+            entryRecordId: s.latestRecordId,
         }));
     }
 
@@ -174,6 +240,76 @@ export default async function ArchivePage({
             intro="Browse and search archived snapshots by keyword and source. This is an early release — coverage and features are still expanding."
         >
             <ApiHealthBanner />
+            {sourceSummaries.length > 0 && (
+                <section className="ha-card ha-home-panel mb-6 p-4 sm:p-5 space-y-4">
+                    <div className="flex flex-wrap items-baseline justify-between gap-3">
+                        <div>
+                            <h2 className="text-sm font-semibold text-slate-900">
+                                Browse archived sites
+                            </h2>
+                            <p className="text-xs leading-relaxed text-ha-muted">
+                                Jump into a source’s archived website and
+                                follow links within that backup.
+                            </p>
+                        </div>
+                        <Link
+                            href="/archive/browse-by-source"
+                            className="text-xs font-medium text-ha-accent hover:text-blue-700"
+                        >
+                            Browse all sources →
+                        </Link>
+                    </div>
+
+                    <div className="ha-grid-3">
+                        {sourceSummaries.map((summary) => {
+                            const entryId =
+                                summary.entryRecordId ?? summary.latestRecordId;
+
+                            return (
+                                <article
+                                    key={summary.sourceCode}
+                                    className="ha-card ha-card-elevated p-4 sm:p-5"
+                                >
+                                    <h3 className="text-sm font-semibold text-slate-900">
+                                        {summary.sourceName}
+                                    </h3>
+                                    <p className="mt-1 text-xs text-ha-muted">
+                                        {summary.recordCount} snapshot
+                                        {summary.recordCount === 1 ? "" : "s"} ·
+                                        latest capture{" "}
+                                        {formatDate(summary.lastCapture)}
+                                    </p>
+                                    {summary.baseUrl && (
+                                        <p className="mt-2 break-all text-[11px] text-ha-muted">
+                                            <span className="font-medium text-slate-800">
+                                                Homepage:
+                                            </span>{" "}
+                                            {summary.baseUrl}
+                                        </p>
+                                    )}
+
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        {entryId && (
+                                            <Link
+                                                href={`/snapshot/${entryId}`}
+                                                className="ha-btn-primary text-xs"
+                                            >
+                                                Browse archived site
+                                            </Link>
+                                        )}
+                                        <Link
+                                            href={`/archive?source=${summary.sourceCode}`}
+                                            className="ha-btn-secondary text-xs"
+                                        >
+                                            Search this source
+                                        </Link>
+                                    </div>
+                                </article>
+                            );
+                        })}
+                    </div>
+                </section>
+            )}
             <div className="ha-home-hero grid gap-8 lg:grid-cols-[minmax(0,280px),minmax(0,1fr)] lg:items-start">
                 {/* Filters panel */}
                 <aside className="ha-card ha-home-panel p-4 sm:p-5 space-y-3">

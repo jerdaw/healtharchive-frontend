@@ -36,14 +36,20 @@ function formatDate(iso: string | undefined | null): string {
 type SourceSummaryLike = {
   sourceCode: string;
   sourceName: string;
+  baseUrl?: string | null;
+  description?: string | null;
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
   latestRecordId: number | string | null;
+  entryRecordId: number | string | null;
 };
 
 export default async function BrowseBySourcePage() {
-  let summaries: SourceSummaryLike[] = getSourcesSummary();
+  let summaries: SourceSummaryLike[] = getSourcesSummary().map((s) => ({
+    ...s,
+    entryRecordId: s.latestRecordId,
+  }));
   let usingBackend = false;
 
   // Try backend /api/sources first; fall back to the demo summary on error.
@@ -52,10 +58,13 @@ export default async function BrowseBySourcePage() {
     summaries = apiSummaries.map((s: ApiSourceSummary) => ({
       sourceCode: s.sourceCode,
       sourceName: s.sourceName,
+      baseUrl: s.baseUrl,
+      description: s.description,
       recordCount: s.recordCount,
       firstCapture: s.firstCapture,
       lastCapture: s.lastCapture,
       latestRecordId: s.latestRecordId,
+      entryRecordId: s.entryRecordId,
     }));
     summaries = summaries.filter((s) => s.sourceCode !== "test");
     usingBackend = true;
@@ -81,38 +90,43 @@ export default async function BrowseBySourcePage() {
         </div>
       )}
       <div className="ha-grid-2">
-        {summaries.map((source) => (
-          <article
-            key={source.sourceCode}
-            className="ha-card ha-card-elevated p-4 sm:p-5"
-          >
-            <h2 className="text-sm font-semibold text-slate-900">
-              {source.sourceName}
-            </h2>
-            <p className="mt-1 text-xs text-ha-muted">
-              {source.recordCount} snapshot{source.recordCount === 1 ? "" : "s"}{" "}
-              captured between{" "}
-              {formatDate(source.firstCapture)} and {formatDate(source.lastCapture)}.
-            </p>
+        {summaries.map((source) => {
+          const entryId = source.entryRecordId ?? source.latestRecordId;
 
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Link
-                href={`/archive?source=${source.sourceCode}`}
-                className="ha-btn-secondary text-xs"
-              >
-                Browse records
-              </Link>
-              {source.latestRecordId && (
+          return (
+            <article
+              key={source.sourceCode}
+              className="ha-card ha-card-elevated p-4 sm:p-5"
+            >
+              <h2 className="text-sm font-semibold text-slate-900">
+                {source.sourceName}
+              </h2>
+              <p className="mt-1 text-xs text-ha-muted">
+                {source.recordCount} snapshot
+                {source.recordCount === 1 ? "" : "s"} captured between{" "}
+                {formatDate(source.firstCapture)} and{" "}
+                {formatDate(source.lastCapture)}.
+              </p>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {entryId && (
+                  <Link
+                    href={`/snapshot/${entryId}`}
+                    className="ha-btn-primary text-xs"
+                  >
+                    Browse archived site
+                  </Link>
+                )}
                 <Link
-                  href={`/snapshot/${source.latestRecordId}`}
-                  className="text-xs font-medium text-ha-accent hover:text-blue-700"
+                  href={`/archive?source=${source.sourceCode}`}
+                  className="ha-btn-secondary text-xs"
                 >
-                  View latest snapshot →
+                  Browse records
                 </Link>
-              )}
-            </div>
-          </article>
-        ))}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </PageShell>
   );
