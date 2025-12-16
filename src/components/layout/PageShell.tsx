@@ -4,14 +4,27 @@ interface PageShellProps {
   title: string;
   intro?: string;
   eyebrow?: string;
+  compact?: boolean;
   children: ReactNode;
 }
 
-export function PageShell({ title, intro, eyebrow, children }: PageShellProps) {
+export function PageShell({
+  title,
+  intro,
+  eyebrow,
+  compact = false,
+  children,
+}: PageShellProps) {
+  const sectionClassName = compact ? "pt-4 pb-8" : "pt-6 pb-10";
+  const headerClassName = compact
+    ? "mb-6 max-w-3xl space-y-2"
+    : "mb-8 max-w-3xl space-y-3";
+  const contentClassName = compact ? "space-y-6" : "space-y-8";
+
   return (
     <div className="ha-container">
-      <section className="pt-6 pb-10">
-        <header className="mb-8 max-w-3xl space-y-3">
+      <section className={sectionClassName}>
+        <header className={headerClassName}>
           {eyebrow && <p className="ha-eyebrow">{eyebrow}</p>}
           <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
             {title}
@@ -22,7 +35,7 @@ export function PageShell({ title, intro, eyebrow, children }: PageShellProps) {
             </p>
           )}
         </header>
-        <div className="space-y-8">{children}</div>
+        <div className={contentClassName}>{children}</div>
       </section>
     </div>
   );

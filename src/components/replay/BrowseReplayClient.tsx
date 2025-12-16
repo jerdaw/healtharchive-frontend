@@ -267,7 +267,7 @@ export function BrowseReplayClient({
               </Link>
               {sourceCode && (
                 <Link
-                  href={`/archive?source=${encodeURIComponent(sourceCode)}`}
+                  href={`/archive?source=${encodeURIComponent(sourceCode)}#archive-filters`}
                   className="ha-btn-secondary text-xs"
                 >
                   Search this source
