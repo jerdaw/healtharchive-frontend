@@ -808,6 +808,16 @@ a:focus-visible {
     outline: none;
 }
 
+.ha-btn-sm {
+    padding: 0.42rem 1.1rem;
+    font-size: 0.82rem;
+}
+
+.ha-btn-xs {
+    padding: 0.34rem 0.9rem;
+    font-size: 0.78rem;
+}
+
 .ha-btn-primary {
     background-color: var(--accent);
     color: #ffffff;
