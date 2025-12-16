@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { SnapshotFrame } from "@/components/SnapshotFrame";
+import { resolveReplayUrl } from "@/lib/api";
 
 import type { ReplayEdition } from "./replayUtils";
 import {
@@ -66,6 +67,8 @@ export function BrowseReplayClient({
   const [currentReplayUrl, setCurrentReplayUrl] = useState<string | null>(
     browseUrl,
   );
+  const [editionNotice, setEditionNotice] = useState<string | null>(null);
+  const [isResolvingEdition, setIsResolvingEdition] = useState(false);
 
   const replayOrigin = useMemo(() => {
     if (!browseUrl) return null;
@@ -112,20 +115,77 @@ export function BrowseReplayClient({
   const displayedCapture =
     timestamp14ToDateLabel(currentTimestamp14) ?? dateIsoToLabel(captureDate);
 
-  function handleEditionChange(nextJobId: number) {
+  async function handleEditionChange(nextJobId: number) {
     if (!replayOrigin) return;
     if (!Number.isFinite(nextJobId)) return;
     if (!currentOriginalUrl) return;
+    if (nextJobId === activeJobId) return;
 
-    const nextSrc = buildReplayUrl(
-      replayOrigin,
-      nextJobId,
-      currentTimestamp14,
-      currentOriginalUrl,
-    );
-    setIframeSrc(nextSrc);
-    setActiveJobId(nextJobId);
-    setCurrentReplayUrl(nextSrc);
+    setIsResolvingEdition(true);
+    setEditionNotice(null);
+
+    try {
+      const resolved = await resolveReplayUrl({
+        jobId: nextJobId,
+        url: currentOriginalUrl,
+        timestamp14: currentTimestamp14,
+      });
+
+      if (resolved.found && resolved.browseUrl) {
+        setIframeSrc(resolved.browseUrl);
+        setActiveJobId(nextJobId);
+        setCurrentReplayUrl(resolved.browseUrl);
+
+        if (resolved.resolvedUrl) {
+          setCurrentOriginalUrl(stripUrlFragment(resolved.resolvedUrl));
+        }
+        if (resolved.captureTimestamp) {
+          const nextTs = isoToTimestamp14(resolved.captureTimestamp);
+          if (nextTs) setCurrentTimestamp14(nextTs);
+        }
+
+        return;
+      }
+
+      const edition = editionOptions.find((opt) => opt.jobId === nextJobId);
+      if (edition?.entryBrowseUrl) {
+        setIframeSrc(edition.entryBrowseUrl);
+        setActiveJobId(nextJobId);
+        setCurrentReplayUrl(edition.entryBrowseUrl);
+        setEditionNotice(
+          "This page was not captured in the selected backup; showing its entry page instead.",
+        );
+        return;
+      }
+
+      const timegateUrl = buildReplayUrl(
+        replayOrigin,
+        nextJobId,
+        null,
+        currentOriginalUrl,
+      );
+      setIframeSrc(timegateUrl);
+      setActiveJobId(nextJobId);
+      setCurrentReplayUrl(timegateUrl);
+      setEditionNotice(
+        "Could not find an exact capture for this page in that backup; showing the closest capture if available.",
+      );
+    } catch {
+      const nextSrc = buildReplayUrl(
+        replayOrigin,
+        nextJobId,
+        currentTimestamp14,
+        currentOriginalUrl,
+      );
+      setIframeSrc(nextSrc);
+      setActiveJobId(nextJobId);
+      setCurrentReplayUrl(nextSrc);
+      setEditionNotice(
+        "Could not confirm capture availability; attempting to open this page in the selected backup.",
+      );
+    } finally {
+      setIsResolvingEdition(false);
+    }
   }
 
   const browseLink = browseUrl ? currentReplayUrl ?? browseUrl : undefined;
@@ -166,6 +226,7 @@ export function BrowseReplayClient({
                     className="ha-select ha-select-sm"
                     value={activeJobId ?? undefined}
                     onChange={(e) => handleEditionChange(Number(e.target.value))}
+                    disabled={isResolvingEdition}
                   >
                     {editionOptions.map((edition) => (
                       <option key={edition.jobId} value={edition.jobId}>
@@ -174,6 +235,17 @@ export function BrowseReplayClient({
                     ))}
                   </select>
                 </div>
+              )}
+
+              {isResolvingEdition && (
+                <p className="mt-2 text-[11px] font-medium text-ha-muted">
+                  Switching backup…
+                </p>
+              )}
+              {editionNotice && (
+                <p className="mt-2 text-[11px] font-medium text-amber-800">
+                  {editionNotice}
+                </p>
               )}
 
               <p className="mt-2 break-all text-[11px] text-ha-muted">
