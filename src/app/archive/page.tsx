@@ -289,35 +289,35 @@ export default async function ArchivePage({
                                     ? `${apiBaseUrl}${summary.entryPreviewUrl}`
                                     : null;
 
-                                return (
-                                    <article
-                                        key={summary.sourceCode}
-                                        className="ha-card ha-card-elevated w-[min(360px,85vw)] flex-shrink-0 overflow-hidden p-0"
-                                        data-testid={`archive-source-${summary.sourceCode}`}
-                                    >
-                                        {previewSrc ? (
-                                            <div className="relative h-24 overflow-hidden border-b border-ha-border bg-white">
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img
-                                                    src={previewSrc}
-                                                    alt={`${summary.sourceName} preview`}
-                                                    loading="lazy"
+	                                return (
+	                                    <article
+	                                        key={summary.sourceCode}
+	                                        className="ha-card ha-card-elevated w-[min(320px,82vw)] flex-shrink-0 overflow-hidden p-0"
+	                                        data-testid={`archive-source-${summary.sourceCode}`}
+	                                    >
+	                                        {previewSrc ? (
+	                                            <div className="relative h-[72px] overflow-hidden border-b border-ha-border bg-white">
+	                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+	                                                <img
+	                                                    src={previewSrc}
+	                                                    alt={`${summary.sourceName} preview`}
+	                                                    loading="lazy"
                                                     decoding="async"
                                                     className="h-full w-full object-cover object-top"
                                                 />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-[#0b0c0d]/90 dark:via-[#0b0c0d]/35" />
-                                            </div>
-                                        ) : (
-                                            <div className="flex h-24 items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]">
-                                                Preview unavailable
-                                            </div>
-                                        )}
+	                                                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-[#0b0c0d]/90 dark:via-[#0b0c0d]/35" />
+	                                            </div>
+	                                        ) : (
+	                                            <div className="flex h-[72px] items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]">
+	                                                Preview unavailable
+	                                            </div>
+	                                        )}
 
-                                        <div className="p-4 sm:p-5">
-                                            <h3 className="text-sm font-semibold text-slate-900">
-                                                {summary.sourceName}
-                                            </h3>
-                                            <p className="mt-1 text-xs text-ha-muted">
+	                                        <div className="p-3 sm:p-4">
+	                                            <h3 className="text-sm font-semibold text-slate-900">
+	                                                {summary.sourceName}
+	                                            </h3>
+	                                            <p className="mt-1 text-xs text-ha-muted">
                                                 {summary.recordCount} snapshot
                                                 {summary.recordCount === 1
                                                     ? ""
@@ -330,41 +330,50 @@ export default async function ArchivePage({
                                                     <span className="font-medium text-slate-800">
                                                         Homepage:
                                                     </span>{" "}
-                                                    {summary.baseUrl}
-                                                </p>
-                                            )}
+	                                                    {summary.baseUrl}
+	                                                </p>
+	                                            )}
 
-                                            <div className="mt-4 flex flex-wrap gap-2">
-                                                {browseId && (
-                                                    <Link
-                                                        href={`/browse/${browseId}`}
-                                                        className="ha-btn-primary text-xs"
-                                                    >
-                                                        {browseLabel}
-                                                    </Link>
-                                                )}
-                                                {summary.entryBrowseUrl && (
-                                                    <a
-                                                        href={
-                                                            summary.entryBrowseUrl
-                                                        }
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        className="ha-btn-secondary text-xs"
-                                                    >
-                                                        Open in replay ↗
-                                                    </a>
-                                                )}
-                                                <Link
-                                                    href={`/archive?source=${summary.sourceCode}`}
-                                                    className="ha-btn-secondary text-xs"
-                                                >
-                                                    Search this source
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </article>
-                                );
+	                                            <div className="mt-3 flex flex-wrap gap-2">
+	                                                {browseId && (
+	                                                    <Link
+	                                                        href={`/browse/${browseId}`}
+	                                                        className="ha-btn-primary ha-btn-xs"
+	                                                    >
+	                                                        {browseLabel
+	                                                            .replace(
+	                                                                "Browse archived site",
+	                                                                "Browse site"
+	                                                            )
+	                                                            .replace(
+	                                                                "Browse latest capture",
+	                                                                "Browse latest"
+	                                                            )}
+	                                                    </Link>
+	                                                )}
+	                                                {summary.entryBrowseUrl && (
+	                                                    <a
+	                                                        href={
+	                                                            summary.entryBrowseUrl
+	                                                        }
+	                                                        target="_blank"
+	                                                        rel="noreferrer"
+	                                                        className="ha-btn-secondary ha-btn-xs"
+	                                                        title="Open this source homepage in the replay service (new tab)"
+	                                                    >
+	                                                        Replay ↗
+	                                                    </a>
+	                                                )}
+	                                                <Link
+	                                                    href={`/archive?source=${summary.sourceCode}`}
+	                                                    className="ha-btn-secondary ha-btn-xs"
+	                                                >
+	                                                    Search
+	                                                </Link>
+	                                            </div>
+	                                        </div>
+	                                    </article>
+	                                );
                             })}
                         </div>
                     </div>
