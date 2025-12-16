@@ -814,8 +814,9 @@ a:focus-visible {
 }
 
 .ha-btn-xs {
-    padding: 0.34rem 0.9rem;
-    font-size: 0.78rem;
+    padding: 0.3rem 0.78rem;
+    font-size: 0.74rem;
+    line-height: 1.1;
 }
 
 .ha-btn-primary {
