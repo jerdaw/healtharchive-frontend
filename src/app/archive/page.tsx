@@ -275,7 +275,7 @@ export default async function ArchivePage({
                         </Link>
                     </div>
 
-                    <div className="-mx-1 overflow-x-auto px-1 pb-1">
+                    <div className="overflow-x-auto pb-1">
                         <div className="flex gap-3">
                             {orderedSourceSummaries.map((summary) => {
                                 const entryId = summary.entryRecordId;
@@ -290,39 +290,40 @@ export default async function ArchivePage({
                                     : null;
 
 	                                return (
-	                                    <article
-	                                        key={summary.sourceCode}
-	                                        className="ha-card ha-card-elevated w-[min(320px,82vw)] flex-shrink-0 overflow-hidden p-0"
-	                                        data-testid={`archive-source-${summary.sourceCode}`}
-	                                    >
-	                                        {previewSrc ? (
-	                                            <div className="relative h-[72px] overflow-hidden border-b border-ha-border bg-white">
-	                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-	                                                <img
-	                                                    src={previewSrc}
-	                                                    alt={`${summary.sourceName} preview`}
-	                                                    loading="lazy"
+                                    <article
+                                        key={summary.sourceCode}
+                                        className="ha-card ha-card-elevated w-[min(320px,82vw)] flex-shrink-0 overflow-hidden p-0"
+                                        data-testid={`archive-source-${summary.sourceCode}`}
+                                    >
+                                        {previewSrc ? (
+                                            <div className="relative h-20 overflow-hidden border-b border-ha-border bg-white">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={previewSrc}
+                                                    alt={`${summary.sourceName} preview`}
+                                                    loading="lazy"
                                                     decoding="async"
                                                     className="h-full w-full object-cover object-top"
                                                 />
-	                                                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-[#0b0c0d]/90 dark:via-[#0b0c0d]/35" />
-	                                            </div>
-	                                        ) : (
-	                                            <div className="flex h-[72px] items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]">
-	                                                Preview unavailable
-	                                            </div>
-	                                        )}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-[#0b0c0d]/90 dark:via-[#0b0c0d]/35" />
+                                            </div>
+                                        ) : (
+                                            <div className="flex h-20 items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]">
+                                                Preview unavailable
+                                            </div>
+                                        )}
 
-	                                        <div className="p-3 sm:p-4">
-	                                            <h3 className="text-sm font-semibold text-slate-900">
-	                                                {summary.sourceName}
-	                                            </h3>
-	                                            <p className="mt-1 text-xs text-ha-muted">
-                                                {summary.recordCount} snapshot
+                                        <div className="p-3 sm:p-4">
+                                            <h3 className="text-sm font-semibold text-slate-900">
+                                                {summary.sourceName}
+                                            </h3>
+                                            <p className="mt-1 text-xs text-ha-muted whitespace-nowrap">
+                                                {summary.recordCount.toLocaleString()}{" "}
+                                                snapshot
                                                 {summary.recordCount === 1
                                                     ? ""
                                                     : "s"}{" "}
-                                                · latest capture{" "}
+                                                · latest{" "}
                                                 {formatDate(summary.lastCapture)}
                                             </p>
                                             {summary.baseUrl && (
@@ -334,13 +335,13 @@ export default async function ArchivePage({
 	                                                </p>
 	                                            )}
 
-	                                            <div className="mt-3 flex flex-wrap gap-2">
-	                                                {browseId && (
-	                                                    <Link
-	                                                        href={`/browse/${browseId}`}
-	                                                        className="ha-btn-primary ha-btn-xs"
-	                                                    >
-	                                                        {browseLabel
+                                            <div className="mt-3 flex flex-wrap gap-1.5">
+                                                {browseId && (
+                                                    <Link
+                                                        href={`/browse/${browseId}`}
+                                                        className="ha-btn-primary ha-btn-xs"
+                                                    >
+                                                        {browseLabel
 	                                                            .replace(
 	                                                                "Browse archived site",
 	                                                                "Browse site"
