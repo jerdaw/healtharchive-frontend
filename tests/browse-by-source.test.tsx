@@ -26,10 +26,14 @@ describe("/archive/browse-by-source", () => {
       {
         sourceCode: "phac",
         sourceName: "PHAC",
+        baseUrl: "https://www.canada.ca/en/public-health.html",
+        description: "PHAC",
         recordCount: 2,
         firstCapture: "2024-01-01",
         lastCapture: "2024-02-01",
         latestRecordId: 10,
+        entryRecordId: 9,
+        entryBrowseUrl: "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/public-health.html",
       },
     ]);
 
