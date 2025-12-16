@@ -3,6 +3,7 @@ import { vi } from "vitest";
 
 vi.mock("@/lib/api", () => ({
   fetchHealth: vi.fn(),
+  resolveReplayUrl: vi.fn(),
   getApiBaseUrl: vi.fn(() => "http://example.test"),
 }));
 
