@@ -835,6 +835,20 @@ All text is stable, but can be refined later.
 	                - Optional: “Open in replay ↗” (opens the replay `browseUrl` in a new tab when replay is configured).
 	                - Optional: “Raw HTML ↗” (opens the backend `/api/snapshots/raw/{id}` when available; falls back to the offline sample HTML path).
 
+        - **Edition (“backup”) switching** (when multiple editions exist):
+
+            - The page fetches editions from the backend:
+                - `GET /api/sources/{sourceCode}/editions`
+            - The “Backup” dropdown appears above the iframe (client-side component: `src/components/replay/SnapshotReplayClient.tsx`).
+            - Switching backups is **v2-style “preserve current page”**:
+                - While you browse within the iframe, the replay origin emits `postMessage` events (`type="haReplayNavigation"`) containing the current *original URL* and current replay timestamp.
+                - When you choose a different edition, the frontend calls:
+                    - `POST /api/replay/resolve`
+                  to ask “does this URL exist in job-N?” and returns a best replay URL for that job.
+                - If the page doesn’t exist in the selected backup:
+                    - fallback to that backup’s `entryBrowseUrl` (source homepage within that job), or
+                    - use the pywb timegate URL for “closest capture”.
+
         - **Important note callout**:
 
             - Emphasizes archival, outdated nature; not current guidance.
@@ -852,6 +866,15 @@ All text is stable, but can be refined later.
 -   Renders a persistent HealthArchive wrapper above the iframe so users can:
     -   confirm which source and capture time they are browsing, and
     -   navigate back to the main HealthArchive UI quickly.
+
+-   **Edition (“backup”) switching** (when multiple editions exist):
+
+    - The wrapper fetches editions from:
+        - `GET /api/sources/{sourceCode}/editions`
+    - The “Switch backup” dropdown preserves the **current page** when possible:
+        - The iframe emits `postMessage` events from the replay origin (`type="haReplayNavigation"`).
+        - The wrapper uses `POST /api/replay/resolve` to open the same original URL in the selected job if it exists.
+        - If not found, it falls back to the backup’s entry page and displays a short notice explaining the fallback.
 
 ---
 
