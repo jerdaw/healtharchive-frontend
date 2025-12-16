@@ -142,34 +142,29 @@ export default async function SnapshotPage({
               <Link href="/archive" className="ha-btn-secondary text-xs">
                 ← Back to archive
               </Link>
+              {viewerUrl && (
+                <Link href={`/browse/${id}`} className="ha-btn-primary text-xs">
+                  Browse full screen
+                </Link>
+              )}
               {browseUrl && (
                 <a
                   href={browseUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="ha-btn-primary text-xs"
+                  className="ha-btn-secondary text-xs"
                 >
-                  Open archived page
+                  Open in replay ↗
                 </a>
               )}
-              {!browseUrl && rawHtmlUrl && (
-                <a
-                  href={rawHtmlUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="ha-btn-primary text-xs"
-                >
-                  Open raw snapshot
-                </a>
-              )}
-              {browseUrl && rawHtmlUrl && (
+              {rawHtmlUrl && (
                 <a
                   href={rawHtmlUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="ha-btn-secondary text-xs"
                 >
-                  Open raw HTML
+                  Raw HTML ↗
                 </a>
               )}
             </div>

@@ -8,6 +8,7 @@ type SnapshotFrameProps = {
   browseLink?: string;
   rawLink?: string;
   apiLink?: string;
+  iframeClassName?: string;
 };
 
 export function SnapshotFrame({
@@ -16,10 +17,14 @@ export function SnapshotFrame({
   browseLink,
   rawLink,
   apiLink,
+  iframeClassName,
 }: SnapshotFrameProps) {
   const [status, setStatus] = useState<"loading" | "loaded" | "error">(
     "loading",
   );
+
+  const iframeClasses =
+    iframeClassName ?? "h-[480px] w-full border-0 sm:h-[560px]";
 
   return (
     <div className="relative h-full w-full">
@@ -72,7 +77,7 @@ export function SnapshotFrame({
           src={src}
           title={title}
           sandbox="allow-same-origin allow-scripts allow-forms"
-          className="h-[480px] w-full border-0 sm:h-[560px]"
+          className={iframeClasses}
           onLoad={() => setStatus("loaded")}
           onError={() => setStatus("error")}
         />

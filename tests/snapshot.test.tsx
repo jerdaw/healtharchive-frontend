@@ -81,7 +81,7 @@ describe("/snapshot/[id]", () => {
     render(ui);
 
     expect(screen.getAllByText(/Snapshot Title/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Open raw snapshot/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Browse full screen/i).length).toBeGreaterThan(0);
   });
 
   it("shows error overlay and links when iframe fails", async () => {
@@ -106,7 +106,7 @@ describe("/snapshot/[id]", () => {
     render(ui);
 
     expect(screen.getByText(/Archived content unavailable/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Open raw snapshot/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Browse full screen/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/View metadata JSON/i)).toBeInTheDocument();
   });
 
@@ -156,8 +156,9 @@ describe("/snapshot/[id]", () => {
     const ui = await SnapshotPage({ params: Promise.resolve({ id: "45" }) });
     render(ui);
 
-    expect(screen.getAllByText(/Open archived page/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Open raw HTML/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Browse full screen/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Open in replay/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Raw HTML/i).length).toBeGreaterThan(0);
   });
 
   it("calls notFound when no snapshot exists", async () => {

@@ -204,9 +204,18 @@ export function SearchResultCard({
                     </div>
                 </div>
 
-                <div className="ha-result-actions">
-                    <Link href={`/snapshot/${record.id}`} className="ha-btn-secondary text-xs">
-                        View snapshot
+                <div className="ha-result-actions flex flex-wrap justify-end gap-2">
+                    <Link
+                        href={`/browse/${record.id}`}
+                        className="ha-btn-primary text-xs"
+                    >
+                        Browse
+                    </Link>
+                    <Link
+                        href={`/snapshot/${record.id}`}
+                        className="ha-btn-secondary text-xs"
+                    >
+                        Details
                     </Link>
                 </div>
             </div>
