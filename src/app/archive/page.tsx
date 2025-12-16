@@ -367,7 +367,8 @@ export default async function ArchivePage({
                                                     </a>
                                                 )}
                                                 <Link
-                                                    href={`/archive?source=${encodeURIComponent(summary.sourceCode)}#archive-filters`}
+                                                    href={`/archive?source=${encodeURIComponent(summary.sourceCode)}&focus=filters`}
+                                                    scroll={false}
                                                     className="ha-btn-secondary text-xs"
 	                                                >
                                                     Search

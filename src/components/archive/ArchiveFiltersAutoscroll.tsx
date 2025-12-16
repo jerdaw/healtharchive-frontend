@@ -11,14 +11,34 @@ export function ArchiveFiltersAutoscroll({
 }: ArchiveFiltersAutoscrollProps) {
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.location.hash !== `#${targetId}`) return;
+    const url = new URL(window.location.href);
+    const shouldScroll =
+      window.location.hash === `#${targetId}` ||
+      url.searchParams.get("focus") === "filters";
+    if (!shouldScroll) return;
 
     const el = document.getElementById(targetId);
     if (!el) return;
-    if (typeof el.scrollIntoView !== "function") return;
+
+    const prefersReducedMotion =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const handle = window.setTimeout(() => {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      const headerEl = document.querySelector<HTMLElement>(".ha-shell-header");
+      const headerHeight = headerEl?.getBoundingClientRect().height ?? 0;
+      const padding = 12;
+      const targetTop =
+        el.getBoundingClientRect().top + window.scrollY - headerHeight - padding;
+
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+
+      url.searchParams.delete("focus");
+      url.hash = "";
+      window.history.replaceState(null, "", url.toString());
     }, 0);
 
     return () => window.clearTimeout(handle);
@@ -26,4 +46,3 @@ export function ArchiveFiltersAutoscroll({
 
   return null;
 }
-
