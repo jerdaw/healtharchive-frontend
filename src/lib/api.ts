@@ -1,10 +1,14 @@
 export type SourceSummary = {
   sourceCode: string;
   sourceName: string;
+  baseUrl: string | null;
+  description: string | null;
   recordCount: number;
   firstCapture: string;
   lastCapture: string;
   latestRecordId: number | null;
+  entryRecordId: number | null;
+  entryBrowseUrl: string | null;
 };
 
 export type SnapshotSummary = {

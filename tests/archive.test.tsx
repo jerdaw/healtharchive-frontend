@@ -28,10 +28,14 @@ describe("/archive", () => {
       {
         sourceCode: "phac",
         sourceName: "PHAC",
+        baseUrl: "https://www.canada.ca/en/public-health.html",
+        description: "PHAC",
         recordCount: 2,
         firstCapture: "2024-01-01",
         lastCapture: "2024-01-02",
         latestRecordId: 1,
+        entryRecordId: 1,
+        entryBrowseUrl: null,
       },
     ]);
     mockSearchSnapshots.mockResolvedValue({
@@ -43,9 +47,12 @@ describe("/archive", () => {
           sourceName: "PHAC",
           language: "en",
           captureDate: "2024-01-02",
+          captureTimestamp: null,
+          jobId: null,
           originalUrl: "https://example.com",
           snippet: "Summary",
           rawSnapshotUrl: "/api/snapshots/raw/101",
+          browseUrl: null,
         },
       ],
       total: 1,
@@ -70,10 +77,14 @@ describe("/archive", () => {
       {
         sourceCode: "phac",
         sourceName: "PHAC",
+        baseUrl: "https://www.canada.ca/en/public-health.html",
+        description: "PHAC",
         recordCount: 1,
         firstCapture: "2024-01-01",
         lastCapture: "2024-01-01",
         latestRecordId: 1,
+        entryRecordId: 1,
+        entryBrowseUrl: null,
       },
     ]);
     mockSearchSnapshots.mockResolvedValue({
