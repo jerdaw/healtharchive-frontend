@@ -13,6 +13,7 @@ import {
 import { ApiHealthBanner } from "@/components/ApiHealthBanner";
 import { HoverGlowButton } from "@/components/home/HoverGlowButton";
 import { SearchResultCard } from "@/components/archive/SearchResultCard";
+import { ArchiveFiltersAutoscroll } from "@/components/archive/ArchiveFiltersAutoscroll";
 import Link from "next/link";
 
 type ArchiveSearchParams = {
@@ -252,7 +253,7 @@ export default async function ArchivePage({
         <PageShell
             eyebrow="Archive explorer"
             title="Browse & search snapshots"
-            intro="Browse and search archived snapshots by keyword and source. This is an early release — coverage and features are still expanding."
+            compact
         >
             <ApiHealthBanner />
             {sourceSummaries.length > 0 && (
@@ -335,17 +336,17 @@ export default async function ArchivePage({
 	                                                </p>
 	                                            )}
 
-                                            <div className="mt-3 flex flex-wrap gap-1.5">
+                                            <div className="mt-3 flex flex-wrap gap-2">
                                                 {browseId && (
                                                     <Link
                                                         href={`/browse/${browseId}`}
-                                                        className="ha-btn-primary ha-btn-xs"
+                                                        className="ha-btn-primary text-xs"
                                                     >
                                                         {browseLabel
-	                                                            .replace(
-	                                                                "Browse archived site",
-	                                                                "Browse site"
-	                                                            )
+                                                            .replace(
+                                                                "Browse archived site",
+                                                                "Browse site"
+                                                            )
 	                                                            .replace(
 	                                                                "Browse latest capture",
 	                                                                "Browse latest"
@@ -354,26 +355,26 @@ export default async function ArchivePage({
 	                                                )}
 	                                                {summary.entryBrowseUrl && (
 	                                                    <a
-	                                                        href={
-	                                                            summary.entryBrowseUrl
-	                                                        }
-	                                                        target="_blank"
-	                                                        rel="noreferrer"
-	                                                        className="ha-btn-secondary ha-btn-xs"
-	                                                        title="Open this source homepage in the replay service (new tab)"
-	                                                    >
-	                                                        Replay ↗
-	                                                    </a>
-	                                                )}
-	                                                <Link
-	                                                    href={`/archive?source=${summary.sourceCode}`}
-	                                                    className="ha-btn-secondary ha-btn-xs"
+                                                        href={
+                                                            summary.entryBrowseUrl
+                                                        }
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        className="ha-btn-secondary text-xs"
+                                                        title="Open this source homepage in the replay service (new tab)"
+                                                    >
+                                                        Replay ↗
+                                                    </a>
+                                                )}
+                                                <Link
+                                                    href={`/archive?source=${encodeURIComponent(summary.sourceCode)}#archive-filters`}
+                                                    className="ha-btn-secondary text-xs"
 	                                                >
-	                                                    Search
-	                                                </Link>
-	                                            </div>
-	                                        </div>
-	                                    </article>
+                                                    Search
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </article>
 	                                );
                             })}
                         </div>
@@ -382,7 +383,10 @@ export default async function ArchivePage({
             )}
             <div className="ha-home-hero grid gap-8 lg:grid-cols-[minmax(0,280px),minmax(0,1fr)] lg:items-start">
                 {/* Filters panel */}
-                <aside className="ha-card ha-home-panel p-4 sm:p-5 space-y-3">
+                <aside
+                    id="archive-filters"
+                    className="ha-card ha-home-panel p-4 sm:p-5 space-y-3"
+                >
                     <h2 className="text-sm font-semibold text-slate-900">
                         Filters
                     </h2>
@@ -392,7 +396,12 @@ export default async function ArchivePage({
                         ranges and jurisdictions would be available.
                     </p>
 
-                    <form className="space-y-4" method="get">
+                    <form
+                        key={`archive-filters:${q}:${source}:${sort}:${view}:${includeNon2xx ? "1" : "0"}:${pageSize}`}
+                        className="space-y-4"
+                        method="get"
+                    >
+                        <ArchiveFiltersAutoscroll targetId="archive-filters" />
                         <input
                             type="hidden"
                             name="page"
@@ -767,6 +776,10 @@ export default async function ArchivePage({
                     )}
                 </section>
             </div>
+
+            <p className="text-xs leading-relaxed text-ha-muted">
+                Early release: coverage and features are still expanding.
+            </p>
         </PageShell>
     );
 }
