@@ -115,22 +115,32 @@ and `Vary: Origin`.
 
 ---
 
-## 4. Snapshot viewer verification
+## 4. Snapshot viewer + replay verification
 
-This verifies that the snapshot viewer iframe can load raw HTML from the API.
+This verifies that the snapshot viewer iframe can load **replay** content from
+`replay.healtharchive.ca` (preferred), and that raw HTML from the API remains
+available as a fallback/debug path.
 
 1. Pick a known snapshot ID that exists in the backend (at least one should
    exist in production).
-2. Open:
+2. Open (metadata + embedded viewer):
 
    - `https://www.healtharchive.ca/snapshot/<id>`
 
 3. Confirm:
 
    - The page loads snapshot metadata (title, capture date, source, URL).
-   - The page displays “Archived content · served from
-     `https://api.healtharchive.ca/api/snapshots/raw/<id>` …”.
-   - The embedded iframe renders HTML content.
+   - If replay is configured, the page displays “Archived content · served from
+     `https://replay.healtharchive.ca/...` via the replay service.”
+   - The embedded iframe renders the archived page (CSS/JS/images should load where captured).
+   - The page still offers a “Raw HTML” link to `https://api.healtharchive.ca/api/snapshots/raw/<id>`.
+
+4. Open the full-screen browse view:
+
+   - `https://www.healtharchive.ca/browse/<id>`
+
+   Confirm it loads the same replay content with a persistent HealthArchive
+   banner/controls above the iframe.
 
 ---
 
