@@ -340,7 +340,7 @@ export default async function ArchivePage({
                                                 {browseId && (
                                                     <Link
                                                         href={`/browse/${browseId}`}
-                                                        className="ha-btn-primary text-xs"
+                                                        className="ha-btn-primary"
                                                     >
                                                         {browseLabel
                                                             .replace(
@@ -360,7 +360,7 @@ export default async function ArchivePage({
                                                         }
                                                         target="_blank"
                                                         rel="noreferrer"
-                                                        className="ha-btn-secondary text-xs"
+                                                        className="ha-btn-secondary"
                                                         title="Open this source homepage in the replay service (new tab)"
                                                     >
                                                         Replay ↗
@@ -369,7 +369,7 @@ export default async function ArchivePage({
                                                 <Link
                                                     href={`/archive?source=${encodeURIComponent(summary.sourceCode)}&focus=filters`}
                                                     scroll={false}
-                                                    className="ha-btn-secondary text-xs"
+                                                    className="ha-btn-secondary"
 	                                                >
                                                     Search
                                                 </Link>

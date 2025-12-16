@@ -27,7 +27,10 @@ export function ArchiveFiltersAutoscroll({
     const handle = window.setTimeout(() => {
       const headerEl = document.querySelector<HTMLElement>(".ha-shell-header");
       const headerHeight = headerEl?.getBoundingClientRect().height ?? 0;
-      const padding = 12;
+      // The header includes a decorative gradient "shadow" (::after) that
+      // extends below the header box. Add a little extra offset so the target
+      // card isn't partially obscured.
+      const padding = 40;
       const targetTop =
         el.getBoundingClientRect().top + window.scrollY - headerHeight - padding;
 
