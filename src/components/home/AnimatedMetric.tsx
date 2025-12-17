@@ -115,7 +115,9 @@ export function AnimatedMetric({
         <div>
             <dt className="ha-metric-label">{label}</dt>
             <dd className="ha-metric-primary">
-                <span className="ha-metric-primary-value">{displayValue}</span>
+                <span className="ha-metric-primary-value">
+                    {displayValue.toLocaleString()}
+                </span>
                 {unit ? (
                     <span className="ha-metric-primary-unit">{unit}</span>
                 ) : null}
