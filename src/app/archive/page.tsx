@@ -304,7 +304,6 @@ export default async function ArchivePage({
                                                     decoding="async"
                                                     className="h-full w-full object-cover object-top"
                                                 />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-[#0b0c0d]/90 dark:via-[#0b0c0d]/35" />
                                             </div>
                                         ) : (
                                             <div className="flex h-20 items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]">
