@@ -288,33 +288,67 @@ export default async function ArchivePage({
                                     ? `${apiBaseUrl}${summary.entryPreviewUrl}`
                                     : null;
 
-	                                return (
+                                return (
                                     <article
                                         key={summary.sourceCode}
-                                        className="ha-card ha-card-elevated w-[min(320px,82vw)] flex-shrink-0 overflow-hidden p-0"
+                                        className="ha-card ha-card-elevated w-[min(360px,86vw)] flex-shrink-0 overflow-hidden p-0"
                                         data-testid={`archive-source-${summary.sourceCode}`}
                                     >
                                         {previewSrc ? (
-                                            <div className="relative h-20 overflow-hidden border-b border-ha-border bg-white">
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img
-                                                    src={previewSrc}
-                                                    alt={`${summary.sourceName} preview`}
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                    className="h-full w-full object-cover object-top"
-                                                />
-                                            </div>
+                                            browseId ? (
+                                                <Link
+                                                    href={`/browse/${browseId}`}
+                                                    className="relative block h-[5.5rem] overflow-hidden border-b border-ha-border bg-white"
+                                                    aria-label={`View ${summary.sourceName}`}
+                                                >
+                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                    <img
+                                                        src={previewSrc}
+                                                        alt={`${summary.sourceName} preview`}
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        className="h-full w-full object-cover object-top"
+                                                    />
+                                                </Link>
+                                            ) : (
+                                                <div className="relative h-[5.5rem] overflow-hidden border-b border-ha-border bg-white">
+                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                    <img
+                                                        src={previewSrc}
+                                                        alt={`${summary.sourceName} preview`}
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        className="h-full w-full object-cover object-top"
+                                                    />
+                                                </div>
+                                            )
+                                        ) : browseId ? (
+                                            <Link
+                                                href={`/browse/${browseId}`}
+                                                className="flex h-[5.5rem] items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]"
+                                                aria-label={`View ${summary.sourceName}`}
+                                            >
+                                                Preview unavailable
+                                            </Link>
                                         ) : (
-                                            <div className="flex h-20 items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]">
+                                            <div className="flex h-[5.5rem] items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]">
                                                 Preview unavailable
                                             </div>
                                         )}
 
                                         <div className="p-3 sm:p-4">
-                                            <h3 className="text-sm font-semibold text-slate-900">
-                                                {summary.sourceName}
-                                            </h3>
+                                            {browseId ? (
+                                                <Link
+                                                    href={`/browse/${browseId}`}
+                                                    className="inline-block text-sm font-semibold text-slate-900 hover:underline"
+                                                >
+                                                    {summary.sourceName}
+                                                </Link>
+                                            ) : (
+                                                <h3 className="text-sm font-semibold text-slate-900">
+                                                    {summary.sourceName}
+                                                </h3>
+                                            )}
                                             <p className="mt-1 text-xs text-ha-muted whitespace-nowrap">
                                                 {summary.recordCount.toLocaleString()}{" "}
                                                 snapshot
@@ -329,21 +363,30 @@ export default async function ArchivePage({
                                                     <span className="font-medium text-slate-800">
                                                         Homepage:
                                                     </span>{" "}
-	                                                    {summary.baseUrl}
-	                                                </p>
-	                                            )}
+                                                    {browseId ? (
+                                                        <Link
+                                                            href={`/browse/${browseId}`}
+                                                            className="hover:underline"
+                                                        >
+                                                            {summary.baseUrl}
+                                                        </Link>
+                                                    ) : (
+                                                        summary.baseUrl
+                                                    )}
+                                                </p>
+                                            )}
 
-                                            <div className="mt-3 flex flex-wrap gap-2">
+                                            <div className="mt-3 flex flex-wrap gap-2 sm:flex-nowrap">
                                                 {browseId && (
                                                     <Link
                                                         href={`/browse/${browseId}`}
                                                         className="ha-btn-primary"
                                                     >
                                                         View
-	                                                    </Link>
-	                                                )}
-	                                                {summary.entryBrowseUrl && (
-	                                                    <a
+                                                    </Link>
+                                                )}
+                                                {summary.entryBrowseUrl && (
+                                                    <a
                                                         href={
                                                             summary.entryBrowseUrl
                                                         }
@@ -359,13 +402,13 @@ export default async function ArchivePage({
                                                     href={`/archive?source=${encodeURIComponent(summary.sourceCode)}&focus=filters`}
                                                     scroll={false}
                                                     className="ha-btn-secondary"
-	                                                >
+                                                >
                                                     Search
                                                 </Link>
                                             </div>
                                         </div>
                                     </article>
-	                                );
+                                );
                             })}
                         </div>
                     </div>
