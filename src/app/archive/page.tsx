@@ -254,7 +254,7 @@ export default async function ArchivePage({
         >
             <ApiHealthBanner />
             {sourceSummaries.length > 0 && (
-                <section className="ha-home-panel-gradient ha-home-panel-gradient-compact mb-4 space-y-3">
+                <section className="ha-home-panel-transparent ha-home-panel-gradient-compact mb-4 space-y-3">
                     <div className="flex flex-wrap items-baseline justify-between gap-3">
                         <div>
                             <h2 className="text-sm font-semibold text-slate-900">
@@ -283,7 +283,7 @@ export default async function ArchivePage({
                                 return (
                                     <article
                                         key={summary.sourceCode}
-                                        className="ha-card ha-card-elevated w-[min(360px,86vw)] flex-shrink-0 overflow-hidden p-0"
+                                        className="ha-card w-[min(360px,86vw)] flex-shrink-0 overflow-hidden p-0"
                                         data-testid={`archive-source-${summary.sourceCode}`}
                                     >
                                         {previewSrc ? (
