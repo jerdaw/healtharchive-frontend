@@ -626,6 +626,7 @@ All in `src/data/demo-records.ts`:
     2. **Side card: “Project snapshot”**
 
         - Displays live totals (snapshots and pages).
+        - Totals are formatted with comma separators for readability (e.g., `123,656`).
         - The animated metrics start after `ha-trackchanges-finished` and dispatch
           `ha-project-snapshot-finished` once all expected metric animations complete.
 
@@ -731,6 +732,7 @@ All in `src/data/demo-records.ts`:
 	                -   “Details” → `/snapshot/${record.id}`.
 	            -   Snippet paragraph.
 	            -   Original URL line (host + path) with a copy-to-clipboard button.
+	            -   On success, the copy icon briefly switches to a checkmark.
 
 ### 8.3 Browse by source `/archive/browse-by-source` – `src/app/archive/browse-by-source/page.tsx`
 
