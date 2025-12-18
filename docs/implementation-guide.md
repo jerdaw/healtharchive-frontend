@@ -661,6 +661,8 @@ All in `src/data/demo-records.ts`:
       sort?: string;
       view?: string;
       includeNon2xx?: string;
+      from?: string;
+      to?: string;
       page?: string;
       pageSize?: string;
     };
@@ -700,6 +702,9 @@ All in `src/data/demo-records.ts`:
 
     -   Keywords (`input name="q"`).
     -   Source (`select name="source"` with values `""`, `"phac"`, `"hc"`).
+    -   Optional date range:
+        -   From (`input type="date" name="from"`, UTC date)
+        -   To (`input type="date" name="to"`, UTC date)
 
 -   “Apply filters” button (`type="submit"`).
 
@@ -714,6 +719,7 @@ All in `src/data/demo-records.ts`:
 
     -   Secondary search form that:
         -   Reuses `q` but preserves `source` via hidden inputs.
+        -   Preserves `from`/`to` when present via hidden inputs.
         -   Allows user to quickly adjust keywords without re-choosing filters.
         -   Live API mode controls:
             -   Show toggle (`all snapshots` vs `pages (latest)`).
@@ -736,6 +742,8 @@ All in `src/data/demo-records.ts`:
 	            -   Snippet paragraph.
 	            -   Original URL line (host + path) with a copy-to-clipboard button.
 	            -   On success, the copy icon briefly switches to a checkmark.
+                -   In `view=pages`, result cards can show a “Captures N” badge and an “All captures”
+                    action that switches to snapshots view for that page.
 
 ### 8.3 Browse by source `/archive/browse-by-source` – `src/app/archive/browse-by-source/page.tsx`
 
