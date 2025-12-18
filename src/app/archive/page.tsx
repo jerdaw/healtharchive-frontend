@@ -496,10 +496,6 @@ export default async function ArchivePage({
                     <h2 className="text-sm font-semibold text-slate-900">
                         Filters
                     </h2>
-                    <p className="text-sm leading-relaxed text-ha-muted">
-                        Adjust these filters and re-run the search on the right.
-                        Filter by keyword, source, and capture date range.
-                    </p>
 
                     <form
                         key={`archive-filters:${q}:${source}:${fromDate}:${toDate}:${sort}:${view}:${
@@ -540,23 +536,22 @@ export default async function ArchivePage({
                             >
                                 Keywords
                             </label>
-                            <input
-                                id="q"
-                                name="q"
-                                type="search"
-                                defaultValue={q}
-                                placeholder="e.g. influenza, naloxone, HIV"
-                                aria-describedby="archive-keywords-help"
-                                className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
-                            />
-                            <p
-                                id="archive-keywords-help"
-                                className="text-[11px] text-ha-muted"
-                            >
-                                Search titles, summaries, and URLs. Tip: paste a
-                                URL to find captures of a specific page.
-                                Advanced: AND/OR/NOT, parentheses, -term, url:…
-                            </p>
+                            <div className="flex gap-2">
+                                <input
+                                    id="q"
+                                    name="q"
+                                    type="search"
+                                    defaultValue={q}
+                                    placeholder="e.g. influenza, https://www.canada.ca/…, covid AND vaccine, -archived, url:covid"
+                                    className="min-w-0 flex-1 rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                                />
+                                <HoverGlowButton
+                                    type="submit"
+                                    className="ha-btn-primary text-xs whitespace-nowrap"
+                                >
+                                    Apply
+                                </HoverGlowButton>
+                            </div>
                         </div>
 
                         {/* Source select */}
@@ -626,13 +621,7 @@ export default async function ArchivePage({
                             </div>
                         )}
 
-                        <div className="flex items-center justify-between gap-2 pt-1">
-                            <HoverGlowButton
-                                type="submit"
-                                className="ha-btn-primary text-xs"
-                            >
-                                Apply filters
-                            </HoverGlowButton>
+                        <div className="flex items-center justify-end gap-2 pt-1">
                             <Link
                                 href="/archive"
                                 className="text-xs font-medium text-ha-muted hover:text-slate-900"
