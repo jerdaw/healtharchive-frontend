@@ -184,6 +184,7 @@ export type SearchParams = {
   sort?: "relevance" | "newest";
   view?: "snapshots" | "pages";
   includeNon2xx?: boolean;
+  includeDuplicates?: boolean;
   from?: string; // YYYY-MM-DD
   to?: string; // YYYY-MM-DD
 };
@@ -196,6 +197,7 @@ export async function searchSnapshots(params: SearchParams): Promise<SearchRespo
   if (params.sort) query.set("sort", params.sort);
   if (params.view) query.set("view", params.view);
   if (params.includeNon2xx) query.set("includeNon2xx", "true");
+  if (params.includeDuplicates) query.set("includeDuplicates", "true");
   if (params.from?.trim()) query.set("from", params.from.trim());
   if (params.to?.trim()) query.set("to", params.to.trim());
   if (params.page && params.page > 1) query.set("page", String(params.page));

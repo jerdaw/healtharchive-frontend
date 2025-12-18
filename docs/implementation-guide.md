@@ -720,6 +720,7 @@ All in `src/data/demo-records.ts`:
     -   Sort (`relevance` vs `newest`).
     -   Results-per-page selector.
     -   “Include error pages” toggle (includes non‑2xx captures).
+    -   “Include duplicates” toggle (snapshots view only): shows same-day repeated captures of the exact same URL when the content is identical.
     -   “Apply” updates the list using current controls; “Clear” resets to `/archive`.
 
 -   Results list:
