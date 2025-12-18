@@ -59,6 +59,9 @@ export default function MethodsPage() {
           site replays archived HTML via the backend; replay fidelity varies by
           site and content type.
         </p>
+        <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
+          Date range filters in the archive explorer use UTC capture dates.
+        </p>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
