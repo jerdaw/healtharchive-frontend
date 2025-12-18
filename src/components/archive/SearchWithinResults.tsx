@@ -12,6 +12,7 @@ type SearchWithinResultsProps = {
   sort: string;
   view: string;
   includeNon2xx: boolean;
+  includeDuplicates: boolean;
   pageSize: number;
   defaultSort: string;
   defaultView: string;
@@ -26,6 +27,7 @@ export function SearchWithinResults({
   sort,
   view,
   includeNon2xx,
+  includeDuplicates,
   pageSize,
   defaultSort,
   defaultView,
@@ -52,8 +54,8 @@ export function SearchWithinResults({
     <form
       id={formId}
       method="get"
-      className={`flex w-full items-start ${
-        open ? "gap-2" : "gap-0"
+      className={`flex w-full items-start transition-[padding] duration-300 ease-out ${
+        open ? "gap-2 py-2" : "gap-0 py-0.5"
       }`}
       aria-label="Search within results"
     >
@@ -96,6 +98,9 @@ export function SearchWithinResults({
       {view !== defaultView && <input type="hidden" name="view" value={view} />}
       {includeNon2xx && (
         <input type="hidden" name="includeNon2xx" value="true" />
+      )}
+      {includeDuplicates && (
+        <input type="hidden" name="includeDuplicates" value="true" />
       )}
       <input type="hidden" name="page" value="1" />
       <input type="hidden" name="pageSize" value={String(pageSize)} />

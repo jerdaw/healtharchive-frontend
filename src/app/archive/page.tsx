@@ -24,6 +24,7 @@ type ArchiveSearchParams = {
     sort?: string;
     view?: string;
     includeNon2xx?: string;
+    includeDuplicates?: string;
     page?: string;
     pageSize?: string;
 };
@@ -116,6 +117,8 @@ export default async function ArchivePage({
         if (params.view?.trim()) qs.set("view", params.view.trim());
         if (params.includeNon2xx?.trim())
             qs.set("includeNon2xx", params.includeNon2xx.trim());
+        if (params.includeDuplicates?.trim())
+            qs.set("includeDuplicates", params.includeDuplicates.trim());
         if (params.pageSize?.trim()) qs.set("pageSize", params.pageSize.trim());
         // Reset page on meaningfully changed query.
         redirect(`/archive?${qs.toString()}`);
@@ -130,6 +133,8 @@ export default async function ArchivePage({
         if (params.view?.trim()) qs.set("view", params.view.trim());
         if (params.includeNon2xx?.trim())
             qs.set("includeNon2xx", params.includeNon2xx.trim());
+        if (params.includeDuplicates?.trim())
+            qs.set("includeDuplicates", params.includeDuplicates.trim());
         if (params.pageSize?.trim()) qs.set("pageSize", params.pageSize.trim());
         redirect(`/archive?${qs.toString()}`);
     }
@@ -143,6 +148,7 @@ export default async function ArchivePage({
     const fromDate = params.from?.trim() ?? "";
     const toDate = params.to?.trim() ?? "";
     const includeNon2xx = parseBoolean(params.includeNon2xx);
+    const includeDuplicatesRaw = parseBoolean(params.includeDuplicates);
     const hasQuery = Boolean(qForSearch);
     const requestedSort = params.sort?.trim().toLowerCase() ?? "";
     const requestedSortValid =
@@ -158,9 +164,21 @@ export default async function ArchivePage({
             ? requestedView
             : "pages";
     const defaultView = "pages";
+    const includeDuplicates =
+        view === "snapshots" ? includeDuplicatesRaw : false;
     const page = parsePositiveInt(params.page, 1);
     const rawPageSize = parsePositiveInt(params.pageSize, DEFAULT_PAGE_SIZE);
     const pageSize = Math.min(rawPageSize, MAX_PAGE_SIZE);
+    const hasActiveSearch = Boolean(
+        qForSearch ||
+            source ||
+            fromDate ||
+            toDate ||
+            includeNon2xx ||
+            includeDuplicates ||
+            view !== defaultView ||
+            sort !== defaultSort
+    );
 
     // Build source options from backend if available; fall back to demo data.
     let sourceOptions: { value: string; label: string }[] = [
@@ -234,6 +252,8 @@ export default async function ArchivePage({
             sort: sort === "relevance" || sort === "newest" ? sort : undefined,
             view: view === "pages" || view === "snapshots" ? view : undefined,
             includeNon2xx: includeNon2xx || undefined,
+            includeDuplicates:
+                view === "snapshots" && includeDuplicates ? true : undefined,
             from: fromDate || undefined,
             to: toDate || undefined,
             page,
@@ -342,6 +362,8 @@ export default async function ArchivePage({
         if (sort !== defaultSort) qs.set("sort", sort);
         if (view !== defaultView) qs.set("view", view);
         if (includeNon2xx) qs.set("includeNon2xx", "true");
+        if (view === "snapshots" && includeDuplicates)
+            qs.set("includeDuplicates", "true");
         if (targetPage > 1) qs.set("page", String(targetPage));
         if (pageSize !== DEFAULT_PAGE_SIZE)
             qs.set("pageSize", String(pageSize));
@@ -539,8 +561,31 @@ export default async function ArchivePage({
                     className="ha-card ha-home-panel p-4 sm:p-5 space-y-3"
                 >
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                        <h2 className="text-sm font-semibold text-slate-900">
-                            Search
+                        <h2 className="flex items-baseline gap-2 text-sm font-semibold text-slate-900">
+                            {hasActiveSearch ? (
+                                <>
+                                    <span className="ha-tag">
+                                        {view === "pages" ? "Page" : "Snapshot"}
+                                    </span>
+                                    <span>search results</span>
+                                    <span className="group relative inline-flex">
+                                        <button
+                                            type="button"
+                                            className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-ha-border bg-white text-[10px] font-semibold leading-none text-ha-muted transition-colors hover:border-[#11588f] hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f]"
+                                            aria-label="Info about pages vs snapshots"
+                                        >
+                                            i
+                                        </button>
+                                        <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 w-60 -translate-x-1/2 rounded-lg border border-ha-border bg-white px-3 py-2 text-[11px] leading-relaxed text-slate-700 shadow-lg opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
+                                            {view === "pages"
+                                                ? "Pages shows the latest capture per page (grouped by URL without query strings)."
+                                                : "All snapshots shows every capture, including multiple captures of the same page across time."}
+                                        </span>
+                                    </span>
+                                </>
+                            ) : (
+                                "Search"
+                            )}
                         </h2>
 	                        <span className="ml-auto text-right text-xs text-ha-muted">
 	                            {resultCountText}
@@ -574,7 +619,7 @@ export default async function ArchivePage({
 	                    <form
 	                        key={`archive-filters:${q}:${source}:${fromDate}:${toDate}:${sort}:${view}:${
 	                            includeNon2xx ? "1" : "0"
-	                        }:${pageSize}`}
+	                        }:${includeDuplicates ? "1" : "0"}:${pageSize}`}
 	                        className="space-y-4"
 	                        method="get"
 	                    >
@@ -613,6 +658,13 @@ export default async function ArchivePage({
                             <input
                                 type="hidden"
                                 name="includeNon2xx"
+                                value="true"
+                            />
+                        )}
+                        {!usingBackend && includeDuplicates && (
+                            <input
+                                type="hidden"
+                                name="includeDuplicates"
                                 value="true"
                             />
                         )}
@@ -783,6 +835,17 @@ export default async function ArchivePage({
                                         />
                                         Include errors
                                     </label>
+                                    {view === "snapshots" && (
+                                        <label className="inline-flex items-center gap-1 text-xs font-medium text-ha-muted sm:ml-2">
+                                            <input
+                                                type="checkbox"
+                                                name="includeDuplicates"
+                                                value="true"
+                                                defaultChecked={includeDuplicates}
+                                            />
+                                            Include duplicates
+                                        </label>
+                                    )}
 
                                     <button
                                         type="submit"
@@ -823,6 +886,7 @@ export default async function ArchivePage({
 	                        sort={sort}
 	                        view={view}
 	                        includeNon2xx={includeNon2xx}
+	                        includeDuplicates={includeDuplicates}
 	                        pageSize={pageSize}
 	                        defaultSort={defaultSort}
 	                        defaultView={defaultView}
