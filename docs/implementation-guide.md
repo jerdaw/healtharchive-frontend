@@ -710,34 +710,29 @@ All in `src/data/demo-records.ts`:
 -   Optional “Search within results” affordance that reveals a secondary keyword
     field (`within`) which is combined with the main keywords query using `AND`
     (e.g. `(influenza) AND (covid)`).
+    -   If `q` is cleared but `within` is present, the URL is canonicalized back
+        to a normal `q=...` search (no lingering `within=`).
 
-#### Results & view controls
+#### Results
 
--   Top card shows:
+-   Live API mode adds view controls inside the search panel:
+    -   Show (`pages (latest)` vs `all snapshots`), with an `i` tooltip explaining page grouping.
+    -   Sort (`relevance` vs `newest`).
+    -   Results-per-page selector.
+    -   “Include error pages” toggle (includes non‑2xx captures).
+    -   “Apply” updates the list using current controls; “Clear” resets to `/archive`.
 
-    -   “Search results” header.
-    -   Summary text: “Matching “q”” and optional date range.
-    -   Live API mode controls:
-        -   Show toggle (`pages (latest)` vs `all snapshots`), with an `i` tooltip explaining page grouping.
-        -   Sort toggle (`relevance` vs `newest`).
-        -   “Include error pages” toggle (includes non‑2xx captures).
-        -   Results-per-page selector.
-        -   “Clear” link resets to `/archive`.
-
-	    -   Results list:
-
-	    -   If empty: show explanatory message.
-	    -   Else: for each `record`:
-
-	            -   Article with `.ha-card ha-card-elevated`:
-
-	            -   Title (link to `/snapshot/${record.id}`).
-	            -   Meta line: `sourceName · captured {formatted date} · language`.
-	            -   Actions:
-	                -   “Browse” → `/browse/${record.id}` (full-screen browse mode).
-	                -   “Details” → `/snapshot/${record.id}`.
-	            -   Snippet paragraph.
-	            -   Original URL line (host + path) with a copy-to-clipboard button.
+-   Results list:
+    -   If empty: show explanatory message.
+    -   Else: for each `record`:
+        -   Title (link to `/snapshot/${record.id}`) with keyword highlighting (includes both `q` and `within` terms).
+        -   Meta line: `sourceName · captured {formatted date} · language`.
+        -   Actions:
+            -   “Browse” → `/browse/${record.id}` (full-screen browse mode).
+            -   “All captures” (only in `pages` view) → `/archive?view=snapshots&q=${originalUrl}`.
+            -   “Details” → `/snapshot/${record.id}`.
+        -   Snippet paragraph.
+        -   Original URL line (host + path) with a copy-to-clipboard button.
 	            -   On success, the copy icon briefly switches to a checkmark.
                 -   In `view=pages`, result cards can show a “Captures N” badge and an “All captures”
                     action that switches to snapshots view for that page.

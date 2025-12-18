@@ -9,6 +9,14 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+const redirectMock = vi.fn();
+vi.mock("next/navigation", () => ({
+  redirect: (url: string) => {
+    redirectMock(url);
+    throw new Error("NEXT_REDIRECT");
+  },
+}));
+
 vi.mock("@/lib/api", () => ({
   fetchSources: vi.fn(),
   searchSnapshots: vi.fn(),
@@ -23,6 +31,42 @@ const mockSearchSnapshots = vi.mocked(searchSnapshots);
 describe("/archive", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  it("canonicalizes within-only searches to q", async () => {
+    mockFetchSources.mockResolvedValue([]);
+    mockSearchSnapshots.mockResolvedValue({
+      results: [],
+      total: 0,
+      page: 1,
+      pageSize: 10,
+    });
+
+    await expect(async () => {
+      await ArchivePage({
+        searchParams: Promise.resolve({ q: "", within: "covid", source: "hc" }),
+      });
+    }).rejects.toThrow("NEXT_REDIRECT");
+
+    expect(redirectMock).toHaveBeenCalledWith("/archive?q=covid&source=hc");
+  });
+
+  it("drops empty within param instead of persisting it", async () => {
+    mockFetchSources.mockResolvedValue([]);
+    mockSearchSnapshots.mockResolvedValue({
+      results: [],
+      total: 0,
+      page: 1,
+      pageSize: 10,
+    });
+
+    await expect(async () => {
+      await ArchivePage({
+        searchParams: Promise.resolve({ q: "influenza", within: "" }),
+      });
+    }).rejects.toThrow("NEXT_REDIRECT");
+
+    expect(redirectMock).toHaveBeenCalledWith("/archive?q=influenza");
   });
 
   it("orders browse source cards by snapshot count", async () => {
@@ -185,6 +229,45 @@ describe("/archive", () => {
     expect(mockSearchSnapshots).toHaveBeenCalledTimes(1);
     const args = mockSearchSnapshots.mock.calls[0][0];
     expect(args.source).toBe("phac");
+  });
+
+  it("combines q and within into an AND query for backend search", async () => {
+    mockFetchSources.mockResolvedValue([]);
+    mockSearchSnapshots.mockResolvedValue({
+      results: [
+        {
+          id: 101,
+          title: "Influenza and covid",
+          sourceCode: "hc",
+          sourceName: "Health Canada",
+          language: "en",
+          captureDate: "2024-01-02",
+          captureTimestamp: null,
+          jobId: null,
+          originalUrl: "https://example.com/influenza",
+          snippet: "covid influenza",
+          rawSnapshotUrl: "/api/snapshots/raw/101",
+          browseUrl: null,
+        },
+      ],
+      total: 1,
+      page: 1,
+      pageSize: 10,
+    });
+
+    const ui = await ArchivePage({
+      searchParams: Promise.resolve({ q: "influenza", within: "covid" }),
+    });
+    render(ui);
+
+    expect(mockSearchSnapshots).toHaveBeenCalledTimes(1);
+    const args = mockSearchSnapshots.mock.calls[0][0];
+    expect(args.q).toBe("(influenza) AND (covid)");
+
+    expect(screen.getByText("Influenza")).toBeInTheDocument();
+    expect(
+      screen.getAllByText("covid", { selector: "mark" }).length,
+    ).toBeGreaterThan(0);
   });
 
   it("passes date range through to backend search", async () => {
