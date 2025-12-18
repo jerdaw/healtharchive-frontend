@@ -51,23 +51,29 @@ export function SearchWithinResults({
       aria-label="Search within results"
     >
       <div
-        className={`min-w-0 flex-1 overflow-hidden transition-[max-width,opacity] duration-300 ease-out ${
-          open ? "max-w-[640px] opacity-100" : "max-w-0 opacity-0"
+        className={`min-w-0 flex-1 overflow-hidden transition-[max-width] duration-300 ease-out ${
+          open ? "max-w-[640px]" : "max-w-0"
         }`}
         aria-hidden={!open}
       >
-        <label className="sr-only" htmlFor={`${formId}-q-within`}>
-          Search within results
-        </label>
-        <input
-          ref={inputRef}
-          id={`${formId}-q-within`}
-          name="q"
-          type="search"
-          defaultValue={q}
-          placeholder="Add keywords to narrow the current list…"
-          className="h-10 w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
-        />
+        <div
+          className={`transition-opacity duration-150 ease-out ${
+            open ? "opacity-100 delay-150" : "opacity-0"
+          }`}
+        >
+          <label className="sr-only" htmlFor={`${formId}-q-within`}>
+            Search within results
+          </label>
+          <input
+            ref={inputRef}
+            id={`${formId}-q-within`}
+            name="q"
+            type="search"
+            defaultValue={q}
+            placeholder="Add keywords to narrow the current list…"
+            className="h-10 w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+          />
+        </div>
       </div>
 
       {/* Keep filters in sync */}
@@ -103,7 +109,7 @@ export function SearchWithinResults({
           aria-hidden={!open}
           tabIndex={open ? 0 : -1}
           disabled={!open}
-          className={`col-start-1 row-start-1 ha-btn-primary text-xs whitespace-nowrap transition-all duration-300 !px-4 !py-2 ${
+          className={`col-start-1 row-start-1 ha-btn-primary h-10 text-xs whitespace-nowrap transition-all duration-300 !px-4 !py-2 ${
             open
               ? "opacity-100 translate-x-0 pointer-events-auto"
               : "opacity-0 -translate-x-2 pointer-events-none"
