@@ -707,7 +707,8 @@ All in `src/data/demo-records.ts`:
         -   To (`input type="date" name="to"`, UTC date)
 
 -   Optional “Search within results” affordance that reveals a secondary keyword
-    field (still uses `q`) for quick refinement without re-scrolling.
+    field (`within`) which is combined with the main keywords query using `AND`
+    (e.g. `(influenza) AND (covid)`).
 
 #### Results & view controls
 
