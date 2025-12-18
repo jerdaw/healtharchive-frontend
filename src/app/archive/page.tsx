@@ -518,7 +518,7 @@ export default async function ArchivePage({
                                                 </div>
                                             )}
 
-	                                            <div className="mt-3 grid grid-cols-3 items-center text-xs font-medium">
+	                                            <div className="mt-3.5 grid grid-cols-3 items-center text-xs font-medium">
 	                                                <div className="text-left">
 	                                                    {browseId && (
 	                                                        <Link
