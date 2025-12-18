@@ -637,7 +637,7 @@ export default async function ArchivePage({
                             </div>
                         </div>
                         {usingBackend && (
-                            <div className="rounded-lg bg-white/60 px-3 py-2">
+                            <div className="rounded-lg bg-white/60 py-2">
                                 <div className="flex flex-wrap items-center gap-2">
                                     <div className="inline-flex items-center gap-1">
                                         <label
@@ -649,7 +649,7 @@ export default async function ArchivePage({
                                         <span className="group relative inline-flex">
                                             <button
                                                 type="button"
-                                                className="relative -top-[1px] text-[10px] font-semibold leading-none text-ha-muted transition-colors hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                                                className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-ha-border bg-white text-[10px] font-semibold leading-none text-ha-muted transition-colors hover:border-[#11588f] hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f]"
                                                 aria-label="Info about page grouping"
                                             >
                                                 i
