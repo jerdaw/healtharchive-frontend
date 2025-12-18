@@ -5,6 +5,7 @@ import { HoverGlowButton } from "@/components/home/HoverGlowButton";
 
 type SearchWithinResultsProps = {
   q: string;
+  within: string;
   source: string;
   fromDate: string;
   toDate: string;
@@ -18,6 +19,7 @@ type SearchWithinResultsProps = {
 
 export function SearchWithinResults({
   q,
+  within,
   source,
   fromDate,
   toDate,
@@ -28,18 +30,21 @@ export function SearchWithinResults({
   defaultSort,
   defaultView,
 }: SearchWithinResultsProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(Boolean(within));
   const inputRef = useRef<HTMLInputElement>(null);
+  const shouldFocusOnOpenRef = useRef(false);
   const formId = useId();
 
   useEffect(() => {
     if (!open) return;
-    // Let layout settle before focusing so the input is reliably visible.
+    if (!shouldFocusOnOpenRef.current) return;
+    shouldFocusOnOpenRef.current = false;
     const handle = window.setTimeout(() => inputRef.current?.focus(), 220);
     return () => window.clearTimeout(handle);
   }, [open]);
 
   const handleToggle = () => {
+    shouldFocusOnOpenRef.current = true;
     setOpen(true);
   };
 
@@ -71,14 +76,16 @@ export function SearchWithinResults({
           <input
             ref={inputRef}
             id={`${formId}-q-within`}
-            name="q"
+            name="within"
             type="search"
-            defaultValue={q}
+            defaultValue={within}
             placeholder="Add keywords to narrow the current list…"
             className="min-w-0 w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:z-10 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
           />
         </div>
       </div>
+
+      <input type="hidden" name="q" value={q} />
 
       {/* Keep filters in sync */}
       <input type="hidden" name="source" value={source} />

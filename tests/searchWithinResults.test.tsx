@@ -5,9 +5,10 @@ import { SearchWithinResults } from "@/components/archive/SearchWithinResults";
 
 describe("SearchWithinResults", () => {
   it("reveals the input and submit button after clicking", async () => {
-    render(
+    const { container } = render(
       <SearchWithinResults
         q="covid"
+        within=""
         source=""
         fromDate=""
         toDate=""
@@ -38,6 +39,12 @@ describe("SearchWithinResults", () => {
       await screen.findByRole("searchbox", { name: "Search within results" }),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("searchbox", { name: "Search within results" }),
+    ).toHaveAttribute("name", "within");
+    expect(
+      container.querySelector('input[type="hidden"][name="q"][value="covid"]'),
+    ).toBeTruthy();
+    expect(
       screen.getByRole("button", { name: "Search within results" }),
     ).toBeInTheDocument();
     expect(
@@ -45,4 +52,3 @@ describe("SearchWithinResults", () => {
     ).not.toBeInTheDocument();
   });
 });
-
