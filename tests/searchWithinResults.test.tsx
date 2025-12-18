@@ -15,6 +15,7 @@ describe("SearchWithinResults", () => {
         sort="relevance"
         view="pages"
         includeNon2xx={false}
+        includeDuplicates={false}
         pageSize={10}
         defaultSort="relevance"
         defaultView="pages"
