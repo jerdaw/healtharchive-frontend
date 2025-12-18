@@ -16,6 +16,7 @@ import Link from "next/link";
 
 type ArchiveSearchParams = {
     q?: string;
+    within?: string;
     source?: string;
     from?: string;
     to?: string;
@@ -99,19 +100,25 @@ export default async function ArchivePage({
     searchParams: Promise<ArchiveSearchParams>;
 }) {
     const params = await searchParams;
-    const q = params.q?.trim() ?? "";
+    const qRaw = params.q?.trim() ?? "";
+    const withinRaw = params.within?.trim() ?? "";
+    const q = qRaw;
+    const within = withinRaw;
+    const qForSearch =
+        q && within ? `(${q}) AND (${within})` : within ? within : q;
     const source = params.source?.trim() ?? "";
     const fromDate = params.from?.trim() ?? "";
     const toDate = params.to?.trim() ?? "";
     const includeNon2xx = parseBoolean(params.includeNon2xx);
+    const hasQuery = Boolean(qForSearch);
     const requestedSort = params.sort?.trim().toLowerCase() ?? "";
     const requestedSortValid =
         requestedSort === "newest" || requestedSort === "relevance"
             ? requestedSort
             : "";
     const sortUi = requestedSortValid || "relevance";
-    const sort = q ? requestedSortValid || "relevance" : "newest";
-    const defaultSort = q ? "relevance" : "newest";
+    const sort = hasQuery ? requestedSortValid || "relevance" : "newest";
+    const defaultSort = hasQuery ? "relevance" : "newest";
     const requestedView = params.view?.trim().toLowerCase() ?? "";
     const view =
         requestedView === "pages" || requestedView === "snapshots"
@@ -132,7 +139,7 @@ export default async function ArchivePage({
     // Start with demo search results. `DemoRecord` is assignable to the
     // `ArchiveListRecord` view used for rendering (it has extra fields).
     let results: ArchiveListRecord[] = searchDemoRecords({
-        q,
+        q: qForSearch,
         source,
         from: fromDate || undefined,
         to: toDate || undefined,
@@ -185,11 +192,11 @@ export default async function ArchivePage({
         }));
     }
 
-    // Attempt to use the backend search API; fall back to the bundled offline
-    // sample dataset on any error.
+        // Attempt to use the backend search API; fall back to the bundled offline
+        // sample dataset on any error.
     try {
         const baseBackendParams = {
-            q: q || undefined,
+            q: qForSearch || undefined,
             source: source || undefined,
             sort: sort === "relevance" || sort === "newest" ? sort : undefined,
             view: view === "pages" || view === "snapshots" ? view : undefined,
@@ -295,6 +302,7 @@ export default async function ArchivePage({
     const buildPageHref = (targetPage: number) => {
         const qs = new URLSearchParams();
         if (q) qs.set("q", q);
+        if (within) qs.set("within", within);
         if (source) qs.set("source", source);
         if (fromDate) qs.set("from", fromDate);
         if (toDate) qs.set("to", toDate);
@@ -501,25 +509,34 @@ export default async function ArchivePage({
                         <h2 className="text-sm font-semibold text-slate-900">
                             Search
                         </h2>
-                        <span className="ml-auto text-right text-xs text-ha-muted">
-                            {resultCountText}
-                            {q && (
-                                <>
-                                    {" "}
-                                    matching{" "}
-                                    <span className="font-medium">“{q}”</span>
-                                </>
-                            )}
-                            {(fromDate || toDate) && (
-                                <>
-                                    {" "}
-                                    · Date:{" "}
-                                    {fromDate ? formatDate(fromDate) : "Any"} –{" "}
-                                    {toDate ? formatDate(toDate) : "Any"}
-                                </>
-                            )}
-                        </span>
-                    </div>
+	                        <span className="ml-auto text-right text-xs text-ha-muted">
+	                            {resultCountText}
+	                            {q && (
+	                                <>
+	                                    {" "}
+	                                    matching{" "}
+	                                    <span className="font-medium">“{q}”</span>
+	                                </>
+	                            )}
+	                            {within && (
+	                                <>
+	                                    {" "}
+	                                    +{" "}
+	                                    <span className="font-medium">
+	                                        “{within}”
+	                                    </span>
+	                                </>
+	                            )}
+	                            {(fromDate || toDate) && (
+	                                <>
+	                                    {" "}
+	                                    · Date:{" "}
+	                                    {fromDate ? formatDate(fromDate) : "Any"} –{" "}
+	                                    {toDate ? formatDate(toDate) : "Any"}
+	                                </>
+	                            )}
+	                        </span>
+	                    </div>
 
                     <form
                         key={`archive-filters:${q}:${source}:${fromDate}:${toDate}:${sort}:${view}:${
@@ -534,6 +551,13 @@ export default async function ArchivePage({
                             name="page"
                             value="1"
                         />
+                        {within && (
+                            <input
+                                type="hidden"
+                                name="within"
+                                value={within}
+                            />
+                        )}
                         {!usingBackend && (
                             <input
                                 type="hidden"
@@ -754,6 +778,7 @@ export default async function ArchivePage({
 
                     <SearchWithinResults
                         q={q}
+                        within={within}
                         source={source}
                         fromDate={fromDate}
                         toDate={toDate}
