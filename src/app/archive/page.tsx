@@ -514,37 +514,43 @@ export default async function ArchivePage({
                                                 </div>
                                             )}
 
-	                                            <div className="mt-2.5 flex flex-nowrap items-center gap-3 text-xs font-medium">
-	                                                {browseId && (
+	                                            <div className="mt-2.5 grid grid-cols-3 items-center text-xs font-medium">
+	                                                <div className="text-left">
+	                                                    {browseId && (
+	                                                        <Link
+	                                                            href={`/browse/${browseId}`}
+	                                                            className="text-ha-accent hover:text-blue-700"
+	                                                        >
+	                                                            View
+	                                                        </Link>
+	                                                    )}
+	                                                </div>
+	                                                <div className="text-center">
+	                                                    {summary.entryBrowseUrl && (
+	                                                        <a
+	                                                            href={
+	                                                                summary.entryBrowseUrl
+	                                                            }
+	                                                            target="_blank"
+	                                                            rel="noreferrer"
+	                                                            className="text-ha-accent hover:text-blue-700"
+	                                                            title="Open this source homepage in the replay service (new tab)"
+	                                                        >
+	                                                            Replay ↗
+	                                                        </a>
+	                                                    )}
+	                                                </div>
+	                                                <div className="text-right">
 	                                                    <Link
-	                                                        href={`/browse/${browseId}`}
+	                                                        href={`/archive?source=${encodeURIComponent(
+	                                                            summary.sourceCode
+	                                                        )}&focus=filters`}
+	                                                        scroll={false}
 	                                                        className="text-ha-accent hover:text-blue-700"
 	                                                    >
-	                                                        View
+	                                                        Search
 	                                                    </Link>
-	                                                )}
-	                                                {summary.entryBrowseUrl && (
-	                                                    <a
-	                                                        href={
-	                                                            summary.entryBrowseUrl
-	                                                        }
-	                                                        target="_blank"
-	                                                        rel="noreferrer"
-	                                                        className="text-ha-accent hover:text-blue-700"
-	                                                        title="Open this source homepage in the replay service (new tab)"
-	                                                    >
-	                                                        Replay ↗
-	                                                    </a>
-	                                                )}
-	                                                <Link
-	                                                    href={`/archive?source=${encodeURIComponent(
-	                                                        summary.sourceCode
-	                                                    )}&focus=filters`}
-	                                                    scroll={false}
-	                                                    className="text-ha-accent hover:text-blue-700"
-	                                                >
-	                                                    Search
-	                                                </Link>
+	                                                </div>
 	                                            </div>
                                         </div>
                                     </article>
@@ -564,10 +570,12 @@ export default async function ArchivePage({
                         <h2 className="flex items-baseline gap-2 text-sm font-semibold text-slate-900">
                             {hasActiveSearch ? (
                                 <>
-                                    <span className="ha-tag">
+                                    <span className="text-ha-accent font-semibold">
                                         {view === "pages" ? "Page" : "Snapshot"}
                                     </span>
-                                    <span>search results</span>
+                                    <span className="text-slate-900">
+                                        search results
+                                    </span>
                                     <span className="group relative inline-flex">
                                         <button
                                             type="button"
