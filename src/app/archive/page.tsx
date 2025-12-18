@@ -487,7 +487,7 @@ export default async function ArchivePage({
                     </div>
                 </section>
             )}
-            <div className="ha-home-hero grid gap-8 lg:grid-cols-[minmax(0,280px),minmax(0,1fr)] lg:items-start">
+            <div className="ha-home-hero grid gap-4 lg:grid-cols-[minmax(0,280px),minmax(0,1fr)] lg:items-start">
                 {/* Filters panel */}
                 <aside
                     id="archive-filters"
