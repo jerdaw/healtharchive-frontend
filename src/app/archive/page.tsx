@@ -583,19 +583,17 @@ export default async function ArchivePage({
                         {/* Source select */}
                         <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
                             <div className="space-y-1 sm:col-span-2">
-                                <div className="flex items-baseline justify-between gap-2">
-                                    <label
-                                        htmlFor="source"
-                                        className="text-xs font-medium text-slate-800"
-                                    >
-                                        Source
-                                    </label>
-                                </div>
+                                <label
+                                    htmlFor="source"
+                                    className="text-xs font-medium text-slate-800"
+                                >
+                                    Source
+                                </label>
                                 <select
                                     id="source"
                                     name="source"
                                     defaultValue={source}
-                                    className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                                    className="h-10 w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
                                 >
                                     <option value="">All sources</option>
                                     {sourceOptions.map((opt) => (
@@ -617,7 +615,7 @@ export default async function ArchivePage({
                                     name="from"
                                     type="date"
                                     defaultValue={fromDate}
-                                    className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                                    className="h-10 w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
                                 />
                             </div>
                             <div className="space-y-1 sm:col-span-1">
@@ -632,7 +630,7 @@ export default async function ArchivePage({
                                     name="to"
                                     type="date"
                                     defaultValue={toDate}
-                                    className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                                    className="h-10 w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
                                 />
                             </div>
                         </div>
