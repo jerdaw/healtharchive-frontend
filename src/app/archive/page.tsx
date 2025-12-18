@@ -582,41 +582,56 @@ export default async function ArchivePage({
                             </select>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="space-y-1">
-                                <label
-                                    htmlFor="from"
-                                    className="text-xs font-medium text-slate-800"
-                                >
-                                    From
-                                </label>
-                                <input
-                                    id="from"
-                                    name="from"
-                                    type="date"
-                                    defaultValue={fromDate}
-                                    className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
-                                />
+                        <details
+                            className="rounded-lg border border-ha-border bg-white/70 px-3 py-2 shadow-sm"
+                            open={Boolean(fromDate || toDate)}
+                        >
+                            <summary className="cursor-pointer list-none text-xs font-medium text-slate-800 [&::-webkit-details-marker]:hidden">
+                                <div className="flex items-center justify-between gap-3">
+                                    <span>Date range</span>
+                                    <span className="text-[11px] font-normal text-ha-muted">
+                                        {fromDate
+                                            ? formatDate(fromDate)
+                                            : "Any"}{" "}
+                                        –{" "}
+                                        {toDate ? formatDate(toDate) : "Any"}
+                                    </span>
+                                </div>
+                            </summary>
+
+                            <div className="mt-3 grid grid-cols-2 gap-3">
+                                <div className="space-y-1">
+                                    <label
+                                        htmlFor="from"
+                                        className="text-xs font-medium text-slate-800"
+                                    >
+                                        From
+                                    </label>
+                                    <input
+                                        id="from"
+                                        name="from"
+                                        type="date"
+                                        defaultValue={fromDate}
+                                        className="w-full rounded-md border border-ha-border bg-white px-2.5 py-1.5 text-xs text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                                    />
+                                </div>
+                                <div className="space-y-1">
+                                    <label
+                                        htmlFor="to"
+                                        className="text-xs font-medium text-slate-800"
+                                    >
+                                        To
+                                    </label>
+                                    <input
+                                        id="to"
+                                        name="to"
+                                        type="date"
+                                        defaultValue={toDate}
+                                        className="w-full rounded-md border border-ha-border bg-white px-2.5 py-1.5 text-xs text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-1">
-                                <label
-                                    htmlFor="to"
-                                    className="text-xs font-medium text-slate-800"
-                                >
-                                    To
-                                </label>
-                                <input
-                                    id="to"
-                                    name="to"
-                                    type="date"
-                                    defaultValue={toDate}
-                                    className="w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
-                                />
-                            </div>
-                        </div>
-                        <p className="text-[11px] text-ha-muted">
-                            Date filters use UTC capture dates.
-                        </p>
+                        </details>
 
                         {backendError && (
                             <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
