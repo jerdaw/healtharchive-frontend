@@ -13,6 +13,7 @@ import { SearchResultCard } from "@/components/archive/SearchResultCard";
 import { ArchiveFiltersAutoscroll } from "@/components/archive/ArchiveFiltersAutoscroll";
 import { SearchWithinResults } from "@/components/archive/SearchWithinResults";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 type ArchiveSearchParams = {
     q?: string;
@@ -102,10 +103,42 @@ export default async function ArchivePage({
     const params = await searchParams;
     const qRaw = params.q?.trim() ?? "";
     const withinRaw = params.within?.trim() ?? "";
+
+    // Canonicalize: if the user clears one box, treat the remaining keyword(s)
+    // as the primary query (no lingering empty `within=` or `q=` in the URL).
+    if (!qRaw && withinRaw) {
+        const qs = new URLSearchParams();
+        qs.set("q", withinRaw);
+        if (params.source?.trim()) qs.set("source", params.source.trim());
+        if (params.from?.trim()) qs.set("from", params.from.trim());
+        if (params.to?.trim()) qs.set("to", params.to.trim());
+        if (params.sort?.trim()) qs.set("sort", params.sort.trim());
+        if (params.view?.trim()) qs.set("view", params.view.trim());
+        if (params.includeNon2xx?.trim())
+            qs.set("includeNon2xx", params.includeNon2xx.trim());
+        if (params.pageSize?.trim()) qs.set("pageSize", params.pageSize.trim());
+        // Reset page on meaningfully changed query.
+        redirect(`/archive?${qs.toString()}`);
+    }
+    if (qRaw && params.within !== undefined && !withinRaw) {
+        const qs = new URLSearchParams();
+        qs.set("q", qRaw);
+        if (params.source?.trim()) qs.set("source", params.source.trim());
+        if (params.from?.trim()) qs.set("from", params.from.trim());
+        if (params.to?.trim()) qs.set("to", params.to.trim());
+        if (params.sort?.trim()) qs.set("sort", params.sort.trim());
+        if (params.view?.trim()) qs.set("view", params.view.trim());
+        if (params.includeNon2xx?.trim())
+            qs.set("includeNon2xx", params.includeNon2xx.trim());
+        if (params.pageSize?.trim()) qs.set("pageSize", params.pageSize.trim());
+        redirect(`/archive?${qs.toString()}`);
+    }
+
     const q = qRaw;
     const within = withinRaw;
     const qForSearch =
         q && within ? `(${q}) AND (${within})` : within ? within : q;
+    const highlightQuery = [q, within].filter(Boolean).join(" ");
     const source = params.source?.trim() ?? "";
     const fromDate = params.from?.trim() ?? "";
     const toDate = params.to?.trim() ?? "";
@@ -362,7 +395,7 @@ export default async function ArchivePage({
 	                                return (
 	                                    <article
 	                                        key={summary.sourceCode}
-	                                        className="ha-card ha-card-tight-shadow w-[min(360px,86vw)] flex-shrink-0 overflow-hidden p-0"
+	                                        className="ha-card ha-card-tight-shadow w-[min(270px,86vw)] flex-shrink-0 overflow-hidden p-0"
 	                                        data-testid={`archive-source-${summary.sourceCode}`}
 	                                    >
 	                                        {previewSrc ? (
@@ -396,7 +429,7 @@ export default async function ArchivePage({
 	                                        ) : browseId ? (
                                             <Link
                                                 href={`/browse/${browseId}`}
-                                                className="flex h-[6rem] items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]"
+                                                className="flex h-[4.5rem] items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]"
                                                 aria-label={`View ${summary.sourceName}`}
                                             >
                                                 Preview unavailable
@@ -459,11 +492,11 @@ export default async function ArchivePage({
                                                 </div>
                                             )}
 
-	                                            <div className="mt-2.5 flex flex-wrap gap-2 sm:flex-nowrap">
+	                                            <div className="mt-2.5 flex flex-nowrap gap-1.5">
 	                                                {browseId && (
 	                                                    <Link
 	                                                        href={`/browse/${browseId}`}
-	                                                        className="ha-btn-primary"
+	                                                        className="ha-btn-primary !px-4 !py-1.5"
                                                     >
                                                         View
                                                     </Link>
@@ -475,7 +508,7 @@ export default async function ArchivePage({
                                                         }
                                                         target="_blank"
                                                         rel="noreferrer"
-                                                        className="ha-btn-secondary"
+                                                        className="ha-btn-secondary !px-4 !py-1.5"
                                                         title="Open this source homepage in the replay service (new tab)"
                                                     >
                                                         Replay ↗
@@ -486,7 +519,7 @@ export default async function ArchivePage({
                                                         summary.sourceCode
                                                     )}&focus=filters`}
                                                     scroll={false}
-                                                    className="ha-btn-secondary"
+                                                    className="ha-btn-secondary !px-4 !py-1.5"
                                                 >
                                                     Search
                                                 </Link>
@@ -829,7 +862,7 @@ export default async function ArchivePage({
                                     key={record.id}
                                     record={record}
                                     view={view as "pages" | "snapshots"}
-                                    query={q}
+                                    query={highlightQuery}
                                 />
                             ))
                         )}
