@@ -167,7 +167,7 @@ export function Header() {
           {/* Desktop nav */}
           <nav
             ref={navRef}
-            className="relative hidden items-center gap-2 lg:gap-3 text-xs lg:text-sm font-semibold text-ha-muted lg:flex"
+            className="relative hidden items-center gap-2 lg:gap-3 text-xs lg:text-sm font-semibold text-ha-muted md:flex"
             aria-label="Primary"
             onMouseLeave={() => {
               const activeItem = navItems.find((item) => isActivePath(pathname, item.href));
@@ -232,7 +232,7 @@ export function Header() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="ha-theme-toggle hidden lg:inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className="ha-theme-toggle hidden md:inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
             aria-label="Toggle color theme"
           >
             <span className="ha-theme-toggle-track">
@@ -269,7 +269,7 @@ export function Header() {
           {/* Mobile menu button */}
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-full border border-ha-border bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white lg:hidden"
+            className="inline-flex items-center justify-center rounded-full border border-ha-border bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white md:hidden"
             aria-label={mobileOpen ? "Close main navigation" : "Open main navigation"}
             aria-expanded={mobileOpen}
             aria-controls="primary-navigation"
@@ -307,7 +307,7 @@ export function Header() {
       {mobileOpen && (
         <div
           ref={mobilePanelRef}
-          className="border-t border-slate-200 bg-white lg:hidden"
+          className="border-t border-slate-200 bg-white md:hidden"
         >
           <nav
             id="primary-navigation"
