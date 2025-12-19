@@ -26,7 +26,7 @@ export default function RootLayout({
           id="ha-theme-initializer"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var storageKey='ha-theme';var stored=window.localStorage.getItem(storageKey);var mql=window.matchMedia('(prefers-color-scheme: dark)');var systemPrefersDark=mql.matches;var theme='light';if(stored==='light'||stored==='dark'){theme=stored;}else{theme=systemPrefersDark?'dark':'light';}document.documentElement.dataset.theme=theme;}catch(e){}})();`,
+            __html: `(function(){try{var storageKey='ha-theme';var stored=window.localStorage.getItem(storageKey);var theme='light';if(stored==='light'||stored==='dark'){theme=stored;}document.documentElement.dataset.theme=theme;}catch(e){}})();`,
           }}
         />
         <a

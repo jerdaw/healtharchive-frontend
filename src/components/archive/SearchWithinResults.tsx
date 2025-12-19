@@ -55,7 +55,7 @@ export function SearchWithinResults({
       id={formId}
       method="get"
       className={`flex w-full items-start transition-[padding] duration-300 ease-out ${
-        open ? "gap-2 py-2" : "gap-0 py-0.5"
+        open ? "gap-2 py-2" : "gap-0 py-0"
       }`}
       aria-label="Search within results"
     >
@@ -126,10 +126,10 @@ export function SearchWithinResults({
           aria-hidden={!open}
           tabIndex={open ? 0 : -1}
           disabled={!open}
-          className={`col-start-1 row-start-1 ha-btn-primary text-xs whitespace-nowrap transition-all duration-300 !px-4 !py-2 ${
+          className={`col-start-1 row-start-1 ha-btn-primary text-xs whitespace-nowrap overflow-hidden transition-[opacity,transform,max-height,padding,border-width] duration-300 ${
             open
-              ? "opacity-100 translate-x-0 pointer-events-auto"
-              : "opacity-0 -translate-x-2 pointer-events-none"
+              ? "max-h-12 !px-4 !py-2 opacity-100 translate-x-0 pointer-events-auto"
+              : "max-h-0 !px-0 !py-0 !border-0 opacity-0 -translate-x-2 pointer-events-none"
           }`}
         >
           Search within results

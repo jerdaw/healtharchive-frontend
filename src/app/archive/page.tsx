@@ -889,20 +889,22 @@ export default async function ArchivePage({
                         </div>
                     )}
 
-	                    <SearchWithinResults
-	                        q={q}
-	                        within={within}
-	                        source={source}
-	                        fromDate={fromDate}
-	                        toDate={toDate}
-	                        sort={sort}
-	                        view={view}
-	                        includeNon2xx={includeNon2xx}
-	                        includeDuplicates={includeDuplicates}
-	                        pageSize={pageSize}
-	                        defaultSort={defaultSort}
-	                        defaultView={defaultView}
-	                    />
+                    {hasActiveSearch && totalResults > 0 && (
+                        <SearchWithinResults
+                            q={q}
+                            within={within}
+                            source={source}
+                            fromDate={fromDate}
+                            toDate={toDate}
+                            sort={sort}
+                            view={view}
+                            includeNon2xx={includeNon2xx}
+                            includeDuplicates={includeDuplicates}
+                            pageSize={pageSize}
+                            defaultSort={defaultSort}
+                            defaultView={defaultView}
+                        />
+                    )}
                 </aside>
 
                 {/* Search & results */}
