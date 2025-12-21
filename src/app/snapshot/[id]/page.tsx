@@ -228,6 +228,13 @@ export default async function SnapshotPage({
               >
                 Report an issue with this snapshot
               </Link>
+              .{" "}
+              <Link
+                href="/cite"
+                className="font-medium text-ha-accent hover:text-blue-700"
+              >
+                How to cite this snapshot
+              </Link>
               .
             </p>
           </div>

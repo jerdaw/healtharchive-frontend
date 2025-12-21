@@ -40,6 +40,9 @@ export function Footer() {
           <Link className="font-medium text-ha-accent hover:text-blue-700" href="/cite">
             Cite
           </Link>
+          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/exports">
+            Exports
+          </Link>
           <Link className="font-medium text-ha-accent hover:text-blue-700" href="/changes">
             Changes
           </Link>
