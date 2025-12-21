@@ -48,6 +48,9 @@ are centralized in `src/lib/siteCopy.ts`.
 -   Public reporting surfaces:
     -   `/status` shares coverage, freshness, and operational status.
     -   `/impact` provides a lightweight monthly impact report (fed by `/api/usage`).
+-   Partner and citation surfaces:
+    -   `/brief` provides a one-page, partner-friendly project summary.
+    -   `/cite` provides pragmatic citation guidance for snapshots and compare views.
 -   Change tracking surfaces:
     -   `/changes` for edition-aware change feeds.
     -   `/compare` for side-by-side diff views.
@@ -171,6 +174,8 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
     -   `/snapshot/[id]`: fetches backend snapshot detail first; prefers a replay `browseUrl` when configured (full-fidelity CSS/JS/images) and falls back to raw HTML (`/api/snapshots/raw/{id}`) or offline sample HTML when needed.
     -   Policy pages: `/governance`, `/terms`, `/privacy`, `/changelog`, `/report`.
     -   Service reporting: `/status` (metrics) and `/impact` (monthly report).
+    -   Partner/citation: `/brief` (one-page brief) and `/cite` (citation handout).
+    -   Change tracking: `/changes`, `/compare`, `/digest`.
     -   `/browse/[id]`: full-screen “browse archived site” mode with a persistent HealthArchive banner/controls above the replay iframe.
 -   Health diagnostics (optional): set `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a small banner when the backend health check fails (useful in dev/staging).
     -   If the health banner is off, you can still log failures by setting `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` (dev-only).
@@ -212,6 +217,8 @@ This runs the Next.js/ESLint config for the app.
     │   ├── researchers/       # For researchers
     │   ├── about/             # About the project
     │   ├── contact/           # Contact info
+    │   ├── brief/             # Partner-friendly one-page brief
+    │   ├── cite/              # Citation guidance handout
     │   └── snapshot/[id]/     # Snapshot viewer
     ├── components/
     │   └── layout/            # Header, Footer, PageShell
