@@ -157,10 +157,12 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
     -   Offline fallback: bundled sample records under `src/data/demo-records.ts` and static snapshots under `public/demo-archive/**` when the API is unavailable.
 -   API client: `src/lib/api.ts` (uses `NEXT_PUBLIC_API_BASE_URL`, defaulting to `http://localhost:8001`).
 -   Production backend: single Hetzner VPS (Nuremberg) running Postgres + API + worker + Caddy; SSH is Tailscale-only; public ports are 80/443 only. Full runbook lives in `healtharchive-backend/docs/production-single-vps.md`.
+-   Issue intake: `/report` posts to the same-origin API route `src/app/api/report/route.ts`, which forwards to the backend `/api/reports` endpoint.
 -   Pages:
     -   `/archive`: uses backend search with pagination and page-size selection; falls back to an offline sample dataset and shows a fallback notice.
     -   `/archive/browse-by-source`: uses backend source summaries; falls back to offline sample summaries with a notice.
     -   `/snapshot/[id]`: fetches backend snapshot detail first; prefers a replay `browseUrl` when configured (full-fidelity CSS/JS/images) and falls back to raw HTML (`/api/snapshots/raw/{id}`) or offline sample HTML when needed.
+    -   Policy pages: `/governance`, `/terms`, `/privacy`, `/changelog`, `/report`.
     -   `/browse/[id]`: full-screen “browse archived site” mode with a persistent HealthArchive banner/controls above the replay iframe.
 -   Health diagnostics (optional): set `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a small banner when the backend health check fails (useful in dev/staging).
     -   If the health banner is off, you can still log failures by setting `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE=true` (dev-only).

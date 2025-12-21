@@ -101,6 +101,15 @@ export default async function SnapshotPage({
     usingBackend && snapshotMeta?.id != null
       ? `${apiBaseUrl}/api/snapshot/${snapshotMeta.id}`
       : undefined;
+  const reportParams = new URLSearchParams();
+  if (!Number.isNaN(Number(id))) {
+    reportParams.set("snapshot", id);
+  }
+  if (originalUrl && originalUrl !== "Unknown URL") {
+    reportParams.set("url", originalUrl);
+  }
+  reportParams.set("page", `/snapshot/${id}`);
+  const reportHref = `/report?${reportParams.toString()}`;
 
   let sourceEditions: Awaited<ReturnType<typeof fetchSourceEditions>> | null =
     null;
@@ -190,15 +199,24 @@ export default async function SnapshotPage({
             </div>
           </div>
 
-	          <div className="ha-callout">
-	            <h3 className="ha-callout-title">Important note</h3>
-	            <p className="text-xs leading-relaxed sm:text-sm">
-	              Archived content reflects what public websites displayed at the
-	              time of capture. {siteCopy.whatThisSiteIs.limitations} This is
-	              not medical advice and should not be treated as current guidance
-	              or official policy. {siteCopy.whatThisSiteIs.forCurrent}.
-	            </p>
-	          </div>
+          <div className="ha-callout">
+            <h3 className="ha-callout-title">Important note</h3>
+            <p className="text-xs leading-relaxed sm:text-sm">
+              Archived content reflects what public websites displayed at the
+              time of capture. {siteCopy.whatThisSiteIs.limitations} This is
+              not medical advice and should not be treated as current guidance
+              or official policy. {siteCopy.whatThisSiteIs.forCurrent}.
+            </p>
+            <p className="mt-3 text-xs leading-relaxed sm:text-sm">
+              <Link
+                href={reportHref}
+                className="font-medium text-ha-accent hover:text-blue-700"
+              >
+                Report an issue with this snapshot
+              </Link>
+              .
+            </p>
+          </div>
         </div>
 
         {/* Embedded snapshot */}
