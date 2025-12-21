@@ -168,7 +168,7 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
     -   Live APIs (preferred): `/api/search`, `/api/sources`, `/api/snapshot/{id}`, `/api/snapshots/raw/{id}`, `/api/stats`, `/api/health`.
     -   Offline fallback: bundled sample records under `src/data/demo-records.ts` and static snapshots under `public/demo-archive/**` when the API is unavailable.
 -   API client: `src/lib/api.ts` (uses `NEXT_PUBLIC_API_BASE_URL`, defaulting to `http://localhost:8001`).
--   Production backend: single Hetzner VPS (Nuremberg) running Postgres + API + worker + Caddy; SSH is Tailscale-only; public ports are 80/443 only. Full runbook lives in `healtharchive-backend/docs/production-single-vps.md`.
+-   Production backend: single Hetzner VPS (Nuremberg) running Postgres + API + worker + Caddy; SSH is Tailscale-only; public ports are 80/443 only. Full runbook lives in `healtharchive-backend/docs/deployment/production-single-vps.md`.
 -   Issue intake: `/report` posts to the same-origin API route `src/app/api/report/route.ts`, which forwards to the backend `/api/reports` endpoint.
 -   Pages:
     -   `/archive`: uses backend search with pagination and page-size selection; falls back to an offline sample dataset and shows a fallback notice.
