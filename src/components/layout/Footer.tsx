@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Footer() {
   const year = new Date().getFullYear();
 
@@ -21,6 +23,23 @@ export function Footer() {
             only and may be incomplete, outdated, or superseded. Nothing on
             this site should be interpreted as medical advice.
           </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3 text-[11px]">
+          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/governance">
+            Governance
+          </Link>
+          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/terms">
+            Terms
+          </Link>
+          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/privacy">
+            Privacy
+          </Link>
+          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/changelog">
+            Changelog
+          </Link>
+          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/report">
+            Report an issue
+          </Link>
         </div>
         <div className="flex flex-col gap-1 text-[11px] text-ha-muted sm:flex-row sm:items-center sm:justify-between">
           <p>

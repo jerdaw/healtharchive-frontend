@@ -115,6 +115,15 @@ export function BrowseReplayClient({
 
   const displayedCapture =
     timestamp14ToDateLabel(currentTimestamp14) ?? dateIsoToLabel(captureDate);
+  const reportHref = useMemo(() => {
+    const params = new URLSearchParams();
+    if (snapshotId) params.set("snapshot", snapshotId);
+    if (currentOriginalUrl && currentOriginalUrl !== "Unknown URL") {
+      params.set("url", currentOriginalUrl);
+    }
+    params.set("page", `/browse/${snapshotId}`);
+    return `/report?${params.toString()}`;
+  }, [snapshotId, currentOriginalUrl]);
 
   async function handleEditionChange(nextJobId: number) {
     if (!replayOrigin) return;
@@ -256,6 +265,14 @@ export function BrowseReplayClient({
               <p className="mt-2 break-all text-[11px] text-ha-muted">
                 <span className="font-medium text-slate-800">Original URL:</span>{" "}
                 {currentOriginalUrl}
+              </p>
+              <p className="mt-2 text-[11px] text-ha-muted">
+                <Link
+                  href={reportHref}
+                  className="font-medium text-ha-accent hover:text-blue-700"
+                >
+                  Report an issue with this capture
+                </Link>
               </p>
 
               {!browseUrl && (

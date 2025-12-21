@@ -30,9 +30,18 @@ export default function ContactPage() {
                             </h2>
                         </div>
                         <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
-                            The simplest way to express interest, report an
-                            issue, or ask questions is by email. The addresse
-                            below currently forwards to the project maintainers.
+                            The simplest way to express interest or ask questions is
+                            by email. The address below currently forwards to the
+                            project maintainers. For structured issue reports, use
+                            the report form.
+                        </p>
+                        <p className="text-sm sm:text-base">
+                            <Link
+                                href="/report"
+                                className="font-medium text-ha-accent hover:text-blue-700"
+                            >
+                                Report an issue
+                            </Link>
                         </p>
                         <div className="mt-4 text-sm sm:text-base space-y-1">
                             <p>
