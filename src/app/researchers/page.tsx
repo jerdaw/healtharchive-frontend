@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { PageShell } from "@/components/layout/PageShell";
 
 export default function ResearchersPage() {
@@ -69,8 +71,15 @@ export default function ResearchersPage() {
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Citing HealthArchive.ca</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
-          Until formal citation guidance is published, a pragmatic format for
-          referencing an archived page from HealthArchive.ca is:
+          Citation guidance is available on the cite page. A pragmatic format
+          for referencing an archived page from HealthArchive.ca is:
+        </p>
+        <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
+          See{" "}
+          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/cite">
+            /cite
+          </Link>{" "}
+          for a shareable handout and compare-view citation guidance.
         </p>
         <div className="ha-card ha-home-panel p-4 sm:p-5 text-xs text-slate-800 sm:text-sm space-y-1">
           HealthArchive.ca Project. “&lt;Page title&gt;” (snapshot from &lt;

@@ -1001,7 +1001,7 @@ We followed an 8-phase plan. Status:
 
 -   **Phase 3 – Page skeletons & content migration**
 
-    -   ✅ Routes `/`, `/archive`, `/archive/browse-by-source`, `/methods`, `/researchers`, `/about`, `/contact`, `/governance`, `/terms`, `/privacy`, `/changelog`, `/report`, `/status`, `/impact`, `/changes`, `/compare`, `/digest` created.
+    -   ✅ Routes `/`, `/archive`, `/archive/browse-by-source`, `/methods`, `/researchers`, `/about`, `/contact`, `/governance`, `/terms`, `/privacy`, `/changelog`, `/report`, `/status`, `/impact`, `/changes`, `/compare`, `/digest`, `/brief`, `/cite` created.
     -   ✅ Original single-page content split and restructured into these routes.
 
 -   **Phase 4 – Data model & demo API**
