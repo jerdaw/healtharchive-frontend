@@ -797,26 +797,35 @@ All text is stable, but can be refined later.
 
         -   Small curated dataset + search interface + snapshot stubs.
 
+    -   Research access and exports:
+
+        -   Export manifest link + request checklist for bulk needs.
+
     -   Citation guidance:
 
         -   Provides a suggested citation format.
 
     -   Planned future capabilities (callout):
 
-        -   Version history, diff views, machine-readable exports, APIs.
+        -   Dataset release cadence and larger custom exports.
 
-### 8.6 About `/about` – `src/app/about/page.tsx`
+### 8.6 Exports `/exports` – `src/app/exports/page.tsx`
+
+-   Describes metadata-only exports and links to the export manifest.
+-   Provides a public data dictionary for snapshot and change export fields.
+
+### 8.7 About `/about` – `src/app/about/page.tsx`
 
 -   Explains motivations, independence/non-partisanship, and current project status.
 
-### 8.7 Contact `/contact` – `src/app/contact/page.tsx`
+### 8.8 Contact `/contact` – `src/app/contact/page.tsx`
 
 -   Two cards:
 
     -   Email: `contact@healtharchive.ca` (forwarding to the maintainer).
     -   GitHub: `https://github.com/jerdaw/healtharchive-frontend`.
 
-### 8.8 Governance & policy pages
+### 8.9 Governance & policy pages
 
 -   Routes:
 
@@ -831,7 +840,7 @@ All text is stable, but can be refined later.
     -   `/report` uses `src/components/report/ReportIssueForm.tsx` and posts to
       the backend issue intake endpoint via `src/app/api/report/route.ts`.
 
-### 8.9 Status & impact reporting
+### 8.10 Status & impact reporting
 
 -   Routes:
 
@@ -841,7 +850,7 @@ All text is stable, but can be refined later.
 -   Both pages are server components that tolerate backend failures by showing
     a fallback callout instead of crashing.
 
-### 8.10 Change tracking (`/changes`, `/compare`, `/digest`)
+### 8.11 Change tracking (`/changes`, `/compare`, `/digest`)
 
 -   Routes:
 
@@ -852,7 +861,7 @@ All text is stable, but can be refined later.
 -   Guardrail copy is required on all three pages:
     -   “Descriptive only”, “not medical advice”, and “archived capture” messaging.
 
-### 8.11 Snapshot viewer `/snapshot/[id]` – `src/app/snapshot/[id]/page.tsx`
+### 8.12 Snapshot viewer `/snapshot/[id]` – `src/app/snapshot/[id]/page.tsx`
 
 -   Async server component with `params` as **Promise** (Next 16 dynamic API).
 
@@ -1001,7 +1010,7 @@ We followed an 8-phase plan. Status:
 
 -   **Phase 3 – Page skeletons & content migration**
 
-    -   ✅ Routes `/`, `/archive`, `/archive/browse-by-source`, `/methods`, `/researchers`, `/about`, `/contact`, `/governance`, `/terms`, `/privacy`, `/changelog`, `/report`, `/status`, `/impact`, `/changes`, `/compare`, `/digest`, `/brief`, `/cite` created.
+    -   ✅ Routes `/`, `/archive`, `/archive/browse-by-source`, `/methods`, `/researchers`, `/about`, `/contact`, `/governance`, `/terms`, `/privacy`, `/changelog`, `/report`, `/status`, `/impact`, `/changes`, `/compare`, `/digest`, `/brief`, `/cite`, `/exports` created.
     -   ✅ Original single-page content split and restructured into these routes.
 
 -   **Phase 4 – Data model & demo API**

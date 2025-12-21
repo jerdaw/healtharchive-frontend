@@ -82,6 +82,16 @@ export default async function ComparePage({
               It does not interpret the change or provide medical advice.
               {` `}{siteCopy.whatThisSiteIs.forCurrent}
             </p>
+            <p className="mt-3 text-xs leading-relaxed sm:text-sm">
+              Need to cite this comparison? See{" "}
+              <Link
+                href="/cite"
+                className="font-medium text-ha-accent hover:text-blue-700"
+              >
+                /cite
+              </Link>
+              .
+            </p>
           </div>
 
           <div className="ha-grid-2">

@@ -1,8 +1,12 @@
 import Link from "next/link";
 
 import { PageShell } from "@/components/layout/PageShell";
+import { getApiBaseUrl } from "@/lib/api";
 
 export default function ResearchersPage() {
+  const apiBase = getApiBaseUrl();
+  const exportsManifestUrl = `${apiBase}/api/exports`;
+
   return (
     <PageShell
       eyebrow="For researchers"
@@ -69,6 +73,40 @@ export default function ResearchersPage() {
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
+        <h2 className="ha-section-heading">Research access & exports</h2>
+        <p className="ha-section-subtitle ha-section-lede leading-relaxed">
+          HealthArchive provides metadata-only exports for research. Exports do
+          not include raw HTML or full diff bodies.
+        </p>
+        <div className="ha-card ha-home-panel p-4 sm:p-5 text-xs text-slate-800 sm:text-sm space-y-2">
+          <p className="text-ha-muted">Export manifest</p>
+          <a
+            className="font-medium text-ha-accent hover:text-blue-700"
+            href={exportsManifestUrl}
+          >
+            {exportsManifestUrl}
+          </a>
+        </div>
+        <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
+          For field definitions and limitations, see{" "}
+          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/exports">
+            /exports
+          </Link>
+          .
+        </p>
+        <h3 className="text-sm font-semibold text-slate-900">Request checklist</h3>
+        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
+          <li>Sources and date ranges needed.</li>
+          <li>Snapshot-level vs page-level grouping.</li>
+          <li>Edition-to-edition vs within-edition changes.</li>
+          <li>Intended use (paper, class project, journalism).</li>
+        </ul>
+        <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
+          For bulk exports or custom requests, contact the project maintainers.
+        </p>
+      </section>
+
+      <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Citing HealthArchive.ca</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
           Citation guidance is available on the cite page. A pragmatic format
@@ -114,15 +152,14 @@ export default function ResearchersPage() {
           </h3>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed sm:text-sm">
             <li>
-              Machine-readable exports describing changes over time for selected
-              URLs or search queries.
+              Versioned dataset releases (monthly or quarterly) with checksums.
             </li>
             <li>
-              Lightweight APIs for programmatic querying of snapshot metadata,
-              with rate limits and sustainability in mind.
+              Larger custom exports prepared offline for specific studies or
+              course projects.
             </li>
           </ul>
-          {/* TODO: add exports + research APIs once change tracking data is stable. */}
+          {/* TODO: add dataset release cadence + bulk export workflow once stable. */}
         </div>
       </section>
     </PageShell>

@@ -26,6 +26,16 @@ export default async function DigestPage() {
             It is descriptive only and does not interpret meaning or provide
             guidance. {siteCopy.whatThisSiteIs.forCurrent}
           </p>
+          <p className="mt-3 text-xs leading-relaxed sm:text-sm">
+            For citation guidance, see{" "}
+            <Link
+              href="/cite"
+              className="font-medium text-ha-accent hover:text-blue-700"
+            >
+              /cite
+            </Link>
+            .
+          </p>
         </div>
       </section>
 

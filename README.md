@@ -51,6 +51,8 @@ are centralized in `src/lib/siteCopy.ts`.
 -   Partner and citation surfaces:
     -   `/brief` provides a one-page, partner-friendly project summary.
     -   `/cite` provides pragmatic citation guidance for snapshots and compare views.
+-   Research exports:
+    -   `/exports` provides the public data dictionary and export manifest link.
 -   Change tracking surfaces:
     -   `/changes` for edition-aware change feeds.
     -   `/compare` for side-by-side diff views.
@@ -175,6 +177,7 @@ Vitest + Testing Library with mocked fetch; no live backend needed.
     -   Policy pages: `/governance`, `/terms`, `/privacy`, `/changelog`, `/report`.
     -   Service reporting: `/status` (metrics) and `/impact` (monthly report).
     -   Partner/citation: `/brief` (one-page brief) and `/cite` (citation handout).
+    -   Research exports: `/exports` (data dictionary + export manifest).
     -   Change tracking: `/changes`, `/compare`, `/digest`.
     -   `/browse/[id]`: full-screen “browse archived site” mode with a persistent HealthArchive banner/controls above the replay iframe.
 -   Health diagnostics (optional): set `NEXT_PUBLIC_SHOW_API_HEALTH_BANNER=true` to surface a small banner when the backend health check fails (useful in dev/staging).
@@ -219,6 +222,7 @@ This runs the Next.js/ESLint config for the app.
     │   ├── contact/           # Contact info
     │   ├── brief/             # Partner-friendly one-page brief
     │   ├── cite/              # Citation guidance handout
+    │   ├── exports/           # Research exports + data dictionary
     │   └── snapshot/[id]/     # Snapshot viewer
     ├── components/
     │   └── layout/            # Header, Footer, PageShell
