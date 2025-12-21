@@ -56,6 +56,7 @@ From the repo root:
   - `GET /api/snapshot/{id}`
   - `GET /api/snapshots/raw/{id}`
   - `GET /api/usage`
+  - `GET /api/exports`
   - `GET /api/changes`
   - `GET /api/changes/compare`
   - `GET /api/changes/rss`
