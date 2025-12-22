@@ -1,11 +1,7 @@
 import Link from "next/link";
 import { PageShell } from "@/components/layout/PageShell";
 import { getSourcesSummary } from "@/data/demo-records";
-import {
-  fetchSources,
-  getApiBaseUrl,
-  type SourceSummary as ApiSourceSummary,
-} from "@/lib/api";
+import { fetchSources, getApiBaseUrl, type SourceSummary as ApiSourceSummary } from "@/lib/api";
 import { siteCopy } from "@/lib/siteCopy";
 
 function formatDate(iso: string | undefined | null): string {
@@ -119,9 +115,7 @@ export default async function BrowseBySourcePage() {
           const entryId = source.entryRecordId;
           const fallbackId = source.latestRecordId;
           const browseId = entryId ?? fallbackId;
-          const browseLabel = entryId
-            ? "Browse archived site"
-            : "Browse latest capture";
+          const browseLabel = entryId ? "Browse archived site" : "Browse latest capture";
           const previewSrc = source.entryPreviewUrl
             ? `${apiBaseUrl}${source.entryPreviewUrl}`
             : null;
@@ -132,7 +126,7 @@ export default async function BrowseBySourcePage() {
               className="ha-card ha-card-elevated overflow-hidden p-0"
             >
               {previewSrc ? (
-                <div className="relative h-28 overflow-hidden border-b border-ha-border bg-white">
+                <div className="border-ha-border relative h-28 overflow-hidden border-b bg-white">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={previewSrc}
@@ -144,28 +138,22 @@ export default async function BrowseBySourcePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/35 to-transparent dark:from-[#0b0c0d]/90 dark:via-[#0b0c0d]/35" />
                 </div>
               ) : (
-                <div className="flex h-28 items-center justify-center border-b border-ha-border bg-white px-4 text-xs text-ha-muted dark:bg-[#0b0c0d]">
+                <div className="border-ha-border text-ha-muted flex h-28 items-center justify-center border-b bg-white px-4 text-xs dark:bg-[#0b0c0d]">
                   Preview unavailable
                 </div>
               )}
 
               <div className="p-4 sm:p-5">
-                <h2 className="text-sm font-semibold text-slate-900">
-                  {source.sourceName}
-                </h2>
-                <p className="mt-1 text-xs text-ha-muted">
+                <h2 className="text-sm font-semibold text-slate-900">{source.sourceName}</h2>
+                <p className="text-ha-muted mt-1 text-xs">
                   {source.recordCount} snapshot
                   {source.recordCount === 1 ? "" : "s"} captured between{" "}
-                  {formatDate(source.firstCapture)} and{" "}
-                  {formatDate(source.lastCapture)}.
+                  {formatDate(source.firstCapture)} and {formatDate(source.lastCapture)}.
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   {browseId && (
-                    <Link
-                      href={`/browse/${browseId}`}
-                      className="ha-btn-primary text-xs"
-                    >
+                    <Link href={`/browse/${browseId}`} className="ha-btn-primary text-xs">
                       {browseLabel}
                     </Link>
                   )}

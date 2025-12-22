@@ -55,9 +55,7 @@ export function SnapshotReplayClient({
   const [currentTimestamp14, setCurrentTimestamp14] = useState<string | null>(
     isoToTimestamp14(initialCaptureTimestamp),
   );
-  const [currentReplayUrl, setCurrentReplayUrl] = useState<string | null>(
-    browseUrl,
-  );
+  const [currentReplayUrl, setCurrentReplayUrl] = useState<string | null>(browseUrl);
   const [editionNotice, setEditionNotice] = useState<string | null>(null);
   const [isResolvingEdition, setIsResolvingEdition] = useState(false);
 
@@ -99,9 +97,7 @@ export function SnapshotReplayClient({
 
   const editionOptions = editions ?? [];
   const showEditionSelect =
-    Boolean(browseUrl && replayOrigin) &&
-    activeJobId != null &&
-    editionOptions.length > 1;
+    Boolean(browseUrl && replayOrigin) && activeJobId != null && editionOptions.length > 1;
 
   async function handleEditionChange(nextJobId: number) {
     if (!replayOrigin) return;
@@ -146,12 +142,7 @@ export function SnapshotReplayClient({
         return;
       }
 
-      const timegateUrl = buildReplayUrl(
-        replayOrigin,
-        nextJobId,
-        null,
-        currentOriginalUrl,
-      );
+      const timegateUrl = buildReplayUrl(replayOrigin, nextJobId, null, currentOriginalUrl);
       setIframeSrc(timegateUrl);
       setActiveJobId(nextJobId);
       setCurrentReplayUrl(timegateUrl);
@@ -176,13 +167,13 @@ export function SnapshotReplayClient({
     }
   }
 
-  const browseLink = browseUrl ? currentReplayUrl ?? browseUrl : undefined;
+  const browseLink = browseUrl ? (currentReplayUrl ?? browseUrl) : undefined;
   const rawLink = rawHtmlUrl ?? undefined;
 
   return (
     <div className="flex h-full w-full flex-col">
       {showEditionSelect && (
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ha-border px-4 py-3 text-xs text-ha-muted sm:px-5">
+        <div className="border-ha-border text-ha-muted flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 text-xs sm:px-5">
           <div className="flex flex-wrap items-center gap-2">
             <label
               htmlFor="ha-snapshot-edition-select"
@@ -210,7 +201,7 @@ export function SnapshotReplayClient({
               href={browseLink}
               target="_blank"
               rel="noreferrer"
-              className="text-[11px] font-medium text-ha-accent hover:text-blue-700"
+              className="text-ha-accent text-[11px] font-medium hover:text-blue-700"
             >
               Open current page ↗
             </a>
@@ -222,8 +213,8 @@ export function SnapshotReplayClient({
         <div
           className={
             editionNotice
-              ? "border-b border-ha-border bg-amber-50 px-4 py-2 text-[11px] font-medium text-amber-900 sm:px-5"
-              : "border-b border-ha-border bg-white px-4 py-2 text-[11px] font-medium text-ha-muted dark:bg-[#0b0c0d] sm:px-5"
+              ? "border-ha-border border-b bg-amber-50 px-4 py-2 text-[11px] font-medium text-amber-900 sm:px-5"
+              : "border-ha-border text-ha-muted border-b bg-white px-4 py-2 text-[11px] font-medium sm:px-5 dark:bg-[#0b0c0d]"
           }
         >
           {isResolvingEdition ? "Switching backup…" : editionNotice}

@@ -4,146 +4,128 @@ import type { ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 
 type CopyButtonProps = {
-    text: string;
-    label: string;
-    className?: string;
-    children?: ReactNode;
+  text: string;
+  label: string;
+  className?: string;
+  children?: ReactNode;
 };
 
 function CheckIcon() {
-    return (
-        <svg
-            aria-hidden="true"
-            viewBox="0 0 20 20"
-            className="h-4 w-4"
-            fill="currentColor"
-        >
-            <path
-                fillRule="evenodd"
-                d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.2 7.3a1 1 0 0 1-1.43.006l-3.79-3.74a1 1 0 1 1 1.404-1.424l3.078 3.038 6.492-6.58a1 1 0 0 1 1.44-.014Z"
-                clipRule="evenodd"
-            />
-        </svg>
-    );
+  return (
+    <svg aria-hidden="true" viewBox="0 0 20 20" className="h-4 w-4" fill="currentColor">
+      <path
+        fillRule="evenodd"
+        d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.2 7.3a1 1 0 0 1-1.43.006l-3.79-3.74a1 1 0 1 1 1.404-1.424l3.078 3.038 6.492-6.58a1 1 0 0 1 1.44-.014Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
 }
 
 type CopyState = "idle" | "copied" | "failed";
 
 function copyWithExecCommand(text: string): boolean {
-    try {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.setAttribute("readonly", "");
-        textarea.style.position = "fixed";
-        textarea.style.top = "-1000px";
-        textarea.style.left = "-1000px";
-        textarea.style.opacity = "0";
-        document.body.appendChild(textarea);
+  try {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.top = "-1000px";
+    textarea.style.left = "-1000px";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
 
-        textarea.focus();
-        textarea.select();
+    textarea.focus();
+    textarea.select();
 
-        const ok = typeof document.execCommand === "function"
-            ? document.execCommand("copy")
-            : false;
+    const ok = typeof document.execCommand === "function" ? document.execCommand("copy") : false;
 
-        document.body.removeChild(textarea);
-        return Boolean(ok);
-    } catch {
-        return false;
-    }
+    document.body.removeChild(textarea);
+    return Boolean(ok);
+  } catch {
+    return false;
+  }
 }
 
-export function CopyButton({
-    text,
-    label,
-    className,
-    children,
-}: CopyButtonProps) {
-    const [state, setState] = useState<CopyState>("idle");
-    const statusId = useId();
-    const timeoutRef = useRef<number | null>(null);
+export function CopyButton({ text, label, className, children }: CopyButtonProps) {
+  const [state, setState] = useState<CopyState>("idle");
+  const statusId = useId();
+  const timeoutRef = useRef<number | null>(null);
 
-    useEffect(() => {
-        return () => {
-            if (timeoutRef.current != null) {
-                window.clearTimeout(timeoutRef.current);
-                timeoutRef.current = null;
-            }
-        };
-    }, []);
-
-    const scheduleReset = (delayMs: number) => {
-        if (timeoutRef.current != null) {
-            window.clearTimeout(timeoutRef.current);
-        }
-        timeoutRef.current = window.setTimeout(() => {
-            setState("idle");
-        }, delayMs);
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current != null) {
+        window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
     };
+  }, []);
 
-    const onCopy = async () => {
-        const trimmed = text.trim();
-        if (!trimmed) {
-            setState("failed");
-            scheduleReset(1600);
-            return;
-        }
+  const scheduleReset = (delayMs: number) => {
+    if (timeoutRef.current != null) {
+      window.clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = window.setTimeout(() => {
+      setState("idle");
+    }, delayMs);
+  };
 
-        try {
-            if (
-                typeof navigator !== "undefined" &&
-                navigator.clipboard &&
-                typeof navigator.clipboard.writeText === "function"
-            ) {
-                await navigator.clipboard.writeText(trimmed);
-                setState("copied");
-                scheduleReset(1200);
-                return;
-            }
+  const onCopy = async () => {
+    const trimmed = text.trim();
+    if (!trimmed) {
+      setState("failed");
+      scheduleReset(1600);
+      return;
+    }
 
-            const ok = copyWithExecCommand(trimmed);
-            setState(ok ? "copied" : "failed");
-            scheduleReset(ok ? 1200 : 1600);
-        } catch {
-            const ok = copyWithExecCommand(trimmed);
-            setState(ok ? "copied" : "failed");
-            scheduleReset(ok ? 1200 : 1600);
-        }
-    };
+    try {
+      if (
+        typeof navigator !== "undefined" &&
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText === "function"
+      ) {
+        await navigator.clipboard.writeText(trimmed);
+        setState("copied");
+        scheduleReset(1200);
+        return;
+      }
 
-    return (
-        <span className="relative inline-flex">
-            <button
-                type="button"
-                className={className}
-                onClick={onCopy}
-                title={label}
-                aria-label={label}
-                aria-describedby={statusId}
-            >
-                {children ? (state === "copied" ? <CheckIcon /> : children) : label}
-            </button>
+      const ok = copyWithExecCommand(trimmed);
+      setState(ok ? "copied" : "failed");
+      scheduleReset(ok ? 1200 : 1600);
+    } catch {
+      const ok = copyWithExecCommand(trimmed);
+      setState(ok ? "copied" : "failed");
+      scheduleReset(ok ? 1200 : 1600);
+    }
+  };
 
-            {state !== "idle" && (
-                <span
-                    className={`pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-[calc(100%+0.4rem)] whitespace-nowrap rounded-md px-2 py-1 text-[11px] shadow ${
-                        state === "copied"
-                            ? "bg-slate-900 text-white"
-                            : "bg-rose-700 text-white"
-                    }`}
-                >
-                    {state === "copied" ? "Copied" : "Copy failed"}
-                </span>
-            )}
+  return (
+    <span className="relative inline-flex">
+      <button
+        type="button"
+        className={className}
+        onClick={onCopy}
+        title={label}
+        aria-label={label}
+        aria-describedby={statusId}
+      >
+        {children ? state === "copied" ? <CheckIcon /> : children : label}
+      </button>
 
-            <span id={statusId} className="sr-only" aria-live="polite">
-                {state === "copied"
-                    ? "Copied to clipboard."
-                    : state === "failed"
-                    ? "Copy failed."
-                    : ""}
-            </span>
+      {state !== "idle" && (
+        <span
+          className={`pointer-events-none absolute top-0 left-1/2 z-10 -translate-x-1/2 -translate-y-[calc(100%+0.4rem)] rounded-md px-2 py-1 text-[11px] whitespace-nowrap shadow ${
+            state === "copied" ? "bg-slate-900 text-white" : "bg-rose-700 text-white"
+          }`}
+        >
+          {state === "copied" ? "Copied" : "Copy failed"}
         </span>
-    );
+      )}
+
+      <span id={statusId} className="sr-only" aria-live="polite">
+        {state === "copied" ? "Copied to clipboard." : state === "failed" ? "Copy failed." : ""}
+      </span>
+    </span>
+  );
 }

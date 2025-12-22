@@ -8,11 +8,7 @@ type HoverGlowButtonProps = DetailedHTMLProps<
   HTMLButtonElement
 > & { className?: string };
 
-export function HoverGlowButton({
-  className,
-  children,
-  ...rest
-}: HoverGlowButtonProps) {
+export function HoverGlowButton({ className, children, ...rest }: HoverGlowButtonProps) {
   const ref = useRef<HTMLButtonElement>(null);
 
   const handleMove = (event: React.MouseEvent<HTMLButtonElement>) => {

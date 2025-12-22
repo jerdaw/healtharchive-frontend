@@ -19,24 +19,20 @@ export default function ExportsPage() {
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
           Use the export manifest to discover available formats and limits.
         </p>
-        <div className="ha-card ha-home-panel p-4 sm:p-5 text-xs text-slate-800 sm:text-sm space-y-2">
+        <div className="ha-card ha-home-panel space-y-2 p-4 text-xs text-slate-800 sm:p-5 sm:text-sm">
           <p className="text-ha-muted">Export manifest</p>
-          <a
-            className="font-medium text-ha-accent hover:text-blue-700"
-            href={manifestUrl}
-          >
+          <a className="text-ha-accent font-medium hover:text-blue-700" href={manifestUrl}>
             {manifestUrl}
           </a>
         </div>
         <div className="ha-callout">
           <h3 className="ha-callout-title">Dataset releases</h3>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            Quarterly metadata-only dataset releases are published on GitHub with
-            checksums.
+            Quarterly metadata-only dataset releases are published on GitHub with checksums.
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
             <Link
-              className="font-medium text-ha-accent hover:text-blue-700"
+              className="text-ha-accent font-medium hover:text-blue-700"
               href={datasetReleasesUrl}
             >
               HealthArchive dataset releases
@@ -47,19 +43,19 @@ export default function ExportsPage() {
           <h3 className="ha-callout-title">Download / print</h3>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
             <a
-              className="font-medium text-ha-accent hover:text-blue-700"
+              className="text-ha-accent font-medium hover:text-blue-700"
               href="/exports/healtharchive-data-dictionary.md"
             >
               Download the data dictionary (Markdown)
-            </a>
-            {" "}or use your browser’s print dialog to save as PDF.
+            </a>{" "}
+            or use your browser’s print dialog to save as PDF.
           </p>
         </div>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Snapshots export (fields)</h2>
-        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>
             <strong>snapshot_id</strong>: numeric snapshot ID.
           </li>
@@ -90,7 +86,7 @@ export default function ExportsPage() {
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Changes export (fields)</h2>
-        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>
             <strong>change_id</strong>: numeric change event ID.
           </li>
@@ -101,13 +97,15 @@ export default function ExportsPage() {
             <strong>from_snapshot_id / to_snapshot_id</strong> and corresponding UTC timestamps.
           </li>
           <li>
-            <strong>change_type</strong>, <strong>summary</strong>, section/line counts, and change ratio.
+            <strong>change_type</strong>, <strong>summary</strong>, section/line counts, and change
+            ratio.
           </li>
           <li>
             <strong>high_noise</strong> and <strong>diff_truncated</strong> flags.
           </li>
           <li>
-            <strong>diff_version</strong>, <strong>normalization_version</strong>, <strong>computed_at_utc</strong>.
+            <strong>diff_version</strong>, <strong>normalization_version</strong>,{" "}
+            <strong>computed_at_utc</strong>.
           </li>
           <li>
             <strong>compare_url</strong>: stable public URL for the diff view.
@@ -117,23 +115,17 @@ export default function ExportsPage() {
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Limitations</h2>
-        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
-          <li>
-            Exports reflect captured content, not real-time source updates.
-          </li>
-          <li>
-            Coverage is limited to in-scope sources and successful captures.
-          </li>
-          <li>
-            Replay fidelity varies by site and asset type.
-          </li>
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
+          <li>Exports reflect captured content, not real-time source updates.</li>
+          <li>Coverage is limited to in-scope sources and successful captures.</li>
+          <li>Replay fidelity varies by site and asset type.</li>
         </ul>
-        <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
+        <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
           For bulk or custom exports, see the{" "}
-          <Link className="font-medium text-ha-accent hover:text-blue-700" href="/researchers">
+          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/researchers">
             researchers page
-          </Link>
-          {" "}for the request workflow.
+          </Link>{" "}
+          for the request workflow.
         </p>
       </section>
     </PageShell>

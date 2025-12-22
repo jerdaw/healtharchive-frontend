@@ -26,13 +26,7 @@ vi.mock("@/data/demo-records", () => ({
 }));
 
 vi.mock("@/components/SnapshotFrame", () => ({
-  SnapshotFrame: ({
-    src,
-    title,
-  }: {
-    src: string;
-    title: string;
-  }) => (
+  SnapshotFrame: ({ src, title }: { src: string; title: string }) => (
     <div>
       <div>SnapshotFrame mock: {title}</div>
       <div>src: {src}</div>
@@ -88,16 +82,12 @@ describe("/browse/[id]", () => {
     render(ui);
 
     expect(screen.getByText(/Browsing archived site/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(/not current guidance or medical advice/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/not current guidance or medical advice/i)).toBeInTheDocument();
     expect(screen.getByText(/Health Canada/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Switch backup/i)).toBeInTheDocument();
     expect(screen.getByText(/Open in replay/i)).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /src: https:\/\/replay\.healtharchive\.ca\/job-1\/20240104123456\//i,
-      ),
+      screen.getByText(/src: https:\/\/replay\.healtharchive\.ca\/job-1\/20240104123456\//i),
     ).toBeInTheDocument();
   });
 

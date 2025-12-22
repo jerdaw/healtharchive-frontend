@@ -20,10 +20,7 @@ function formatDate(value: string | null | undefined): string {
 }
 
 export default async function ImpactPage() {
-  const [statsRes, usageRes] = await Promise.allSettled([
-    fetchArchiveStats(),
-    fetchUsageMetrics(),
-  ]);
+  const [statsRes, usageRes] = await Promise.allSettled([fetchArchiveStats(), fetchUsageMetrics()]);
 
   const stats = statsRes.status === "fulfilled" ? statsRes.value : null;
   const usage = usageRes.status === "fulfilled" ? usageRes.value : null;
@@ -44,32 +41,32 @@ export default async function ImpactPage() {
         <h2 className="ha-section-heading">Coverage snapshot</h2>
         <div className="ha-grid-3">
           <div className="ha-card space-y-1">
-            <p className="text-xs text-ha-muted">Sources tracked</p>
+            <p className="text-ha-muted text-xs">Sources tracked</p>
             <p className="text-2xl font-semibold text-slate-900">
               {formatNumber(stats?.sourcesTotal ?? null)}
             </p>
           </div>
           <div className="ha-card space-y-1">
-            <p className="text-xs text-ha-muted">Snapshots</p>
+            <p className="text-ha-muted text-xs">Snapshots</p>
             <p className="text-2xl font-semibold text-slate-900">
               {formatNumber(stats?.snapshotsTotal ?? null)}
             </p>
           </div>
           <div className="ha-card space-y-1">
-            <p className="text-xs text-ha-muted">Unique pages</p>
+            <p className="text-ha-muted text-xs">Unique pages</p>
             <p className="text-2xl font-semibold text-slate-900">
               {formatNumber(stats?.pagesTotal ?? null)}
             </p>
           </div>
         </div>
-        <p className="text-sm text-ha-muted">
+        <p className="text-ha-muted text-sm">
           Latest capture date: {formatDate(stats?.latestCaptureDate ?? null)}.
         </p>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-4">
         <h2 className="ha-section-heading">What changed this month</h2>
-        <ul className="list-disc pl-5 text-sm text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed">
           <li>Launched edition-aware change tracking and comparison views.</li>
           <li>Added a public digest page with RSS feeds for change events.</li>
           <li>Exposed snapshot timelines to support capture-to-capture auditing.</li>
@@ -78,9 +75,9 @@ export default async function ImpactPage() {
 
       <section className="ha-home-hero ha-home-hero-plain space-y-4">
         <h2 className="ha-section-heading">Reliability notes</h2>
-        <p className="text-sm text-ha-muted">
-          No public incident log this month. Service availability is tracked via
-          the /api/health endpoint and external checks when configured.
+        <p className="text-ha-muted text-sm">
+          No public incident log this month. Service availability is tracked via the /api/health
+          endpoint and external checks when configured.
         </p>
       </section>
 
@@ -89,25 +86,27 @@ export default async function ImpactPage() {
         {usage?.enabled ? (
           <div className="ha-grid-2">
             <div className="ha-card space-y-1">
-              <p className="text-xs text-ha-muted">Search requests (last {usage.windowDays} days)</p>
+              <p className="text-ha-muted text-xs">
+                Search requests (last {usage.windowDays} days)
+              </p>
               <p className="text-2xl font-semibold text-slate-900">
                 {formatNumber(usage.totals.searchRequests)}
               </p>
             </div>
             <div className="ha-card space-y-1">
-              <p className="text-xs text-ha-muted">Snapshot detail views</p>
+              <p className="text-ha-muted text-xs">Snapshot detail views</p>
               <p className="text-2xl font-semibold text-slate-900">
                 {formatNumber(usage.totals.snapshotDetailViews)}
               </p>
             </div>
             <div className="ha-card space-y-1">
-              <p className="text-xs text-ha-muted">Raw snapshot views</p>
+              <p className="text-ha-muted text-xs">Raw snapshot views</p>
               <p className="text-2xl font-semibold text-slate-900">
                 {formatNumber(usage.totals.rawSnapshotViews)}
               </p>
             </div>
             <div className="ha-card space-y-1">
-              <p className="text-xs text-ha-muted">Reports submitted</p>
+              <p className="text-ha-muted text-xs">Reports submitted</p>
               <p className="text-2xl font-semibold text-slate-900">
                 {formatNumber(usage.totals.reportSubmissions)}
               </p>
@@ -116,9 +115,8 @@ export default async function ImpactPage() {
         ) : (
           <div className="ha-callout">
             <p className="text-xs leading-relaxed sm:text-sm">
-              Usage metrics are currently unavailable or disabled. Enable
-              aggregate counts in the backend to include this section in future
-              reports.
+              Usage metrics are currently unavailable or disabled. Enable aggregate counts in the
+              backend to include this section in future reports.
             </p>
           </div>
         )}
@@ -126,17 +124,17 @@ export default async function ImpactPage() {
 
       <section className="ha-home-hero ha-home-hero-plain space-y-4">
         <h2 className="ha-section-heading">Partner highlights</h2>
-        <p className="text-sm text-ha-muted">
-          No partner updates recorded this month. Outreach and verification are
-          tracked as part of Phase 4.
+        <p className="text-ha-muted text-sm">
+          No partner updates recorded this month. Outreach and verification are tracked as part of
+          Phase 4.
         </p>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-4">
         <h2 className="ha-section-heading">Next focus</h2>
-        <p className="text-sm text-ha-muted">
-          Phase 3 work will introduce change tracking and compare views to make
-          updates over time easier to audit.
+        <p className="text-ha-muted text-sm">
+          Phase 3 work will introduce change tracking and compare views to make updates over time
+          easier to audit.
         </p>
       </section>
 
@@ -147,10 +145,7 @@ export default async function ImpactPage() {
             See the status page for live coverage metrics.
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link
-              href="/status"
-              className="font-medium text-ha-accent hover:text-blue-700"
-            >
+            <Link href="/status" className="text-ha-accent font-medium hover:text-blue-700">
               View status & metrics
             </Link>
             .

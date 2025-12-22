@@ -51,4 +51,3 @@ This is an archival record and change-tracking tool. It is not current guidance 
 
 - Contact and reporting: https://www.healtharchive.ca/contact
 - Issue reporting form: https://www.healtharchive.ca/report
-

@@ -12,12 +12,7 @@ vi.mock("@/lib/api", () => ({
   getApiBaseUrl: () => "https://api.example.test",
 }));
 
-import {
-  fetchArchiveStats,
-  fetchHealth,
-  fetchSources,
-  fetchUsageMetrics,
-} from "@/lib/api";
+import { fetchArchiveStats, fetchHealth, fetchSources, fetchUsageMetrics } from "@/lib/api";
 
 const mockFetchHealth = vi.mocked(fetchHealth);
 const mockFetchArchiveStats = vi.mocked(fetchArchiveStats);

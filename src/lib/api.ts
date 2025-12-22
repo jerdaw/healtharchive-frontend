@@ -188,8 +188,7 @@ export class ApiError extends Error {
   }
 }
 
-const API_BASE_ENV =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_BASE_ENV = process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export function getApiBaseUrl(): string {
   if (API_BASE_ENV) {
@@ -205,21 +204,12 @@ type FetchInit = RequestInit & {
   };
 };
 
-async function fetchJson<T>(
-  path: string,
-  query?: URLSearchParams,
-  init?: FetchInit,
-): Promise<T> {
+async function fetchJson<T>(path: string, query?: URLSearchParams, init?: FetchInit): Promise<T> {
   const baseUrl = getApiBaseUrl();
   const url =
-    query && String(query)
-      ? `${baseUrl}${path}?${query.toString()}`
-      : `${baseUrl}${path}`;
+    query && String(query) ? `${baseUrl}${path}?${query.toString()}` : `${baseUrl}${path}`;
 
-  const res = await fetch(
-    url,
-    ({ cache: "no-store", ...init } as unknown) as RequestInit,
-  );
+  const res = await fetch(url, { cache: "no-store", ...init } as unknown as RequestInit);
 
   if (!res.ok) {
     let detail: unknown = null;
@@ -227,11 +217,7 @@ async function fetchJson<T>(
     if (contentType.includes("application/json")) {
       try {
         const data: unknown = await res.json();
-        if (
-          typeof data === "object" &&
-          data !== null &&
-          "detail" in data
-        ) {
+        if (typeof data === "object" && data !== null && "detail" in data) {
           detail = (data as { detail?: unknown }).detail ?? null;
         }
       } catch {
@@ -253,15 +239,11 @@ export async function fetchSources(): Promise<SourceSummary[]> {
   return fetchJson<SourceSummary[]>("/api/sources");
 }
 
-export async function fetchSourceEditions(
-  sourceCode: string,
-): Promise<SourceEdition[]> {
+export async function fetchSourceEditions(sourceCode: string): Promise<SourceEdition[]> {
   const normalized = sourceCode.trim();
   if (!normalized) return [];
 
-  return fetchJson<SourceEdition[]>(
-    `/api/sources/${encodeURIComponent(normalized)}/editions`,
-  );
+  return fetchJson<SourceEdition[]>(`/api/sources/${encodeURIComponent(normalized)}/editions`);
 }
 
 export type SearchParams = {
@@ -350,9 +332,7 @@ export async function fetchChangeCompare(params: {
   return fetchJson<ChangeCompare>("/api/changes/compare", query);
 }
 
-export async function fetchSnapshotTimeline(
-  snapshotId: number,
-): Promise<SnapshotTimeline> {
+export async function fetchSnapshotTimeline(snapshotId: number): Promise<SnapshotTimeline> {
   return fetchJson<SnapshotTimeline>(`/api/snapshots/${snapshotId}/timeline`);
 }
 

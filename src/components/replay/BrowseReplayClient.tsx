@@ -65,9 +65,7 @@ export function BrowseReplayClient({
   const [currentTimestamp14, setCurrentTimestamp14] = useState<string | null>(
     isoToTimestamp14(captureTimestamp),
   );
-  const [currentReplayUrl, setCurrentReplayUrl] = useState<string | null>(
-    browseUrl,
-  );
+  const [currentReplayUrl, setCurrentReplayUrl] = useState<string | null>(browseUrl);
   const [editionNotice, setEditionNotice] = useState<string | null>(null);
   const [isResolvingEdition, setIsResolvingEdition] = useState(false);
 
@@ -109,9 +107,7 @@ export function BrowseReplayClient({
 
   const editionOptions = editions ?? [];
   const showEditionSelect =
-    Boolean(browseUrl && replayOrigin) &&
-    activeJobId != null &&
-    editionOptions.length > 1;
+    Boolean(browseUrl && replayOrigin) && activeJobId != null && editionOptions.length > 1;
 
   const displayedCapture =
     timestamp14ToDateLabel(currentTimestamp14) ?? dateIsoToLabel(captureDate);
@@ -168,12 +164,7 @@ export function BrowseReplayClient({
         return;
       }
 
-      const timegateUrl = buildReplayUrl(
-        replayOrigin,
-        nextJobId,
-        null,
-        currentOriginalUrl,
-      );
+      const timegateUrl = buildReplayUrl(replayOrigin, nextJobId, null, currentOriginalUrl);
       setIframeSrc(timegateUrl);
       setActiveJobId(nextJobId);
       setCurrentReplayUrl(timegateUrl);
@@ -198,22 +189,20 @@ export function BrowseReplayClient({
     }
   }
 
-  const browseLink = browseUrl ? currentReplayUrl ?? browseUrl : undefined;
+  const browseLink = browseUrl ? (currentReplayUrl ?? browseUrl) : undefined;
   const rawLink = rawHtmlUrl ?? undefined;
 
   return (
     <div className="ha-container">
-      <section className="space-y-4 pb-10 pt-6">
+      <section className="space-y-4 pt-6 pb-10">
         <header className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-xs font-medium text-ha-muted">
-                Browsing archived site
-              </p>
+              <p className="text-ha-muted text-xs font-medium">Browsing archived site</p>
               <h1 className="mt-1 text-base font-semibold text-slate-900 sm:text-lg">
                 {sourceName}
               </h1>
-              <p className="mt-1 text-xs text-ha-muted">
+              <p className="text-ha-muted mt-1 text-xs">
                 Capture: {displayedCapture}
                 {activeJobId != null && (
                   <>
@@ -252,33 +241,25 @@ export function BrowseReplayClient({
               )}
 
               {isResolvingEdition && (
-                <p className="mt-2 text-[11px] font-medium text-ha-muted">
-                  Switching backup…
-                </p>
+                <p className="text-ha-muted mt-2 text-[11px] font-medium">Switching backup…</p>
               )}
               {editionNotice && (
-                <p className="mt-2 text-[11px] font-medium text-amber-800">
-                  {editionNotice}
-                </p>
+                <p className="mt-2 text-[11px] font-medium text-amber-800">{editionNotice}</p>
               )}
 
-              <p className="mt-2 break-all text-[11px] text-ha-muted">
+              <p className="text-ha-muted mt-2 text-[11px] break-all">
                 <span className="font-medium text-slate-800">Original URL:</span>{" "}
                 {currentOriginalUrl}
               </p>
-              <p className="mt-2 text-[11px] text-ha-muted">
-                <Link
-                  href={reportHref}
-                  className="font-medium text-ha-accent hover:text-blue-700"
-                >
+              <p className="text-ha-muted mt-2 text-[11px]">
+                <Link href={reportHref} className="text-ha-accent font-medium hover:text-blue-700">
                   Report an issue with this capture
                 </Link>
               </p>
 
               {!browseUrl && (
                 <p className="mt-2 text-[11px] font-medium text-amber-800">
-                  Replay browsing is not available for this record; showing raw
-                  HTML instead.
+                  Replay browsing is not available for this record; showing raw HTML instead.
                 </p>
               )}
             </div>
@@ -296,10 +277,7 @@ export function BrowseReplayClient({
                   Search this source
                 </Link>
               )}
-              <Link
-                href={`/snapshot/${snapshotId}`}
-                className="ha-btn-secondary text-xs"
-              >
+              <Link href={`/snapshot/${snapshotId}`} className="ha-btn-secondary text-xs">
                 Snapshot details
               </Link>
               {browseLink && (
@@ -348,7 +326,7 @@ export function BrowseReplayClient({
               iframeClassName="h-[70vh] w-full border-0 sm:h-[75vh]"
             />
           ) : (
-            <div className="flex h-[320px] items-center justify-center px-4 text-center text-sm text-ha-muted">
+            <div className="text-ha-muted flex h-[320px] items-center justify-center px-4 text-center text-sm">
               Archived HTML content for this snapshot is not currently available.
             </div>
           )}

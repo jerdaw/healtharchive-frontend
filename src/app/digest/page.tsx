@@ -6,8 +6,7 @@ import { siteCopy } from "@/lib/siteCopy";
 
 export default async function DigestPage() {
   const sourcesRes = await Promise.allSettled([fetchSources()]);
-  const sources =
-    sourcesRes[0].status === "fulfilled" ? sourcesRes[0].value : null;
+  const sources = sourcesRes[0].status === "fulfilled" ? sourcesRes[0].value : null;
 
   const apiBase = getApiBaseUrl();
   const globalRss = `${apiBase}/api/changes/rss`;
@@ -22,21 +21,18 @@ export default async function DigestPage() {
         <div className="ha-callout">
           <h2 className="ha-callout-title">What the digest is</h2>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            The digest lists pages whose archived text changed between captures.
-            It is descriptive only and does not interpret meaning or provide
-            guidance. {siteCopy.whatThisSiteIs.forCurrent}
+            The digest lists pages whose archived text changed between captures. It is descriptive
+            only and does not interpret meaning or provide guidance.{" "}
+            {siteCopy.whatThisSiteIs.forCurrent}
           </p>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            Digests reflect edition-to-edition changes. Annual editions are
-            captured on Jan 01 (UTC), and any ad-hoc captures are labeled when
-            they occur. This does not imply real-time monitoring.
+            Digests reflect edition-to-edition changes. Annual editions are captured on Jan 01
+            (UTC), and any ad-hoc captures are labeled when they occur. This does not imply
+            real-time monitoring.
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
             For citation guidance, see{" "}
-            <Link
-              href="/cite"
-              className="font-medium text-ha-accent hover:text-blue-700"
-            >
+            <Link href="/cite" className="text-ha-accent font-medium hover:text-blue-700">
               /cite
             </Link>
             .
@@ -47,11 +43,8 @@ export default async function DigestPage() {
       <section className="ha-home-hero ha-home-hero-plain space-y-4">
         <h2 className="ha-section-heading">RSS feeds</h2>
         <div className="ha-card space-y-2">
-          <p className="text-xs text-ha-muted">Latest edition changes</p>
-          <a
-            href={globalRss}
-            className="font-medium text-ha-accent hover:text-blue-700"
-          >
+          <p className="text-ha-muted text-xs">Latest edition changes</p>
+          <a href={globalRss} className="text-ha-accent font-medium hover:text-blue-700">
             Global RSS feed
           </a>
         </div>
@@ -64,14 +57,11 @@ export default async function DigestPage() {
               )}`;
               return (
                 <div key={source.sourceCode} className="ha-card space-y-2">
-                  <p className="text-xs text-ha-muted">{source.sourceName}</p>
-                  <a
-                    href={rssUrl}
-                    className="font-medium text-ha-accent hover:text-blue-700"
-                  >
+                  <p className="text-ha-muted text-xs">{source.sourceName}</p>
+                  <a href={rssUrl} className="text-ha-accent font-medium hover:text-blue-700">
                     RSS feed
                   </a>
-                  <p className="text-xs text-ha-muted">
+                  <p className="text-ha-muted text-xs">
                     Tracks changes between the latest archived editions.
                   </p>
                 </div>
@@ -81,8 +71,7 @@ export default async function DigestPage() {
         ) : (
           <div className="ha-callout">
             <p className="text-xs leading-relaxed sm:text-sm">
-              Source-specific RSS feeds will appear once the backend is
-              available.
+              Source-specific RSS feeds will appear once the backend is available.
             </p>
           </div>
         )}
@@ -90,9 +79,9 @@ export default async function DigestPage() {
 
       <section className="ha-home-hero ha-home-hero-plain space-y-4">
         <h2 className="ha-section-heading">Next steps</h2>
-        <p className="text-sm text-ha-muted">
-          Email digests are intentionally deferred until change tracking is
-          stable and the RSS feeds are in steady use.
+        <p className="text-ha-muted text-sm">
+          Email digests are intentionally deferred until change tracking is stable and the RSS feeds
+          are in steady use.
         </p>
         <div className="flex flex-wrap gap-2">
           <Link href="/changes" className="ha-btn-secondary text-xs">

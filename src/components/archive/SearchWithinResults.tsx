@@ -61,9 +61,7 @@ export function SearchWithinResults({
     >
       <div
         className={`min-w-0 flex-1 transition-[max-width,max-height] duration-300 ease-out ${
-          open
-            ? "max-w-[640px] max-h-12 overflow-visible"
-            : "max-w-0 max-h-0 overflow-hidden"
+          open ? "max-h-12 max-w-[640px] overflow-visible" : "max-h-0 max-w-0 overflow-hidden"
         }`}
         aria-hidden={!open}
       >
@@ -82,7 +80,7 @@ export function SearchWithinResults({
             type="search"
             defaultValue={within}
             placeholder="Add keywords to narrow the current list…"
-            className="min-w-0 w-full rounded-lg border border-ha-border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-400 focus:z-10 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+            className="border-ha-border w-full min-w-0 rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm ring-0 outline-none placeholder:text-slate-400 focus:z-10 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
           />
         </div>
       </div>
@@ -96,12 +94,8 @@ export function SearchWithinResults({
       {toDate && <input type="hidden" name="to" value={toDate} />}
       {sort !== defaultSort && <input type="hidden" name="sort" value={sort} />}
       {view !== defaultView && <input type="hidden" name="view" value={view} />}
-      {includeNon2xx && (
-        <input type="hidden" name="includeNon2xx" value="true" />
-      )}
-      {includeDuplicates && (
-        <input type="hidden" name="includeDuplicates" value="true" />
-      )}
+      {includeNon2xx && <input type="hidden" name="includeNon2xx" value="true" />}
+      {includeDuplicates && <input type="hidden" name="includeDuplicates" value="true" />}
       <input type="hidden" name="page" value="1" />
       <input type="hidden" name="pageSize" value={String(pageSize)} />
 
@@ -112,10 +106,8 @@ export function SearchWithinResults({
           onClick={handleToggle}
           aria-hidden={open}
           tabIndex={open ? -1 : 0}
-          className={`col-start-1 row-start-1 text-left text-xs font-medium text-ha-accent hover:text-blue-700 hover:underline underline-offset-2 transition-all duration-300 ${
-            open
-              ? "pointer-events-none opacity-0 translate-x-2"
-              : "opacity-100 translate-x-0"
+          className={`text-ha-accent col-start-1 row-start-1 text-left text-xs font-medium underline-offset-2 transition-all duration-300 hover:text-blue-700 hover:underline ${
+            open ? "pointer-events-none translate-x-2 opacity-0" : "translate-x-0 opacity-100"
           }`}
         >
           Search within results →
@@ -126,10 +118,10 @@ export function SearchWithinResults({
           aria-hidden={!open}
           tabIndex={open ? 0 : -1}
           disabled={!open}
-          className={`col-start-1 row-start-1 ha-btn-primary text-xs whitespace-nowrap overflow-hidden transition-[opacity,transform,max-height,padding,border-width] duration-300 ${
+          className={`ha-btn-primary col-start-1 row-start-1 overflow-hidden text-xs whitespace-nowrap transition-[opacity,transform,max-height,padding,border-width] duration-300 ${
             open
-              ? "max-h-12 !px-4 !py-2 opacity-100 translate-x-0 pointer-events-auto"
-              : "max-h-0 !px-0 !py-0 !border-0 opacity-0 -translate-x-2 pointer-events-none"
+              ? "pointer-events-auto max-h-12 translate-x-0 !px-4 !py-2 opacity-100"
+              : "pointer-events-none max-h-0 -translate-x-2 !border-0 !px-0 !py-0 opacity-0"
           }`}
         >
           Search within results

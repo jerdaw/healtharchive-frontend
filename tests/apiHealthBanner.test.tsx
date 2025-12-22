@@ -60,9 +60,7 @@ describe("ApiHealthBanner diagnostics", () => {
     expect(mockFetchHealth).toHaveBeenCalled();
 
     // Banner should appear when health check fails.
-    expect(
-      await screen.findByText(/Backend unreachable/i),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/Backend unreachable/i)).toBeInTheDocument();
 
     // No warning log when LOG_HEALTH_FAILURE is false.
     expect(warnSpy).not.toHaveBeenCalled();

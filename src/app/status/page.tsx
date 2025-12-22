@@ -1,12 +1,7 @@
 import Link from "next/link";
 
 import { PageShell } from "@/components/layout/PageShell";
-import {
-  fetchArchiveStats,
-  fetchHealth,
-  fetchSources,
-  fetchUsageMetrics,
-} from "@/lib/api";
+import { fetchArchiveStats, fetchHealth, fetchSources, fetchUsageMetrics } from "@/lib/api";
 import { siteCopy } from "@/lib/siteCopy";
 
 function formatNumber(value: number | null | undefined): string {
@@ -60,8 +55,8 @@ export default async function StatusPage() {
         <div className="ha-callout">
           <h2 className="ha-callout-title">Live metrics unavailable</h2>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            The backend API could not be reached. This page will display live
-            metrics when the API is available.
+            The backend API could not be reached. This page will display live metrics when the API
+            is available.
           </p>
         </div>
       )}
@@ -71,9 +66,9 @@ export default async function StatusPage() {
         <div className="ha-card space-y-2">
           <div className="flex flex-wrap items-center gap-3">
             <span className="ha-tag">{statusLabel}</span>
-            <span className="text-xs text-ha-muted">Last checked: {lastChecked}</span>
+            <span className="text-ha-muted text-xs">Last checked: {lastChecked}</span>
           </div>
-          <p className="text-sm text-ha-muted">
+          <p className="text-ha-muted text-sm">
             {siteCopy.whatThisSiteIs.is} {siteCopy.whatThisSiteIs.isNot}
           </p>
         </div>
@@ -83,51 +78,47 @@ export default async function StatusPage() {
         <h2 className="ha-section-heading">Coverage snapshot</h2>
         <div className="ha-grid-3">
           <div className="ha-card space-y-1">
-            <p className="text-xs text-ha-muted">Sources tracked</p>
+            <p className="text-ha-muted text-xs">Sources tracked</p>
             <p className="text-2xl font-semibold text-slate-900">
               {formatNumber(stats?.sourcesTotal ?? null)}
             </p>
           </div>
           <div className="ha-card space-y-1">
-            <p className="text-xs text-ha-muted">Snapshots</p>
+            <p className="text-ha-muted text-xs">Snapshots</p>
             <p className="text-2xl font-semibold text-slate-900">
               {formatNumber(stats?.snapshotsTotal ?? null)}
             </p>
           </div>
           <div className="ha-card space-y-1">
-            <p className="text-xs text-ha-muted">Unique pages</p>
+            <p className="text-ha-muted text-xs">Unique pages</p>
             <p className="text-2xl font-semibold text-slate-900">
               {formatNumber(stats?.pagesTotal ?? null)}
             </p>
           </div>
         </div>
-        <p className="text-sm text-ha-muted">
+        <p className="text-ha-muted text-sm">
           Latest capture date: {formatDate(stats?.latestCaptureDate ?? null)}.
         </p>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-4">
         <h2 className="ha-section-heading">Per-source coverage</h2>
-        <p className="text-sm text-ha-muted">
-          First/last capture dates are UTC and reflect archival capture times, not
-          necessarily the last time a source updated its content.
+        <p className="text-ha-muted text-sm">
+          First/last capture dates are UTC and reflect archival capture times, not necessarily the
+          last time a source updated its content.
         </p>
         {sources && sources.length > 0 ? (
           <div className="ha-grid-2">
             {sources.map((source) => (
               <div key={source.sourceCode} className="ha-card space-y-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-sm font-semibold text-slate-900">
-                    {source.sourceName}
-                  </h3>
-                  <span className="ha-tag">
-                    {formatNumber(source.recordCount)} snapshots
-                  </span>
+                  <h3 className="text-sm font-semibold text-slate-900">{source.sourceName}</h3>
+                  <span className="ha-tag">{formatNumber(source.recordCount)} snapshots</span>
                 </div>
-                <p className="text-xs text-ha-muted">
+                <p className="text-ha-muted text-xs">
                   First capture: {formatDate(source.firstCapture)}
                 </p>
-                <p className="text-xs text-ha-muted">
+                <p className="text-ha-muted text-xs">
                   Last capture: {formatDate(source.lastCapture)}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -163,25 +154,27 @@ export default async function StatusPage() {
         {usage?.enabled ? (
           <div className="ha-grid-2">
             <div className="ha-card space-y-1">
-              <p className="text-xs text-ha-muted">Search requests (last {usage.windowDays} days)</p>
+              <p className="text-ha-muted text-xs">
+                Search requests (last {usage.windowDays} days)
+              </p>
               <p className="text-2xl font-semibold text-slate-900">
                 {formatNumber(usage.totals.searchRequests)}
               </p>
             </div>
             <div className="ha-card space-y-1">
-              <p className="text-xs text-ha-muted">Snapshot detail views</p>
+              <p className="text-ha-muted text-xs">Snapshot detail views</p>
               <p className="text-2xl font-semibold text-slate-900">
                 {formatNumber(usage.totals.snapshotDetailViews)}
               </p>
             </div>
             <div className="ha-card space-y-1">
-              <p className="text-xs text-ha-muted">Raw snapshot views</p>
+              <p className="text-ha-muted text-xs">Raw snapshot views</p>
               <p className="text-2xl font-semibold text-slate-900">
                 {formatNumber(usage.totals.rawSnapshotViews)}
               </p>
             </div>
             <div className="ha-card space-y-1">
-              <p className="text-xs text-ha-muted">Reports submitted</p>
+              <p className="text-ha-muted text-xs">Reports submitted</p>
               <p className="text-2xl font-semibold text-slate-900">
                 {formatNumber(usage.totals.reportSubmissions)}
               </p>
@@ -190,36 +183,32 @@ export default async function StatusPage() {
         ) : (
           <div className="ha-callout">
             <p className="text-xs leading-relaxed sm:text-sm">
-              Usage metrics are currently unavailable or disabled. Enable
-              aggregated usage counts in the backend to display this section.
+              Usage metrics are currently unavailable or disabled. Enable aggregated usage counts in
+              the backend to display this section.
             </p>
           </div>
         )}
-        <p className="text-xs text-ha-muted">
+        <p className="text-ha-muted text-xs">
           Usage metrics are aggregated daily counts with no personal identifiers.
         </p>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-4">
         <h2 className="ha-section-heading">Metrics definitions</h2>
-        <ul className="list-disc pl-5 text-sm text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed">
+          <li>Snapshots are individual captured pages with a timestamped record.</li>
+          <li>Pages are URL groups that may have multiple snapshots over time.</li>
           <li>
-            Snapshots are individual captured pages with a timestamped record.
+            Last capture date is a proxy for freshness and reflects archive capture time (UTC), not
+            source update time.
           </li>
           <li>
-            Pages are URL groups that may have multiple snapshots over time.
+            Annual editions are captured on Jan 01 (UTC). Ad-hoc captures are labeled when they
+            occur.
           </li>
           <li>
-            Last capture date is a proxy for freshness and reflects archive
-            capture time (UTC), not source update time.
-          </li>
-          <li>
-            Annual editions are captured on Jan 01 (UTC). Ad-hoc captures are
-            labeled when they occur.
-          </li>
-          <li>
-            Usage counts are aggregated daily totals (search requests, snapshot
-            views, report submissions).
+            Usage counts are aggregated daily totals (search requests, snapshot views, report
+            submissions).
           </li>
         </ul>
       </section>
@@ -228,14 +217,10 @@ export default async function StatusPage() {
         <div className="ha-callout">
           <h3 className="ha-callout-title">Monthly impact report</h3>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            A short monthly report summarizes coverage, reliability, and usage
-            trends.
+            A short monthly report summarizes coverage, reliability, and usage trends.
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link
-              href="/impact"
-              className="font-medium text-ha-accent hover:text-blue-700"
-            >
+            <Link href="/impact" className="text-ha-accent font-medium hover:text-blue-700">
               View the latest impact report
             </Link>
             .

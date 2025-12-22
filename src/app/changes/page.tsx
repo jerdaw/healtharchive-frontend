@@ -31,12 +31,10 @@ export default async function ChangesPage({
   const currentPage = Number.isNaN(page) || page < 1 ? 1 : page;
 
   const sourcesRes = await Promise.allSettled([fetchSources()]);
-  const sources =
-    sourcesRes[0].status === "fulfilled" ? sourcesRes[0].value : null;
+  const sources = sourcesRes[0].status === "fulfilled" ? sourcesRes[0].value : null;
 
   const selectedSource =
-    requestedSource ||
-    (sources && sources.length > 0 ? sources[0].sourceCode : "");
+    requestedSource || (sources && sources.length > 0 ? sources[0].sourceCode : "");
 
   let editions = null;
   if (selectedSource) {
@@ -48,9 +46,7 @@ export default async function ChangesPage({
   }
 
   const selectedEdition =
-    editions?.find((edition) => String(edition.jobId) === requestedJob) ??
-    editions?.[0] ??
-    null;
+    editions?.find((edition) => String(edition.jobId) === requestedJob) ?? editions?.[0] ?? null;
 
   let changes = null;
   if (selectedSource && selectedEdition?.jobId) {
@@ -83,14 +79,12 @@ export default async function ChangesPage({
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
             Comparisons highlight text differences between archived captures.
             {` `}They do not interpret meaning or provide medical guidance.
-            {` `}{siteCopy.whatThisSiteIs.forCurrent}
+            {` `}
+            {siteCopy.whatThisSiteIs.forCurrent}
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
             For citation guidance, see{" "}
-            <Link
-              href="/cite"
-              className="font-medium text-ha-accent hover:text-blue-700"
-            >
+            <Link href="/cite" className="text-ha-accent font-medium hover:text-blue-700">
               /cite
             </Link>
             .
@@ -102,13 +96,9 @@ export default async function ChangesPage({
         <h2 className="ha-section-heading">Scope</h2>
         <form className="ha-card space-y-4" action="/changes">
           <div className="grid gap-3 md:grid-cols-2">
-            <label className="space-y-2 text-xs font-medium text-ha-muted">
+            <label className="text-ha-muted space-y-2 text-xs font-medium">
               Source
-              <select
-                name="source"
-                defaultValue={selectedSource}
-                className="ha-select w-full"
-              >
+              <select name="source" defaultValue={selectedSource} className="ha-select w-full">
                 {(sources ?? []).map((source) => (
                   <option key={source.sourceCode} value={source.sourceCode}>
                     {source.sourceName}
@@ -116,7 +106,7 @@ export default async function ChangesPage({
                 ))}
               </select>
             </label>
-            <label className="space-y-2 text-xs font-medium text-ha-muted">
+            <label className="text-ha-muted space-y-2 text-xs font-medium">
               Edition (latest by default)
               <select
                 name="job"
@@ -140,11 +130,10 @@ export default async function ChangesPage({
               View digest & RSS
             </Link>
           </div>
-          <p className="text-xs text-ha-muted">
-            The default view is edition-aware and reflects changes between
-            archived captures, not real-time source updates. Annual editions
-            are captured on Jan 01 (UTC), and ad-hoc captures are labeled when
-            they occur.
+          <p className="text-ha-muted text-xs">
+            The default view is edition-aware and reflects changes between archived captures, not
+            real-time source updates. Annual editions are captured on Jan 01 (UTC), and ad-hoc
+            captures are labeled when they occur.
           </p>
         </form>
       </section>
@@ -155,8 +144,8 @@ export default async function ChangesPage({
           <div className="ha-callout">
             <h3 className="ha-callout-title">Changes unavailable</h3>
             <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-              The changes feed could not be loaded. Ensure the backend is
-              reachable and change tracking is enabled.
+              The changes feed could not be loaded. Ensure the backend is reachable and change
+              tracking is enabled.
             </p>
           </div>
         )}
@@ -172,8 +161,8 @@ export default async function ChangesPage({
         {changes && changes.enabled && !hasResults && (
           <div className="ha-callout">
             <p className="text-xs leading-relaxed sm:text-sm">
-              No changes found for this edition yet. This is expected during
-              early captures or when content did not change between editions.
+              No changes found for this edition yet. This is expected during early captures or when
+              content did not change between editions.
             </p>
           </div>
         )}
@@ -188,20 +177,16 @@ export default async function ChangesPage({
               const snapshotHref = `/snapshot/${event.toSnapshotId}`;
               return (
                 <div key={event.changeId} className="ha-card space-y-2">
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-ha-muted">
+                  <div className="text-ha-muted flex flex-wrap items-center gap-2 text-xs">
                     <span className="ha-tag">{event.changeType}</span>
-                    {event.highNoise ? (
-                      <span className="ha-tag">High noise</span>
-                    ) : null}
-                    <span>
-                      Captured {formatDate(event.toCaptureTimestamp)}
-                    </span>
+                    {event.highNoise ? <span className="ha-tag">High noise</span> : null}
+                    <span>Captured {formatDate(event.toCaptureTimestamp)}</span>
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-sm font-semibold text-slate-900">
                       {event.sourceName ?? "Archived source"}
                     </h3>
-                    <p className="text-xs text-ha-muted">
+                    <p className="text-ha-muted text-xs">
                       {event.summary ?? "Archived text updated."}
                     </p>
                   </div>
@@ -222,7 +207,7 @@ export default async function ChangesPage({
         )}
 
         {changes && changes.enabled && totalPages > 1 && (
-          <div className="flex items-center justify-between text-xs text-ha-muted">
+          <div className="text-ha-muted flex items-center justify-between text-xs">
             <span>
               Page {currentPage} of {totalPages}
             </span>

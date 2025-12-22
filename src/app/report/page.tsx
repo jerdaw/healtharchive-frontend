@@ -24,23 +24,19 @@ export default async function ReportPage({
   const initialPageUrl = params.page?.trim() || null;
 
   return (
-    <PageShell
-      eyebrow="Report"
-      title="Report an issue"
-      intro={DEFAULT_INTRO}
-    >
+    <PageShell eyebrow="Report" title="Report an issue" intro={DEFAULT_INTRO}>
       <section className="ha-home-hero space-y-4">
         <h2 className="ha-section-heading">What happens next</h2>
-        <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
-          Reports are reviewed by the project maintainers. We may follow up by
-          email if you provide contact information. For urgent safety labeling
-          concerns, we prioritize review within 48 hours.
+        <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
+          Reports are reviewed by the project maintainers. We may follow up by email if you provide
+          contact information. For urgent safety labeling concerns, we prioritize review within 48
+          hours.
         </p>
-        <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
+        <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
           You can also reach us directly at{" "}
           <a
             href="mailto:contact@healtharchive.ca"
-            className="font-medium text-ha-accent hover:text-blue-700"
+            className="text-ha-accent font-medium hover:text-blue-700"
           >
             contact@healtharchive.ca
           </a>
@@ -58,14 +54,10 @@ export default async function ReportPage({
         <div className="ha-callout">
           <h3 className="ha-callout-title">Looking for policies?</h3>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            See the governance page for scope, corrections, and takedown
-            policies.
+            See the governance page for scope, corrections, and takedown policies.
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link
-              href="/governance"
-              className="font-medium text-ha-accent hover:text-blue-700"
-            >
+            <Link href="/governance" className="text-ha-accent font-medium hover:text-blue-700">
               Read governance & policies
             </Link>
             .

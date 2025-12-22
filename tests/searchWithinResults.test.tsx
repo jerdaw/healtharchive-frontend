@@ -22,32 +22,23 @@ describe("SearchWithinResults", () => {
       />,
     );
 
-    expect(
-      screen.getByRole("button", { name: "Search within results →" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Search within results →" })).toBeInTheDocument();
     expect(
       screen.queryByRole("searchbox", { name: "Search within results" }),
     ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "Search within results" }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Search within results" })).not.toBeInTheDocument();
 
-    fireEvent.click(
-      screen.getByRole("button", { name: "Search within results →" }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: "Search within results →" }));
 
     expect(
       await screen.findByRole("searchbox", { name: "Search within results" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("searchbox", { name: "Search within results" }),
-    ).toHaveAttribute("name", "within");
-    expect(
-      container.querySelector('input[type="hidden"][name="q"][value="covid"]'),
-    ).toBeTruthy();
-    expect(
-      screen.getByRole("button", { name: "Search within results" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("searchbox", { name: "Search within results" })).toHaveAttribute(
+      "name",
+      "within",
+    );
+    expect(container.querySelector('input[type="hidden"][name="q"][value="covid"]')).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Search within results" })).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: "Search within results →" }),
     ).not.toBeInTheDocument();

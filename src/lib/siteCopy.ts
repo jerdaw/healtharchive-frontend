@@ -8,16 +8,13 @@ export const siteCopy = {
   whatThisSiteIs: {
     is: "An archival record of what public health websites displayed at a specific time, with capture dates and citations.",
     isNot: "Current guidance, medical advice, or an official government website.",
-    forCurrent:
-      "For up-to-date recommendations, always consult the official source website",
-    limitations:
-      "Archived content may be incomplete, outdated, or superseded.",
+    forCurrent: "For up-to-date recommendations, always consult the official source website",
+    limitations: "Archived content may be incomplete, outdated, or superseded.",
   },
   workflow: {
     archiveSummary:
       "Browse and search historical snapshots. This is an archive — not current guidance or medical advice.",
-    browseSummary:
-      "You are viewing an archived capture — not current guidance or medical advice.",
+    browseSummary: "You are viewing an archived capture — not current guidance or medical advice.",
   },
 } as const;
 
@@ -25,9 +22,7 @@ export function buildMetaDescription(): string {
   return `${siteCopy.mission.line1} ${siteCopy.mission.line2}`;
 }
 
-export function buildBrowseDisclaimer(args: {
-  captureLabel?: string | null;
-}): string {
+export function buildBrowseDisclaimer(args: { captureLabel?: string | null }): string {
   const capturePart = args.captureLabel ? ` from ${args.captureLabel}` : "";
   return `You are viewing an archived capture${capturePart} — not current guidance or medical advice.`;
 }

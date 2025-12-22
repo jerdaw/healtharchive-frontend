@@ -69,7 +69,6 @@ In Chrome or Firefox DevTools:
 2. Open **DevTools → Network** and reload.
 3. Click the main document request (usually the first row with path `/archive`).
 4. In **Headers → Response headers**, confirm you see:
-
    - `Referrer-Policy: strict-origin-when-cross-origin`
    - `X-Content-Type-Options: nosniff`
    - `X-Frame-Options: SAMEORIGIN`
@@ -128,11 +127,9 @@ available as a fallback/debug path.
 1. Pick a known snapshot ID that exists in the backend (at least one should
    exist in production).
 2. Open (metadata + embedded viewer):
-
    - `https://www.healtharchive.ca/snapshot/<id>`
 
 3. Confirm:
-
    - The page loads snapshot metadata (title, capture date, source, URL).
    - If replay is configured, the page displays “Archived content · served from
      `https://replay.healtharchive.ca/...` via the replay service.”
@@ -140,22 +137,19 @@ available as a fallback/debug path.
    - The page still offers a “Raw HTML” link to `https://api.healtharchive.ca/api/snapshots/raw/<id>`.
 
 4. Open the full-screen browse view:
-
    - `https://www.healtharchive.ca/browse/<id>`
 
    Confirm it loads the same replay content with a persistent HealthArchive
    banner/controls above the iframe.
 
 5. (Optional, if a source has multiple backups) Verify edition switching:
-
    - In `/browse/<id>` (or `/snapshot/<id>`), look for a “Backup” / “Switch backup” dropdown.
    - Click a few links inside the replay iframe to navigate to a deeper page.
    - Switch the dropdown to another job/edition and confirm:
-     - the viewer attempts to keep you on the *same original URL* in the selected backup, and
+     - the viewer attempts to keep you on the _same original URL_ in the selected backup, and
      - if that page wasn’t captured in the selected backup, it falls back to the backup’s entry page with a short notice.
 
 6. Verify “Browse archived sites” search shortcuts:
-
    - On `https://www.healtharchive.ca/archive`, click **Search** on one of the “Browse archived sites” cards.
    - Confirm:
      - the Source filter updates to that source (not “All sources”), and

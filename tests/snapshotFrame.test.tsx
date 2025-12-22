@@ -15,9 +15,6 @@ describe("SnapshotFrame", () => {
 
     const iframe = screen.getByTitle("Snapshot Title");
     expect(iframe.tagName.toLowerCase()).toBe("iframe");
-    expect(iframe).toHaveAttribute(
-      "sandbox",
-      "allow-same-origin allow-scripts allow-forms",
-    );
+    expect(iframe).toHaveAttribute("sandbox", "allow-same-origin allow-scripts allow-forms");
   });
 });
