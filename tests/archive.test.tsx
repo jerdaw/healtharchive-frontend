@@ -93,7 +93,8 @@ describe("/archive", () => {
         lastCapture: "2024-01-02",
         latestRecordId: 1,
         entryRecordId: 1,
-        entryBrowseUrl: "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/health-canada.html",
+        entryBrowseUrl:
+          "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/health-canada.html",
       },
     ]);
     mockSearchSnapshots.mockResolvedValue({
@@ -128,7 +129,8 @@ describe("/archive", () => {
         lastCapture: "2024-01-02",
         latestRecordId: 1,
         entryRecordId: 1,
-        entryBrowseUrl: "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/health-canada.html",
+        entryBrowseUrl:
+          "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/health-canada.html",
         entryPreviewUrl: "/api/sources/hc/preview?jobId=1",
       },
     ]);
@@ -145,15 +147,10 @@ describe("/archive", () => {
     render(ui);
 
     expect(screen.getByText(/Important note/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(/not current guidance or medical advice/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/not current guidance or medical advice/i)).toBeInTheDocument();
 
     const img = screen.getByAltText("Health Canada preview");
-    expect(img).toHaveAttribute(
-      "src",
-      "https://api.example.test/api/sources/hc/preview?jobId=1",
-    );
+    expect(img).toHaveAttribute("src", "https://api.example.test/api/sources/hc/preview?jobId=1");
   });
 
   it("renders backend search results with pagination", async () => {
@@ -199,13 +196,9 @@ describe("/archive", () => {
     render(ui);
 
     expect(screen.getByText(/Important note/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(/not current guidance or medical advice/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/not current guidance or medical advice/i)).toBeInTheDocument();
 
-    expect(
-      screen.getByRole("link", { name: /test snapshot/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /test snapshot/i })).toBeInTheDocument();
     expect(screen.getByText(/1 page/)).toBeInTheDocument();
   });
 
@@ -275,9 +268,7 @@ describe("/archive", () => {
     expect(args.q).toBe("(influenza) AND (covid)");
 
     expect(screen.getByText("Influenza")).toBeInTheDocument();
-    expect(
-      screen.getAllByText("covid", { selector: "mark" }).length,
-    ).toBeGreaterThan(0);
+    expect(screen.getAllByText("covid", { selector: "mark" }).length).toBeGreaterThan(0);
   });
 
   it("passes date range through to backend search", async () => {
@@ -334,9 +325,7 @@ describe("/archive", () => {
     });
     render(ui);
 
-    expect(
-      screen.getByText("Invalid date range: 'from' must be <= 'to'."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Invalid date range: 'from' must be <= 'to'.")).toBeInTheDocument();
     expect(
       screen.queryByText(/Live API unavailable; showing a limited offline sample/i),
     ).not.toBeInTheDocument();
@@ -355,9 +344,7 @@ describe("/archive", () => {
       screen.getByText(/Live API unavailable; showing a limited offline sample/i),
     ).toBeInTheDocument();
 
-    expect(
-      screen.getByRole("link", { name: /Information for Canadians/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Information for Canadians/i })).toBeInTheDocument();
   });
 
   it("supports URL queries in offline sample mode", async () => {

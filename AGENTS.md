@@ -65,7 +65,7 @@ From the repo root:
 
 Environment variables (for local dev):
 
-- `NEXT_PUBLIC_API_BASE_URL`  
+- `NEXT_PUBLIC_API_BASE_URL`
   - Default fallback if unset: `http://localhost:8001`.
   - Local dev example: `NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8001`.
 - Dev/Preview-only diagnostics (can be enabled locally, but keep them off in production/CI):

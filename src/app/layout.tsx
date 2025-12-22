@@ -6,19 +6,14 @@ import { Footer } from "@/components/layout/Footer";
 import { buildMetaDescription } from "@/lib/siteCopy";
 
 export const metadata: Metadata = {
-  title:
-    "HealthArchive.ca – Independent archive of Canadian public health information",
+  title: "HealthArchive.ca – Independent archive of Canadian public health information",
   description: buildMetaDescription(),
   icons: {
     icon: "/healtharchive-favicon.png",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <body className="antialiased">
@@ -31,15 +26,12 @@ export default function RootLayout({
         />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:text-slate-900 focus:shadow-lg"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:text-slate-900 focus:shadow-lg"
         >
           Skip to main content
         </a>
         <Header />
-        <main
-          id="main-content"
-          className="pt-20 pb-10 sm:pt-24 sm:pb-12"
-        >
+        <main id="main-content" className="pt-20 pb-10 sm:pt-24 sm:pb-12">
           {children}
         </main>
         <Footer />

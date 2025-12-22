@@ -10,16 +10,12 @@ describe("/exports", () => {
       screen.getByRole("heading", {
         level: 1,
         name: "Research exports & data dictionary",
-      })
+      }),
     ).toBeInTheDocument();
 
     const download = screen.getByRole("link", {
       name: "Download the data dictionary (Markdown)",
     });
-    expect(download).toHaveAttribute(
-      "href",
-      "/exports/healtharchive-data-dictionary.md"
-    );
+    expect(download).toHaveAttribute("href", "/exports/healtharchive-data-dictionary.md");
   });
 });
-

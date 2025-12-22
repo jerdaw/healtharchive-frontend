@@ -45,14 +45,9 @@ function formatDate(iso: string | undefined | null): string {
   return iso;
 }
 
-export default async function SnapshotPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function SnapshotPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  let snapshotMeta: Awaited<ReturnType<typeof fetchSnapshotDetail>> | null =
-    null;
+  let snapshotMeta: Awaited<ReturnType<typeof fetchSnapshotDetail>> | null = null;
   let usingBackend = false;
 
   // Attempt to fetch real snapshot metadata from the backend. If that fails
@@ -76,14 +71,11 @@ export default async function SnapshotPage({
   }
 
   const title = snapshotMeta?.title ?? record?.title ?? "Snapshot";
-  const captureDate =
-    snapshotMeta?.captureDate ?? record?.captureDate ?? "Unknown";
+  const captureDate = snapshotMeta?.captureDate ?? record?.captureDate ?? "Unknown";
   const sourceCode = snapshotMeta?.sourceCode ?? record?.sourceCode ?? null;
-  const sourceName =
-    snapshotMeta?.sourceName ?? record?.sourceName ?? "Unknown source";
+  const sourceName = snapshotMeta?.sourceName ?? record?.sourceName ?? "Unknown source";
   const language = snapshotMeta?.language ?? record?.language ?? "Unknown";
-  const originalUrl =
-    snapshotMeta?.originalUrl ?? record?.originalUrl ?? "Unknown URL";
+  const originalUrl = snapshotMeta?.originalUrl ?? record?.originalUrl ?? "Unknown URL";
   const captureTimestamp = snapshotMeta?.captureTimestamp ?? null;
   const jobId = snapshotMeta?.jobId ?? null;
   // Backend-backed snapshots may include:
@@ -99,7 +91,7 @@ export default async function SnapshotPage({
   const rawHtmlUrl =
     snapshotMeta?.rawSnapshotUrl != null
       ? `${apiBaseUrl}${snapshotMeta.rawSnapshotUrl}`
-      : record?.snapshotPath ?? null;
+      : (record?.snapshotPath ?? null);
   const browseUrl = snapshotMeta?.browseUrl ?? null;
   const viewerUrl = browseUrl ?? rawHtmlUrl ?? null;
   const apiLink =
@@ -116,8 +108,7 @@ export default async function SnapshotPage({
   reportParams.set("page", `/snapshot/${id}`);
   const reportHref = `/report?${reportParams.toString()}`;
 
-  let sourceEditions: Awaited<ReturnType<typeof fetchSourceEditions>> | null =
-    null;
+  let sourceEditions: Awaited<ReturnType<typeof fetchSourceEditions>> | null = null;
   if (usingBackend && snapshotMeta?.sourceCode) {
     try {
       sourceEditions = await fetchSourceEditions(snapshotMeta.sourceCode);
@@ -145,30 +136,29 @@ export default async function SnapshotPage({
         {/* Metadata card */}
         <div className="space-y-4">
           <div className="ha-card p-4 sm:p-5">
-            <p className="text-xs font-medium text-ha-muted">
+            <p className="text-ha-muted text-xs font-medium">
               Archived snapshot from {formatDate(captureDate)}.
             </p>
             {!usingBackend && record && (
-              <p className="mt-1 text-xs text-ha-muted">
-                This snapshot is from a limited offline sample bundled with the
-                site.
+              <p className="text-ha-muted mt-1 text-xs">
+                This snapshot is from a limited offline sample bundled with the site.
               </p>
             )}
             <dl className="mt-3 space-y-1 text-xs text-slate-800 sm:text-sm">
               <div className="flex gap-2">
-                <dt className="w-28 text-ha-muted">Source</dt>
+                <dt className="text-ha-muted w-28">Source</dt>
                 <dd>{sourceName}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="w-28 text-ha-muted">Capture date</dt>
+                <dt className="text-ha-muted w-28">Capture date</dt>
                 <dd>{formatDate(captureDate)}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="w-28 text-ha-muted">Language</dt>
+                <dt className="text-ha-muted w-28">Language</dt>
                 <dd>{language}</dd>
               </div>
               <div className="flex gap-2">
-                <dt className="w-28 text-ha-muted">Original URL</dt>
+                <dt className="text-ha-muted w-28">Original URL</dt>
                 <dd className="break-all">{originalUrl}</dd>
               </div>
             </dl>
@@ -216,23 +206,16 @@ export default async function SnapshotPage({
           <div className="ha-callout">
             <h3 className="ha-callout-title">Important note</h3>
             <p className="text-xs leading-relaxed sm:text-sm">
-              Archived content reflects what public websites displayed at the
-              time of capture. {siteCopy.whatThisSiteIs.limitations} This is
-              not medical advice and should not be treated as current guidance
-              or official policy. {siteCopy.whatThisSiteIs.forCurrent}.
+              Archived content reflects what public websites displayed at the time of capture.{" "}
+              {siteCopy.whatThisSiteIs.limitations} This is not medical advice and should not be
+              treated as current guidance or official policy. {siteCopy.whatThisSiteIs.forCurrent}.
             </p>
             <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-              <Link
-                href={reportHref}
-                className="font-medium text-ha-accent hover:text-blue-700"
-              >
+              <Link href={reportHref} className="text-ha-accent font-medium hover:text-blue-700">
                 Report an issue with this snapshot
               </Link>
               .{" "}
-              <Link
-                href="/cite"
-                className="font-medium text-ha-accent hover:text-blue-700"
-              >
+              <Link href="/cite" className="text-ha-accent font-medium hover:text-blue-700">
                 How to cite this snapshot
               </Link>
               .
@@ -241,10 +224,8 @@ export default async function SnapshotPage({
 
           {timeline?.snapshots && timeline.snapshots.length > 1 && (
             <div className="ha-card p-4 sm:p-5">
-              <h3 className="text-sm font-semibold text-slate-900">
-                Other captures of this page
-              </h3>
-              <p className="mt-1 text-xs text-ha-muted">
+              <h3 className="text-sm font-semibold text-slate-900">Other captures of this page</h3>
+              <p className="text-ha-muted mt-1 text-xs">
                 Compare captures to see descriptive text changes between editions.
               </p>
               <ul className="mt-3 space-y-2 text-xs text-slate-800 sm:text-sm">
@@ -257,13 +238,11 @@ export default async function SnapshotPage({
                   return (
                     <li
                       key={item.snapshotId}
-                      className="flex flex-wrap items-center justify-between gap-2 border-b border-ha-border pb-2 last:border-b-0 last:pb-0"
+                      className="border-ha-border flex flex-wrap items-center justify-between gap-2 border-b pb-2 last:border-b-0 last:pb-0"
                     >
                       <div>
-                        <p className="font-medium text-slate-900">
-                          {formatDate(item.captureDate)}
-                        </p>
-                        <p className="text-xs text-ha-muted">
+                        <p className="font-medium text-slate-900">{formatDate(item.captureDate)}</p>
+                        <p className="text-ha-muted text-xs">
                           {item.jobName ? item.jobName : "Edition capture"}
                         </p>
                       </div>
@@ -279,10 +258,7 @@ export default async function SnapshotPage({
                           </Link>
                         )}
                         {compareHref ? (
-                          <Link
-                            href={compareHref}
-                            className="ha-btn-secondary text-xs"
-                          >
+                          <Link href={compareHref} className="ha-btn-secondary text-xs">
                             Compare
                           </Link>
                         ) : null}
@@ -297,15 +273,12 @@ export default async function SnapshotPage({
 
         {/* Embedded snapshot */}
         <div className="ha-card ha-card-elevated flex min-h-[320px] flex-col">
-          <div className="border-b border-ha-border px-4 py-3 text-xs text-ha-muted sm:px-5">
+          <div className="border-ha-border text-ha-muted border-b px-4 py-3 text-xs sm:px-5">
             <span className="font-medium text-slate-900">Archived content</span>{" "}
             {viewerUrl ? (
               <>
                 {" "}
-                · served from{" "}
-                <code>
-                  {viewerUrl}
-                </code>{" "}
+                · served from <code>{viewerUrl}</code>{" "}
                 {browseUrl
                   ? "via the replay service."
                   : usingBackend
@@ -340,11 +313,10 @@ export default async function SnapshotPage({
                 initialOriginalUrl={originalUrl}
               />
             ) : (
-              <div className="flex h-[320px] items-center justify-center px-4 text-center text-xs text-ha-muted sm:h-[560px] sm:text-sm">
+              <div className="text-ha-muted flex h-[320px] items-center justify-center px-4 text-center text-xs sm:h-[560px] sm:text-sm">
                 {usingBackend && snapshotMeta ? (
                   <>
-                    Archived HTML content for this snapshot is not currently
-                    available.{" "}
+                    Archived HTML content for this snapshot is not currently available.{" "}
                     {apiLink && (
                       <>
                         You can still{" "}
@@ -352,7 +324,7 @@ export default async function SnapshotPage({
                           href={apiLink}
                           target="_blank"
                           rel="noreferrer"
-                          className="font-medium text-ha-accent hover:text-blue-700"
+                          className="text-ha-accent font-medium hover:text-blue-700"
                         >
                           view metadata JSON
                         </a>
@@ -362,8 +334,8 @@ export default async function SnapshotPage({
                   </>
                 ) : (
                   <>
-                    Archived HTML content for this snapshot is not currently
-                    available in the embedded viewer.
+                    Archived HTML content for this snapshot is not currently available in the
+                    embedded viewer.
                   </>
                 )}
               </div>

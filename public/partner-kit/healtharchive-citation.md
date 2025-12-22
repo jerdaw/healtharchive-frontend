@@ -55,4 +55,3 @@ On `/compare?from=<id>&to=<id>` you can find:
 - Both capture date/times (UTC)
 - The original URL
 - A descriptive change summary
-

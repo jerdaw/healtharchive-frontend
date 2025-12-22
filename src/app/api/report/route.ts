@@ -8,10 +8,7 @@ export async function POST(request: Request) {
   try {
     payload = await request.json();
   } catch {
-    return NextResponse.json(
-      { error: "Invalid JSON payload." },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Invalid JSON payload." }, { status: 400 });
   }
 
   const apiBase = getApiBaseUrl();

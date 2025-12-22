@@ -19,24 +19,18 @@ export function SnapshotFrame({
   apiLink,
   iframeClassName,
 }: SnapshotFrameProps) {
-  const [status, setStatus] = useState<"loading" | "loaded" | "error">(
-    "loading",
-  );
+  const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
 
-  const iframeClasses =
-    iframeClassName ?? "h-[480px] w-full border-0 sm:h-[560px]";
+  const iframeClasses = iframeClassName ?? "h-[480px] w-full border-0 sm:h-[560px]";
 
   return (
     <div className="relative h-full w-full">
       {status === "error" ? (
-        <div className="flex h-full min-h-[320px] items-center justify-center px-4 text-center text-xs text-ha-muted sm:min-h-[560px] sm:text-sm">
+        <div className="text-ha-muted flex h-full min-h-[320px] items-center justify-center px-4 text-center text-xs sm:min-h-[560px] sm:text-sm">
           <div className="space-y-2">
-            <p className="font-semibold text-slate-900">
-              Archived content unavailable
-            </p>
+            <p className="font-semibold text-slate-900">Archived content unavailable</p>
             <p>
-              The archived page failed to load. Try opening it in a new tab or
-              reloading the page.
+              The archived page failed to load. Try opening it in a new tab or reloading the page.
             </p>
             <div className="flex justify-center gap-2 text-[11px] font-medium">
               {browseLink && (
@@ -83,7 +77,7 @@ export function SnapshotFrame({
         />
       )}
       {status === "loading" && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white/40 text-xs text-ha-muted">
+        <div className="text-ha-muted pointer-events-none absolute inset-0 flex items-center justify-center bg-white/40 text-xs">
           Loading snapshot…
         </div>
       )}
