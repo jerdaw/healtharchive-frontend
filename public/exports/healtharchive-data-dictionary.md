@@ -27,6 +27,11 @@ Fields:
 - `job_name` — archive job name (edition label, if available).
 - `snapshot_url` — stable public URL to the snapshot detail page.
 
+Notes:
+
+- `normalized_url_group` is the canonical identifier for a page across multiple captures.
+- Some fields can be null if a capture did not record them or was non-HTML.
+
 ---
 
 ## Changes export (`/api/exports/changes`)
@@ -60,11 +65,15 @@ Fields:
 - `computed_at_utc` — when this change event was computed (UTC).
 - `compare_url` — stable public URL to the compare view.
 
+Notes:
+
+- Change events are edition-aware by default, reflecting captured snapshots, not real-time source updates.
+- `compare_url` is safe for citation and shows the descriptive diff.
+
 ---
 
 ## Limitations
 
 - Exports reflect captured content, not necessarily real-time source updates.
 - Coverage is limited to in-scope sources and successful captures.
-- Replay fidelity varies by site and asset type.
-
+- Replay fidelity varies by site and asset type; exports do not include replay assets or raw HTML.
