@@ -6,15 +6,12 @@ type ArchiveFiltersAutoscrollProps = {
   targetId: string;
 };
 
-export function ArchiveFiltersAutoscroll({
-  targetId,
-}: ArchiveFiltersAutoscrollProps) {
+export function ArchiveFiltersAutoscroll({ targetId }: ArchiveFiltersAutoscrollProps) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const url = new URL(window.location.href);
     const shouldScroll =
-      window.location.hash === `#${targetId}` ||
-      url.searchParams.get("focus") === "filters";
+      window.location.hash === `#${targetId}` || url.searchParams.get("focus") === "filters";
     if (!shouldScroll) return;
 
     const el = document.getElementById(targetId);
@@ -31,8 +28,7 @@ export function ArchiveFiltersAutoscroll({
       // extends below the header box. Add a little extra offset so the target
       // card isn't partially obscured.
       const padding = 40;
-      const targetTop =
-        el.getBoundingClientRect().top + window.scrollY - headerHeight - padding;
+      const targetTop = el.getBoundingClientRect().top + window.scrollY - headerHeight - padding;
 
       window.scrollTo({
         top: Math.max(0, targetTop),

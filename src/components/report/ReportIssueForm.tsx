@@ -109,8 +109,7 @@ export function ReportIssueForm({
       return;
     }
 
-    const snapshotIdValue =
-      snapshotId && /^\d+$/.test(snapshotId) ? Number(snapshotId) : null;
+    const snapshotIdValue = snapshotId && /^\d+$/.test(snapshotId) ? Number(snapshotId) : null;
 
     const payload: IssueReportPayload = {
       category,
@@ -153,8 +152,8 @@ export function ReportIssueForm({
       <div className="ha-callout">
         <h3 className="ha-callout-title">Report received</h3>
         <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-          Thank you for the report. We will review it and follow up if you
-          provided an email address.
+          Thank you for the report. We will review it and follow up if you provided an email
+          address.
         </p>
         {submittedId != null && (
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
@@ -184,7 +183,7 @@ export function ReportIssueForm({
               </option>
             ))}
           </select>
-          <p className="text-xs text-ha-muted">
+          <p className="text-ha-muted text-xs">
             {ISSUE_CATEGORIES.find((item) => item.value === category)?.helper}
           </p>
         </div>
@@ -248,9 +247,8 @@ export function ReportIssueForm({
             onChange={(event) => setDescription(event.target.value)}
             placeholder="Include enough detail for us to reproduce the problem."
           />
-          <p className="text-xs text-ha-muted">
-            Please do not include personal or health information. Minimum 20
-            characters.
+          <p className="text-ha-muted text-xs">
+            Please do not include personal or health information. Minimum 20 characters.
           </p>
         </div>
 
@@ -272,11 +270,8 @@ export function ReportIssueForm({
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">{error}</p>
           {fallbackMailto && (
             <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-              You can email the report instead: {" "}
-              <a
-                href={fallbackMailto}
-                className="font-medium text-ha-accent hover:text-blue-700"
-              >
+              You can email the report instead:{" "}
+              <a href={fallbackMailto} className="text-ha-accent font-medium hover:text-blue-700">
                 open a pre-filled email
               </a>
               .
@@ -286,16 +281,10 @@ export function ReportIssueForm({
       )}
 
       <div className="flex flex-wrap items-center gap-3">
-        <button
-          type="submit"
-          className="ha-btn-primary"
-          disabled={isSubmitting}
-        >
+        <button type="submit" className="ha-btn-primary" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit report"}
         </button>
-        <p className="text-xs text-ha-muted">
-          We aim to acknowledge reports within 7 days.
-        </p>
+        <p className="text-ha-muted text-xs">We aim to acknowledge reports within 7 days.</p>
       </div>
     </form>
   );

@@ -82,9 +82,7 @@ describe("/changes", () => {
     render(ui);
 
     expect(screen.getByText(/Change tracking/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: /Health Canada/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Health Canada/i })).toBeInTheDocument();
     expect(screen.getByText(/1 sections changed/i)).toBeInTheDocument();
     expect(screen.getByText(/Compare captures/i)).toBeInTheDocument();
   });

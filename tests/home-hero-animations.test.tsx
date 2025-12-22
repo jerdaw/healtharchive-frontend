@@ -6,74 +6,70 @@ import { ProjectSnapshotOrchestrator } from "@/components/home/ProjectSnapshotOr
 import { TrackChangesPhrase } from "@/components/TrackChangesPhrase";
 
 describe("Homepage hero animation orchestration", () => {
-    beforeEach(() => {
-        vi.useFakeTimers();
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("dispatches ha-project-snapshot-finished after all expected metric events", () => {
+    const handler = vi.fn();
+    window.addEventListener("ha-project-snapshot-finished", handler);
+
+    render(<ProjectSnapshotOrchestrator expectedIds={["records", "pages"]} />);
+
+    act(() => {
+      window.dispatchEvent(
+        new CustomEvent("ha-metric-finished", {
+          detail: { id: "records" },
+        }),
+      );
     });
 
-    afterEach(() => {
-        vi.useRealTimers();
+    expect(handler).not.toHaveBeenCalled();
+
+    act(() => {
+      window.dispatchEvent(
+        new CustomEvent("ha-metric-finished", {
+          detail: { id: "pages" },
+        }),
+      );
     });
 
-    it("dispatches ha-project-snapshot-finished after all expected metric events", () => {
-        const handler = vi.fn();
-        window.addEventListener("ha-project-snapshot-finished", handler);
+    expect(handler).toHaveBeenCalledTimes(1);
+    window.removeEventListener("ha-project-snapshot-finished", handler);
+  });
 
-        render(
-            <ProjectSnapshotOrchestrator
-                expectedIds={["records", "pages"]}
-            />,
-        );
+  it("removes the crossed-out before after project snapshot finishes", () => {
+    render(
+      <span>
+        <TrackChangesPhrase /> they change.
+      </span>,
+    );
 
-        act(() => {
-            window.dispatchEvent(
-                new CustomEvent("ha-metric-finished", {
-                    detail: { id: "records" },
-                }),
-            );
-        });
-
-        expect(handler).not.toHaveBeenCalled();
-
-        act(() => {
-            window.dispatchEvent(
-                new CustomEvent("ha-metric-finished", {
-                    detail: { id: "pages" },
-                }),
-            );
-        });
-
-        expect(handler).toHaveBeenCalledTimes(1);
-        window.removeEventListener("ha-project-snapshot-finished", handler);
+    act(() => {
+      vi.advanceTimersByTime(4000);
     });
 
-    it("removes the crossed-out before after project snapshot finishes", () => {
-        render(
-            <span>
-                <TrackChangesPhrase /> they change.
-            </span>,
-        );
+    expect(screen.getByText("before")).toBeInTheDocument();
+    expect(screen.getByText("after")).toBeInTheDocument();
 
-        act(() => {
-            vi.advanceTimersByTime(4000);
-        });
-
-        expect(screen.getByText("before")).toBeInTheDocument();
-        expect(screen.getByText("after")).toBeInTheDocument();
-
-        act(() => {
-            window.dispatchEvent(new CustomEvent("ha-project-snapshot-finished"));
-            vi.advanceTimersByTime(800);
-        });
-
-        const fadingBefore = document.querySelector(".ha-before-word--fading");
-        expect(fadingBefore).not.toBeNull();
-
-        act(() => {
-            vi.advanceTimersByTime(5600);
-        });
-
-        expect(screen.queryByText("before")).not.toBeInTheDocument();
-        expect(screen.getByText("after")).toBeInTheDocument();
-        expect(screen.getByText(/they change\./i)).toBeInTheDocument();
+    act(() => {
+      window.dispatchEvent(new CustomEvent("ha-project-snapshot-finished"));
+      vi.advanceTimersByTime(800);
     });
+
+    const fadingBefore = document.querySelector(".ha-before-word--fading");
+    expect(fadingBefore).not.toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(5600);
+    });
+
+    expect(screen.queryByText("before")).not.toBeInTheDocument();
+    expect(screen.getByText("after")).toBeInTheDocument();
+    expect(screen.getByText(/they change\./i)).toBeInTheDocument();
+  });
 });

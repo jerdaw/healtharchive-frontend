@@ -26,7 +26,8 @@ export const demoRecords: DemoRecord[] = [
   },
   {
     id: "phac-2023-10-01-flu-recs-en",
-    title: "National Advisory Committee on Immunization: Seasonal influenza vaccine recommendations",
+    title:
+      "National Advisory Committee on Immunization: Seasonal influenza vaccine recommendations",
     sourceCode: "phac",
     sourceName: "Public Health Agency of Canada",
     language: "English",
@@ -58,8 +59,7 @@ export const demoRecords: DemoRecord[] = [
     sourceName: "Public Health Agency of Canada",
     language: "English",
     captureDate: "2024-07-10",
-    originalUrl:
-      "https://www.canada.ca/en/public-health/services/diseases/monkeypox.html",
+    originalUrl: "https://www.canada.ca/en/public-health/services/diseases/monkeypox.html",
     snapshotPath: "/demo-archive/phac/2024-07-10-mpox-update.html",
     snippet:
       "Update on mpox activity in Canada, including case counts, epidemiologic links, and vaccination recommendations.",
@@ -110,8 +110,7 @@ export const demoRecords: DemoRecord[] = [
     sourceName: "Health Canada",
     language: "English",
     captureDate: "2023-04-20",
-    originalUrl:
-      "https://www.canada.ca/en/health-canada/services/opioids/naloxone.html",
+    originalUrl: "https://www.canada.ca/en/health-canada/services/opioids/naloxone.html",
     snapshotPath: "/demo-archive/hc/2023-04-20-naloxone.html",
     snippet:
       "Guidance for the public and service providers on accessing and using naloxone to temporarily reverse opioid overdoses.",
@@ -123,8 +122,7 @@ export const demoRecords: DemoRecord[] = [
     sourceName: "Health Canada",
     language: "English",
     captureDate: "2024-03-05",
-    originalUrl:
-      "https://recalls-rappels.canada.ca/en/food-recalls-and-safety-alerts",
+    originalUrl: "https://recalls-rappels.canada.ca/en/food-recalls-and-safety-alerts",
     snapshotPath: "/demo-archive/hc/2024-03-05-food-recalls.html",
     snippet:
       "Listing of current food recalls and safety alerts issued for products marketed in Canada.",
@@ -161,8 +159,10 @@ export function searchDemoRecords(params: SearchParams): DemoRecord[] {
   const from = params.from?.trim();
   const to = params.to?.trim();
   const tokens =
-    q?.match(/[a-z0-9]+/gi)?.map((t) => t.toLowerCase()).filter((t) => t.length >= 3) ??
-    [];
+    q
+      ?.match(/[a-z0-9]+/gi)
+      ?.map((t) => t.toLowerCase())
+      .filter((t) => t.length >= 3) ?? [];
 
   return demoRecords.filter((record) => {
     if (source && record.sourceCode !== source) return false;
@@ -172,13 +172,9 @@ export function searchDemoRecords(params: SearchParams): DemoRecord[] {
     if (!q) return true;
 
     const haystack = normalize(
-      [
-        record.title,
-        record.snippet,
-        record.sourceName,
-        record.language,
-        record.originalUrl,
-      ].join(" "),
+      [record.title, record.snippet, record.sourceName, record.language, record.originalUrl].join(
+        " ",
+      ),
     );
 
     if (tokens.length === 0) return haystack.includes(normalize(q));
@@ -221,9 +217,7 @@ export function getSourcesSummary(): SourceSummary[] {
     }
   }
 
-  return Array.from(map.values()).sort((a, b) =>
-    a.sourceName.localeCompare(b.sourceName),
-  );
+  return Array.from(map.values()).sort((a, b) => a.sourceName.localeCompare(b.sourceName));
 }
 
 export function getRecordById(id: string): DemoRecord | undefined {

@@ -7,20 +7,14 @@ describe("/cite", () => {
     render(<CitePage />);
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "How to cite HealthArchive.ca" })
+      screen.getByRole("heading", { level: 1, name: "How to cite HealthArchive.ca" }),
     ).toBeInTheDocument();
 
     const download = screen.getByRole("link", {
       name: "Download citation handout (Markdown)",
     });
-    expect(download).toHaveAttribute(
-      "href",
-      "/partner-kit/healtharchive-citation.md"
-    );
+    expect(download).toHaveAttribute("href", "/partner-kit/healtharchive-citation.md");
 
-    expect(
-      screen.getByRole("heading", { name: "1) Cite a snapshot" })
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "1) Cite a snapshot" })).toBeInTheDocument();
   });
 });
-

@@ -39,8 +39,8 @@ export default async function ComparePage({
         <div className="ha-callout">
           <h2 className="ha-callout-title">Compare unavailable</h2>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            No snapshot was selected for comparison. Visit a snapshot page to
-            choose captures to compare.
+            No snapshot was selected for comparison. Visit a snapshot page to choose captures to
+            compare.
           </p>
         </div>
       </PageShell>
@@ -67,8 +67,8 @@ export default async function ComparePage({
         <div className="ha-callout">
           <h2 className="ha-callout-title">Comparison unavailable</h2>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            The comparison could not be loaded. Ensure change tracking is
-            enabled and the selected capture pair has a precomputed diff.
+            The comparison could not be loaded. Ensure change tracking is enabled and the selected
+            capture pair has a precomputed diff.
           </p>
         </div>
       )}
@@ -78,16 +78,14 @@ export default async function ComparePage({
           <div className="ha-callout">
             <h2 className="ha-callout-title">Descriptive changes only</h2>
             <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-              This comparison highlights text changes between archived captures.
-              It does not interpret the change or provide medical advice.
-              {` `}{siteCopy.whatThisSiteIs.forCurrent}
+              This comparison highlights text changes between archived captures. It does not
+              interpret the change or provide medical advice.
+              {` `}
+              {siteCopy.whatThisSiteIs.forCurrent}
             </p>
             <p className="mt-3 text-xs leading-relaxed sm:text-sm">
               Need to cite this comparison? See{" "}
-              <Link
-                href="/cite"
-                className="font-medium text-ha-accent hover:text-blue-700"
-              >
+              <Link href="/cite" className="text-ha-accent font-medium hover:text-blue-700">
                 /cite
               </Link>
               .
@@ -96,16 +94,16 @@ export default async function ComparePage({
 
           <div className="ha-grid-2">
             <div className="ha-card space-y-2">
-              <p className="text-xs text-ha-muted">Earlier capture</p>
+              <p className="text-ha-muted text-xs">Earlier capture</p>
               {compare.fromSnapshot ? (
                 <>
                   <h3 className="text-sm font-semibold text-slate-900">
                     {compare.fromSnapshot.title ?? "Archived snapshot"}
                   </h3>
-                  <p className="text-xs text-ha-muted">
+                  <p className="text-ha-muted text-xs">
                     {formatDate(compare.fromSnapshot.captureDate)}
                   </p>
-                  <p className="text-xs text-ha-muted">
+                  <p className="text-ha-muted text-xs">
                     {compare.fromSnapshot.jobName ?? "Edition capture"}
                   </p>
                   <div className="pt-2">
@@ -118,20 +116,18 @@ export default async function ComparePage({
                   </div>
                 </>
               ) : (
-                <p className="text-xs text-ha-muted">
+                <p className="text-ha-muted text-xs">
                   This is the first archived capture for this page.
                 </p>
               )}
             </div>
             <div className="ha-card space-y-2">
-              <p className="text-xs text-ha-muted">Later capture</p>
+              <p className="text-ha-muted text-xs">Later capture</p>
               <h3 className="text-sm font-semibold text-slate-900">
                 {compare.toSnapshot.title ?? "Archived snapshot"}
               </h3>
-              <p className="text-xs text-ha-muted">
-                {formatDate(compare.toSnapshot.captureDate)}
-              </p>
-              <p className="text-xs text-ha-muted">
+              <p className="text-ha-muted text-xs">{formatDate(compare.toSnapshot.captureDate)}</p>
+              <p className="text-ha-muted text-xs">
                 {compare.toSnapshot.jobName ?? "Edition capture"}
               </p>
               <div className="pt-2">
@@ -149,33 +145,27 @@ export default async function ComparePage({
             <div className="ha-callout border-amber-300 bg-amber-50 text-amber-900">
               <h3 className="ha-callout-title">High-noise change</h3>
               <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-                This change may include layout or boilerplate updates (such as
-                navigation or footer adjustments). Treat the diff as
-                descriptive, not definitive.
+                This change may include layout or boilerplate updates (such as navigation or footer
+                adjustments). Treat the diff as descriptive, not definitive.
               </p>
             </div>
           )}
 
           <div className="ha-card space-y-3">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-ha-muted">
+            <div className="text-ha-muted flex flex-wrap items-center gap-2 text-xs">
               <span className="ha-tag">{compare.event.changeType}</span>
               <span>{compare.event.summary ?? "Archived text updated."}</span>
             </div>
             {compare.diffHtml ? (
-              <div
-                className="ha-diff"
-                dangerouslySetInnerHTML={{ __html: compare.diffHtml }}
-              />
+              <div className="ha-diff" dangerouslySetInnerHTML={{ __html: compare.diffHtml }} />
             ) : (
-              <p className="text-xs text-ha-muted">
-                No diff is available for this capture pair. This can happen
-                when content is unchanged or stored in a non-HTML format.
+              <p className="text-ha-muted text-xs">
+                No diff is available for this capture pair. This can happen when content is
+                unchanged or stored in a non-HTML format.
               </p>
             )}
             {compare.diffTruncated && (
-              <p className="text-xs text-ha-muted">
-                Diff output was truncated for readability.
-              </p>
+              <p className="text-ha-muted text-xs">Diff output was truncated for readability.</p>
             )}
           </div>
         </section>

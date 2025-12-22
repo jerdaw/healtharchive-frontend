@@ -15,115 +15,116 @@ export default function BriefPage() {
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
           {siteCopy.mission.line1}
         </p>
-        <p className="text-sm sm:text-base leading-relaxed text-ha-muted">
-          This is an archival record and change-tracking tool. It is not current
-          guidance and not medical advice.
+        <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
+          This is an archival record and change-tracking tool. It is not current guidance and not
+          medical advice.
         </p>
         <div className="ha-callout">
           <h3 className="ha-callout-title">Download / print</h3>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
             <a
-              className="font-medium text-ha-accent hover:text-blue-700"
+              className="text-ha-accent font-medium hover:text-blue-700"
               href="/partner-kit/healtharchive-brief.md"
             >
               Download this brief (Markdown)
-            </a>
-            {" "}or use your browser’s print dialog to save as PDF.
+            </a>{" "}
+            or use your browser’s print dialog to save as PDF.
           </p>
         </div>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">What it does</h2>
-        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>Captures time-stamped snapshots of selected public health web pages.</li>
           <li>Indexes snapshots into a searchable archive.</li>
           <li>
-            Provides descriptive change tracking between archived editions:
-            a changes feed, compare views, and RSS feeds.
+            Provides descriptive change tracking between archived editions: a changes feed, compare
+            views, and RSS feeds.
           </li>
         </ul>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">What it is not</h2>
-        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>Not a source of current guidance.</li>
           <li>Not medical advice.</li>
           <li>Not an official government website.</li>
           <li>
-            Not affiliated with, endorsed by, or associated with PHAC, Health
-            Canada, or any government agency.
+            Not affiliated with, endorsed by, or associated with PHAC, Health Canada, or any
+            government agency.
           </li>
         </ul>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Intended audiences</h2>
-        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>
-            <strong>Researchers and trainees:</strong> reproducible citations
-            and historical context.
+            <strong>Researchers and trainees:</strong> reproducible citations and historical
+            context.
           </li>
           <li>
-            <strong>Journalists and science communicators:</strong> timelines
-            and wording changes.
+            <strong>Journalists and science communicators:</strong> timelines and wording changes.
           </li>
           <li>
-            <strong>Educators:</strong> teaching how evidence communication
-            evolves over time.
+            <strong>Educators:</strong> teaching how evidence communication evolves over time.
           </li>
         </ul>
       </section>
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Key links</h2>
-        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>
             Home:{" "}
-            <a className="font-medium text-ha-accent hover:text-blue-700" href="https://www.healtharchive.ca/">
+            <a
+              className="text-ha-accent font-medium hover:text-blue-700"
+              href="https://www.healtharchive.ca/"
+            >
               https://www.healtharchive.ca/
             </a>
           </li>
           <li>
             Archive search:{" "}
-            <Link className="font-medium text-ha-accent hover:text-blue-700" href="/archive">
+            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/archive">
               /archive
             </Link>
           </li>
           <li>
             Changes feed:{" "}
-            <Link className="font-medium text-ha-accent hover:text-blue-700" href="/changes">
+            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/changes">
               /changes
             </Link>
           </li>
           <li>
             Digest + RSS:{" "}
-            <Link className="font-medium text-ha-accent hover:text-blue-700" href="/digest">
+            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/digest">
               /digest
             </Link>
           </li>
           <li>
             Methods and scope:{" "}
-            <Link className="font-medium text-ha-accent hover:text-blue-700" href="/methods">
+            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/methods">
               /methods
             </Link>
           </li>
           <li>
             Governance and policies:{" "}
-            <Link className="font-medium text-ha-accent hover:text-blue-700" href="/governance">
+            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/governance">
               /governance
             </Link>
           </li>
           <li>
             Status and metrics:{" "}
-            <Link className="font-medium text-ha-accent hover:text-blue-700" href="/status">
+            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/status">
               /status
             </Link>
           </li>
           <li>
             Monthly impact report:{" "}
-            <Link className="font-medium text-ha-accent hover:text-blue-700" href="/impact">
+            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/impact">
               /impact
             </Link>
           </li>
@@ -132,15 +133,10 @@ export default function BriefPage() {
 
       <section className="ha-home-hero ha-home-hero-plain space-y-5">
         <h2 className="ha-section-heading">Safety posture (plain-language)</h2>
-        <ul className="list-disc pl-5 text-sm sm:text-base text-ha-muted leading-relaxed space-y-1">
+        <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>Archived content can be incomplete, outdated, or superseded.</li>
-          <li>
-            Change tracking is descriptive only and does not interpret meaning.
-          </li>
-          <li>
-            For up-to-date recommendations, always consult the official source
-            website.
-          </li>
+          <li>Change tracking is descriptive only and does not interpret meaning.</li>
+          <li>For up-to-date recommendations, always consult the official source website.</li>
         </ul>
       </section>
 
@@ -148,21 +144,15 @@ export default function BriefPage() {
         <div className="ha-callout">
           <h3 className="ha-callout-title">Contact and reporting</h3>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-            For collaboration, feedback, missing pages, or corrections, use the
-            contact page or submit an issue report.
+            For collaboration, feedback, missing pages, or corrections, use the contact page or
+            submit an issue report.
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link
-              href="/contact"
-              className="font-medium text-ha-accent hover:text-blue-700"
-            >
+            <Link href="/contact" className="text-ha-accent font-medium hover:text-blue-700">
               Contact
-            </Link>
-            {" "}·{" "}
-            <Link
-              href="/report"
-              className="font-medium text-ha-accent hover:text-blue-700"
-            >
+            </Link>{" "}
+            ·{" "}
+            <Link href="/report" className="text-ha-accent font-medium hover:text-blue-700">
               Report an issue
             </Link>
           </p>
@@ -171,4 +161,3 @@ export default function BriefPage() {
     </PageShell>
   );
 }
-

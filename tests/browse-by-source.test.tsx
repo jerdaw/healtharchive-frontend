@@ -35,7 +35,8 @@ describe("/archive/browse-by-source", () => {
         lastCapture: "2024-02-01",
         latestRecordId: 10,
         entryRecordId: 9,
-        entryBrowseUrl: "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/public-health.html",
+        entryBrowseUrl:
+          "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/public-health.html",
         entryPreviewUrl: "/api/sources/phac/preview?jobId=1",
       },
     ]);
@@ -44,9 +45,7 @@ describe("/archive/browse-by-source", () => {
     render(ui);
 
     expect(screen.getByText(/Important note/i)).toBeInTheDocument();
-    expect(
-      screen.getByText(/not current guidance or medical advice/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/not current guidance or medical advice/i)).toBeInTheDocument();
 
     expect(screen.getByText("PHAC")).toBeInTheDocument();
     expect(screen.getByText(/2 snapshot/i)).toBeInTheDocument();
@@ -64,7 +63,8 @@ describe("/archive/browse-by-source", () => {
         lastCapture: "2024-02-01",
         latestRecordId: 10,
         entryRecordId: 9,
-        entryBrowseUrl: "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/health-canada.html",
+        entryBrowseUrl:
+          "https://replay.healtharchive.ca/job-1/https://www.canada.ca/en/health-canada.html",
         entryPreviewUrl: "/api/sources/hc/preview?jobId=1",
       },
     ]);
@@ -73,10 +73,7 @@ describe("/archive/browse-by-source", () => {
     render(ui);
 
     const img = screen.getByAltText("Health Canada preview");
-    expect(img).toHaveAttribute(
-      "src",
-      "https://api.example.test/api/sources/hc/preview?jobId=1",
-    );
+    expect(img).toHaveAttribute("src", "https://api.example.test/api/sources/hc/preview?jobId=1");
   });
 
   it("shows fallback notice when backend fails", async () => {

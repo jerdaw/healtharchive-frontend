@@ -14,9 +14,7 @@ export function stripUrlFragment(url: string): string {
   return trimmed.slice(0, hashIdx);
 }
 
-export function parseJobIdFromCollection(
-  collection: string | null | undefined,
-): number | null {
+export function parseJobIdFromCollection(collection: string | null | undefined): number | null {
   if (!collection) return null;
   const match = /^job-(\d+)$/.exec(collection.trim());
   if (!match) return null;
