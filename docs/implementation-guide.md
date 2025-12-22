@@ -987,56 +987,56 @@ Old GitHub Pages `A @ 185.199.*` records have been **removed**.
 
 ---
 
-## 10. Phase summary (what’s done vs future)
+## 10. Milestone summary (what’s done vs future)
 
-We followed an 8-phase plan. Status:
+We followed an 8-step build plan. Status:
 
--   **Phase 0 – Repo & environment**
+-   **Repo & environment**
 
     -   ✅ Branch strategy: `main` (prod), `static-legacy` (old site), `next` (development, now merged).
     -   ✅ Node + npm + TS + Tailwind set up.
 
--   **Phase 1 – Scaffold Next.js app**
+-   **Scaffold Next.js app**
 
     -   ✅ Next.js 16 App Router app created.
     -   ✅ Typescript and Tailwind integrated.
     -   ✅ Basic dev server works.
 
--   **Phase 2 – Global layout & navigation shell**
+-   **Global layout & navigation shell**
 
     -   ✅ `<Header>`, `<Footer>`, `<PageShell>` created.
     -   ✅ Navigation items finalized.
     -   ✅ Disclaimer in Footer.
 
--   **Phase 3 – Page skeletons & content migration**
+-   **Page skeletons & content migration**
 
     -   ✅ Routes `/`, `/archive`, `/archive/browse-by-source`, `/methods`, `/researchers`, `/about`, `/contact`, `/governance`, `/terms`, `/privacy`, `/changelog`, `/report`, `/status`, `/impact`, `/changes`, `/compare`, `/digest`, `/brief`, `/cite`, `/exports` created.
     -   ✅ Original single-page content split and restructured into these routes.
 
--   **Phase 4 – Data model & demo API**
+-   **Data model & demo API**
 
     -   Partially integrated directly into server components instead of separate `/api` routes.
     -   ✅ `DemoRecord` type, demo data, and helper functions created in `src/data/demo-records.ts`.
     -   ⏳ Could still add `/api/search` and `/api/sources` for client-side data fetching if desired.
 
--   **Phase 5 – Archive UI**
+-   **Archive UI**
 
     -   ✅ `/archive` implemented with server-side filtering via URL `searchParams`.
     -   ✅ Search panel + results list.
     -   ✅ `/archive/browse-by-source` implemented using `getSourcesSummary`.
 
--   **Phase 6 – Snapshot demo pages**
+-   **Snapshot demo pages**
 
     -   ✅ `/snapshot/[id]` route implemented with metadata and iframe viewer.
     -   ✅ Static snapshot HTML files wired via `snapshotPath` and stored in `public/demo-archive/**`.
 
--   **Phase 7 – Design system & polish**
+-   **Design system & polish**
 
     -   ✅ Basic design system (.ha-\* classes) in `globals.css`.
     -   ✅ Layout reasonably modern and coherent.
     -   ⏳ Further polish (e.g., more advanced responsive tweaks, accessibility audit) still possible.
 
--   **Phase 8 – Deployment & DNS**
+-   **Deployment & DNS**
 
     -   ✅ Next.js app deployed to Vercel.
     -   ✅ GitHub integration configured.
