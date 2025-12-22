@@ -7,6 +7,14 @@ export type ChangelogEntry = {
 export const changelogEntries: ChangelogEntry[] = [
   {
     date: "2025-12-22",
+    title: "Dataset releases",
+    items: [
+      "Published automated quarterly, metadata-only dataset releases with checksums (GitHub Releases).",
+      "Linked dataset releases from the exports page.",
+    ],
+  },
+  {
+    date: "2025-12-22",
     title: "Change tracking and comparison",
     items: [
       "Launched edition-aware change tracking feeds and comparison views.",
