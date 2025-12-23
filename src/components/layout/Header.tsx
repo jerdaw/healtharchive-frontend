@@ -267,53 +267,43 @@ export function Header() {
             })}
           </nav>
 
-          {/* Theme toggle */}
-          <NextLink
-            href={languageSwitchHref}
-            aria-label={languageSwitchAriaLabel}
-            className="ha-locale-toggle hidden md:inline-flex"
-          >
-            <span className="ha-locale-toggle-label" aria-hidden="true">
-              {languageSwitchLabel}
-            </span>
-            <span className="sr-only">{languageSwitchAriaLabel}</span>
-          </NextLink>
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="ha-theme-toggle hidden focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none md:inline-flex"
-            aria-label={themeToggleAriaLabel}
-          >
-            <span className="ha-theme-toggle-track">
-              {/* Sun icon (left) */}
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="ha-theme-toggle-icon ha-theme-toggle-icon-sun"
-              >
-                <circle cx="12" cy="12" r="4" fill="currentColor" />
-                <path
-                  d="M12 2.5v2.5M12 19v2.5M4.22 4.22l1.77 1.77M17.99 17.99l1.77 1.77M2.5 12h2.5M19 12h2.5M4.22 19.78l1.77-1.77M17.99 6.01l1.77-1.77"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                />
-              </svg>
-              {/* Moon icon (right) */}
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="ha-theme-toggle-icon ha-theme-toggle-icon-moon"
-              >
-                <path
-                  d="M21 12.79A9 9 0 0 1 12.21 3 7 7 0 0 0 12 17a7 7 0 0 0 9-4.21z"
-                  fill="currentColor"
-                />
-              </svg>
-              {/* Thumb */}
-              <span className="ha-theme-toggle-thumb" />
-            </span>
-          </button>
+          <div className="ha-utility-switch hidden md:inline-flex">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="ha-utility-switch-item ha-utility-switch-item--icon"
+              aria-label={themeToggleAriaLabel}
+              aria-pressed={theme === "dark"}
+            >
+              {theme === "dark" ? (
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path
+                    d="M21 12.79A9 9 0 0 1 12.21 3 7 7 0 0 0 12 17a7 7 0 0 0 9-4.21z"
+                    fill="currentColor"
+                  />
+                </svg>
+              ) : (
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="4" fill="currentColor" />
+                  <path
+                    d="M12 2.5v2.5M12 19v2.5M4.22 4.22l1.77 1.77M17.99 17.99l1.77 1.77M2.5 12h2.5M19 12h2.5M4.22 19.78l1.77-1.77M17.99 6.01l1.77-1.77"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              )}
+              <span className="sr-only">{themeToggleAriaLabel}</span>
+            </button>
+            <NextLink
+              href={languageSwitchHref}
+              aria-label={languageSwitchAriaLabel}
+              className="ha-utility-switch-item ha-utility-switch-item--locale"
+            >
+              <span aria-hidden="true">{languageSwitchLabel}</span>
+              <span className="sr-only">{languageSwitchAriaLabel}</span>
+            </NextLink>
+          </div>
 
           {/* Mobile menu button */}
           <button
@@ -391,54 +381,48 @@ export function Header() {
                 );
               })}
             </div>
-            <div className="flex items-center justify-between gap-3 pt-2">
-              <NextLink
-                href={languageSwitchHref}
-                aria-label={languageSwitchAriaLabel}
-                className="ha-locale-toggle inline-flex"
-                onClick={() => setMobileOpen(false)}
-              >
-                <span className="ha-locale-toggle-label" aria-hidden="true">
-                  {languageSwitchLabel}
-                </span>
-                <span className="sr-only">{languageSwitchAriaLabel}</span>
-              </NextLink>
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="ha-theme-toggle inline-flex focus-visible:ring-2 focus-visible:ring-[#11588f] focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none lg:hidden"
-                aria-label={themeToggleAriaLabel}
-              >
-                <span className="ha-theme-toggle-track">
-                  {/* Sun icon (left) */}
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    className="ha-theme-toggle-icon ha-theme-toggle-icon-sun"
-                  >
-                    <circle cx="12" cy="12" r="4" fill="currentColor" />
-                    <path
-                      d="M12 2.5v2.5M12 19v2.5M4.22 4.22l1.77 1.77M17.99 17.99l1.77 1.77M2.5 12h2.5M19 12h2.5M4.22 19.78l1.77-1.77M17.99 6.01l1.77-1.77"
-                      stroke="currentColor"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  {/* Moon icon (right) */}
-                  <svg
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
-                    className="ha-theme-toggle-icon ha-theme-toggle-icon-moon"
-                  >
-                    <path
-                      d="M21 12.79A9 9 0 0 1 12.21 3 7 7 0 0 0 12 17a7 7 0 0 0 9-4.21z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                  {/* Thumb */}
-                  <span className="ha-theme-toggle-thumb" />
-                </span>
-              </button>
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <div className="ha-utility-switch inline-flex">
+                <button
+                  type="button"
+                  onClick={() => {
+                    toggleTheme();
+                    setMobileOpen(false);
+                  }}
+                  className="ha-utility-switch-item ha-utility-switch-item--icon"
+                  aria-label={themeToggleAriaLabel}
+                  aria-pressed={theme === "dark"}
+                >
+                  {theme === "dark" ? (
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <path
+                        d="M21 12.79A9 9 0 0 1 12.21 3 7 7 0 0 0 12 17a7 7 0 0 0 9-4.21z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  ) : (
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="4" fill="currentColor" />
+                      <path
+                        d="M12 2.5v2.5M12 19v2.5M4.22 4.22l1.77 1.77M17.99 17.99l1.77 1.77M2.5 12h2.5M19 12h2.5M4.22 19.78l1.77-1.77M17.99 6.01l1.77-1.77"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  )}
+                  <span className="sr-only">{themeToggleAriaLabel}</span>
+                </button>
+                <NextLink
+                  href={languageSwitchHref}
+                  aria-label={languageSwitchAriaLabel}
+                  className="ha-utility-switch-item ha-utility-switch-item--locale"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span aria-hidden="true">{languageSwitchLabel}</span>
+                  <span className="sr-only">{languageSwitchAriaLabel}</span>
+                </NextLink>
+              </div>
             </div>
           </nav>
         </div>
