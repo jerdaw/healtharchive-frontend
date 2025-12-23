@@ -13,3 +13,5 @@ This repo includes a `.pre-commit-config.yaml` with fast, mechanical checks (whi
 - Install (recommended): `pipx install pre-commit` (or `python -m pip install --user pre-commit`)
 - Enable: `pre-commit install`
 - Run on demand: `pre-commit run --all-files`
+
+Note: CI runs these hooks on pull requests. Installing the hook locally avoids “CI fixed whitespace” failures.
