@@ -231,7 +231,7 @@ From the repo root:
 │   ├── vercel.svg
 │   └── styles.css                 # Basic CSS used by the stock Next starter (not heavily used)
 └── src/
-    ├── middleware.ts               # Locale routing (English canonical; French /fr)
+    ├── proxy.ts                    # Locale routing (English canonical; French /fr)
     ├── app/
     │   ├── globals.css
     │   ├── [locale]/               # Locale-aware routes (see middleware)
@@ -390,7 +390,7 @@ Responsibility:
 - Render persistent **Header** and **Footer** around the route content.
 - Provide locale routing:
   - English is the default, unprefixed locale.
-  - French lives under `/fr/...` (see `src/middleware.ts` for rewrite/redirect behavior).
+  - French lives under `/fr/...` (see `src/proxy.ts` for rewrite/redirect behavior).
   - French UI is an automated alpha translation and is marked `noindex`; English governs on policy pages.
 
 Structure:

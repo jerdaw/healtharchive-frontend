@@ -20,7 +20,7 @@
 - Canonical public-facing copy (mission + workflow disclaimers) lives in `src/lib/siteCopy.ts` and should be reused rather than duplicated across pages.
 - Localization:
   - Locale-aware routes live under `src/app/[locale]/...`.
-  - English is canonical/unprefixed; French is under `/fr/...` (see `src/middleware.ts`).
+  - English is canonical/unprefixed; French is under `/fr/...` (see `src/proxy.ts`).
   - French is an automated alpha translation; English governs for any inconsistencies (see `src/components/i18n/FrenchTranslationBanner.tsx` and `src/components/policy/EnglishControlsNotice.tsx`).
   - Prefer `getSiteCopy(locale)` and `pickLocalized(locale, { en, fr })` instead of sprinkling ad-hoc strings.
 
