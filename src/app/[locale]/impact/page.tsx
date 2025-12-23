@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { fetchArchiveStats, fetchUsageMetrics } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 
 function formatNumber(locale: Locale, value: number | null | undefined): string {
@@ -21,37 +24,53 @@ function formatDate(locale: Locale, value: string | null | undefined): string {
   });
 }
 
+function getImpactCopy(locale: Locale) {
+  const monthLabel = new Date().toLocaleDateString(localeToLanguageTag(locale), {
+    year: "numeric",
+    month: "long",
+  });
+
+  if (locale === "fr") {
+    return {
+      eyebrow: "Rapport d’impact",
+      title: `Rapport d’impact mensuel — ${monthLabel}`,
+      intro:
+        "Un aperçu mensuel léger de la couverture et de l’utilisation, conçu pour la transparence et la responsabilisation.",
+    };
+  }
+
+  return {
+    eyebrow: "Impact report",
+    title: `Monthly impact report — ${monthLabel}`,
+    intro:
+      "A lightweight monthly snapshot of coverage and usage, designed for transparency and accountability.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getImpactCopy(locale);
+  return buildPageMetadata(locale, "/impact", copy.title, copy.intro);
+}
+
 export default async function ImpactPage({
   params,
 }: {
   params?: Promise<{ locale?: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getImpactCopy(locale);
   const [statsRes, usageRes] = await Promise.allSettled([fetchArchiveStats(), fetchUsageMetrics()]);
 
   const stats = statsRes.status === "fulfilled" ? statsRes.value : null;
   const usage = usageRes.status === "fulfilled" ? usageRes.value : null;
 
-  const now = new Date();
-  const monthLabel = now.toLocaleDateString(localeToLanguageTag(locale), {
-    year: "numeric",
-    month: "long",
-  });
-
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Rapport d’impact" : "Impact report"}
-      title={
-        locale === "fr"
-          ? `Rapport d’impact mensuel — ${monthLabel}`
-          : `Monthly impact report — ${monthLabel}`
-      }
-      intro={
-        locale === "fr"
-          ? "Un aperçu mensuel léger de la couverture et de l’utilisation, conçu pour la transparence et la responsabilisation."
-          : "A lightweight monthly snapshot of coverage and usage, designed for transparency and accountability."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Aperçu de la couverture" : "Coverage snapshot"}

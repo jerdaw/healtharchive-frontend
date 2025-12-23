@@ -1,10 +1,41 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { fetchChanges, fetchSourceEditions, fetchSources } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
+
+function getChangesCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Changements",
+      title: "Suivi des changements",
+      intro:
+        "Suivez les changements de texte entre des captures archivées. Ces changements reflètent des différences entre captures, et non des directives actuelles.",
+    };
+  }
+
+  return {
+    eyebrow: "Changes",
+    title: "Change tracking",
+    intro:
+      "Track text changes between archived captures. These changes reflect differences between snapshots, not current guidance.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getChangesCopy(locale);
+  return buildPageMetadata(locale, "/changes", copy.title, copy.intro);
+}
 
 function formatDate(locale: Locale, value: string | null | undefined): string {
   if (!value) return locale === "fr" ? "Inconnu" : "Unknown";
@@ -27,6 +58,7 @@ export default async function ChangesPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const locale = await resolveLocale(routeParams);
+  const copy = getChangesCopy(locale);
   const siteCopy = getSiteCopy(locale);
   const params = await searchParams;
   const requestedSource = typeof params.source === "string" ? params.source : "";
@@ -74,15 +106,7 @@ export default async function ChangesPage({
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Changements" : "Changes"}
-      title={locale === "fr" ? "Suivi des changements" : "Change tracking"}
-      intro={
-        locale === "fr"
-          ? "Suivez les changements de texte entre des captures archivées. Ces changements reflètent des différences entre captures, et non des directives actuelles."
-          : "Track text changes between archived captures. These changes reflect differences between snapshots, not current guidance."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-4">
         <div className="ha-callout">
           <h2 className="ha-callout-title">

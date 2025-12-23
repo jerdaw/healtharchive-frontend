@@ -1,6 +1,38 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import { PageShell } from "@/components/layout/PageShell";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
+
+function getContactCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Contact et suivi",
+      title: "Rester en contact avec le projet",
+      intro:
+        "HealthArchive.ca est un projet porté par des bénévoles et en développement. Si vous souhaitez suivre le travail ou explorer une collaboration, les options ci-dessous sont un bon point de départ.",
+    };
+  }
+
+  return {
+    eyebrow: "Contact & follow",
+    title: "Staying in touch with the project",
+    intro:
+      "HealthArchive.ca is a volunteer-led project in development. If you are interested in following the work or exploring collaboration, the options below are a starting point.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getContactCopy(locale);
+  return buildPageMetadata(locale, "/contact", copy.title, copy.intro);
+}
 
 export default async function ContactPage({
   params,
@@ -8,19 +40,10 @@ export default async function ContactPage({
   params?: Promise<{ locale?: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getContactCopy(locale);
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Contact et suivi" : "Contact & follow"}
-      title={
-        locale === "fr" ? "Rester en contact avec le projet" : "Staying in touch with the project"
-      }
-      intro={
-        locale === "fr"
-          ? "HealthArchive.ca est un projet porté par des bénévoles et en développement. Si vous souhaitez suivre le travail ou explorer une collaboration, les options ci-dessous sont un bon point de départ."
-          : "HealthArchive.ca is a volunteer-led project in development. If you are interested in following the work or exploring collaboration, the options below are a starting point."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-6">
         <div className="ha-grid-2 gap-4 sm:gap-5">
           <div className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">

@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { fetchArchiveStats, fetchHealth, fetchSources, fetchUsageMetrics } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
 
@@ -22,12 +25,40 @@ function formatDate(locale: Locale, value: string | null | undefined): string {
   });
 }
 
+function getStatusCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Statut",
+      title: "Statut et métriques",
+      intro:
+        "Une vue transparente de la couverture, de la fraîcheur et de l’état du service de HealthArchive.ca.",
+    };
+  }
+
+  return {
+    eyebrow: "Status",
+    title: "Status & metrics",
+    intro: "A transparent view of HealthArchive.ca coverage, freshness, and service status.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getStatusCopy(locale);
+  return buildPageMetadata(locale, "/status", copy.title, copy.intro);
+}
+
 export default async function StatusPage({
   params,
 }: {
   params?: Promise<{ locale?: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getStatusCopy(locale);
   const siteCopy = getSiteCopy(locale);
 
   const [healthRes, statsRes, sourcesRes, usageRes] = await Promise.allSettled([
@@ -61,15 +92,7 @@ export default async function StatusPage({
   });
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Statut" : "Status"}
-      title={locale === "fr" ? "Statut et métriques" : "Status & metrics"}
-      intro={
-        locale === "fr"
-          ? "Une vue transparente de la couverture, de la fraîcheur et de l’état du service de HealthArchive.ca."
-          : "A transparent view of HealthArchive.ca coverage, freshness, and service status."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       {!hasAnyData && (
         <div className="ha-callout">
           <h2 className="ha-callout-title">
