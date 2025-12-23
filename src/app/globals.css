@@ -142,9 +142,9 @@ a:focus-visible {
   align-items: center;
   height: 2rem;
   border-radius: 999px;
-  border: 1px solid var(--border);
-  background-color: color-mix(in srgb, var(--surface-bg-soft) 75%, transparent);
-  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background-color: transparent;
+  box-shadow: none;
   overflow: hidden;
 }
 
@@ -160,7 +160,7 @@ a:focus-visible {
   height: 100%;
   border: 0;
   background-color: transparent;
-  color: var(--text);
+  color: var(--muted);
   text-decoration: none;
   cursor: pointer;
   transition:
@@ -173,21 +173,17 @@ a:focus-visible {
 }
 
 .ha-utility-switch-item + .ha-utility-switch-item {
-  border-left: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
 }
 
 .ha-utility-switch-item:hover {
-  background-color: color-mix(in srgb, var(--surface-bg) 65%, transparent);
+  background-color: color-mix(in srgb, var(--surface-bg) 52%, transparent);
+  color: var(--text);
   text-decoration: none;
 }
 
 .ha-utility-switch-item--icon {
-  width: 2.25rem;
-  color: var(--muted);
-}
-
-.ha-utility-switch-item--icon:hover {
-  color: var(--text);
+  width: 2rem;
 }
 
 .ha-utility-switch-item--icon svg {
@@ -196,10 +192,10 @@ a:focus-visible {
 }
 
 .ha-utility-switch-item--locale {
-  padding: 0 0.8rem;
+  padding: 0 0.7rem;
   font-size: 0.72rem;
-  font-weight: 650;
-  letter-spacing: 0.1em;
+  font-weight: 550;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
