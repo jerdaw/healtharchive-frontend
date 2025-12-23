@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { demoRecords } from "@/data/demo-records";
 import { TrackChangesPhrase } from "@/components/TrackChangesPhrase";
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
@@ -5,8 +7,32 @@ import { AnimatedMetric } from "@/components/home/AnimatedMetric";
 import { HoverGlowLink } from "@/components/home/HoverGlowLink";
 import { ProjectSnapshotOrchestrator } from "@/components/home/ProjectSnapshotOrchestrator";
 import { fetchArchiveStats } from "@/lib/api";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
+
+function getHomeCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      title: "HealthArchive.ca – Archive indépendante d’information de santé publique au Canada",
+    };
+  }
+
+  return {
+    title: "HealthArchive.ca – Independent archive of Canadian public health information",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getHomeCopy(locale);
+  return buildPageMetadata(locale, "/", copy.title);
+}
 
 export default async function HomePage({
   params,

@@ -16,4 +16,14 @@ describe("/brief", () => {
     });
     expect(download).toHaveAttribute("href", "/partner-kit/healtharchive-brief.md");
   });
+
+  it("renders the French brief download link", async () => {
+    const ui = await BriefPage({ params: Promise.resolve({ locale: "fr" }) });
+    render(ui);
+
+    const download = screen.getByRole("link", {
+      name: "Télécharger cette fiche (Markdown, alpha)",
+    });
+    expect(download).toHaveAttribute("href", "/partner-kit/healtharchive-brief.fr.md");
+  });
 });

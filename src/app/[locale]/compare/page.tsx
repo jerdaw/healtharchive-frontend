@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { fetchChangeCompare } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
 
@@ -17,6 +20,32 @@ function formatDate(locale: Locale, value: string | null | undefined): string {
     });
   }
   return value;
+}
+
+function getCompareMetadataCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      title: "Comparer des captures archivées",
+      intro:
+        "Cette vue met en évidence des différences de texte entre deux captures archivées. Elle n’interprète pas le sens et ne fournit pas de directives.",
+    };
+  }
+
+  return {
+    title: "Compare archived captures",
+    intro:
+      "This view highlights text differences between two archived captures. It does not interpret meaning or provide guidance.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getCompareMetadataCopy(locale);
+  return buildPageMetadata(locale, "/compare", copy.title, copy.intro);
 }
 
 export default async function ComparePage({

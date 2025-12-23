@@ -1,9 +1,39 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { fetchSources, getApiBaseUrl } from "@/lib/api";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
+
+function getDigestCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Bulletin",
+      title: "Bulletin des changements et RSS",
+      intro: "Un bulletin léger des changements de texte archivés entre éditions.",
+    };
+  }
+
+  return {
+    eyebrow: "Digest",
+    title: "Change digest & RSS",
+    intro: "A lightweight digest of archived text changes between editions.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getDigestCopy(locale);
+  return buildPageMetadata(locale, "/digest", copy.title, copy.intro);
+}
 
 export default async function DigestPage({
   params,
@@ -11,6 +41,7 @@ export default async function DigestPage({
   params?: Promise<{ locale?: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getDigestCopy(locale);
   const siteCopy = getSiteCopy(locale);
 
   const sourcesRes = await Promise.allSettled([fetchSources()]);
@@ -20,15 +51,7 @@ export default async function DigestPage({
   const globalRss = `${apiBase}/api/changes/rss`;
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Bulletin" : "Digest"}
-      title={locale === "fr" ? "Bulletin des changements et RSS" : "Change digest & RSS"}
-      intro={
-        locale === "fr"
-          ? "Un bulletin léger des changements de texte archivés entre éditions."
-          : "A lightweight digest of archived text changes between editions."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-4">
         <div className="ha-callout">
           <h2 className="ha-callout-title">

@@ -1,10 +1,42 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import NextLink from "next/link";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { EnglishControlsNotice } from "@/components/policy/EnglishControlsNotice";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy, type SiteCopy } from "@/lib/siteCopy";
+
+function getGovernanceCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Gouvernance",
+      title: "Gouvernance et politiques",
+      intro:
+        "HealthArchive.ca est une archive d’intérêt public. Cette page explique comment nous définissons la portée, garantissons la provenance, gérons les corrections et répondons aux demandes de retrait ou d’exclusion.",
+    };
+  }
+
+  return {
+    eyebrow: "Governance",
+    title: "Governance & policies",
+    intro:
+      "HealthArchive.ca is a public-interest archive. This page explains how we define scope, guarantee provenance, handle corrections, and respond to takedown or opt-out requests.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getGovernanceCopy(locale);
+  return buildPageMetadata(locale, "/governance", copy.title, copy.intro);
+}
 
 function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
   return (
@@ -214,19 +246,12 @@ export default async function GovernancePage({
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getGovernanceCopy(locale);
   const siteCopy = getSiteCopy(locale);
   const siteCopyEn = getSiteCopy("en");
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Gouvernance" : "Governance"}
-      title={locale === "fr" ? "Gouvernance et politiques" : "Governance & policies"}
-      intro={
-        locale === "fr"
-          ? "HealthArchive.ca est une archive d’intérêt public. Cette page explique comment nous définissons la portée, garantissons la provenance, gérons les corrections et répondons aux demandes de retrait ou d’exclusion."
-          : "HealthArchive.ca is a public-interest archive. This page explains how we define scope, guarantee provenance, handle corrections, and respond to takedown or opt-out requests."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <EnglishControlsNotice locale={locale} />
 
       {locale === "fr" && (

@@ -1,8 +1,39 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
+
+function getCiteCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Citer",
+      title: "Comment citer HealthArchive.ca",
+      intro:
+        "Conseils pratiques de citation pour les captures archivées et les vues de comparaison.",
+    };
+  }
+
+  return {
+    eyebrow: "Cite",
+    title: "How to cite HealthArchive.ca",
+    intro: "Pragmatic citation guidance for archived snapshots and compare views.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getCiteCopy(locale);
+  return buildPageMetadata(locale, "/cite", copy.title, copy.intro);
+}
 
 export default async function CitePage({
   params,
@@ -10,18 +41,11 @@ export default async function CitePage({
   params?: Promise<{ locale?: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getCiteCopy(locale);
   const siteCopy = getSiteCopy(locale);
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Citer" : "Cite"}
-      title={locale === "fr" ? "Comment citer HealthArchive.ca" : "How to cite HealthArchive.ca"}
-      intro={
-        locale === "fr"
-          ? "Conseils pratiques de citation pour les captures archivées et les vues de comparaison."
-          : "Pragmatic citation guidance for archived snapshots and compare views."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Note importante" : "Important note"}

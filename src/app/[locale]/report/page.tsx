@@ -1,7 +1,11 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { ReportIssueForm } from "@/components/report/ReportIssueForm";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 
 type ReportSearchParams = {
@@ -9,6 +13,34 @@ type ReportSearchParams = {
   url?: string;
   page?: string;
 };
+
+function getReportCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Signalement",
+      title: "Signaler un problème",
+      intro:
+        "Utilisez ce formulaire pour signaler des captures ou relectures défectueuses, des erreurs de métadonnées, des pages manquantes ou des demandes de retrait. Veuillez ne pas soumettre d’informations personnelles ou médicales.",
+    };
+  }
+
+  return {
+    eyebrow: "Report",
+    title: "Report an issue",
+    intro:
+      "Use this form to report broken snapshots, metadata errors, missing pages, or takedown requests. Please do not submit personal or personal health information.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getReportCopy(locale);
+  return buildPageMetadata(locale, "/report", copy.title, copy.intro);
+}
 
 export default async function ReportPage({
   params,
@@ -18,6 +50,7 @@ export default async function ReportPage({
   searchParams: Promise<ReportSearchParams>;
 }) {
   const locale = await resolveLocale(params);
+  const copy = getReportCopy(locale);
   const query = await searchParams;
   const snapshotId = query.snapshot ? Number(query.snapshot) : null;
   const initialSnapshotId = Number.isFinite(snapshotId) ? snapshotId : null;
@@ -25,15 +58,7 @@ export default async function ReportPage({
   const initialPageUrl = query.page?.trim() || null;
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Signalement" : "Report"}
-      title={locale === "fr" ? "Signaler un problème" : "Report an issue"}
-      intro={
-        locale === "fr"
-          ? "Utilisez ce formulaire pour signaler des captures ou relectures défectueuses, des erreurs de métadonnées, des pages manquantes ou des demandes de retrait. Veuillez ne pas soumettre d’informations personnelles ou médicales."
-          : "Use this form to report broken snapshots, metadata errors, missing pages, or takedown requests. Please do not submit personal or personal health information."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Étapes suivantes" : "What happens next"}
