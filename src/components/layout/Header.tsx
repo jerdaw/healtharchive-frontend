@@ -58,7 +58,7 @@ export function Header() {
       locale === "fr" ? canonicalPath : canonicalPath === "/" ? "/fr" : `/fr${canonicalPath}`;
     return queryString ? `${targetPath}?${queryString}` : targetPath;
   })();
-  const languageSwitchLabel = locale === "fr" ? "English" : "Français";
+  const languageSwitchCode = locale === "fr" ? "EN" : "FR";
   const languageSwitchAriaLabel = locale === "fr" ? "Switch to English" : "Passer au français";
   const primaryNavAriaLabel = locale === "fr" ? "Navigation principale" : "Primary";
   const themeToggleAriaLabel =
@@ -267,9 +267,34 @@ export function Header() {
           <NextLink
             href={languageSwitchHref}
             aria-label={languageSwitchAriaLabel}
-            className="ha-btn-secondary hidden text-xs md:inline-flex"
+            className="ha-lang-switch hidden md:inline-flex"
           >
-            {languageSwitchLabel}
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="ha-lang-switch-icon">
+              <path
+                d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+              />
+              <path
+                d="M2.75 12h18.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+              <path
+                d="M12 2.9c-2.8 2.6-4.6 6-4.6 9.1s1.8 6.5 4.6 9.1c2.8-2.6 4.6-6 4.6-9.1S14.8 5.5 12 2.9Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="ha-lang-switch-code" aria-hidden="true">
+              {languageSwitchCode}
+            </span>
+            <span className="sr-only">{languageSwitchAriaLabel}</span>
           </NextLink>
           <button
             type="button"
@@ -384,17 +409,40 @@ export function Header() {
                 );
               })}
             </div>
-            <div className="pt-2">
+            <div className="flex items-center justify-between gap-3 pt-2">
               <NextLink
                 href={languageSwitchHref}
                 aria-label={languageSwitchAriaLabel}
-                className="ha-btn-secondary w-full justify-center text-xs"
+                className="ha-lang-switch"
                 onClick={() => setMobileOpen(false)}
               >
-                {languageSwitchLabel}
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="ha-lang-switch-icon">
+                  <path
+                    d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  />
+                  <path
+                    d="M2.75 12h18.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M12 2.9c-2.8 2.6-4.6 6-4.6 9.1s1.8 6.5 4.6 9.1c2.8-2.6 4.6-6 4.6-9.1S14.8 5.5 12 2.9Z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span className="ha-lang-switch-code" aria-hidden="true">
+                  {languageSwitchCode}
+                </span>
+                <span className="sr-only">{languageSwitchAriaLabel}</span>
               </NextLink>
-            </div>
-            <div className="flex items-center justify-end pt-1">
               <button
                 type="button"
                 onClick={toggleTheme}

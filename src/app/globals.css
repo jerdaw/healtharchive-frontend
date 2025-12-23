@@ -186,6 +186,47 @@ a:focus-visible {
   right: 5px;
 }
 
+.ha-lang-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  height: 2rem;
+  padding: 0 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background-color: transparent;
+  color: var(--muted);
+  text-decoration: none;
+  transition:
+    background-color 140ms ease-out,
+    border-color 140ms ease-out,
+    color 140ms ease-out;
+}
+
+.ha-lang-switch:hover {
+  background-color: color-mix(in srgb, var(--surface-bg) 72%, transparent);
+  border-color: color-mix(in srgb, var(--border) 65%, transparent);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.ha-lang-switch:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.ha-lang-switch-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.ha-lang-switch-code {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+
 .ha-typing-caret {
   position: relative;
   width: 0;
