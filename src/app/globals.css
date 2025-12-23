@@ -136,90 +136,71 @@ a:focus-visible {
   background-color: var(--surface-bg);
 }
 
-/* Theme toggle slider */
-.ha-theme-toggle {
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background-color: transparent;
-}
-
-.ha-theme-toggle-track {
-  position: relative;
+/* Header utility cluster (theme + language) */
+.ha-utility-switch {
   display: inline-flex;
   align-items: center;
-  width: 44px;
-  height: 22px;
-  border-radius: 999px;
-  background-color: rgba(148, 163, 184, 0.35);
-  transition: background-color 150ms ease-out;
-}
-
-.ha-theme-toggle-thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
-  transition:
-    transform 150ms ease-out,
-    background-color 150ms ease-out;
-}
-
-.ha-theme-toggle-icon {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  fill: #9ca3af;
-}
-
-.ha-theme-toggle-icon-sun {
-  left: 5px;
-}
-
-.ha-theme-toggle-icon-moon {
-  right: 5px;
-}
-
-.ha-locale-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   height: 2rem;
-  padding: 0 0.85rem;
   border-radius: 999px;
   border: 1px solid var(--border);
   background-color: color-mix(in srgb, var(--surface-bg-soft) 75%, transparent);
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
-  font-size: 0.72rem;
-  font-weight: 650;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text);
-  text-decoration: none;
-  transition:
-    background-color 140ms ease-out,
-    border-color 140ms ease-out,
-    box-shadow 140ms ease-out;
+  overflow: hidden;
 }
 
-.ha-locale-toggle:hover {
-  background-color: color-mix(in srgb, var(--surface-bg-soft) 88%, transparent);
-  text-decoration: none;
-}
-
-.ha-locale-toggle:focus-visible {
+.ha-utility-switch:focus-within {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
-.ha-locale-toggle-label {
-  line-height: 1;
+.ha-utility-switch-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: 0;
+  background-color: transparent;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 140ms ease-out,
+    color 140ms ease-out;
+}
+
+.ha-utility-switch-item:focus-visible {
+  outline: none;
+}
+
+.ha-utility-switch-item + .ha-utility-switch-item {
+  border-left: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+.ha-utility-switch-item:hover {
+  background-color: color-mix(in srgb, var(--surface-bg) 65%, transparent);
+  text-decoration: none;
+}
+
+.ha-utility-switch-item--icon {
+  width: 2.25rem;
+  color: var(--muted);
+}
+
+.ha-utility-switch-item--icon:hover {
+  color: var(--text);
+}
+
+.ha-utility-switch-item--icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ha-utility-switch-item--locale {
+  padding: 0 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .ha-typing-caret {
@@ -1446,19 +1427,6 @@ html[data-theme="dark"] .hover\:text-blue-700:hover {
 
 html[data-theme="dark"] .ha-btn-secondary:hover {
   background-color: #1e2021;
-}
-
-html[data-theme="dark"] .ha-theme-toggle-track {
-  background-color: rgba(30, 64, 175, 0.45);
-}
-
-html[data-theme="dark"] .ha-theme-toggle-thumb {
-  background-color: #020617;
-  transform: translateX(22px);
-}
-
-html[data-theme="dark"] .ha-theme-toggle-icon {
-  fill: #e5e7eb;
 }
 
 html[data-theme="dark"] .ha-nav-link {
