@@ -144,8 +144,7 @@ a:focus-visible {
 }
 
 .ha-utility-switch:focus-within {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .ha-utility-switch-item {
@@ -170,7 +169,7 @@ a:focus-visible {
 }
 
 .ha-utility-switch-item:hover {
-  background-color: color-mix(in srgb, var(--surface-bg) 52%, transparent);
+  background-color: color-mix(in srgb, var(--surface-bg) 38%, transparent);
   color: var(--text);
   text-decoration: none;
 }
@@ -195,17 +194,30 @@ a:focus-visible {
 .ha-utility-switch-item--locale::before {
   content: "";
   position: absolute;
-  left: 0;
-  top: 18%;
-  bottom: 18%;
+  left: -0.5px;
+  top: 12%;
+  bottom: 12%;
   width: 1px;
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    color-mix(in srgb, var(--border) 70%, transparent) 50%,
+    color-mix(in srgb, var(--muted) 55%, transparent) 45%,
+    color-mix(in srgb, var(--muted) 55%, transparent) 55%,
     transparent 100%
   );
+  opacity: 0.65;
   pointer-events: none;
+}
+
+@supports selector(:has(*)) {
+  .ha-utility-switch:focus-within {
+    outline: none;
+  }
+
+  .ha-utility-switch:has(.ha-utility-switch-item:focus-visible) {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
 }
 
 .ha-typing-caret {
