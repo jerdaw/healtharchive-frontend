@@ -213,7 +213,7 @@ This runs the Next.js/ESLint config for the app.
 │   ├── healtharchive-logo.webp  # Primary logo used in header/hero
 │   └── demo-archive/            # Static HTML stubs used by the snapshot viewer
 └── src/
-    ├── middleware.ts           # Locale routing (English canonical; French /fr)
+    ├── proxy.ts                # Locale routing (English canonical; French /fr)
     ├── app/                    # Next.js App Router
     │   ├── [locale]/           # Locale-aware routes (see middleware)
     │   └── api/report/         # Same-origin report intake → backend forward
