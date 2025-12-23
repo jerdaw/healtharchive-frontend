@@ -1,8 +1,40 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
+
+function getBriefCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Fiche",
+      title: "Fiche projet (une page)",
+      intro:
+        "Un résumé adapté aux partenaires de ce qu’est HealthArchive.ca, de ce qu’il fait et de la façon de le décrire sans suggérer une approbation ni des directives médicales.",
+    };
+  }
+
+  return {
+    eyebrow: "Brief",
+    title: "One-page project brief",
+    intro:
+      "A partner-friendly summary of what HealthArchive.ca is, what it does, and how to describe it without implying endorsement or medical guidance.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getBriefCopy(locale);
+  return buildPageMetadata(locale, "/brief", copy.title, copy.intro);
+}
 
 export default async function BriefPage({
   params,
@@ -10,18 +42,11 @@ export default async function BriefPage({
   params?: Promise<{ locale?: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getBriefCopy(locale);
   const siteCopy = getSiteCopy(locale);
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Fiche" : "Brief"}
-      title={locale === "fr" ? "Fiche projet (une page)" : "One-page project brief"}
-      intro={
-        locale === "fr"
-          ? "Un résumé adapté aux partenaires de ce qu’est HealthArchive.ca, de ce qu’il fait et de la façon de le décrire sans suggérer une approbation ni des directives médicales."
-          : "A partner-friendly summary of what HealthArchive.ca is, what it does, and how to describe it without implying endorsement or medical guidance."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-5">
         <h2 className="ha-section-heading">{locale === "fr" ? "En bref" : "At a glance"}</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">

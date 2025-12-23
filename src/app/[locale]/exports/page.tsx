@@ -1,8 +1,40 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { getApiBaseUrl } from "@/lib/api";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
+
+function getExportsCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Exports",
+      title: "Exports de recherche et dictionnaire de données",
+      intro:
+        "HealthArchive fournit des exports de métadonnées (sans HTML brut) pour la recherche et la reproductibilité. Les exports n’incluent pas l’HTML brut ni le corps complet des diffs.",
+    };
+  }
+
+  return {
+    eyebrow: "Exports",
+    title: "Research exports & data dictionary",
+    intro:
+      "HealthArchive provides metadata-only exports for research and reproducibility. Exports do not include raw HTML or full diff bodies.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getExportsCopy(locale);
+  return buildPageMetadata(locale, "/exports", copy.title, copy.intro);
+}
 
 export default async function ExportsPage({
   params,
@@ -10,24 +42,13 @@ export default async function ExportsPage({
   params?: Promise<{ locale?: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getExportsCopy(locale);
   const apiBase = getApiBaseUrl();
   const manifestUrl = `${apiBase}/api/exports`;
   const datasetReleasesUrl = "https://github.com/jerdaw/healtharchive-datasets/releases";
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Exports" : "Exports"}
-      title={
-        locale === "fr"
-          ? "Exports de recherche et dictionnaire de données"
-          : "Research exports & data dictionary"
-      }
-      intro={
-        locale === "fr"
-          ? "HealthArchive fournit des exports de métadonnées (sans HTML brut) pour la recherche et la reproductibilité. Les exports n’incluent pas l’HTML brut ni le corps complet des diffs."
-          : "HealthArchive provides metadata-only exports for research and reproducibility. Exports do not include raw HTML or full diff bodies."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Aperçu des exports" : "Exports overview"}

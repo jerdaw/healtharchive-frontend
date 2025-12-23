@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import { PageShell } from "@/components/layout/PageShell";
 import { getSourcesSummary } from "@/data/demo-records";
 import { fetchSources, getApiBaseUrl, type SourceSummary as ApiSourceSummary } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
 
@@ -50,12 +53,41 @@ type SourceSummaryLike = {
   entryPreviewUrl?: string | null;
 };
 
+function getBrowseBySourceCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Explorateur d’archives",
+      title: "Parcourir les sources",
+      intro:
+        "Parcourez la couverture par source et accédez à un site archivé ou à la liste complète des enregistrements. La couverture et les fonctionnalités sont encore en expansion.",
+    };
+  }
+
+  return {
+    eyebrow: "Archive explorer",
+    title: "Browse records by source",
+    intro:
+      "Browse coverage by source and jump into an archived site or the full record list. Coverage and features are still expanding.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getBrowseBySourceCopy(locale);
+  return buildPageMetadata(locale, "/archive/browse-by-source", copy.title, copy.intro);
+}
+
 export default async function BrowseBySourcePage({
   params,
 }: {
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getBrowseBySourceCopy(locale);
   const siteCopy = getSiteCopy(locale);
 
   let summaries: SourceSummaryLike[] = getSourcesSummary().map((s) => ({
@@ -97,15 +129,7 @@ export default async function BrowseBySourcePage({
   const apiBaseUrl = getApiBaseUrl();
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Explorateur d’archives" : "Archive explorer"}
-      title={locale === "fr" ? "Parcourir les sources" : "Browse records by source"}
-      intro={
-        locale === "fr"
-          ? "Parcourez la couverture par source et accédez à un site archivé ou à la liste complète des enregistrements. La couverture et les fonctionnalités sont encore en expansion."
-          : "Browse coverage by source and jump into an archived site or the full record list. Coverage and features are still expanding."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <div className="ha-callout mb-6">
         <h2 className="ha-callout-title">
           {locale === "fr" ? "Note importante" : "Important note"}

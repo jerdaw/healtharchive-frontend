@@ -1,5 +1,37 @@
+import type { Metadata } from "next";
+
 import { PageShell } from "@/components/layout/PageShell";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
+
+function getAboutCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "À propos du projet",
+      title: "Pourquoi HealthArchive.ca existe",
+      intro:
+        "Ce projet est né de la préoccupation que des informations essentielles de santé publique peuvent changer discrètement ou disparaître en ligne. L’objectif est de créer un dossier indépendant, transparent et citable de ce qui a été publié, et à quel moment.",
+    };
+  }
+
+  return {
+    eyebrow: "About the project",
+    title: "Why HealthArchive.ca exists",
+    intro:
+      "This project grew out of concern that critical public health information can quietly change or disappear online. The goal is to create an independent, transparent, citable record of what was published and when.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getAboutCopy(locale);
+  return buildPageMetadata(locale, "/about", copy.title, copy.intro);
+}
 
 export default async function AboutPage({
   params,
@@ -7,17 +39,10 @@ export default async function AboutPage({
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getAboutCopy(locale);
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "À propos du projet" : "About the project"}
-      title={locale === "fr" ? "Pourquoi HealthArchive.ca existe" : "Why HealthArchive.ca exists"}
-      intro={
-        locale === "fr"
-          ? "Ce projet est né de la préoccupation que des informations essentielles de santé publique peuvent changer discrètement ou disparaître en ligne. L’objectif est de créer un dossier indépendant, transparent et citable de ce qui a été publié, et à quel moment."
-          : "This project grew out of concern that critical public health information can quietly change or disappear online. The goal is to create an independent, transparent, citable record of what was published and when."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-5">
         <h2 className="ha-section-heading">{locale === "fr" ? "Motivation" : "Motivation"}</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">

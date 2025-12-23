@@ -1,8 +1,39 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { changelogEntriesByLocale } from "@/content/changelog";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
+
+function getChangelogCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Journal des modifications",
+      title: "Historique du projet",
+      intro:
+        "Un registre léger des mises à jour publiques, des politiques et des changements majeurs.",
+    };
+  }
+
+  return {
+    eyebrow: "Changelog",
+    title: "Project changelog",
+    intro: "A lightweight record of public-facing updates, policies, and major feature changes.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getChangelogCopy(locale);
+  return buildPageMetadata(locale, "/changelog", copy.title, copy.intro);
+}
 
 export default async function ChangelogPage({
   params,
@@ -10,18 +41,11 @@ export default async function ChangelogPage({
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getChangelogCopy(locale);
   const changelogEntries = changelogEntriesByLocale[locale];
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Journal des modifications" : "Changelog"}
-      title={locale === "fr" ? "Historique du projet" : "Project changelog"}
-      intro={
-        locale === "fr"
-          ? "Un registre léger des mises à jour publiques, des politiques et des changements majeurs."
-          : "A lightweight record of public-facing updates, policies, and major feature changes."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="space-y-6">
         {changelogEntries.map((entry) => (
           <article key={`${entry.date}-${entry.title}`} className="ha-card space-y-3">

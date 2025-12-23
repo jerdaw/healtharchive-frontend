@@ -1,9 +1,41 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import NextLink from "next/link";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { EnglishControlsNotice } from "@/components/policy/EnglishControlsNotice";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
+
+function getPrivacyCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Confidentialité",
+      title: "Confidentialité",
+      intro:
+        "HealthArchive.ca est conçu pour minimiser la collecte de données. Il n’y a pas de comptes utilisateurs, et nous ne collectons pas de renseignements médicaux personnels.",
+    };
+  }
+
+  return {
+    eyebrow: "Privacy",
+    title: "Privacy",
+    intro:
+      "HealthArchive.ca is designed to minimize data collection. There are no user accounts, and we do not collect personal health information.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getPrivacyCopy(locale);
+  return buildPageMetadata(locale, "/privacy", copy.title, copy.intro);
+}
 
 function PrivacyEnglishContent() {
   return (
@@ -75,17 +107,10 @@ export default async function PrivacyPage({
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getPrivacyCopy(locale);
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Confidentialité" : "Privacy"}
-      title={locale === "fr" ? "Confidentialité" : "Privacy"}
-      intro={
-        locale === "fr"
-          ? "HealthArchive.ca est conçu pour minimiser la collecte de données. Il n’y a pas de comptes utilisateurs, et nous ne collectons pas de renseignements médicaux personnels."
-          : "HealthArchive.ca is designed to minimize data collection. There are no user accounts, and we do not collect personal health information."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <EnglishControlsNotice locale={locale} />
 
       {locale === "fr" && (

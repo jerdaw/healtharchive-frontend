@@ -8,6 +8,7 @@ import { FrenchTranslationBanner } from "@/components/i18n/FrenchTranslationBann
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { isLocale, localeToLanguageTag } from "@/lib/i18n";
+import { SITE_BASE_URL } from "@/lib/metadata";
 import { buildMetaDescription } from "@/lib/siteCopy";
 
 export async function generateMetadata({
@@ -19,6 +20,7 @@ export async function generateMetadata({
   const normalizedLocale = isLocale(locale) ? locale : "en";
 
   return {
+    metadataBase: new URL(SITE_BASE_URL),
     title:
       normalizedLocale === "fr"
         ? "HealthArchive.ca – Archive indépendante d’information de santé publique au Canada"

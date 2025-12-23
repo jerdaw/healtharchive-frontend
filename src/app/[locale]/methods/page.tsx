@@ -1,5 +1,37 @@
+import type { Metadata } from "next";
+
 import { PageShell } from "@/components/layout/PageShell";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
+
+function getMethodsCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Méthodes et couverture",
+      title: "Comment HealthArchive.ca est développé",
+      intro:
+        "Cette page décrit comment HealthArchive.ca capture, préserve, indexe et relit des instantanés de contenu Web de santé publique. Le projet est en développement et la couverture s’élargit encore, mais le pipeline d’archivage de base est déjà en place.",
+    };
+  }
+
+  return {
+    eyebrow: "Methods & coverage",
+    title: "How HealthArchive.ca is being built",
+    intro:
+      "This page outlines how HealthArchive.ca captures, preserves, indexes, and replays snapshots of public health web content. The project is in development and coverage is still expanding, but the core archive pipeline is already in place.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getMethodsCopy(locale);
+  return buildPageMetadata(locale, "/methods", copy.title, copy.intro);
+}
 
 export default async function MethodsPage({
   params,
@@ -7,21 +39,10 @@ export default async function MethodsPage({
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getMethodsCopy(locale);
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Méthodes et couverture" : "Methods & coverage"}
-      title={
-        locale === "fr"
-          ? "Comment HealthArchive.ca est développé"
-          : "How HealthArchive.ca is being built"
-      }
-      intro={
-        locale === "fr"
-          ? "Cette page décrit comment HealthArchive.ca capture, préserve, indexe et relit des instantanés de contenu Web de santé publique. Le projet est en développement et la couverture s’élargit encore, mais le pipeline d’archivage de base est déjà en place."
-          : "This page outlines how HealthArchive.ca captures, preserves, indexes, and replays snapshots of public health web content. The project is in development and coverage is still expanding, but the core archive pipeline is already in place."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr"

@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/layout/PageShell";
@@ -9,6 +11,7 @@ import {
   getApiBaseUrl,
 } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
 import { SnapshotReplayClient } from "@/components/replay/SnapshotReplayClient";
@@ -45,6 +48,33 @@ function formatDate(locale: Locale, iso: string | undefined | null): string {
   }
 
   return iso;
+}
+
+function getSnapshotMetadataCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      title: "Capture archivée",
+      description:
+        "Consultez une capture archivée et ses métadonnées associées. Le contenu archivé peut être incomplet, périmé ou remplacé.",
+    };
+  }
+
+  return {
+    title: "Archived snapshot",
+    description:
+      "Review an archived snapshot and its associated metadata. Archived content may be incomplete, outdated, or superseded.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string; locale?: string }>;
+}): Promise<Metadata> {
+  const routeParams = await params;
+  const locale = await resolveLocale(Promise.resolve(routeParams));
+  const copy = getSnapshotMetadataCopy(locale);
+  return buildPageMetadata(locale, `/snapshot/${routeParams.id}`, copy.title, copy.description);
 }
 
 export default async function SnapshotPage({

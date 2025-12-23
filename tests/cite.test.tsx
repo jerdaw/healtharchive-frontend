@@ -18,4 +18,14 @@ describe("/cite", () => {
 
     expect(screen.getByRole("heading", { name: "1) Cite a snapshot" })).toBeInTheDocument();
   });
+
+  it("renders the French citation download link", async () => {
+    const ui = await CitePage({ params: Promise.resolve({ locale: "fr" }) });
+    render(ui);
+
+    const download = screen.getByRole("link", {
+      name: "Télécharger la fiche de citation (Markdown, alpha)",
+    });
+    expect(download).toHaveAttribute("href", "/partner-kit/healtharchive-citation.fr.md");
+  });
 });

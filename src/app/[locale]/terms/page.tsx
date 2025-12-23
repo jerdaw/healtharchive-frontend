@@ -1,10 +1,42 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import NextLink from "next/link";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { EnglishControlsNotice } from "@/components/policy/EnglishControlsNotice";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy, type SiteCopy } from "@/lib/siteCopy";
+
+function getTermsCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Conditions",
+      title: "Conditions d’utilisation",
+      intro:
+        "HealthArchive.ca fournit des captures archivées à des fins de recherche, d’éducation et de référence d’intérêt public. Ces conditions décrivent l’utilisation prévue et les limites du service.",
+    };
+  }
+
+  return {
+    eyebrow: "Terms",
+    title: "Terms of use",
+    intro:
+      "HealthArchive.ca provides archived snapshots for research, education, and public-interest reference. These terms describe the intended use and limitations of the service.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getTermsCopy(locale);
+  return buildPageMetadata(locale, "/terms", copy.title, copy.intro);
+}
 
 function TermsEnglishContent({ copy }: { copy: SiteCopy }) {
   return (
@@ -82,19 +114,12 @@ export default async function TermsPage({
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getTermsCopy(locale);
   const siteCopy = getSiteCopy(locale);
   const siteCopyEn = getSiteCopy("en");
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Conditions" : "Terms"}
-      title={locale === "fr" ? "Conditions d’utilisation" : "Terms of use"}
-      intro={
-        locale === "fr"
-          ? "HealthArchive.ca fournit des captures archivées à des fins de recherche, d’éducation et de référence d’intérêt public. Ces conditions décrivent l’utilisation prévue et les limites du service."
-          : "HealthArchive.ca provides archived snapshots for research, education, and public-interest reference. These terms describe the intended use and limitations of the service."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <EnglishControlsNotice locale={locale} />
 
       {locale === "fr" && (

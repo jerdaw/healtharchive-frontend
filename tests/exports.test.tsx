@@ -19,4 +19,14 @@ describe("/exports", () => {
     });
     expect(download).toHaveAttribute("href", "/exports/healtharchive-data-dictionary.md");
   });
+
+  it("renders the French data dictionary link", async () => {
+    const ui = await ExportsPage({ params: Promise.resolve({ locale: "fr" }) });
+    render(ui);
+
+    const download = screen.getByRole("link", {
+      name: "Télécharger le dictionnaire de données (Markdown, alpha)",
+    });
+    expect(download).toHaveAttribute("href", "/exports/healtharchive-data-dictionary.fr.md");
+  });
 });

@@ -1,32 +1,52 @@
+import type { Metadata } from "next";
+
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { getApiBaseUrl } from "@/lib/api";
+import type { Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 
+function getResearchersCopy(locale: Locale) {
+  if (locale === "fr") {
+    return {
+      eyebrow: "Pour les chercheurs",
+      title: "Utiliser HealthArchive.ca pour la recherche et l’analyse",
+      intro:
+        "Ce projet est conçu pour que les épidémiologistes, chercheurs en services de santé, analystes de politiques et journalistes de données puissent reconstituer de façon fiable ce que les sites canadiens de santé publique montraient à des moments précis.",
+    };
+  }
+
+  return {
+    eyebrow: "For researchers",
+    title: "Using HealthArchive.ca for research and analysis",
+    intro:
+      "This project is being designed so that epidemiologists, health services researchers, policy analysts, and data journalists can reliably reconstruct what Canadian public health sites showed at specific points in time.",
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getResearchersCopy(locale);
+  return buildPageMetadata(locale, "/researchers", copy.title, copy.intro);
+}
 export default async function ResearchersPage({
   params,
 }: {
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
+  const copy = getResearchersCopy(locale);
   const apiBase = getApiBaseUrl();
   const exportsManifestUrl = `${apiBase}/api/exports`;
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Pour les chercheurs" : "For researchers"}
-      title={
-        locale === "fr"
-          ? "Utiliser HealthArchive.ca pour la recherche et l’analyse"
-          : "Using HealthArchive.ca for research and analysis"
-      }
-      intro={
-        locale === "fr"
-          ? "Ce projet est conçu pour que les épidémiologistes, chercheurs en services de santé, analystes de politiques et journalistes de données puissent reconstituer de façon fiable ce que les sites canadiens de santé publique montraient à des moments précis."
-          : "This project is being designed so that epidemiologists, health services researchers, policy analysts, and data journalists can reliably reconstruct what Canadian public health sites showed at specific points in time."
-      }
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
       <section className="ha-home-hero space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr"

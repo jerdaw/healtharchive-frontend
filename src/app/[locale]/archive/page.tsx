@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { PageShell } from "@/components/layout/PageShell";
 import { searchDemoRecords, getSourcesSummary } from "@/data/demo-records";
 import type { DemoRecord } from "@/data/demo-records";
@@ -8,6 +10,7 @@ import {
   type SearchParams as ApiSearchParams,
 } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
 import { ApiHealthBanner } from "@/components/ApiHealthBanner";
@@ -53,6 +56,25 @@ type SourceBrowseSummary = {
   entryBrowseUrl?: string | null;
   entryPreviewUrl?: string | null;
 };
+
+function getArchiveCopy(locale: Locale) {
+  const siteCopy = getSiteCopy(locale);
+  return {
+    eyebrow: locale === "fr" ? "Explorateur d’archives" : "Archive explorer",
+    title: locale === "fr" ? "Parcourir et rechercher des captures" : "Browse & search snapshots",
+    description: `${siteCopy.workflow.archiveSummary} ${siteCopy.whatThisSiteIs.limitations} ${siteCopy.whatThisSiteIs.forCurrent}.`,
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params?: Promise<{ locale?: string }>;
+}): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const copy = getArchiveCopy(locale);
+  return buildPageMetadata(locale, "/archive", copy.title, copy.description);
+}
 
 function parsePositiveInt(value: string | undefined, fallback: number): number {
   const parsed = Number(value);
@@ -107,6 +129,7 @@ export default async function ArchivePage({
   searchParams: Promise<ArchiveSearchParams>;
 }) {
   const locale = await resolveLocale(routeParams);
+  const copy = getArchiveCopy(locale);
   const siteCopy = getSiteCopy(locale);
   const params = await searchParams;
   const qRaw = params.q?.trim() ?? "";
@@ -382,12 +405,7 @@ export default async function ArchivePage({
   const apiBaseUrl = getApiBaseUrl();
 
   return (
-    <PageShell
-      eyebrow={locale === "fr" ? "Explorateur d’archives" : "Archive explorer"}
-      title={locale === "fr" ? "Parcourir et rechercher des captures" : "Browse & search snapshots"}
-      compact
-      hideHeaderVisually
-    >
+    <PageShell eyebrow={copy.eyebrow} title={copy.title} compact hideHeaderVisually>
       <ApiHealthBanner />
       <section className="mb-4">
         <div className="ha-callout">
