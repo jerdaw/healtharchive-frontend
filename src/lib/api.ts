@@ -204,35 +204,53 @@ type FetchInit = RequestInit & {
   };
 };
 
+const DEFAULT_FETCH_TIMEOUT_MS = 8000;
+
 async function fetchJson<T>(path: string, query?: URLSearchParams, init?: FetchInit): Promise<T> {
   const baseUrl = getApiBaseUrl();
   const url =
     query && String(query) ? `${baseUrl}${path}?${query.toString()}` : `${baseUrl}${path}`;
 
-  const res = await fetch(url, { cache: "no-store", ...init } as unknown as RequestInit);
+  const shouldApplyTimeout = init?.signal == null;
+  const abortController = shouldApplyTimeout ? new AbortController() : null;
+  const timeoutHandle = shouldApplyTimeout
+    ? setTimeout(() => abortController?.abort(), DEFAULT_FETCH_TIMEOUT_MS)
+    : null;
 
-  if (!res.ok) {
-    let detail: unknown = null;
-    const contentType = res.headers.get("content-type") ?? "";
-    if (contentType.includes("application/json")) {
-      try {
-        const data: unknown = await res.json();
-        if (typeof data === "object" && data !== null && "detail" in data) {
-          detail = (data as { detail?: unknown }).detail ?? null;
+  try {
+    const res = await fetch(url, {
+      cache: "no-store",
+      ...init,
+      signal: init?.signal ?? abortController?.signal,
+    } as unknown as RequestInit);
+
+    if (!res.ok) {
+      let detail: unknown = null;
+      const contentType = res.headers.get("content-type") ?? "";
+      if (contentType.includes("application/json")) {
+        try {
+          const data: unknown = await res.json();
+          if (typeof data === "object" && data !== null && "detail" in data) {
+            detail = (data as { detail?: unknown }).detail ?? null;
+          }
+        } catch {
+          detail = null;
         }
-      } catch {
-        detail = null;
       }
+
+      throw new ApiError({
+        status: res.status,
+        statusText: res.statusText,
+        detail,
+      });
     }
 
-    throw new ApiError({
-      status: res.status,
-      statusText: res.statusText,
-      detail,
-    });
+    return (await res.json()) as T;
+  } finally {
+    if (timeoutHandle) {
+      clearTimeout(timeoutHandle);
+    }
   }
-
-  return (await res.json()) as T;
 }
 
 export async function fetchSources(): Promise<SourceSummary[]> {
