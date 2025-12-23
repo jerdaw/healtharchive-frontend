@@ -52,13 +52,15 @@ export function Header() {
   const mobilePanelRef = useRef<HTMLDivElement | null>(null);
   const mobileToggleRef = useRef<HTMLButtonElement | null>(null);
 
-  const languageSwitchHref = (() => {
+  const { englishHref, frenchHref } = (() => {
     const canonicalPath = stripLocalePrefix(pathname);
-    const targetPath =
-      locale === "fr" ? canonicalPath : canonicalPath === "/" ? "/fr" : `/fr${canonicalPath}`;
-    return queryString ? `${targetPath}?${queryString}` : targetPath;
+    const englishPath = canonicalPath;
+    const frenchPath = canonicalPath === "/" ? "/fr" : `/fr${canonicalPath}`;
+    return {
+      englishHref: queryString ? `${englishPath}?${queryString}` : englishPath,
+      frenchHref: queryString ? `${frenchPath}?${queryString}` : frenchPath,
+    };
   })();
-  const languageSwitchCode = locale === "fr" ? "EN" : "FR";
   const languageSwitchAriaLabel = locale === "fr" ? "Switch to English" : "Passer au français";
   const primaryNavAriaLabel = locale === "fr" ? "Navigation principale" : "Primary";
   const themeToggleAriaLabel =
@@ -264,38 +266,69 @@ export function Header() {
           </nav>
 
           {/* Theme toggle */}
-          <NextLink
-            href={languageSwitchHref}
-            aria-label={languageSwitchAriaLabel}
-            className="ha-lang-switch hidden md:inline-flex"
+          <div
+            className="ha-locale-switch hidden md:inline-flex"
+            role="group"
+            aria-label="Language"
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="ha-lang-switch-icon">
-              <path
-                d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Z"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-              />
-              <path
-                d="M2.75 12h18.5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-              />
-              <path
-                d="M12 2.9c-2.8 2.6-4.6 6-4.6 9.1s1.8 6.5 4.6 9.1c2.8-2.6 4.6-6 4.6-9.1S14.8 5.5 12 2.9Z"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span className="ha-lang-switch-code" aria-hidden="true">
-              {languageSwitchCode}
+            <span className="ha-locale-switch-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                />
+                <path
+                  d="M2.75 12h18.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M12 2.9c-2.8 2.6-4.6 6-4.6 9.1s1.8 6.5 4.6 9.1c2.8-2.6 4.6-6 4.6-9.1S14.8 5.5 12 2.9Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </span>
-            <span className="sr-only">{languageSwitchAriaLabel}</span>
-          </NextLink>
+            {locale === "fr" ? (
+              <>
+                <NextLink
+                  href={englishHref}
+                  className="ha-locale-switch-item"
+                  aria-label={languageSwitchAriaLabel}
+                >
+                  EN
+                </NextLink>
+                <span
+                  className="ha-locale-switch-item ha-locale-switch-item--active"
+                  aria-current="page"
+                >
+                  FR
+                </span>
+              </>
+            ) : (
+              <>
+                <span
+                  className="ha-locale-switch-item ha-locale-switch-item--active"
+                  aria-current="page"
+                >
+                  EN
+                </span>
+                <NextLink
+                  href={frenchHref}
+                  className="ha-locale-switch-item"
+                  aria-label={languageSwitchAriaLabel}
+                >
+                  FR
+                </NextLink>
+              </>
+            )}
+          </div>
           <button
             type="button"
             onClick={toggleTheme}
@@ -410,39 +443,67 @@ export function Header() {
               })}
             </div>
             <div className="flex items-center justify-between gap-3 pt-2">
-              <NextLink
-                href={languageSwitchHref}
-                aria-label={languageSwitchAriaLabel}
-                className="ha-lang-switch"
-                onClick={() => setMobileOpen(false)}
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true" className="ha-lang-switch-icon">
-                  <path
-                    d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Z"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                  />
-                  <path
-                    d="M2.75 12h18.5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M12 2.9c-2.8 2.6-4.6 6-4.6 9.1s1.8 6.5 4.6 9.1c2.8-2.6 4.6-6 4.6-9.1S14.8 5.5 12 2.9Z"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span className="ha-lang-switch-code" aria-hidden="true">
-                  {languageSwitchCode}
+              <div className="ha-locale-switch" role="group" aria-label="Language">
+                <span className="ha-locale-switch-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M12 2.75a9.25 9.25 0 1 0 0 18.5 9.25 9.25 0 0 0 0-18.5Z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                    />
+                    <path
+                      d="M2.75 12h18.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M12 2.9c-2.8 2.6-4.6 6-4.6 9.1s1.8 6.5 4.6 9.1c2.8-2.6 4.6-6 4.6-9.1S14.8 5.5 12 2.9Z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </span>
-                <span className="sr-only">{languageSwitchAriaLabel}</span>
-              </NextLink>
+                {locale === "fr" ? (
+                  <>
+                    <NextLink
+                      href={englishHref}
+                      className="ha-locale-switch-item"
+                      aria-label={languageSwitchAriaLabel}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      EN
+                    </NextLink>
+                    <span
+                      className="ha-locale-switch-item ha-locale-switch-item--active"
+                      aria-current="page"
+                    >
+                      FR
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span
+                      className="ha-locale-switch-item ha-locale-switch-item--active"
+                      aria-current="page"
+                    >
+                      EN
+                    </span>
+                    <NextLink
+                      href={frenchHref}
+                      className="ha-locale-switch-item"
+                      aria-label={languageSwitchAriaLabel}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      FR
+                    </NextLink>
+                  </>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={toggleTheme}
