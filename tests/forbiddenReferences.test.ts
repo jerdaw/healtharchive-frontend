@@ -3,7 +3,6 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const TARGETS = ["src", "docs", "public", "README.md", "AGENTS.md"] as const;
-const FORBIDDEN = /restoredcdc|rcdc/i;
 const TEXT_EXTENSIONS = new Set([
   ".css",
   ".html",
@@ -18,6 +17,15 @@ const TEXT_EXTENSIONS = new Set([
   ".yaml",
   ".yml",
 ]);
+const FORBIDDEN = new RegExp(
+  [
+    [114, 101, 115, 116, 111, 114, 101, 100, 99, 100, 99],
+    [114, 99, 100, 99],
+  ]
+    .map((codes) => String.fromCharCode(...codes))
+    .join("|"),
+  "i",
+);
 
 function collectFiles(entryPath: string): string[] {
   const stats = statSync(entryPath);
@@ -36,7 +44,7 @@ function collectFiles(entryPath: string): string[] {
 }
 
 describe("content policy", () => {
-  it("does not reference RestoredCDC/RCDC in repo content", () => {
+  it("does not reference forbidden sources in repo content", () => {
     const repoRoot = process.cwd();
     const files = TARGETS.flatMap((target) => collectFiles(join(repoRoot, target)));
     const violations = files.filter((file) => {
