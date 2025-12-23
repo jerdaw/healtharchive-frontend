@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 import { getApiBaseUrl } from "@/lib/api";
 
+const REPORT_FORWARD_TIMEOUT_MS = 8000;
+
 export async function POST(request: Request) {
   let payload: unknown = null;
 
@@ -14,13 +16,21 @@ export async function POST(request: Request) {
   const apiBase = getApiBaseUrl();
 
   try {
-    const res = await fetch(`${apiBase}/api/reports`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const controller = new AbortController();
+    const timeoutHandle = setTimeout(() => controller.abort(), REPORT_FORWARD_TIMEOUT_MS);
+    let res: Response;
+    try {
+      res = await fetch(`${apiBase}/api/reports`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutHandle);
+    }
 
     const responseBody = await res.json();
 
