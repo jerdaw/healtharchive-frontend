@@ -140,12 +140,7 @@ a:focus-visible {
 .ha-utility-switch {
   display: inline-flex;
   align-items: center;
-  height: 2rem;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-  background-color: transparent;
-  box-shadow: none;
-  overflow: hidden;
+  height: 1.85rem;
 }
 
 .ha-utility-switch:focus-within {
@@ -154,6 +149,7 @@ a:focus-visible {
 }
 
 .ha-utility-switch-item {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -163,6 +159,7 @@ a:focus-visible {
   color: var(--muted);
   text-decoration: none;
   cursor: pointer;
+  border-radius: 999px;
   transition:
     background-color 140ms ease-out,
     color 140ms ease-out;
@@ -172,10 +169,6 @@ a:focus-visible {
   outline: none;
 }
 
-.ha-utility-switch-item + .ha-utility-switch-item {
-  border-left: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
-}
-
 .ha-utility-switch-item:hover {
   background-color: color-mix(in srgb, var(--surface-bg) 52%, transparent);
   color: var(--text);
@@ -183,7 +176,7 @@ a:focus-visible {
 }
 
 .ha-utility-switch-item--icon {
-  width: 2rem;
+  width: 1.9rem;
 }
 
 .ha-utility-switch-item--icon svg {
@@ -192,11 +185,27 @@ a:focus-visible {
 }
 
 .ha-utility-switch-item--locale {
-  padding: 0 0.7rem;
+  padding: 0 0.55rem;
   font-size: 0.72rem;
   font-weight: 550;
   letter-spacing: 0.07em;
   text-transform: uppercase;
+}
+
+.ha-utility-switch-item--locale::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18%;
+  bottom: 18%;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--border) 70%, transparent) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 .ha-typing-caret {
