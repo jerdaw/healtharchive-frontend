@@ -44,6 +44,7 @@ export default async function ResearchersPage({
   const copy = getResearchersCopy(locale);
   const apiBase = getApiBaseUrl();
   const exportsManifestUrl = `${apiBase}/api/exports`;
+  const datasetReleasesUrl = "https://github.com/jerdaw/healtharchive-datasets/releases";
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
@@ -177,6 +178,26 @@ export default async function ResearchersPage({
             {exportsManifestUrl}
           </a>
         </div>
+        <div className="ha-callout">
+          <h3 className="ha-callout-title">
+            {locale === "fr" ? "Publications de jeux de données" : "Dataset releases"}
+          </h3>
+          <p className="mt-2 text-xs leading-relaxed sm:text-sm">
+            {locale === "fr"
+              ? "Des publications trimestrielles de jeux de données (métadonnées seulement) sont publiées sur GitHub avec des sommes de contrôle."
+              : "Quarterly metadata-only dataset releases are published on GitHub with checksums."}
+          </p>
+          <p className="mt-3 text-xs leading-relaxed sm:text-sm">
+            <Link
+              className="text-ha-accent font-medium hover:text-blue-700"
+              href={datasetReleasesUrl}
+            >
+              {locale === "fr"
+                ? "Publications de jeux de données HealthArchive"
+                : "HealthArchive dataset releases"}
+            </Link>
+          </p>
+        </div>
         <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
           {locale === "fr"
             ? "Pour les définitions de champs et les limites, voir "
@@ -210,11 +231,33 @@ export default async function ResearchersPage({
               ? "Usage prévu (article, projet de cours, journalisme)."
               : "Intended use (paper, class project, journalism)."}
           </li>
+          <li>
+            {locale === "fr"
+              ? "Format souhaité (CSV ou JSONL) et toute échéance."
+              : "Preferred format (CSV or JSONL) and any deadline."}
+          </li>
         </ul>
         <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
-          {locale === "fr"
-            ? "Pour des exportations en lot ou des demandes personnalisées, contactez les responsables du projet."
-            : "For bulk exports or custom requests, contact the project maintainers."}
+          {locale === "fr" ? (
+            <>
+              Pour des exportations en lot ou des demandes personnalisées, contactez les
+              responsables du projet via la page{" "}
+              <Link className="text-ha-accent font-medium hover:text-blue-700" href="/contact">
+                Contact
+              </Link>
+              . Nous visons une réponse sous 7 jours, mais cela peut prendre plus de temps selon la
+              charge de travail (précisez toute échéance).
+            </>
+          ) : (
+            <>
+              For bulk exports or custom requests, contact the project maintainers via the{" "}
+              <Link className="text-ha-accent font-medium hover:text-blue-700" href="/contact">
+                contact page
+              </Link>
+              . We aim to respond within 7 days, but it may take longer depending on workload
+              (include any deadline).
+            </>
+          )}
         </p>
       </section>
 
@@ -268,29 +311,6 @@ export default async function ResearchersPage({
             ? "Lors de la citation d’une comparaison, incluez les deux URL de capture (A et B), leurs dates de capture, ainsi que l’URL de comparaison HealthArchive."
             : "When citing a comparison, include both snapshot URLs (A and B), their capture dates, and the HealthArchive compare URL."}
         </p>
-      </section>
-
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
-        <div className="ha-callout">
-          <h3 className="ha-callout-title">
-            {locale === "fr"
-              ? "Fonctionnalités prévues pour la recherche (pas encore mises en œuvre)"
-              : "Planned researcher-focused capabilities (not yet implemented)"}
-          </h3>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-relaxed sm:text-sm">
-            <li>
-              {locale === "fr"
-                ? "Versions de jeux de données (mensuelles ou trimestrielles) avec sommes de contrôle."
-                : "Versioned dataset releases (monthly or quarterly) with checksums."}
-            </li>
-            <li>
-              {locale === "fr"
-                ? "Exportations personnalisées plus volumineuses préparées hors ligne pour des études ou projets de cours."
-                : "Larger custom exports prepared offline for specific studies or course projects."}
-            </li>
-          </ul>
-          {/* TODO: add dataset release cadence + bulk export workflow once stable. */}
-        </div>
       </section>
     </PageShell>
   );
