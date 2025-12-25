@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "../globals.css";
 import { notFound } from "next/navigation";
@@ -10,6 +10,11 @@ import { Footer } from "@/components/layout/Footer";
 import { isLocale, localeToLanguageTag } from "@/lib/i18n";
 import { SITE_BASE_URL } from "@/lib/metadata";
 import { buildMetaDescription } from "@/lib/siteCopy";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export async function generateMetadata({
   params,

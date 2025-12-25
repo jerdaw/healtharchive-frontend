@@ -126,7 +126,7 @@ export function SearchWithinResults({
           aria-hidden={!open}
           tabIndex={open ? 0 : -1}
           disabled={!open}
-          className={`ha-btn-primary col-start-1 row-start-1 overflow-hidden text-xs whitespace-nowrap transition-[opacity,transform,max-height,padding,border-width] duration-300 ${
+          className={`ha-btn-primary col-start-1 row-start-1 overflow-hidden text-xs leading-tight transition-[opacity,transform,max-height,padding,border-width] duration-300 ${
             open
               ? "pointer-events-auto max-h-12 translate-x-0 !px-4 !py-2 opacity-100"
               : "pointer-events-none max-h-0 -translate-x-2 !border-0 !px-0 !py-0 opacity-0"
