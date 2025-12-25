@@ -758,7 +758,7 @@ export default async function ArchivePage({
               <label htmlFor="q" className="text-xs font-medium text-slate-800">
                 {locale === "fr" ? "Mots-clés" : "Keywords"}
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
                 <input
                   id="q"
                   name="q"
@@ -771,7 +771,7 @@ export default async function ArchivePage({
                   }
                   className="border-ha-border min-w-0 flex-1 rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm ring-0 outline-none placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
                 />
-                <HoverGlowButton type="submit" className="ha-btn-primary text-xs whitespace-nowrap">
+                <HoverGlowButton type="submit" className="ha-btn-primary w-full text-xs sm:w-auto">
                   {locale === "fr" ? "Rechercher" : "Search"}
                 </HoverGlowButton>
               </div>
