@@ -107,7 +107,7 @@ export function AnimatedMetric({
   }, [value, barPercent, durationMs, isActive, completeEvent, id, label, onComplete]);
 
   return (
-    <div>
+    <div className="ha-metric">
       <dt className="ha-metric-label">{label}</dt>
       <dd className="ha-metric-primary">
         <span className="ha-metric-primary-value">

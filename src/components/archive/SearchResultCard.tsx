@@ -228,7 +228,7 @@ export function SearchResultCard({
           </div>
         </div>
 
-        <div className="ha-result-actions flex flex-wrap justify-end gap-2">
+        <div className="ha-result-actions flex flex-wrap justify-start gap-2 sm:justify-end">
           <Link href={`/browse/${record.id}`} className="ha-btn-primary text-xs">
             {locale === "fr" ? "Parcourir" : "Browse"}
           </Link>

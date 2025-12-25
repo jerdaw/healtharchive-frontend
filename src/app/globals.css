@@ -50,50 +50,54 @@ html[data-theme="dark"] {
   --callout-border: #27374c;
 }
 
-/* Basic reset */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+@layer base {
+  /* Basic reset */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  /* Base body styles */
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--page-bg);
+    color: var(--text);
+  }
+
+  /* Utility used by the Next starter */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Links */
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-}
-
-/* Base body styles */
-body {
-  font-family: var(--font-sans);
-  background-color: var(--page-bg);
-  color: var(--text);
-}
-
-/* Utility used by the Next starter */
-.text-balance {
-  text-wrap: balance;
-}
-
-/* Links */
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--accent-hover);
-  text-decoration: underline;
-}
-
-a:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
-}
-
-.text-ha-accent {
-  color: var(--accent);
+@layer utilities {
+  .text-ha-accent {
+    color: var(--accent);
+  }
 }
 
 /* ====================================
@@ -137,90 +141,91 @@ a:focus-visible {
 }
 
 /* Header utility cluster (theme + language) */
-.ha-utility-switch {
-  display: inline-flex;
-  align-items: center;
-  height: 1.85rem;
-}
+@layer components {
+  .ha-utility-switch {
+    align-items: center;
+    height: 1.85rem;
+  }
 
-.ha-utility-switch:focus-within {
-  outline: none;
-}
-
-.ha-utility-switch-item {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  border: 0;
-  background-color: transparent;
-  color: var(--muted);
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 999px;
-  transition:
-    background-color 140ms ease-out,
-    color 140ms ease-out;
-}
-
-.ha-utility-switch-item:focus-visible {
-  outline: none;
-}
-
-.ha-utility-switch-item:hover {
-  background-color: color-mix(in srgb, var(--surface-bg) 38%, transparent);
-  color: var(--text);
-  text-decoration: none;
-}
-
-.ha-utility-switch-item--icon {
-  width: 1.9rem;
-}
-
-.ha-utility-switch-item--icon svg {
-  width: 16px;
-  height: 16px;
-}
-
-.ha-utility-switch-item--locale {
-  padding: 0 0.55rem;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-}
-
-.ha-utility-switch-item--locale:hover {
-  font-weight: 650;
-}
-
-.ha-utility-switch-item--locale::before {
-  content: "";
-  position: absolute;
-  left: -0.5px;
-  top: 12%;
-  bottom: 12%;
-  width: 1px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    color-mix(in srgb, var(--muted) 55%, transparent) 45%,
-    color-mix(in srgb, var(--muted) 55%, transparent) 55%,
-    transparent 100%
-  );
-  opacity: 0.375;
-  pointer-events: none;
-}
-
-@supports selector(:has(*)) {
   .ha-utility-switch:focus-within {
     outline: none;
   }
 
-  .ha-utility-switch:has(.ha-utility-switch-item:focus-visible) {
-    outline: 2px solid var(--brand);
-    outline-offset: 2px;
+  .ha-utility-switch-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border: 0;
+    background-color: transparent;
+    color: var(--muted);
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 999px;
+    transition:
+      background-color 140ms ease-out,
+      color 140ms ease-out;
+  }
+
+  .ha-utility-switch-item:focus-visible {
+    outline: none;
+  }
+
+  .ha-utility-switch-item:hover {
+    background-color: color-mix(in srgb, var(--surface-bg) 38%, transparent);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .ha-utility-switch-item--icon {
+    width: 1.9rem;
+  }
+
+  .ha-utility-switch-item--icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .ha-utility-switch-item--locale {
+    padding: 0 0.55rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .ha-utility-switch-item--locale:hover {
+    font-weight: 650;
+  }
+
+  .ha-utility-switch-item--locale::before {
+    content: "";
+    position: absolute;
+    left: -0.5px;
+    top: 12%;
+    bottom: 12%;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in srgb, var(--muted) 55%, transparent) 45%,
+      color-mix(in srgb, var(--muted) 55%, transparent) 55%,
+      transparent 100%
+    );
+    opacity: 0.375;
+    pointer-events: none;
+  }
+
+  @supports selector(:has(*)) {
+    .ha-utility-switch:focus-within {
+      outline: none;
+    }
+
+    .ha-utility-switch:has(.ha-utility-switch-item:focus-visible) {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
   }
 }
 
@@ -789,18 +794,29 @@ html[data-theme="dark"] .ha-page-intro-card {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.ha-metric {
+  display: grid;
+  grid-template-rows: minmax(2.3em, auto) auto auto;
+  align-content: start;
+}
+
 .ha-metric-label {
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--muted);
+  line-height: 1.15;
+  margin: 0;
+  display: inline-block;
+  max-inline-size: 11ch;
 }
 
 .ha-metric-primary {
   display: flex;
   align-items: baseline;
   gap: 0.4rem;
+  margin: 0;
 }
 
 .ha-metric-primary-value {
@@ -814,6 +830,7 @@ html[data-theme="dark"] .ha-page-intro-card {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .ha-metric-secondary {
@@ -841,85 +858,97 @@ html[data-theme="dark"] .ha-page-intro-card {
    Buttons
    ==================================== */
 
-/* New button classes used in React components */
-.ha-btn-primary,
-.ha-btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.55rem 1.35rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  outline: none;
-}
+@layer components {
+  /* New button classes used in React components */
+  .ha-btn-primary,
+  .ha-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.35rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    outline: none;
+    text-align: center;
+    max-width: 100%;
+  }
 
-.ha-btn-primary {
-  background-color: var(--accent);
-  color: #ffffff;
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
-}
+  @media (max-width: 640px) {
+    .ha-btn-primary,
+    .ha-btn-secondary {
+      padding: 0.5rem 1.1rem;
+      white-space: normal;
+    }
+  }
 
-.ha-btn-primary:hover {
-  background-color: var(--accent-hover);
-  color: #ffffff;
-  text-decoration: none;
-}
+  .ha-btn-primary {
+    background-color: var(--accent);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+  }
 
-.ha-btn-glow {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
+  .ha-btn-primary:hover {
+    background-color: var(--accent-hover);
+    color: #ffffff;
+    text-decoration: none;
+  }
 
-.ha-btn-glow::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  background: radial-gradient(
-    circle at var(--ha-glow-x, 50%) var(--ha-glow-y, 50%),
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(255, 255, 255, 0) 36%
-  );
-  opacity: 0;
-  transition:
-    opacity 140ms ease-out,
-    transform 200ms ease-out;
-  z-index: 0;
-  pointer-events: none;
-}
+  .ha-btn-glow {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
 
-.ha-btn-glow:hover::before {
-  opacity: 1;
-  transform: scale(1.002);
-}
+  .ha-btn-glow::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background: radial-gradient(
+      circle at var(--ha-glow-x, 50%) var(--ha-glow-y, 50%),
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.1) 20%,
+      rgba(255, 255, 255, 0) 36%
+    );
+    opacity: 0;
+    transition:
+      opacity 140ms ease-out,
+      transform 200ms ease-out;
+    z-index: 0;
+    pointer-events: none;
+  }
 
-.ha-btn-glow > * {
-  position: relative;
-  z-index: 1;
-}
+  .ha-btn-glow:hover::before {
+    opacity: 1;
+    transform: scale(1.002);
+  }
 
-.ha-btn-secondary {
-  background-color: var(--surface-bg);
-  color: var(--text);
-  border-color: var(--border);
-}
+  .ha-btn-glow > * {
+    position: relative;
+    z-index: 1;
+  }
 
-.ha-btn-secondary:hover {
-  background-color: #f9fafb;
-  color: var(--text);
-  text-decoration: none;
-}
+  .ha-btn-secondary {
+    background-color: var(--surface-bg);
+    color: var(--text);
+    border-color: var(--border);
+  }
 
-.ha-btn-primary:focus-visible,
-.ha-btn-secondary:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
+  .ha-btn-secondary:hover {
+    background-color: #f9fafb;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .ha-btn-primary:focus-visible,
+  .ha-btn-secondary:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
 }
 
 /* ====================================
@@ -1388,6 +1417,11 @@ html[data-theme="dark"] .ha-page-intro-card {
 
   .ha-main {
     padding-inline: 1.25rem;
+  }
+
+  .ha-result-row {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 
