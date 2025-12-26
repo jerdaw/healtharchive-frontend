@@ -38,6 +38,7 @@ Notes :
 
 - Le résultat de comparaison est descriptif seulement et n’interprète pas la signification.
 - Notez toujours les deux ID de capture et les horodatages de capture affichés sur la page de comparaison.
+- Les comparaisons avec la page en direct (/compare-live) ne sont pas des enregistrements d’archive; citez plutôt la capture.
 
 ---
 
