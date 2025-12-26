@@ -60,6 +60,7 @@ Related artifacts:
 - Change tracking surfaces:
   - Changes feed: `src/app/[locale]/changes/page.tsx`
   - Compare view: `src/app/[locale]/compare/page.tsx`
+  - Compare live view: `src/app/[locale]/compare-live/page.tsx`
   - Digest + RSS: `src/app/[locale]/digest/page.tsx`
   - Each has “descriptive only / not guidance” language and citation links.
 

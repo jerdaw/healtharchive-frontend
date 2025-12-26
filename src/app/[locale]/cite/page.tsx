@@ -162,6 +162,11 @@ export default async function CitePage({
               ? "Notez les deux IDs de capture et les horodatages affichés sur la page de comparaison."
               : "Record both snapshot IDs and the capture timestamps shown on the compare page."}
           </li>
+          <li>
+            {locale === "fr"
+              ? "Les comparaisons avec la page en direct (/compare-live) ne sont pas des enregistrements d’archive; citez plutôt la capture."
+              : "Live compare views (/compare-live) are not archival records; cite the snapshot instead."}
+          </li>
         </ul>
       </section>
 
@@ -195,6 +200,11 @@ export default async function CitePage({
             {locale === "fr"
               ? "vous trouverez les deux IDs de capture, les deux horodatages de capture (UTC), l’URL d’origine et un résumé descriptif des changements."
               : "you can find both snapshot IDs, both capture timestamps (UTC), the original URL, and a descriptive change summary."}
+          </p>
+          <p className="mt-3 text-xs leading-relaxed sm:text-sm">
+            {locale === "fr"
+              ? "Les pages /compare-live effectuent un chargement en direct à chaque requête; elles ne remplacent pas une citation de capture."
+              : "/compare-live pages perform a live fetch on each request; they do not replace a snapshot citation."}
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
             {locale === "fr"

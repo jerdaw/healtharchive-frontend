@@ -36,6 +36,7 @@ Notes:
 
 - Compare output is descriptive only and does not interpret meaning.
 - Always record both snapshot IDs and the capture timestamps shown on the compare page.
+- Live compare views (/compare-live) are not archival records; cite the snapshot instead.
 
 ---
 
