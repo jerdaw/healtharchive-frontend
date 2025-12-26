@@ -791,7 +791,13 @@ html[data-theme="dark"] .ha-page-intro-card {
 }
 
 .ha-metric-grid-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 400px) {
+  .ha-metric-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .ha-metric {
