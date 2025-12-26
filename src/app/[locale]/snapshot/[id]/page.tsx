@@ -50,6 +50,12 @@ function formatDate(locale: Locale, iso: string | undefined | null): string {
   return iso;
 }
 
+function isHtmlMimeType(value: string | null | undefined): boolean {
+  if (!value) return false;
+  const normalized = value.split(";")[0]?.trim().toLowerCase();
+  return normalized === "text/html" || normalized === "application/xhtml+xml";
+}
+
 function getSnapshotMetadataCopy(locale: Locale) {
   if (locale === "fr") {
     return {
@@ -152,6 +158,10 @@ export default async function SnapshotPage({
   }
   reportParams.set("page", `/snapshot/${id}`);
   const reportHref = `/report?${reportParams.toString()}`;
+  const compareLiveHref =
+    usingBackend && snapshotMeta?.id && isHtmlMimeType(snapshotMeta.mimeType)
+      ? `/compare-live?to=${snapshotMeta.id}`
+      : null;
 
   let sourceEditions: Awaited<ReturnType<typeof fetchSourceEditions>> | null = null;
   if (usingBackend && snapshotMeta?.sourceCode) {
@@ -248,6 +258,11 @@ export default async function SnapshotPage({
                 >
                   {locale === "fr" ? "Ouvrir dans le lecteur ↗" : "Open in replay ↗"}
                 </a>
+              )}
+              {compareLiveHref && (
+                <Link href={compareLiveHref} prefetch={false} className="ha-btn-secondary text-xs">
+                  {locale === "fr" ? "Comparer à la page en direct" : "Compare to the live page"}
+                </Link>
               )}
               {rawHtmlUrl && (
                 <a
