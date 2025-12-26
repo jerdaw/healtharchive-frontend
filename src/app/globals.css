@@ -788,6 +788,7 @@ html[data-theme="dark"] .ha-page-intro-card {
 .ha-metric-grid {
   display: grid;
   gap: 0.85rem 1.1rem;
+  container-type: inline-size;
 }
 
 .ha-metric-grid-2 {
@@ -859,11 +860,16 @@ html[data-theme="dark"] .ha-page-intro-card {
 
   .ha-metric {
     grid-template-rows: subgrid;
-    grid-row: 1 / span 3;
   }
 
   .ha-metric-bar {
     margin-top: 0;
+  }
+
+  @container (min-width: 29rem) {
+    .ha-metric {
+      grid-row: 1 / span 3;
+    }
   }
 }
 
