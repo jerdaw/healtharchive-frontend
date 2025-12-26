@@ -853,22 +853,19 @@ html[data-theme="dark"] .ha-page-intro-card {
 }
 
 @supports (grid-template-rows: subgrid) {
-  .ha-metric-grid {
-    gap: 0.2rem 1.1rem;
-    grid-template-rows: auto auto auto;
-  }
-
-  .ha-metric {
-    grid-template-rows: subgrid;
-  }
-
-  .ha-metric-bar {
-    margin-top: 0;
-  }
-
   @container (min-width: 29rem) {
+    .ha-metric-grid {
+      gap: 0.2rem 1.1rem;
+      grid-template-rows: auto auto auto;
+    }
+
     .ha-metric {
+      grid-template-rows: subgrid;
       grid-row: 1 / span 3;
+    }
+
+    .ha-metric-bar {
+      margin-top: 0;
     }
   }
 }
