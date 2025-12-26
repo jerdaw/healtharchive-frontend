@@ -144,6 +144,41 @@ export type ChangeCompare = {
   normalizationVersion: string | null;
 };
 
+export type CompareLiveFetch = {
+  requestedUrl: string;
+  finalUrl: string;
+  statusCode: number;
+  contentType: string | null;
+  bytesRead: number;
+  fetchedAt: string;
+};
+
+export type CompareLiveStats = {
+  summary: string;
+  addedSections: number;
+  removedSections: number;
+  changedSections: number;
+  addedLines: number;
+  removedLines: number;
+  changeRatio: number;
+  highNoise: boolean;
+};
+
+export type CompareLiveDiff = {
+  diffFormat: string;
+  diffHtml: string;
+  diffTruncated: boolean;
+  diffVersion: string;
+  normalizationVersion: string;
+};
+
+export type CompareLive = {
+  archivedSnapshot: ChangeCompareSnapshot;
+  liveFetch: CompareLiveFetch;
+  stats: CompareLiveStats;
+  diff: CompareLiveDiff;
+};
+
 export type SnapshotTimelineItem = {
   snapshotId: number;
   captureDate: string;
@@ -359,6 +394,10 @@ export async function fetchChangeCompare(params: {
     query.set("fromSnapshotId", String(params.fromSnapshotId));
   }
   return fetchJson<ChangeCompare>("/api/changes/compare", query);
+}
+
+export async function fetchSnapshotCompareLive(snapshotId: number): Promise<CompareLive> {
+  return fetchJson<CompareLive>(`/api/snapshots/${snapshotId}/compare-live`);
 }
 
 export async function fetchSnapshotTimeline(snapshotId: number): Promise<SnapshotTimeline> {

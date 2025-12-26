@@ -22,6 +22,12 @@ function formatDate(locale: Locale, value: string | null | undefined): string {
   return value;
 }
 
+function formatPercent(value: number | null | undefined): string {
+  if (value == null) return "";
+  const rounded = Math.round(value * 100);
+  return `${rounded}%`;
+}
+
 function getCompareMetadataCopy(locale: Locale) {
   if (locale === "fr") {
     return {
@@ -145,6 +151,22 @@ export default async function ComparePage({
             </p>
           </div>
 
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href={`/compare-live?to=${compare.toSnapshot.snapshotId}`}
+              prefetch={false}
+              className="ha-btn-secondary text-xs"
+            >
+              {locale === "fr" ? "Comparer à la page en direct" : "Compare to the live page"}
+            </Link>
+            <Link
+              href={`/snapshot/${compare.toSnapshot.snapshotId}`}
+              className="ha-btn-secondary text-xs"
+            >
+              {locale === "fr" ? "Voir la capture" : "View snapshot"}
+            </Link>
+          </div>
+
           <div className="ha-grid-2">
             <div className="ha-card space-y-2">
               <p className="text-ha-muted text-xs">
@@ -163,6 +185,17 @@ export default async function ComparePage({
                     {compare.fromSnapshot.jobName ??
                       (locale === "fr" ? "Capture d’édition" : "Edition capture")}
                   </p>
+                  <p className="text-ha-muted text-xs">ID {compare.fromSnapshot.snapshotId}</p>
+                  <div className="text-xs">
+                    <a
+                      href={compare.fromSnapshot.originalUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-ha-accent font-medium hover:text-blue-700"
+                    >
+                      {locale === "fr" ? "URL originale ↗" : "Original URL ↗"}
+                    </a>
+                  </div>
                   <div className="pt-2">
                     <Link
                       href={`/snapshot/${compare.fromSnapshot.snapshotId}`}
@@ -195,6 +228,17 @@ export default async function ComparePage({
                 {compare.toSnapshot.jobName ??
                   (locale === "fr" ? "Capture d’édition" : "Edition capture")}
               </p>
+              <p className="text-ha-muted text-xs">ID {compare.toSnapshot.snapshotId}</p>
+              <div className="text-xs">
+                <a
+                  href={compare.toSnapshot.originalUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-ha-accent font-medium hover:text-blue-700"
+                >
+                  {locale === "fr" ? "URL originale ↗" : "Original URL ↗"}
+                </a>
+              </div>
               <div className="pt-2">
                 <Link
                   href={`/snapshot/${compare.toSnapshot.snapshotId}`}
@@ -226,6 +270,36 @@ export default async function ComparePage({
                 {compare.event.summary ??
                   (locale === "fr" ? "Texte archivé mis à jour." : "Archived text updated.")}
               </span>
+            </div>
+            <div className="text-ha-muted flex flex-wrap items-center gap-2 text-xs">
+              {compare.event.changedSections != null && (
+                <span>
+                  {compare.event.changedSections}{" "}
+                  {locale === "fr" ? "sections modifiées" : "sections changed"}
+                </span>
+              )}
+              {compare.event.addedSections != null && (
+                <span>
+                  {compare.event.addedSections} {locale === "fr" ? "ajoutées" : "added"}
+                </span>
+              )}
+              {compare.event.removedSections != null && (
+                <span>
+                  {compare.event.removedSections} {locale === "fr" ? "retirées" : "removed"}
+                </span>
+              )}
+              {compare.event.addedLines != null && compare.event.removedLines != null && (
+                <span>
+                  +{compare.event.addedLines} / -{compare.event.removedLines}{" "}
+                  {locale === "fr" ? "lignes" : "lines"}
+                </span>
+              )}
+              {compare.event.changeRatio != null && (
+                <span>
+                  {locale === "fr" ? "Variation" : "Change ratio"}:{" "}
+                  {formatPercent(compare.event.changeRatio)}
+                </span>
+              )}
             </div>
             {compare.diffHtml ? (
               <div className="ha-diff" dangerouslySetInnerHTML={{ __html: compare.diffHtml }} />
