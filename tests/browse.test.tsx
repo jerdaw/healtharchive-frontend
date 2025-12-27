@@ -16,6 +16,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/lib/api", () => ({
   fetchSnapshotDetail: vi.fn(),
+  fetchSnapshotLatest: vi.fn(),
   fetchSourceEditions: vi.fn(),
   resolveReplayUrl: vi.fn(),
   getApiBaseUrl: () => "https://api.example.test",
@@ -34,8 +35,9 @@ vi.mock("@/components/SnapshotFrame", () => ({
   ),
 }));
 
-import { fetchSnapshotDetail, fetchSourceEditions } from "@/lib/api";
+import { fetchSnapshotDetail, fetchSnapshotLatest, fetchSourceEditions } from "@/lib/api";
 const mockFetchSnapshotDetail = vi.mocked(fetchSnapshotDetail);
+const mockFetchSnapshotLatest = vi.mocked(fetchSnapshotLatest);
 const mockFetchSourceEditions = vi.mocked(fetchSourceEditions);
 
 describe("/browse/[id]", () => {
@@ -60,6 +62,12 @@ describe("/browse/[id]", () => {
         "https://replay.healtharchive.ca/job-1/20240104123456/https://canada.ca/en/health-canada.html",
       mimeType: "text/html",
       statusCode: 200,
+    });
+    mockFetchSnapshotLatest.mockResolvedValue({
+      found: true,
+      snapshotId: 46,
+      captureTimestamp: "2024-02-02T00:00:00+00:00",
+      mimeType: "text/html",
     });
     mockFetchSourceEditions.mockResolvedValue([
       {
@@ -86,6 +94,10 @@ describe("/browse/[id]", () => {
     expect(screen.getByText(/Health Canada/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Switch edition/i)).toBeInTheDocument();
     expect(screen.getByText(/Open in replay/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Compare to the live page/i })).toHaveAttribute(
+      "href",
+      "/compare-live?to=46&run=1",
+    );
     expect(
       screen.getByText(/src: https:\/\/replay\.healtharchive\.ca\/job-1\/20240104123456\//i),
     ).toBeInTheDocument();
