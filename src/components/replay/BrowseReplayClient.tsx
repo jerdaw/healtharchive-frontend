@@ -468,9 +468,9 @@ export function BrowseReplayClient({
             </p>
           )}
 
-          <div className="flex flex-wrap gap-2 pt-1">
+          <div className="flex flex-wrap items-center gap-2 pt-1">
             {compareLiveHref && (
-              <Link href={compareLiveHref} prefetch={false} className="ha-btn-secondary text-xs">
+              <Link href={compareLiveHref} prefetch={false} className="ha-btn-primary text-xs">
                 {locale === "fr" ? "Voir diff" : "View diff"}
               </Link>
             )}
@@ -510,15 +510,17 @@ export function BrowseReplayClient({
             <Link href={reportHref} className="ha-btn-secondary text-xs">
               {locale === "fr" ? "Signaler un problème" : "Report issue"}
             </Link>
-            <button
-              type="button"
-              className="ha-btn-secondary text-xs"
-              aria-expanded={historyOpen}
-              onClick={() => setHistoryOpen((prev) => !prev)}
-              disabled={otherSnapshotsDisabled}
-            >
-              {otherSnapshotsButtonLabel}
-            </button>
+            <div className="ml-auto flex w-full justify-end sm:w-auto">
+              <button
+                type="button"
+                className="ha-btn-secondary text-xs whitespace-nowrap"
+                aria-expanded={historyOpen}
+                onClick={() => setHistoryOpen((prev) => !prev)}
+                disabled={otherSnapshotsDisabled}
+              >
+                {otherSnapshotsButtonLabel}
+              </button>
+            </div>
           </div>
 
           {historyOpen && (
