@@ -114,9 +114,9 @@ export default async function SnapshotPage({
       : undefined;
 
   let sourceEditions: Awaited<ReturnType<typeof fetchSourceEditions>> | null = null;
-  if (usingBackend && snapshotMeta?.sourceCode) {
+  if (usingBackend && sourceCode) {
     try {
-      sourceEditions = await fetchSourceEditions(snapshotMeta.sourceCode);
+      sourceEditions = await fetchSourceEditions(sourceCode);
     } catch {
       sourceEditions = null;
     }
@@ -145,7 +145,6 @@ export default async function SnapshotPage({
       snapshotId={id}
       title={title}
       language={language}
-      sourceCode={sourceCode}
       sourceName={sourceName}
       captureDate={captureDate}
       captureTimestamp={captureTimestamp}

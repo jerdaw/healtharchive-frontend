@@ -55,9 +55,15 @@ vi.mock("@/components/SnapshotFrame", () => ({
   ),
 }));
 
-import { fetchSnapshotDetail, fetchSnapshotLatest, fetchSourceEditions } from "@/lib/api";
+import {
+  fetchSnapshotDetail,
+  fetchSnapshotLatest,
+  fetchSnapshotTimeline,
+  fetchSourceEditions,
+} from "@/lib/api";
 const mockFetchSnapshotDetail = vi.mocked(fetchSnapshotDetail);
 const mockFetchSnapshotLatest = vi.mocked(fetchSnapshotLatest);
+const mockFetchSnapshotTimeline = vi.mocked(fetchSnapshotTimeline);
 const mockFetchSourceEditions = vi.mocked(fetchSourceEditions);
 
 describe("/snapshot/[id]", () => {
@@ -109,17 +115,23 @@ describe("/snapshot/[id]", () => {
     const ui = await SnapshotPage({ params: Promise.resolve({ id: "45" }) });
     render(ui);
 
-    expect(screen.getByText(/Browsing archived site/i)).toBeInTheDocument();
-    expect(screen.getByText(/Health Canada/i)).toBeInTheDocument();
-    expect(screen.getByText(/Snapshot details/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Snapshot Replay/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Health Canada/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole("button", { name: /Details/i })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /How to cite/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Compare to the live page/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /View diff/i })).toHaveAttribute(
       "href",
       "/compare-live?to=46&run=1",
     );
   });
 
   it("opens the details section when view=details", async () => {
+    mockFetchSnapshotTimeline.mockResolvedValue({
+      sourceCode: null,
+      sourceName: null,
+      normalizedUrlGroup: null,
+      snapshots: [],
+    });
     mockFetchSnapshotDetail.mockResolvedValue({
       id: 43,
       title: "Snapshot Error",
@@ -149,7 +161,6 @@ describe("/snapshot/[id]", () => {
     });
     render(ui);
 
-    expect(screen.getByText(/Snapshot details/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Snapshot Error/i).length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: /How to cite/i })).toHaveAttribute("href", "/cite");
   });

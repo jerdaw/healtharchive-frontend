@@ -55,7 +55,6 @@ describe("BrowseReplayClient compare-live follow", () => {
         snapshotId="45"
         title="Snapshot Replay"
         language="en"
-        sourceCode="hc"
         sourceName="Health Canada"
         captureDate="2024-01-04"
         captureTimestamp="2024-01-04T12:34:56+00:00"
@@ -68,7 +67,7 @@ describe("BrowseReplayClient compare-live follow", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: /Compare to the live page/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /View diff/i })).toHaveAttribute(
       "href",
       "/compare-live?to=45&run=1",
     );
@@ -77,7 +76,7 @@ describe("BrowseReplayClient compare-live follow", () => {
       await vi.advanceTimersByTimeAsync(400);
     });
 
-    expect(screen.getByRole("link", { name: /Compare to the live page/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /View diff/i })).toHaveAttribute(
       "href",
       "/compare-live?to=1000&run=1",
     );
@@ -99,7 +98,6 @@ describe("BrowseReplayClient compare-live follow", () => {
         snapshotId="45"
         title="Snapshot Replay"
         language="en"
-        sourceCode="hc"
         sourceName="Health Canada"
         captureDate="2024-01-04"
         captureTimestamp="2024-01-04T12:34:56+00:00"
@@ -112,14 +110,12 @@ describe("BrowseReplayClient compare-live follow", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: /Compare to the live page/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /View diff/i })).toBeInTheDocument();
 
     await act(async () => {
       await vi.advanceTimersByTimeAsync(400);
     });
 
-    expect(
-      screen.queryByRole("link", { name: /Compare to the live page/i }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /View diff/i })).not.toBeInTheDocument();
   });
 });
