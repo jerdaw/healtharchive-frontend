@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { SnapshotFrame } from "@/components/SnapshotFrame";
 import { useLocale } from "@/components/i18n/LocaleProvider";
-import { resolveReplayUrl } from "@/lib/api";
+import { fetchSnapshotLatest, resolveReplayUrl } from "@/lib/api";
 import { isHtmlMimeType } from "@/lib/mime";
 import { buildBrowseDisclaimer, getSiteCopy } from "@/lib/siteCopy";
 
@@ -42,6 +42,7 @@ type BrowseReplayClientProps = {
   apiLink?: string;
   editions?: ReplayEdition[] | null;
   canCompareLive?: boolean;
+  initialCompareSnapshotId?: string | null;
 };
 
 export function BrowseReplayClient({
@@ -58,6 +59,7 @@ export function BrowseReplayClient({
   apiLink,
   editions,
   canCompareLive = false,
+  initialCompareSnapshotId = null,
 }: BrowseReplayClientProps) {
   const locale = useLocale();
   const siteCopy = getSiteCopy(locale);
@@ -74,9 +76,22 @@ export function BrowseReplayClient({
   const [currentReplayUrl, setCurrentReplayUrl] = useState<string | null>(browseUrl);
   const [editionNotice, setEditionNotice] = useState<string | null>(null);
   const [isResolvingEdition, setIsResolvingEdition] = useState(false);
+  const defaultCompareSnapshotId = canCompareLive ? (initialCompareSnapshotId ?? snapshotId) : null;
   const [compareSnapshotId, setCompareSnapshotId] = useState<string | null>(
-    canCompareLive ? snapshotId : null,
+    defaultCompareSnapshotId,
   );
+  const [fallbackCompareSnapshotId, setFallbackCompareSnapshotId] = useState<string | null>(
+    defaultCompareSnapshotId,
+  );
+
+  useEffect(() => {
+    setFallbackCompareSnapshotId(defaultCompareSnapshotId);
+    if (!canCompareLive) {
+      setCompareSnapshotId(null);
+      return;
+    }
+    setCompareSnapshotId(defaultCompareSnapshotId);
+  }, [canCompareLive, defaultCompareSnapshotId]);
 
   const replayOrigin = useMemo(() => {
     if (!browseUrl) return null;
@@ -151,15 +166,25 @@ export function BrowseReplayClient({
         if (resolved.snapshotId) {
           const mimeType = resolved.mimeType;
           if (mimeType === undefined || isHtmlMimeType(mimeType)) {
+            try {
+              const latest = await fetchSnapshotLatest(resolved.snapshotId);
+              if (cancelled) return;
+              if (latest.found && latest.snapshotId != null) {
+                setCompareSnapshotId(String(latest.snapshotId));
+                return;
+              }
+            } catch {
+              if (cancelled) return;
+            }
             setCompareSnapshotId(String(resolved.snapshotId));
             return;
           }
           setCompareSnapshotId(null);
           return;
         }
-        setCompareSnapshotId(snapshotId);
+        setCompareSnapshotId(fallbackCompareSnapshotId);
       } catch {
-        if (!cancelled) setCompareSnapshotId(snapshotId);
+        if (!cancelled) setCompareSnapshotId(fallbackCompareSnapshotId);
       }
     }, 350);
 
@@ -167,7 +192,13 @@ export function BrowseReplayClient({
       cancelled = true;
       window.clearTimeout(timeoutId);
     };
-  }, [activeJobId, canCompareLive, currentOriginalUrl, currentTimestamp14, snapshotId]);
+  }, [
+    activeJobId,
+    canCompareLive,
+    currentOriginalUrl,
+    currentTimestamp14,
+    fallbackCompareSnapshotId,
+  ]);
 
   async function handleEditionChange(nextJobId: number) {
     if (!replayOrigin) return;
@@ -245,7 +276,7 @@ export function BrowseReplayClient({
 
   const browseLink = browseUrl ? (currentReplayUrl ?? browseUrl) : undefined;
   const rawLink = rawHtmlUrl ?? undefined;
-  const compareLiveHref = compareSnapshotId ? `/compare-live?to=${compareSnapshotId}` : null;
+  const compareLiveHref = compareSnapshotId ? `/compare-live?to=${compareSnapshotId}&run=1` : null;
 
   return (
     <div className="ha-container">

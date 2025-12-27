@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
-import { fetchChangeCompare } from "@/lib/api";
+import { fetchChangeCompare, fetchSnapshotLatest } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
@@ -105,6 +105,20 @@ export default async function ComparePage({
     compare = null;
   }
 
+  let compareLiveHref: string | null = null;
+  if (compare) {
+    let latestSnapshotId = compare.toSnapshot.snapshotId;
+    try {
+      const latest = await fetchSnapshotLatest(compare.toSnapshot.snapshotId);
+      if (latest.found && latest.snapshotId != null) {
+        latestSnapshotId = latest.snapshotId;
+      }
+    } catch {
+      latestSnapshotId = compare.toSnapshot.snapshotId;
+    }
+    compareLiveHref = `/compare-live?to=${latestSnapshotId}&run=1`;
+  }
+
   return (
     <PageShell
       eyebrow={locale === "fr" ? "Comparer" : "Compare"}
@@ -152,13 +166,11 @@ export default async function ComparePage({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Link
-              href={`/compare-live?to=${compare.toSnapshot.snapshotId}`}
-              prefetch={false}
-              className="ha-btn-secondary text-xs"
-            >
-              {locale === "fr" ? "Comparer à la page en direct" : "Compare to the live page"}
-            </Link>
+            {compareLiveHref && (
+              <Link href={compareLiveHref} prefetch={false} className="ha-btn-secondary text-xs">
+                {locale === "fr" ? "Comparer à la page en direct" : "Compare to the live page"}
+              </Link>
+            )}
             <Link
               href={`/snapshot/${compare.toSnapshot.snapshotId}`}
               className="ha-btn-secondary text-xs"

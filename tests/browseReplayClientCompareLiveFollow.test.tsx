@@ -16,9 +16,10 @@ vi.mock("@/components/SnapshotFrame", () => ({
 
 vi.mock("@/lib/api", () => ({
   resolveReplayUrl: vi.fn(),
+  fetchSnapshotLatest: vi.fn(),
 }));
 
-import { resolveReplayUrl } from "@/lib/api";
+import { fetchSnapshotLatest, resolveReplayUrl } from "@/lib/api";
 
 describe("BrowseReplayClient compare-live follow", () => {
   beforeEach(() => {
@@ -32,12 +33,19 @@ describe("BrowseReplayClient compare-live follow", () => {
 
   it("updates the compare-live link when a newer snapshot is resolvable and HTML", async () => {
     const mockResolveReplayUrl = vi.mocked(resolveReplayUrl);
+    const mockFetchSnapshotLatest = vi.mocked(fetchSnapshotLatest);
     mockResolveReplayUrl.mockResolvedValue({
       found: true,
       snapshotId: 999,
       captureTimestamp: "2024-01-04T12:34:56+00:00",
       resolvedUrl: "https://example.org/other",
       browseUrl: null,
+      mimeType: "text/html",
+    });
+    mockFetchSnapshotLatest.mockResolvedValue({
+      found: true,
+      snapshotId: 1000,
+      captureTimestamp: "2025-01-01T00:00:00+00:00",
       mimeType: "text/html",
     });
 
@@ -60,7 +68,7 @@ describe("BrowseReplayClient compare-live follow", () => {
 
     expect(screen.getByRole("link", { name: /Compare to the live page/i })).toHaveAttribute(
       "href",
-      "/compare-live?to=45",
+      "/compare-live?to=45&run=1",
     );
 
     await act(async () => {
@@ -69,7 +77,7 @@ describe("BrowseReplayClient compare-live follow", () => {
 
     expect(screen.getByRole("link", { name: /Compare to the live page/i })).toHaveAttribute(
       "href",
-      "/compare-live?to=999",
+      "/compare-live?to=1000&run=1",
     );
   });
 

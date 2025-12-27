@@ -226,6 +226,13 @@ export type ReplayResolveResponse = {
   mimeType: string | null;
 };
 
+export type SnapshotLatest = {
+  found: boolean;
+  snapshotId: number | null;
+  captureTimestamp: string | null;
+  mimeType: string | null;
+};
+
 export class ApiError extends Error {
   status: number;
   detail: unknown;
@@ -446,4 +453,18 @@ export async function resolveReplayUrl(params: {
   if (params.timestamp14) query.set("timestamp", params.timestamp14);
 
   return fetchJson<ReplayResolveResponse>("/api/replay/resolve", query);
+}
+
+export async function fetchSnapshotLatest(
+  snapshotId: number,
+  params?: {
+    requireHtml?: boolean;
+  },
+): Promise<SnapshotLatest> {
+  const query = new URLSearchParams();
+  if (params?.requireHtml === false) {
+    query.set("requireHtml", "0");
+  }
+
+  return fetchJson<SnapshotLatest>(`/api/snapshots/${snapshotId}/latest`, query);
 }
