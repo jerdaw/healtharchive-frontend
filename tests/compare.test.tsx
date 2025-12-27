@@ -5,13 +5,15 @@ import ComparePage from "@/app/[locale]/compare/page";
 
 vi.mock("@/lib/api", () => ({
   fetchChangeCompare: vi.fn(),
+  fetchSnapshotLatest: vi.fn(),
   resolveReplayUrl: vi.fn(),
   getApiBaseUrl: () => "https://api.example.test",
 }));
 
-import { fetchChangeCompare } from "@/lib/api";
+import { fetchChangeCompare, fetchSnapshotLatest } from "@/lib/api";
 
 const mockFetchChangeCompare = vi.mocked(fetchChangeCompare);
+const mockFetchSnapshotLatest = vi.mocked(fetchSnapshotLatest);
 
 describe("/compare", () => {
   beforeEach(() => {
@@ -72,6 +74,12 @@ describe("/compare", () => {
       diffTruncated: false,
       diffVersion: "v1",
       normalizationVersion: "v1",
+    });
+    mockFetchSnapshotLatest.mockResolvedValue({
+      found: true,
+      snapshotId: 11,
+      captureTimestamp: "2025-01-01T00:00:00+00:00",
+      mimeType: "text/html",
     });
 
     const ui = await ComparePage({

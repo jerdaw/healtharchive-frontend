@@ -16,6 +16,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/lib/api", () => ({
   fetchSnapshotDetail: vi.fn(),
+  fetchSnapshotLatest: vi.fn(),
   fetchSnapshotTimeline: vi.fn(),
   fetchSourceEditions: vi.fn(),
   resolveReplayUrl: vi.fn(),
@@ -54,8 +55,14 @@ vi.mock("@/components/SnapshotFrame", () => ({
   ),
 }));
 
-import { fetchSnapshotDetail, fetchSourceEditions, fetchSnapshotTimeline } from "@/lib/api";
+import {
+  fetchSnapshotDetail,
+  fetchSnapshotLatest,
+  fetchSourceEditions,
+  fetchSnapshotTimeline,
+} from "@/lib/api";
 const mockFetchSnapshotDetail = vi.mocked(fetchSnapshotDetail);
+const mockFetchSnapshotLatest = vi.mocked(fetchSnapshotLatest);
 const mockFetchSourceEditions = vi.mocked(fetchSourceEditions);
 const mockFetchSnapshotTimeline = vi.mocked(fetchSnapshotTimeline);
 
@@ -68,6 +75,12 @@ describe("/snapshot/[id]", () => {
       normalizedUrlGroup: "https://example.com",
       snapshots: [],
     });
+    mockFetchSnapshotLatest.mockImplementation(async (snapshotId: number) => ({
+      found: true,
+      snapshotId,
+      captureTimestamp: "2025-01-01T00:00:00+00:00",
+      mimeType: "text/html",
+    }));
   });
 
   it("renders backend snapshot and iframe", async () => {

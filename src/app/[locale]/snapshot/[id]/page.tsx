@@ -6,6 +6,7 @@ import { PageShell } from "@/components/layout/PageShell";
 import { getRecordById } from "@/data/demo-records";
 import {
   fetchSnapshotDetail,
+  fetchSnapshotLatest,
   fetchSnapshotTimeline,
   fetchSourceEditions,
   getApiBaseUrl,
@@ -153,10 +154,6 @@ export default async function SnapshotPage({
   }
   reportParams.set("page", `/snapshot/${id}`);
   const reportHref = `/report?${reportParams.toString()}`;
-  const compareLiveHref =
-    usingBackend && snapshotMeta?.id && isHtmlMimeType(snapshotMeta.mimeType)
-      ? `/compare-live?to=${snapshotMeta.id}`
-      : null;
 
   let sourceEditions: Awaited<ReturnType<typeof fetchSourceEditions>> | null = null;
   if (usingBackend && snapshotMeta?.sourceCode) {
@@ -175,6 +172,23 @@ export default async function SnapshotPage({
       timeline = null;
     }
   }
+
+  let compareLiveSnapshotId: number | null = null;
+  if (usingBackend && snapshotMeta?.id && isHtmlMimeType(snapshotMeta.mimeType)) {
+    compareLiveSnapshotId = snapshotMeta.id;
+    try {
+      const latest = await fetchSnapshotLatest(snapshotMeta.id);
+      if (latest.found && latest.snapshotId != null) {
+        compareLiveSnapshotId = latest.snapshotId;
+      }
+    } catch {
+      compareLiveSnapshotId = snapshotMeta.id;
+    }
+  }
+
+  const compareLiveHref = compareLiveSnapshotId
+    ? `/compare-live?to=${compareLiveSnapshotId}&run=1`
+    : null;
 
   const displayedOriginalUrl = originalUrl ?? (locale === "fr" ? "URL inconnue" : "Unknown URL");
 

@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { getRecordById } from "@/data/demo-records";
-import { fetchSnapshotDetail, fetchSourceEditions, getApiBaseUrl } from "@/lib/api";
+import {
+  fetchSnapshotDetail,
+  fetchSnapshotLatest,
+  fetchSourceEditions,
+  getApiBaseUrl,
+} from "@/lib/api";
 import type { Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { isHtmlMimeType } from "@/lib/mime";
@@ -79,6 +84,19 @@ export default async function BrowseSnapshotPage({
   const canCompareLive = Boolean(
     usingBackend && snapshotMeta?.id && isHtmlMimeType(snapshotMeta?.mimeType),
   );
+  let initialCompareSnapshotId: string | null = null;
+  if (usingBackend && snapshotMeta?.id && canCompareLive) {
+    try {
+      const latest = await fetchSnapshotLatest(snapshotMeta.id);
+      if (latest.found && latest.snapshotId != null) {
+        initialCompareSnapshotId = String(latest.snapshotId);
+      } else {
+        initialCompareSnapshotId = String(snapshotMeta.id);
+      }
+    } catch {
+      initialCompareSnapshotId = String(snapshotMeta.id);
+    }
+  }
 
   const apiBaseUrl = getApiBaseUrl();
   const rawHtmlUrl =
@@ -115,6 +133,7 @@ export default async function BrowseSnapshotPage({
       apiLink={apiLink}
       editions={sourceEditions}
       canCompareLive={canCompareLive}
+      initialCompareSnapshotId={initialCompareSnapshotId}
     />
   );
 }
