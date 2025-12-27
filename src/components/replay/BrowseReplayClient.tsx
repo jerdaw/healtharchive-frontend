@@ -87,7 +87,7 @@ export function BrowseReplayClient({
   const [fallbackCompareSnapshotId, setFallbackCompareSnapshotId] = useState<string | null>(
     defaultCompareSnapshotId,
   );
-  const [detailsOpen, setDetailsOpen] = useState(initialDetailsOpen);
+  const [historyOpen, setHistoryOpen] = useState(initialDetailsOpen);
   const [timelineLoading, setTimelineLoading] = useState(false);
   const [timelineError, setTimelineError] = useState<string | null>(null);
   const [timeline, setTimeline] = useState<Awaited<
@@ -158,9 +158,9 @@ export function BrowseReplayClient({
   }, [snapshotId, currentOriginalUrl]);
 
   useEffect(() => {
-    if (!detailsOpen) return;
+    if (!historyOpen) return;
     if (!timelineSnapshotId) return;
-    if (timeline || timelineLoading) return;
+    if (timeline) return;
 
     let cancelled = false;
     setTimelineLoading(true);
@@ -184,7 +184,12 @@ export function BrowseReplayClient({
     return () => {
       cancelled = true;
     };
-  }, [detailsOpen, timeline, timelineLoading, timelineSnapshotId]);
+  }, [historyOpen, timeline, timelineSnapshotId]);
+
+  useEffect(() => {
+    if (historyOpen) return;
+    setTimelineLoading(false);
+  }, [historyOpen]);
 
   useEffect(() => {
     if (!canCompareLive) {
@@ -318,15 +323,73 @@ export function BrowseReplayClient({
   const rawLink = rawHtmlUrl ?? undefined;
   const compareLiveHref = compareSnapshotId ? `/compare-live?to=${compareSnapshotId}&run=1` : null;
 
+  const otherSnapshotsCount =
+    timeline?.snapshots && timelineSnapshotId != null
+      ? timeline.snapshots.filter((item) => item.snapshotId !== timelineSnapshotId).length
+      : null;
+  const otherSnapshotsDisabled =
+    !timelineSnapshotId ||
+    (timelineLoading && !historyOpen) ||
+    (otherSnapshotsCount != null && otherSnapshotsCount < 1 && !historyOpen);
+
+  const otherSnapshotsButtonLabel = (() => {
+    if (!timelineSnapshotId) {
+      return locale === "fr" ? "Autres captures indisponibles" : "Other snapshots unavailable";
+    }
+    if (timelineLoading) {
+      return locale === "fr" ? "Chargement des autres captures…" : "Loading other snapshots…";
+    }
+    if (otherSnapshotsCount != null) {
+      if (otherSnapshotsCount < 1) {
+        if (historyOpen) {
+          return locale === "fr" ? "Masquer les autres captures" : "Hide other snapshots";
+        }
+        return locale === "fr" ? "Aucune autre capture" : "No other snapshots";
+      }
+      const countLabel =
+        locale === "fr"
+          ? `${otherSnapshotsCount} autre${otherSnapshotsCount === 1 ? "" : "s"} capture${
+              otherSnapshotsCount === 1 ? "" : "s"
+            }`
+          : `${otherSnapshotsCount} other snapshot${otherSnapshotsCount === 1 ? "" : "s"}`;
+      return historyOpen
+        ? locale === "fr"
+          ? `Masquer ${countLabel}`
+          : `Hide ${countLabel}`
+        : locale === "fr"
+          ? `Afficher ${countLabel}`
+          : `Show ${countLabel}`;
+    }
+    return historyOpen
+      ? locale === "fr"
+        ? "Masquer les autres captures"
+        : "Hide other snapshots"
+      : locale === "fr"
+        ? "Afficher les autres captures"
+        : "Show other snapshots";
+  })();
+
   return (
     <div className="ha-container">
       <section className="space-y-4 pt-6 pb-10">
         <header className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h1 className="text-base font-semibold text-slate-900 sm:text-lg">{title}</h1>
-              <p className="text-ha-muted mt-1 text-xs">
-                {sourceName} · {displayedCapture}
+          <dl className="space-y-1 text-xs text-slate-800 sm:text-sm">
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">
+                {locale === "fr" ? "Titre de la page" : "Page title"}
+              </dt>
+              <dd className="min-w-0 flex-1 font-semibold break-words text-slate-900">{title}</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">{locale === "fr" ? "Source" : "Source"}</dt>
+              <dd>{sourceName}</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">
+                {locale === "fr" ? "Date de capture" : "Snapshot date"}
+              </dt>
+              <dd>
+                {displayedCapture}
                 {activeJobId != null && (
                   <>
                     {" "}
@@ -334,52 +397,17 @@ export function BrowseReplayClient({
                     <span className="font-medium">#{activeJobId}</span>
                   </>
                 )}
-              </p>
-              <p className="mt-2 text-[11px] font-medium text-amber-800">
-                {locale === "fr"
-                  ? "Archive indépendante · Pas un site gouvernemental officiel."
-                  : "Independent archive · Not an official government website."}{" "}
-                {buildBrowseDisclaimer(locale, { captureLabel: displayedCapture })}{" "}
-                {siteCopy.whatThisSiteIs.forCurrent}.
-              </p>
-
-              {showEditionSelect && (
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <label
-                    htmlFor="ha-edition-select"
-                    className="text-[11px] font-medium text-slate-800"
-                  >
-                    {locale === "fr" ? "Changer d’édition" : "Switch edition"}
-                  </label>
-                  <select
-                    id="ha-edition-select"
-                    className="ha-select ha-select-sm"
-                    value={activeJobId ?? undefined}
-                    onChange={(e) => handleEditionChange(Number(e.target.value))}
-                    disabled={isResolvingEdition}
-                  >
-                    {editionOptions.map((edition) => (
-                      <option key={edition.jobId} value={edition.jobId}>
-                        {formatEditionLabel(edition, locale)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {isResolvingEdition && (
-                <p className="text-ha-muted mt-2 text-[11px] font-medium">
-                  {locale === "fr" ? "Changement d’édition…" : "Switching edition…"}
-                </p>
-              )}
-              {editionNotice && (
-                <p className="mt-2 text-[11px] font-medium text-amber-800">{editionNotice}</p>
-              )}
-
-              <p className="text-ha-muted mt-2 text-[11px] break-all">
-                <span className="font-medium text-slate-800">
-                  {locale === "fr" ? "URL d’origine :" : "Original URL:"}
-                </span>{" "}
+              </dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">{locale === "fr" ? "Langue" : "Language"}</dt>
+              <dd>{language}</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">
+                {locale === "fr" ? "URL d’origine" : "Original URL"}
+              </dt>
+              <dd className="min-w-0 flex-1 break-all">
                 {entryOriginalUrl ? (
                   <a
                     href={entryOriginalUrl}
@@ -390,166 +418,191 @@ export function BrowseReplayClient({
                     {entryOriginalUrl}
                   </a>
                 ) : (
-                  unknownUrlLabel
+                  <span className="text-ha-muted">{unknownUrlLabel}</span>
                 )}
-              </p>
-
-              {!browseUrl && (
-                <p className="mt-2 text-[11px] font-medium text-amber-800">
-                  {locale === "fr"
-                    ? "La navigation en mode relecture n’est pas disponible pour cet enregistrement; affichage du HTML brut à la place."
-                    : "Replay browsing is not available for this record; showing raw HTML instead."}
-                </p>
-              )}
+              </dd>
             </div>
+          </dl>
 
-            <div className="flex flex-wrap items-center justify-end gap-2">
-              {compareLiveHref && (
-                <Link href={compareLiveHref} prefetch={false} className="ha-btn-secondary text-xs">
-                  {locale === "fr" ? "Voir diff" : "View diff"}
-                </Link>
-              )}
-              {browseLink && (
-                <a
-                  href={browseLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="ha-btn-primary text-xs"
-                >
-                  {locale === "fr" ? "Ouvrir dans le lecteur ↗" : "Open in replay ↗"}
-                </a>
-              )}
-              <button
-                type="button"
-                className="ha-btn-secondary text-xs"
-                aria-expanded={detailsOpen}
-                onClick={() => setDetailsOpen((prev) => !prev)}
+          <p className="mt-2 text-[11px] font-medium text-amber-800">
+            {locale === "fr"
+              ? "Archive indépendante · Pas un site gouvernemental officiel."
+              : "Independent archive · Not an official government website."}{" "}
+            {buildBrowseDisclaimer(locale, { captureLabel: displayedCapture })}{" "}
+            {siteCopy.whatThisSiteIs.forCurrent}.
+          </p>
+
+          {showEditionSelect && (
+            <div className="flex flex-wrap items-center gap-2">
+              <label htmlFor="ha-edition-select" className="text-ha-muted text-xs">
+                {locale === "fr" ? "Édition" : "Edition"}
+              </label>
+              <select
+                id="ha-edition-select"
+                className="ha-select ha-select-sm"
+                value={activeJobId ?? undefined}
+                onChange={(e) => handleEditionChange(Number(e.target.value))}
+                disabled={isResolvingEdition}
               >
-                {detailsOpen
-                  ? locale === "fr"
-                    ? "Masquer"
-                    : "Hide"
-                  : locale === "fr"
-                    ? "Détails"
-                    : "Details"}
-              </button>
+                {editionOptions.map((edition) => (
+                  <option key={edition.jobId} value={edition.jobId}>
+                    {formatEditionLabel(edition, locale)}
+                  </option>
+                ))}
+              </select>
+              {isResolvingEdition && (
+                <span className="text-ha-muted text-xs">
+                  {locale === "fr" ? "Changement…" : "Switching…"}
+                </span>
+              )}
             </div>
+          )}
+
+          {editionNotice && <p className="text-ha-muted text-xs">{editionNotice}</p>}
+
+          {!browseUrl && (
+            <p className="mt-2 text-[11px] font-medium text-amber-800">
+              {locale === "fr"
+                ? "La navigation en mode relecture n’est pas disponible pour cet enregistrement; affichage du HTML brut à la place."
+                : "Replay browsing is not available for this record; showing raw HTML instead."}
+            </p>
+          )}
+
+          <div className="flex flex-wrap gap-2 pt-1">
+            {compareLiveHref && (
+              <Link href={compareLiveHref} prefetch={false} className="ha-btn-secondary text-xs">
+                {locale === "fr" ? "Voir diff" : "View diff"}
+              </Link>
+            )}
+            {browseLink && (
+              <a
+                href={browseLink}
+                target="_blank"
+                rel="noreferrer"
+                className="ha-btn-primary text-xs"
+              >
+                {locale === "fr" ? "Relecture ↗" : "Replay ↗"}
+              </a>
+            )}
+            {rawHtmlUrl && (
+              <a
+                href={rawHtmlUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="ha-btn-secondary text-xs"
+              >
+                {locale === "fr" ? "HTML brut ↗" : "Raw HTML ↗"}
+              </a>
+            )}
+            {apiLink && (
+              <a
+                href={apiLink}
+                target="_blank"
+                rel="noreferrer"
+                className="ha-btn-secondary text-xs"
+              >
+                {locale === "fr" ? "Métadonnées (JSON) ↗" : "Metadata JSON ↗"}
+              </a>
+            )}
+            <Link href="/cite" className="ha-btn-secondary text-xs">
+              {locale === "fr" ? "Citer" : "Cite"}
+            </Link>
+            <Link href={reportHref} className="ha-btn-secondary text-xs">
+              {locale === "fr" ? "Signaler un problème" : "Report issue"}
+            </Link>
+            <button
+              type="button"
+              className="ha-btn-secondary text-xs"
+              aria-expanded={historyOpen}
+              onClick={() => setHistoryOpen((prev) => !prev)}
+              disabled={otherSnapshotsDisabled}
+            >
+              {otherSnapshotsButtonLabel}
+            </button>
           </div>
-          {detailsOpen && (
-            <div className="border-ha-border mt-4 space-y-4 border-t pt-4">
-              <dl className="text-xs text-slate-800 sm:text-sm">
-                <div className="flex gap-2">
-                  <dt className="text-ha-muted w-28">{locale === "fr" ? "Langue" : "Language"}</dt>
-                  <dd>{language}</dd>
-                </div>
-              </dl>
 
-              <div className="flex flex-wrap gap-2">
-                <Link href="/cite" className="ha-btn-secondary text-xs">
-                  {locale === "fr" ? "Comment citer" : "How to cite"}
-                </Link>
-                {rawHtmlUrl && (
-                  <a
-                    href={rawHtmlUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="ha-btn-secondary text-xs"
-                  >
-                    {locale === "fr" ? "HTML brut ↗" : "Raw HTML ↗"}
-                  </a>
-                )}
-                {apiLink && (
-                  <a
-                    href={apiLink}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="ha-btn-secondary text-xs"
-                  >
-                    {locale === "fr" ? "Métadonnées (JSON) ↗" : "Metadata JSON ↗"}
-                  </a>
-                )}
-                <Link href={reportHref} className="ha-btn-secondary text-xs">
-                  {locale === "fr" ? "Signaler un problème" : "Report an issue"}
-                </Link>
-              </div>
-
-              <div>
-                <h2 className="text-sm font-semibold text-slate-900">
-                  {locale === "fr" ? "Autres captures" : "Other captures"}
-                </h2>
-
-                {!timelineSnapshotId ? (
-                  <p className="text-ha-muted mt-2 text-xs">
-                    {locale === "fr"
-                      ? "L’historique n’est pas disponible pour cette capture."
-                      : "History is not available for this snapshot."}
-                  </p>
-                ) : timelineLoading ? (
-                  <p className="text-ha-muted mt-2 text-xs">
-                    {locale === "fr" ? "Chargement…" : "Loading…"}
-                  </p>
-                ) : timelineError ? (
-                  <p className="text-ha-muted mt-2 text-xs">
-                    {locale === "fr"
-                      ? "Impossible de charger l’historique."
-                      : "Could not load history."}
-                  </p>
-                ) : timeline?.snapshots && timeline.snapshots.length > 1 ? (
-                  <ul className="mt-3 space-y-2 text-xs text-slate-800 sm:text-sm">
-                    {timeline.snapshots.map((item) => {
-                      const isCurrent = item.snapshotId === timelineSnapshotId;
-                      const compareHref =
-                        item.compareFromSnapshotId != null
-                          ? `/compare?from=${item.compareFromSnapshotId}&to=${item.snapshotId}`
-                          : null;
-                      return (
-                        <li
-                          key={item.snapshotId}
-                          className="border-ha-border flex flex-wrap items-center justify-between gap-2 border-b pb-2 last:border-b-0 last:pb-0"
-                        >
-                          <div>
-                            <p className="font-medium text-slate-900">
-                              {dateIsoToLabel(item.captureDate, locale)}
-                            </p>
-                            <p className="text-ha-muted text-xs">
-                              {item.jobName
-                                ? item.jobName
-                                : locale === "fr"
-                                  ? "Capture d’édition"
-                                  : "Edition capture"}
-                            </p>
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {isCurrent ? (
-                              <span className="ha-tag">
-                                {locale === "fr" ? "Cette capture" : "This capture"}
-                              </span>
-                            ) : (
+          {historyOpen && (
+            <div className="border-ha-border mt-4 border-t pt-4">
+              {!timelineSnapshotId ? (
+                <p className="text-ha-muted text-xs">
+                  {locale === "fr"
+                    ? "L’historique n’est pas disponible pour cette capture."
+                    : "History is not available for this snapshot."}
+                </p>
+              ) : timelineLoading ? (
+                <p className="text-ha-muted text-xs">
+                  {locale === "fr" ? "Chargement…" : "Loading…"}
+                </p>
+              ) : timelineError ? (
+                <p className="text-ha-muted text-xs">
+                  {locale === "fr"
+                    ? "Impossible de charger l’historique."
+                    : "Could not load history."}
+                </p>
+              ) : timeline?.snapshots && timelineSnapshotId != null ? (
+                (() => {
+                  const otherItems = timeline.snapshots.filter(
+                    (item) => item.snapshotId !== timelineSnapshotId,
+                  );
+                  if (otherItems.length < 1) {
+                    return (
+                      <p className="text-ha-muted text-xs">
+                        {locale === "fr"
+                          ? "Aucune autre capture n’est disponible pour cette page."
+                          : "No other captures are available for this page."}
+                      </p>
+                    );
+                  }
+                  return (
+                    <ul className="space-y-2 text-xs text-slate-800 sm:text-sm">
+                      {otherItems.map((item) => {
+                        const compareHref =
+                          item.compareFromSnapshotId != null
+                            ? `/compare?from=${item.compareFromSnapshotId}&to=${item.snapshotId}`
+                            : null;
+                        return (
+                          <li
+                            key={item.snapshotId}
+                            className="border-ha-border flex flex-wrap items-center justify-between gap-2 border-b pb-2 last:border-b-0 last:pb-0"
+                          >
+                            <div>
+                              <p className="font-medium text-slate-900">
+                                {dateIsoToLabel(item.captureDate, locale)}
+                              </p>
+                              <p className="text-ha-muted text-xs">
+                                {item.jobName
+                                  ? item.jobName
+                                  : locale === "fr"
+                                    ? "Capture d’édition"
+                                    : "Edition capture"}
+                              </p>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
                               <Link
                                 href={`/snapshot/${item.snapshotId}`}
                                 className="ha-btn-secondary text-xs"
                               >
-                                {locale === "fr" ? "Voir la capture" : "View snapshot"}
+                                {locale === "fr" ? "Voir" : "View"}
                               </Link>
-                            )}
-                            {compareHref ? (
-                              <Link href={compareHref} className="ha-btn-secondary text-xs">
-                                {locale === "fr" ? "Comparer" : "Compare"}
-                              </Link>
-                            ) : null}
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <p className="text-ha-muted mt-2 text-xs">
-                    {locale === "fr"
-                      ? "Aucune autre capture n’est disponible pour cette page."
-                      : "No other captures are available for this page."}
-                  </p>
-                )}
-              </div>
+                              {compareHref ? (
+                                <Link href={compareHref} className="ha-btn-secondary text-xs">
+                                  {locale === "fr" ? "Comparer" : "Compare"}
+                                </Link>
+                              ) : null}
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  );
+                })()
+              ) : (
+                <p className="text-ha-muted text-xs">
+                  {locale === "fr"
+                    ? "Aucune autre capture n’est disponible pour cette page."
+                    : "No other captures are available for this page."}
+                </p>
+              )}
             </div>
           )}
         </header>
