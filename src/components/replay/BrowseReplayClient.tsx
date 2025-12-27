@@ -616,7 +616,7 @@ export function BrowseReplayClient({
               browseLink={browseLink}
               rawLink={rawLink}
               apiLink={apiLink}
-              iframeClassName="h-[70vh] w-full border-0 sm:h-[75vh]"
+              iframeClassName="h-[175vh] w-full border-0 sm:h-[187.5vh]"
             />
           ) : (
             <div className="text-ha-muted flex h-[320px] items-center justify-center px-4 text-center text-sm">
