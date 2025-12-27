@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import SnapshotPage from "@/app/[locale]/snapshot/[id]/page";
 
@@ -117,8 +117,8 @@ describe("/snapshot/[id]", () => {
 
     expect(screen.getAllByText(/Snapshot Replay/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Health Canada/i).length).toBeGreaterThan(0);
-    expect(screen.getByRole("button", { name: /Details/i })).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /How to cite/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Cite/i })).toHaveAttribute("href", "/cite");
+    expect(screen.getByRole("button", { name: /Show other snapshots/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /View diff/i })).toHaveAttribute(
       "href",
       "/compare-live?to=46&run=1",
@@ -161,8 +161,13 @@ describe("/snapshot/[id]", () => {
     });
     render(ui);
 
+    await waitFor(() => expect(mockFetchSnapshotTimeline).toHaveBeenCalled());
     expect(screen.getAllByText(/Snapshot Error/i).length).toBeGreaterThan(0);
-    expect(screen.getByRole("link", { name: /How to cite/i })).toHaveAttribute("href", "/cite");
+    expect(screen.getByRole("link", { name: /Cite/i })).toHaveAttribute("href", "/cite");
+    expect(screen.getByRole("button", { name: /other snapshots/i })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
   });
 
   it("calls notFound when no snapshot exists", async () => {
