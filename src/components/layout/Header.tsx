@@ -10,7 +10,7 @@ import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 const navItems = [
   { href: "/", label: { en: "Home", fr: "Accueil" } },
-  { href: "/archive", label: { en: "Browse", fr: "Parcourir" } },
+  { href: "/archive", label: { en: "Archive", fr: "Parcourir" } },
   { href: "/changes", label: { en: "Changes", fr: "Changements" } },
   { href: "/methods", label: { en: "Methods", fr: "Méthodes" } },
   { href: "/researchers", label: { en: "Researchers", fr: "Recherche" } },
