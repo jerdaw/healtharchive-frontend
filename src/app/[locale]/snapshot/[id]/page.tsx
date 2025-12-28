@@ -1,34 +1,69 @@
 import type { Metadata } from "next";
 
 import { notFound } from "next/navigation";
+
 import { getRecordById } from "@/data/demo-records";
 import {
   fetchSnapshotDetail,
   fetchSnapshotLatest,
+  fetchSnapshotTimeline,
   searchSnapshots,
-  fetchSourceEditions,
   getApiBaseUrl,
 } from "@/lib/api";
 import type { Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { isHtmlMimeType } from "@/lib/mime";
 import { resolveLocale } from "@/lib/resolveLocale";
-import { BrowseReplayClient } from "@/components/replay/BrowseReplayClient";
+import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
+import { CopyButton } from "@/components/archive/CopyButton";
+import { PageShell } from "@/components/layout/PageShell";
+import { localeToLanguageTag } from "@/lib/i18n";
+import { getSiteCopy } from "@/lib/siteCopy";
 
-function getSnapshotMetadataCopy(locale: Locale) {
+function getSnapshotDetailsMetadataCopy(locale: Locale) {
   if (locale === "fr") {
     return {
-      title: "Capture archivée",
+      title: "Détails de la capture",
       description:
-        "Consultez une capture archivée et ses métadonnées associées. Le contenu archivé peut être incomplet, périmé ou remplacé.",
+        "Consultez les détails d’une capture archivée (métadonnées, liens et captures connexes).",
     };
   }
 
   return {
-    title: "Archived snapshot",
-    description:
-      "Review an archived snapshot and its associated metadata. Archived content may be incomplete, outdated, or superseded.",
+    title: "Snapshot details",
+    description: "Review snapshot details (metadata, links, and related captures).",
   };
+}
+
+function formatDate(locale: Locale, iso: string | null | undefined): string {
+  if (!iso) return locale === "fr" ? "Inconnu" : "Unknown";
+  const parts = iso.split("-");
+  if (parts.length === 3) {
+    const [yearStr, monthStr, dayStr] = parts;
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    const day = Number(dayStr);
+    if (year && month && day) {
+      const d = new Date(Date.UTC(year, month - 1, day));
+      if (!Number.isNaN(d.getTime())) {
+        return d.toLocaleDateString(localeToLanguageTag(locale), {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+    }
+  }
+  return iso;
+}
+
+function formatUtcTimestamp(value: string | null | undefined): string {
+  if (!value) return "";
+  const parsed = new Date(value);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toISOString().replace(".000Z", "Z");
+  }
+  return value;
 }
 
 export async function generateMetadata({
@@ -38,25 +73,19 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const routeParams = await params;
   const locale = await resolveLocale(Promise.resolve(routeParams));
-  const copy = getSnapshotMetadataCopy(locale);
+  const copy = getSnapshotDetailsMetadataCopy(locale);
   return buildPageMetadata(locale, `/snapshot/${routeParams.id}`, copy.title, copy.description);
 }
 
 export default async function SnapshotPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string; locale?: string }>;
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const routeParams = await params;
   const { id } = routeParams;
   const locale = await resolveLocale(Promise.resolve(routeParams));
-  const routeSearchParams = await (searchParams ??
-    Promise.resolve<Record<string, string | string[] | undefined>>({}));
-  const viewParam = typeof routeSearchParams.view === "string" ? routeSearchParams.view : "";
-  const panelParam = typeof routeSearchParams.panel === "string" ? routeSearchParams.panel : "";
-  const initialDetailsOpen = viewParam === "details" || panelParam === "details";
+  const siteCopy = getSiteCopy(locale);
 
   let snapshotMeta: Awaited<ReturnType<typeof fetchSnapshotDetail>> | null = null;
   let usingBackend = false;
@@ -100,15 +129,13 @@ export default async function SnapshotPage({
   }
 
   const title = snapshotMeta?.title ?? record?.title ?? (locale === "fr" ? "Capture" : "Snapshot");
-  const captureDate =
-    snapshotMeta?.captureDate ?? record?.captureDate ?? (locale === "fr" ? "Inconnu" : "Unknown");
+  const captureDate = snapshotMeta?.captureDate ?? record?.captureDate ?? null;
   const sourceCode = snapshotMeta?.sourceCode ?? record?.sourceCode ?? null;
   const sourceName =
     snapshotMeta?.sourceName ??
     record?.sourceName ??
     (locale === "fr" ? "Source inconnue" : "Unknown source");
-  const language =
-    snapshotMeta?.language ?? record?.language ?? (locale === "fr" ? "Inconnu" : "Unknown");
+  const language = snapshotMeta?.language ?? record?.language ?? null;
   const originalUrl = snapshotMeta?.originalUrl ?? record?.originalUrl ?? null;
   const captureTimestamp = snapshotMeta?.captureTimestamp ?? null;
   const jobId = snapshotMeta?.jobId ?? null;
@@ -122,24 +149,14 @@ export default async function SnapshotPage({
   // origin, not the frontend origin. For demo records, fall back to the local
   // static snapshot path under /public.
   const apiBaseUrl = getApiBaseUrl();
-  const rawHtmlUrl =
-    snapshotMeta?.rawSnapshotUrl != null
+  const rawHtmlUrl = usingBackend
+    ? snapshotMeta?.rawSnapshotUrl
       ? `${apiBaseUrl}${snapshotMeta.rawSnapshotUrl}`
-      : (record?.snapshotPath ?? null);
+      : null
+    : (record?.snapshotPath ?? null);
   const browseUrl = snapshotMeta?.browseUrl ?? null;
   const apiLink =
-    usingBackend && snapshotMeta?.id != null
-      ? `${apiBaseUrl}/api/snapshot/${snapshotMeta.id}`
-      : undefined;
-
-  let sourceEditions: Awaited<ReturnType<typeof fetchSourceEditions>> | null = null;
-  if (usingBackend && sourceCode) {
-    try {
-      sourceEditions = await fetchSourceEditions(sourceCode);
-    } catch {
-      sourceEditions = null;
-    }
-  }
+    usingBackend && snapshotMeta?.id != null ? `${apiBaseUrl}/api/snapshot/${id}` : null;
 
   const canCompareLive = Boolean(
     usingBackend && snapshotMeta?.id && isHtmlMimeType(snapshotMeta?.mimeType),
@@ -157,28 +174,281 @@ export default async function SnapshotPage({
     }
   }
 
-  const timelineSnapshotId = usingBackend && snapshotMeta?.id != null ? snapshotMeta.id : null;
+  const replayHref = `/browse/${id}`;
+  const diffHref =
+    canCompareLive && compareLiveSnapshotId != null
+      ? `/compare-live?to=${compareLiveSnapshotId}&run=1`
+      : null;
+  const citeHref =
+    usingBackend && snapshotMeta?.id != null
+      ? `/cite?snapshot=${snapshotMeta.id}`
+      : originalUrl
+        ? `/cite?url=${encodeURIComponent(originalUrl)}`
+        : "/cite";
+
+  const reportHref =
+    originalUrl && usingBackend && snapshotMeta?.id != null
+      ? `/report?snapshot=${snapshotMeta.id}&url=${encodeURIComponent(originalUrl)}&page=${encodeURIComponent(
+          `/snapshot/${snapshotMeta.id}`,
+        )}`
+      : "/report";
+
+  const allSnapshotsHref =
+    originalUrl && sourceCode
+      ? `/archive?view=snapshots&source=${encodeURIComponent(sourceCode)}&q=${encodeURIComponent(
+          originalUrl,
+        )}&focus=results`
+      : "/archive?view=snapshots&focus=results";
+
+  let timeline: Awaited<ReturnType<typeof fetchSnapshotTimeline>> | null = null;
+  if (usingBackend && snapshotMeta?.id != null) {
+    try {
+      timeline = await fetchSnapshotTimeline(snapshotMeta.id);
+    } catch {
+      timeline = null;
+    }
+  }
 
   return (
-    <BrowseReplayClient
-      snapshotId={id}
+    <PageShell
+      eyebrow={locale === "fr" ? "Détails" : "Details"}
       title={title}
-      language={language}
-      sourceName={sourceName}
-      captureDate={captureDate}
-      captureTimestamp={captureTimestamp}
-      jobId={jobId}
-      originalUrl={originalUrl}
-      browseUrl={browseUrl}
-      rawHtmlUrl={rawHtmlUrl}
-      apiLink={apiLink}
-      editions={sourceEditions}
-      canCompareLive={canCompareLive}
-      initialCompareSnapshotId={
-        compareLiveSnapshotId != null ? String(compareLiveSnapshotId) : null
+      intro={
+        locale === "fr"
+          ? "Métadonnées et liens pour une capture archivée."
+          : "Metadata and links for an archived snapshot."
       }
-      initialDetailsOpen={initialDetailsOpen}
-      timelineSnapshotId={timelineSnapshotId}
-    />
+      compact
+    >
+      <section className="ha-card ha-home-panel space-y-4 p-4 sm:p-5">
+        <dl className="space-y-1 text-xs text-slate-800 sm:text-sm">
+          <div className="flex gap-2">
+            <dt className="text-ha-muted w-28">{locale === "fr" ? "Source" : "Source"}</dt>
+            <dd>{sourceName}</dd>
+          </div>
+          <div className="flex gap-2">
+            <dt className="text-ha-muted w-28">{locale === "fr" ? "Date" : "Date"}</dt>
+            <dd>
+              {captureDate
+                ? formatDate(locale, captureDate)
+                : locale === "fr"
+                  ? "Inconnu"
+                  : "Unknown"}
+              {jobId != null ? (
+                <>
+                  {" "}
+                  · {locale === "fr" ? "édition" : "edition"}{" "}
+                  <span className="font-medium">#{jobId}</span>
+                </>
+              ) : null}
+            </dd>
+          </div>
+          {captureTimestamp ? (
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">{locale === "fr" ? "Horodatage" : "Timestamp"}</dt>
+              <dd className="break-all">{formatUtcTimestamp(captureTimestamp)}</dd>
+            </div>
+          ) : null}
+          {language ? (
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">{locale === "fr" ? "Langue" : "Language"}</dt>
+              <dd>{language}</dd>
+            </div>
+          ) : null}
+          {originalUrl ? (
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">
+                {locale === "fr" ? "URL d’origine" : "Original URL"}
+              </dt>
+              <dd className="min-w-0 flex-1 break-all">
+                <a
+                  href={originalUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-ha-accent font-medium hover:text-blue-700"
+                >
+                  {originalUrl}
+                </a>
+              </dd>
+            </div>
+          ) : null}
+          {browseUrl ? (
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">
+                {locale === "fr" ? "URL de relecture" : "Replay URL"}
+              </dt>
+              <dd className="min-w-0 flex-1 break-all">
+                <a
+                  href={browseUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-ha-accent font-medium hover:text-blue-700"
+                >
+                  {browseUrl}
+                </a>
+              </dd>
+            </div>
+          ) : null}
+
+          {usingBackend && snapshotMeta ? (
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">ID</dt>
+              <dd className="break-all">{snapshotMeta.id}</dd>
+            </div>
+          ) : null}
+          {usingBackend && snapshotMeta?.statusCode != null ? (
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">{locale === "fr" ? "Statut" : "Status"}</dt>
+              <dd>{snapshotMeta.statusCode}</dd>
+            </div>
+          ) : null}
+          {usingBackend && snapshotMeta?.mimeType ? (
+            <div className="flex gap-2">
+              <dt className="text-ha-muted w-28">{locale === "fr" ? "Type" : "Type"}</dt>
+              <dd className="break-all">{snapshotMeta.mimeType}</dd>
+            </div>
+          ) : null}
+        </dl>
+
+        <p className="text-[11px] font-medium text-amber-800">
+          {locale === "fr"
+            ? "Archive indépendante · Pas un site officiel du gouvernement."
+            : "Independent archive · Not an official government website."}{" "}
+          {siteCopy.whatThisSiteIs.forCurrent}.
+        </p>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href={replayHref} prefetch={false} className="ha-btn-primary text-xs">
+            {locale === "fr" ? "Relecture" : "Replay"}
+          </Link>
+          {diffHref ? (
+            <Link href={diffHref} prefetch={false} className="ha-btn-secondary text-xs">
+              {locale === "fr" ? "Voir diff" : "View diff"}
+            </Link>
+          ) : null}
+          {rawHtmlUrl ? (
+            <a
+              href={rawHtmlUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="ha-btn-secondary text-xs"
+            >
+              {locale === "fr" ? "HTML brut ↗" : "Raw HTML ↗"}
+            </a>
+          ) : null}
+          {apiLink ? (
+            <a
+              href={apiLink}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="ha-btn-secondary text-xs"
+            >
+              {locale === "fr" ? "Métadonnées (JSON) ↗" : "Metadata JSON ↗"}
+            </a>
+          ) : null}
+          <Link href={citeHref} prefetch={false} className="ha-btn-secondary text-xs">
+            {locale === "fr" ? "Citer" : "Cite"}
+          </Link>
+          <Link href={reportHref} prefetch={false} className="ha-btn-secondary text-xs">
+            {locale === "fr" ? "Signaler un problème" : "Report issue"}
+          </Link>
+          <Link href={allSnapshotsHref} prefetch={false} className="ha-btn-secondary text-xs">
+            {locale === "fr" ? "Toutes les captures" : "All snapshots"}
+          </Link>
+          {originalUrl ? (
+            <CopyButton
+              text={originalUrl}
+              label={locale === "fr" ? "Copier l’URL d’origine" : "Copy original URL"}
+              className="ha-btn-secondary text-xs"
+            >
+              {locale === "fr" ? "Copier l’URL" : "Copy URL"}
+            </CopyButton>
+          ) : null}
+        </div>
+      </section>
+
+      <section id="other-snapshots" className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
+        <h2 className="text-sm font-semibold text-slate-900">
+          {locale === "fr" ? "Autres captures" : "Other snapshots"}
+        </h2>
+        {!usingBackend ? (
+          <p className="text-ha-muted text-xs leading-relaxed sm:text-sm">
+            {locale === "fr"
+              ? "L’historique n’est pas disponible pour les captures de démonstration."
+              : "History is not available for demo snapshots."}
+          </p>
+        ) : timeline?.snapshots?.length ? (
+          <ul className="space-y-2 text-xs text-slate-800 sm:text-sm">
+            {timeline.snapshots
+              .slice()
+              .reverse()
+              .map((item) => {
+                const isCurrent = snapshotMeta?.id != null && item.snapshotId === snapshotMeta.id;
+                const compareHref =
+                  item.compareFromSnapshotId != null
+                    ? `/compare?from=${item.compareFromSnapshotId}&to=${item.snapshotId}`
+                    : null;
+                return (
+                  <li
+                    key={item.snapshotId}
+                    className={`border-ha-border flex flex-wrap items-center justify-between gap-2 border-b pb-2 last:border-b-0 last:pb-0 ${
+                      isCurrent ? "rounded-lg bg-blue-50/40 px-2 py-1.5" : ""
+                    }`}
+                  >
+                    <div className="min-w-0">
+                      <p className="font-medium text-slate-900">
+                        {formatDate(locale, item.captureDate)}
+                        {isCurrent
+                          ? locale === "fr"
+                            ? " · (cette capture)"
+                            : " · (this snapshot)"
+                          : ""}
+                      </p>
+                      <p className="text-ha-muted text-xs">
+                        {item.jobName
+                          ? item.jobName
+                          : locale === "fr"
+                            ? "Capture d’édition"
+                            : "Edition capture"}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Link
+                        href={`/browse/${item.snapshotId}`}
+                        prefetch={false}
+                        className="ha-btn-secondary text-xs"
+                      >
+                        {locale === "fr" ? "Relecture" : "Replay"}
+                      </Link>
+                      <Link
+                        href={`/snapshot/${item.snapshotId}`}
+                        prefetch={false}
+                        className="ha-btn-secondary text-xs"
+                      >
+                        {locale === "fr" ? "Détails" : "Details"}
+                      </Link>
+                      {compareHref ? (
+                        <Link
+                          href={compareHref}
+                          prefetch={false}
+                          className="ha-btn-secondary text-xs"
+                        >
+                          {locale === "fr" ? "Comparer" : "Compare"}
+                        </Link>
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
+          </ul>
+        ) : (
+          <p className="text-ha-muted text-xs leading-relaxed sm:text-sm">
+            {locale === "fr"
+              ? "Aucune autre capture n’est disponible pour cette page."
+              : "No other snapshots are available for this page."}
+          </p>
+        )}
+      </section>
+    </PageShell>
   );
 }

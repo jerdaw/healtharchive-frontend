@@ -189,7 +189,7 @@ export function SearchResultCard({
       <div className="ha-result-row">
         <div className="ha-result-main">
           <h3 className="ha-result-title">
-            <Link href={`/snapshot/${record.id}`} className="ha-result-title-link">
+            <Link href={`/browse/${record.id}`} className="ha-result-title-link">
               {titleNodes}
             </Link>
           </h3>
@@ -230,19 +230,9 @@ export function SearchResultCard({
         </div>
 
         <div className="ha-result-actions flex flex-wrap justify-start gap-2 sm:justify-end">
-          <Link href={`/snapshot/${record.id}`} className="ha-btn-primary text-xs">
-            {locale === "fr" ? "Parcourir" : "Browse"}
+          <Link href={`/browse/${record.id}`} className="ha-btn-primary text-xs">
+            {locale === "fr" ? "Relecture" : "Replay"}
           </Link>
-          {record.browseUrl && (
-            <a
-              href={record.browseUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="ha-btn-secondary text-xs"
-            >
-              {locale === "fr" ? "Relecture ↗" : "Replay ↗"}
-            </a>
-          )}
           {view === "pages" && (
             <Link
               href={`/archive?view=snapshots&source=${encodeURIComponent(
