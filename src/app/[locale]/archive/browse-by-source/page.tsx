@@ -170,11 +170,11 @@ export default async function BrowseBySourcePage({
           const browseId = entryId ?? fallbackId;
           const browseLabel = entryId
             ? locale === "fr"
-              ? "Parcourir le site archivé"
-              : "Browse archived site"
+              ? "Relecture du site archivé"
+              : "Replay archived site"
             : locale === "fr"
-              ? "Parcourir la capture la plus récente"
-              : "Browse latest capture";
+              ? "Relecture de la capture la plus récente"
+              : "Replay latest capture";
           const previewSrc = source.entryPreviewUrl
             ? `${apiBaseUrl}${source.entryPreviewUrl}`
             : null;
@@ -228,7 +228,7 @@ export default async function BrowseBySourcePage({
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   {browseId && (
-                    <Link href={`/snapshot/${browseId}`} className="ha-btn-primary text-xs">
+                    <Link href={`/browse/${browseId}`} className="ha-btn-primary text-xs">
                       {browseLabel}
                     </Link>
                   )}
