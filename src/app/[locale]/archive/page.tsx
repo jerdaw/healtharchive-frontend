@@ -736,7 +736,7 @@ export default async function ArchivePage({
             className="space-y-4"
             method="get"
           >
-            <ArchiveFiltersAutoscroll targetId="archive-filters" />
+            <ArchiveFiltersAutoscroll targetId="archive-filters" focusParam="filters" />
             <input type="hidden" name="focus" value="filters" />
             <input type="hidden" name="page" value="1" />
             {within && <input type="hidden" name="within" value={within} />}
@@ -964,7 +964,8 @@ export default async function ArchivePage({
         </aside>
 
         {/* Search & results */}
-        <section className="space-y-4">
+        <section id="archive-results" className="space-y-4">
+          <ArchiveFiltersAutoscroll targetId="archive-results" focusParam="results" />
           {!usingBackend && (
             <div className="ha-card ha-home-panel p-4 sm:p-5">
               <p className="text-[11px] font-medium text-amber-800">

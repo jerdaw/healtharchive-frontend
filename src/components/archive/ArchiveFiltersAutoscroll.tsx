@@ -4,14 +4,16 @@ import { useEffect } from "react";
 
 type ArchiveFiltersAutoscrollProps = {
   targetId: string;
+  focusParam?: string;
 };
 
-export function ArchiveFiltersAutoscroll({ targetId }: ArchiveFiltersAutoscrollProps) {
+export function ArchiveFiltersAutoscroll({ targetId, focusParam }: ArchiveFiltersAutoscrollProps) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const url = new URL(window.location.href);
+    const focusKey = focusParam ?? targetId;
     const shouldScroll =
-      window.location.hash === `#${targetId}` || url.searchParams.get("focus") === "filters";
+      window.location.hash === `#${targetId}` || url.searchParams.get("focus") === focusKey;
     if (!shouldScroll) return;
 
     const el = document.getElementById(targetId);
@@ -41,7 +43,7 @@ export function ArchiveFiltersAutoscroll({ targetId }: ArchiveFiltersAutoscrollP
     }, 0);
 
     return () => window.clearTimeout(handle);
-  }, [targetId]);
+  }, [targetId, focusParam]);
 
   return null;
 }
