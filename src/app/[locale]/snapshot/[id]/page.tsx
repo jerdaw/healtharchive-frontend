@@ -5,6 +5,7 @@ import { getRecordById } from "@/data/demo-records";
 import {
   fetchSnapshotDetail,
   fetchSnapshotLatest,
+  searchSnapshots,
   fetchSourceEditions,
   getApiBaseUrl,
 } from "@/lib/api";
@@ -75,6 +76,24 @@ export default async function SnapshotPage({
   }
 
   const record = getRecordById(id);
+
+  if (!snapshotMeta && record?.originalUrl) {
+    try {
+      const search = await searchSnapshots({
+        q: record.originalUrl,
+        view: "pages",
+        pageSize: 1,
+        sort: "newest",
+      });
+      const resolved = search.results[0];
+      if (resolved?.id != null) {
+        snapshotMeta = await fetchSnapshotDetail(resolved.id);
+        usingBackend = true;
+      }
+    } catch {
+      snapshotMeta = null;
+    }
+  }
 
   if (!snapshotMeta && !record) {
     return notFound();
