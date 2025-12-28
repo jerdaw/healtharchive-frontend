@@ -170,11 +170,11 @@ export default async function BrowseBySourcePage({
           const browseId = entryId ?? fallbackId;
           const browseLabel = entryId
             ? locale === "fr"
-              ? "Relecture du site archivé"
-              : "Replay archived site"
+              ? "Voir le site archivé"
+              : "View archived site"
             : locale === "fr"
-              ? "Relecture de la capture la plus récente"
-              : "Replay latest capture";
+              ? "Voir la capture la plus récente"
+              : "View latest snapshot";
           const previewSrc = source.entryPreviewUrl
             ? `${apiBaseUrl}${source.entryPreviewUrl}`
             : null;
@@ -227,21 +227,15 @@ export default async function BrowseBySourcePage({
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {browseId && (
+                  {source.entryBrowseUrl ? (
+                    <a href={source.entryBrowseUrl} className="ha-btn-primary text-xs">
+                      {browseLabel}
+                    </a>
+                  ) : browseId ? (
                     <Link href={`/browse/${browseId}`} className="ha-btn-primary text-xs">
                       {browseLabel}
                     </Link>
-                  )}
-                  {source.entryBrowseUrl && (
-                    <a
-                      href={source.entryBrowseUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="ha-btn-secondary text-xs"
-                    >
-                      {locale === "fr" ? "Ouvrir dans le lecteur ↗" : "Open in replay ↗"}
-                    </a>
-                  )}
+                  ) : null}
                   <Link
                     href={`/archive?source=${source.sourceCode}`}
                     className="ha-btn-secondary text-xs"

@@ -17,6 +17,7 @@ import { resolveLocale } from "@/lib/resolveLocale";
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import { CopyButton } from "@/components/archive/CopyButton";
 import { PageShell } from "@/components/layout/PageShell";
+import { SnapshotFrame } from "@/components/SnapshotFrame";
 import { localeToLanguageTag } from "@/lib/i18n";
 import { getSiteCopy } from "@/lib/siteCopy";
 
@@ -174,7 +175,7 @@ export default async function SnapshotPage({
     }
   }
 
-  const replayHref = `/browse/${id}`;
+  const viewHref = browseUrl;
   const diffHref =
     canCompareLive && compareLiveSnapshotId != null
       ? `/compare-live?to=${compareLiveSnapshotId}&run=1`
@@ -318,9 +319,11 @@ export default async function SnapshotPage({
         </p>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Link href={replayHref} prefetch={false} className="ha-btn-primary text-xs">
-            {locale === "fr" ? "Relecture" : "Replay"}
-          </Link>
+          {viewHref ? (
+            <a href={viewHref} className="ha-btn-primary text-xs">
+              {locale === "fr" ? "Voir" : "View"}
+            </a>
+          ) : null}
           {diffHref ? (
             <Link href={diffHref} prefetch={false} className="ha-btn-secondary text-xs">
               {locale === "fr" ? "Voir diff" : "View diff"}
@@ -366,6 +369,19 @@ export default async function SnapshotPage({
           ) : null}
         </div>
       </section>
+
+      {browseUrl || rawHtmlUrl ? (
+        <section className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
+          <h2 className="text-sm font-semibold text-slate-900">
+            {locale === "fr" ? "Aperçu de la page archivée" : "Archived page preview"}
+          </h2>
+          <SnapshotFrame
+            src={browseUrl ?? rawHtmlUrl ?? ""}
+            title={title}
+            iframeClassName="h-[90vh] w-full border-0 sm:h-[96vh]"
+          />
+        </section>
+      ) : null}
 
       <section id="other-snapshots" className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
         <h2 className="text-sm font-semibold text-slate-900">
@@ -413,13 +429,11 @@ export default async function SnapshotPage({
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      <Link
-                        href={`/browse/${item.snapshotId}`}
-                        prefetch={false}
-                        className="ha-btn-secondary text-xs"
-                      >
-                        {locale === "fr" ? "Relecture" : "Replay"}
-                      </Link>
+                      {item.browseUrl ? (
+                        <a href={item.browseUrl} className="ha-btn-secondary text-xs">
+                          {locale === "fr" ? "Voir" : "View"}
+                        </a>
+                      ) : null}
                       <Link
                         href={`/snapshot/${item.snapshotId}`}
                         prefetch={false}

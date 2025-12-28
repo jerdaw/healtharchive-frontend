@@ -45,7 +45,7 @@ describe("/snapshot/[id] (details)", () => {
     vi.clearAllMocks();
   });
 
-  it("renders a details page with Replay + prefilling links", async () => {
+  it("renders a details page with View + prefilling links", async () => {
     const detail: SnapshotDetail = {
       id: 45,
       title: "COVID-19: Current situation - Canada.ca",
@@ -108,8 +108,14 @@ describe("/snapshot/[id] (details)", () => {
     const ui = await SnapshotDetailsPage({ params: Promise.resolve({ id: "45" }) });
     render(ui);
 
-    const replayLinks = screen.getAllByRole("link", { name: "Replay" });
-    expect(replayLinks.some((link) => link.getAttribute("href") === "/browse/45")).toBe(true);
+    const viewLinks = screen.getAllByRole("link", { name: "View" });
+    expect(
+      viewLinks.some(
+        (link) =>
+          link.getAttribute("href") ===
+          "https://replay.healtharchive.ca/job-1/20250417000000/https://www.canada.ca/en/public-health/services/diseases/covid.html#ha_snapshot=45",
+      ),
+    ).toBe(true);
 
     expect(screen.getByRole("link", { name: "Cite" })).toHaveAttribute("href", "/cite?snapshot=45");
 

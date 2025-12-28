@@ -44,6 +44,8 @@ type ArchiveListRecord = Omit<DemoRecord, "snapshotPath" | "sourceCode"> & {
   sourceCode: string;
   pageSnapshotsCount?: number | null;
   browseUrl?: string | null;
+  jobId?: number | null;
+  captureTimestamp?: string | null;
 };
 
 type SourceBrowseSummary = {
@@ -341,6 +343,8 @@ export default async function ArchivePage({
       sourceName: r.sourceName,
       language: r.language ?? "",
       captureDate: r.captureDate,
+      captureTimestamp: r.captureTimestamp ?? null,
+      jobId: r.jobId ?? null,
       originalUrl: r.originalUrl,
       snippet: r.snippet ?? "",
       pageSnapshotsCount: r.pageSnapshotsCount ?? null,
@@ -589,7 +593,15 @@ export default async function ArchivePage({
                           <span className="flex-shrink-0 font-medium text-slate-800">
                             {locale === "fr" ? "Page d’accueil :" : "Homepage:"}
                           </span>
-                          {browseId ? (
+                          {summary.entryBrowseUrl ? (
+                            <a
+                              href={summary.entryBrowseUrl}
+                              className="min-w-0 truncate hover:underline"
+                              title={summary.baseUrl}
+                            >
+                              {summary.baseUrl}
+                            </a>
+                          ) : browseId ? (
                             <Link
                               href={`/browse/${browseId}`}
                               className="min-w-0 truncate hover:underline"
@@ -607,14 +619,21 @@ export default async function ArchivePage({
 
                       <div className="mt-3.5 grid grid-cols-3 items-center text-xs font-medium">
                         <div className="text-left">
-                          {browseId && (
+                          {summary.entryBrowseUrl ? (
+                            <a
+                              href={summary.entryBrowseUrl}
+                              className="text-ha-accent hover:text-blue-700"
+                            >
+                              {locale === "fr" ? "Voir" : "View"}
+                            </a>
+                          ) : browseId ? (
                             <Link
                               href={`/browse/${browseId}`}
                               className="text-ha-accent hover:text-blue-700"
                             >
                               {locale === "fr" ? "Voir" : "View"}
                             </Link>
-                          )}
+                          ) : null}
                         </div>
                         <div className="text-center">
                           {summary.entryBrowseUrl && (
@@ -629,7 +648,7 @@ export default async function ArchivePage({
                                   : "Open this source homepage in the replay service (new tab)"
                               }
                             >
-                              {locale === "fr" ? "Relecture ↗" : "Replay ↗"}
+                              {locale === "fr" ? "Voir ↗" : "View ↗"}
                             </a>
                           )}
                         </div>

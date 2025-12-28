@@ -204,7 +204,7 @@ describe("/archive", () => {
     expect(screen.getByText(/1 page/)).toBeInTheDocument();
   });
 
-  it("renders a replay link when browseUrl is available", async () => {
+  it("renders a view link when browseUrl is available", async () => {
     mockFetchSources.mockResolvedValue([]);
     mockSearchSnapshots.mockResolvedValue({
       results: [
@@ -234,17 +234,20 @@ describe("/archive", () => {
     });
     const { container } = render(ui);
 
-    expect(screen.getByRole("link", { name: "Replay" })).toHaveAttribute("href", "/browse/101");
+    expect(screen.getByRole("link", { name: "View" })).toHaveAttribute(
+      "href",
+      "https://replay.healtharchive.ca/job-1/20240102000000/https://example.com#ha_snapshot=101",
+    );
 
     const actions = container.querySelector(".ha-result-actions");
     expect(actions).toBeTruthy();
     const actionLabels = Array.from(actions!.querySelectorAll("a")).map((a) =>
       (a.textContent ?? "").trim(),
     );
-    expect(actionLabels).toEqual(["Replay", "All snapshots"]);
+    expect(actionLabels).toEqual(["View", "All snapshots"]);
   });
 
-  it("renders the replay link label in French", async () => {
+  it("renders the view link label in French", async () => {
     mockFetchSourcesLocalized.mockResolvedValue([]);
     mockSearchSnapshots.mockResolvedValue({
       results: [
@@ -275,7 +278,7 @@ describe("/archive", () => {
     });
     render(ui);
 
-    expect(screen.getByRole("link", { name: "Relecture" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Voir" })).toBeInTheDocument();
   });
 
   it("passes source through to backend search", async () => {
