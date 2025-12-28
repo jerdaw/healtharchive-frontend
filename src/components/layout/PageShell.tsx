@@ -17,13 +17,7 @@ export function PageShell({
   hideHeaderVisually = false,
   children,
 }: PageShellProps) {
-  const sectionClassName = hideHeaderVisually
-    ? compact
-      ? "pt-2 pb-8"
-      : "pt-4 pb-10"
-    : compact
-      ? "pt-4 pb-8"
-      : "pt-6 pb-10";
+  const sectionClassName = compact ? "pt-6 pb-8" : "pt-6 pb-10";
   const headerClassName = [
     compact ? (intro ? "mb-4" : "mb-6") : intro ? "mb-5" : "mb-8",
     compact ? "max-w-3xl space-y-2" : "max-w-3xl space-y-3",
