@@ -29,6 +29,8 @@ remain as-captured and are never translated.
 - Locale helpers: `src/lib/i18n.ts`
 - Metadata helpers: `src/lib/metadata.ts`
 - Routing + base metadata: `src/app/[locale]/layout.tsx`
+- Replay banner (direct replay pages): `../healtharchive-backend/docs/deployment/pywb/custom_banner.html`
+  - Keep EN/FR strings in sync; the banner infers UI language from the archived URL.
 
 Prefer reusing canonical copy to avoid drift. If a string is locale-invariant
 (for example, a product name or code), keep it literal and document the choice
