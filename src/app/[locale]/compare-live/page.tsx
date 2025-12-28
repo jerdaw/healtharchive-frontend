@@ -3,7 +3,12 @@ import type { Metadata } from "next";
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import { PageShell } from "@/components/layout/PageShell";
 import { CompareLiveDiffPanel } from "@/components/diff/CompareLiveDiffPanel";
-import { ApiError, fetchSnapshotCompareLive, type CompareLiveTextMode } from "@/lib/api";
+import {
+  ApiError,
+  fetchSnapshotCompareLive,
+  searchSnapshots,
+  type CompareLiveTextMode,
+} from "@/lib/api";
 import { type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
@@ -65,13 +70,32 @@ export default async function CompareLivePage({
   const params = await searchParams;
 
   const toParam = typeof params.to === "string" ? params.to : "";
+  const urlParam = typeof params.url === "string" ? params.url : "";
   const runParam = typeof params.run === "string" ? params.run : "";
   const modeParam = typeof params.mode === "string" ? params.mode : "";
 
-  const toSnapshotId = Number.parseInt(toParam, 10);
+  let toSnapshotId = Number.parseInt(toParam, 10);
   const shouldRun = runParam === "1";
   const mode: CompareLiveTextMode = modeParam === "full" ? "full" : "main";
   const modeQuery = mode === "full" ? "&mode=full" : "";
+
+  const cleanedUrlParam = urlParam.split("#")[0]?.trim() ?? "";
+  if ((!toSnapshotId || Number.isNaN(toSnapshotId)) && cleanedUrlParam) {
+    try {
+      const resolved = await searchSnapshots({
+        q: cleanedUrlParam,
+        view: "pages",
+        sort: "newest",
+        pageSize: 1,
+      });
+      const candidateId = resolved.results[0]?.id ?? null;
+      if (candidateId != null) {
+        toSnapshotId = candidateId;
+      }
+    } catch {
+      // Fall through to the compare-unavailable state.
+    }
+  }
 
   if (!toSnapshotId || Number.isNaN(toSnapshotId)) {
     return (
@@ -94,8 +118,12 @@ export default async function CompareLivePage({
           </h2>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
             {locale === "fr"
-              ? "Aucune capture n’a été sélectionnée pour la comparaison en direct."
-              : "No snapshot was selected for a live comparison."}
+              ? cleanedUrlParam
+                ? "Aucune capture n’a été trouvée pour cette URL."
+                : "Aucune capture n’a été sélectionnée pour la comparaison en direct."
+              : cleanedUrlParam
+                ? "No snapshots were found for that URL."
+                : "No snapshot was selected for a live comparison."}
           </p>
         </div>
       </PageShell>

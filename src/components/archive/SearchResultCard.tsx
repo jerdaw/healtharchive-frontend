@@ -16,6 +16,7 @@ export type SearchResultCardRecord = {
   originalUrl: string;
   snippet?: string | null;
   pageSnapshotsCount?: number | null;
+  browseUrl?: string | null;
 };
 
 function formatDate(locale: Locale, iso: string | undefined | null): string {
@@ -232,6 +233,16 @@ export function SearchResultCard({
           <Link href={`/snapshot/${record.id}`} className="ha-btn-primary text-xs">
             {locale === "fr" ? "Parcourir" : "Browse"}
           </Link>
+          {record.browseUrl && (
+            <a
+              href={record.browseUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="ha-btn-secondary text-xs"
+            >
+              {locale === "fr" ? "Relecture ↗" : "Replay ↗"}
+            </a>
+          )}
           {view === "pages" && (
             <Link
               href={`/archive?view=snapshots&source=${encodeURIComponent(

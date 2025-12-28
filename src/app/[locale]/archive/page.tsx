@@ -43,6 +43,7 @@ const MAX_PAGE_SIZE = 50;
 type ArchiveListRecord = Omit<DemoRecord, "snapshotPath" | "sourceCode"> & {
   sourceCode: string;
   pageSnapshotsCount?: number | null;
+  browseUrl?: string | null;
 };
 
 type SourceBrowseSummary = {
@@ -343,6 +344,7 @@ export default async function ArchivePage({
       originalUrl: r.originalUrl,
       snippet: r.snippet ?? "",
       pageSnapshotsCount: r.pageSnapshotsCount ?? null,
+      browseUrl: r.browseUrl ?? null,
     }));
     totalResults = backend.total;
     usingBackend = true;

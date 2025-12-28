@@ -19,13 +19,15 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/lib/api", () => ({
   fetchSources: vi.fn(),
+  fetchSourcesLocalized: vi.fn(),
   searchSnapshots: vi.fn(),
   getApiBaseUrl: () => "https://api.example.test",
   resolveReplayUrl: vi.fn(),
 }));
 
-import { fetchSources, searchSnapshots } from "@/lib/api";
+import { fetchSources, fetchSourcesLocalized, searchSnapshots } from "@/lib/api";
 const mockFetchSources = vi.mocked(fetchSources);
+const mockFetchSourcesLocalized = vi.mocked(fetchSourcesLocalized);
 const mockSearchSnapshots = vi.mocked(searchSnapshots);
 
 describe("/archive", () => {
@@ -200,6 +202,85 @@ describe("/archive", () => {
 
     expect(screen.getByRole("link", { name: /test snapshot/i })).toBeInTheDocument();
     expect(screen.getByText(/1 page/)).toBeInTheDocument();
+  });
+
+  it("renders a replay link when browseUrl is available", async () => {
+    mockFetchSources.mockResolvedValue([]);
+    mockSearchSnapshots.mockResolvedValue({
+      results: [
+        {
+          id: 101,
+          title: "Test Snapshot",
+          sourceCode: "phac",
+          sourceName: "PHAC",
+          language: "en",
+          captureDate: "2024-01-02",
+          captureTimestamp: null,
+          jobId: 1,
+          originalUrl: "https://example.com",
+          snippet: "Summary",
+          rawSnapshotUrl: "/api/snapshots/raw/101",
+          browseUrl:
+            "https://replay.healtharchive.ca/job-1/20240102000000/https://example.com#ha_snapshot=101",
+        },
+      ],
+      total: 1,
+      page: 1,
+      pageSize: 10,
+    });
+
+    const ui = await ArchivePage({
+      searchParams: Promise.resolve({ q: "test", view: "pages" }),
+    });
+    const { container } = render(ui);
+
+    const replayLink = screen.getByRole("link", { name: "Replay ↗" });
+    expect(replayLink).toHaveAttribute(
+      "href",
+      "https://replay.healtharchive.ca/job-1/20240102000000/https://example.com#ha_snapshot=101",
+    );
+    expect(replayLink).toHaveAttribute("target", "_blank");
+
+    const actions = container.querySelector(".ha-result-actions");
+    expect(actions).toBeTruthy();
+    const actionLabels = Array.from(actions!.querySelectorAll("a")).map((a) =>
+      (a.textContent ?? "").trim(),
+    );
+    expect(actionLabels).toEqual(["Browse", "Replay ↗", "All snapshots"]);
+  });
+
+  it("renders the replay link label in French", async () => {
+    mockFetchSourcesLocalized.mockResolvedValue([]);
+    mockSearchSnapshots.mockResolvedValue({
+      results: [
+        {
+          id: 101,
+          title: "Test Snapshot",
+          sourceCode: "phac",
+          sourceName: "PHAC",
+          language: "fr",
+          captureDate: "2024-01-02",
+          captureTimestamp: null,
+          jobId: 1,
+          originalUrl: "https://example.com/fr",
+          snippet: "Summary",
+          rawSnapshotUrl: "/api/snapshots/raw/101",
+          browseUrl:
+            "https://replay.healtharchive.ca/job-1/20240102000000/https://example.com/fr#ha_snapshot=101",
+        },
+      ],
+      total: 1,
+      page: 1,
+      pageSize: 10,
+    });
+
+    const ui = await ArchivePage({
+      params: Promise.resolve({ locale: "fr" }),
+      searchParams: Promise.resolve({ q: "test", view: "pages" }),
+    });
+    render(ui);
+
+    expect(screen.getByRole("link", { name: "Relecture ↗" })).toBeInTheDocument();
   });
 
   it("passes source through to backend search", async () => {
