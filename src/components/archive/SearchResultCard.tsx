@@ -236,10 +236,10 @@ export function SearchResultCard({
             <Link
               href={`/archive?view=snapshots&source=${encodeURIComponent(
                 record.sourceCode,
-              )}&q=${encodeURIComponent(record.originalUrl)}`}
+              )}&q=${encodeURIComponent(record.originalUrl)}&focus=results`}
               className="ha-btn-secondary text-xs"
             >
-              {locale === "fr" ? "Toutes les captures" : "All captures"}
+              {locale === "fr" ? "Toutes les captures" : "All snapshots"}
             </Link>
           )}
         </div>
