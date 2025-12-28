@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
+import { CopyButton } from "@/components/archive/CopyButton";
 
 import { PageShell } from "@/components/layout/PageShell";
+import { fetchSnapshotDetail, searchSnapshots } from "@/lib/api";
 import type { Locale } from "@/lib/i18n";
-import { buildPageMetadata } from "@/lib/metadata";
+import { buildPageMetadata, SITE_BASE_URL } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
 
@@ -25,6 +27,40 @@ function getCiteCopy(locale: Locale) {
   };
 }
 
+function formatUtcTimestamp(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const parsed = new Date(value);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toISOString().replace(".000Z", "Z");
+  }
+  return value;
+}
+
+function stripUrlFragment(value: string): string {
+  const idx = value.indexOf("#");
+  return idx >= 0 ? value.slice(0, idx) : value;
+}
+
+function buildPrefilledCitation(args: {
+  locale: Locale;
+  snapshotId: number;
+  title: string;
+  sourceName: string;
+  captureTimestamp: string | null;
+  originalUrl: string;
+  snapshotUrl: string;
+  accessedDate: string;
+}): string {
+  const capture = args.captureTimestamp ?? (args.locale === "fr" ? "Inconnu" : "Unknown");
+  const title = args.title || (args.locale === "fr" ? "Capture archivée" : "Archived snapshot");
+
+  if (args.locale === "fr") {
+    return `Projet HealthArchive.ca. « ${title} » (capture du ${capture}). Copie archivée de la page Web de ${args.sourceName} (${args.originalUrl}). Consulté le ${args.accessedDate}. Disponible à : ${args.snapshotUrl}.`;
+  }
+
+  return `HealthArchive.ca Project. “${title}” (snapshot from ${capture}). Archived copy of ${args.sourceName} web page (${args.originalUrl}). Accessed ${args.accessedDate}. Available from: ${args.snapshotUrl}.`;
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -37,15 +73,116 @@ export async function generateMetadata({
 
 export default async function CitePage({
   params,
+  searchParams,
 }: {
   params?: Promise<{ locale?: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 } = {}) {
   const locale = await resolveLocale(params);
   const copy = getCiteCopy(locale);
   const siteCopy = getSiteCopy(locale);
+  const query = (await searchParams) ?? {};
+
+  const snapshotParam = typeof query.snapshot === "string" ? query.snapshot : "";
+  const urlParam = typeof query.url === "string" ? query.url : "";
+
+  let prefillError: string | null = null;
+  let citationText: string | null = null;
+  let citationSnapshotId: number | null = null;
+
+  if (snapshotParam || urlParam) {
+    let resolvedSnapshotId: number | null = null;
+    const parsedId = Number.parseInt(snapshotParam, 10);
+    if (parsedId && !Number.isNaN(parsedId)) {
+      resolvedSnapshotId = parsedId;
+    } else if (urlParam.trim()) {
+      const cleanedUrl = stripUrlFragment(urlParam.trim());
+      try {
+        const resolved = await searchSnapshots({
+          q: cleanedUrl,
+          view: "pages",
+          sort: "newest",
+          pageSize: 1,
+        });
+        resolvedSnapshotId = resolved.results[0]?.id ?? null;
+      } catch {
+        resolvedSnapshotId = null;
+      }
+    }
+
+    if (resolvedSnapshotId != null) {
+      try {
+        const detail = await fetchSnapshotDetail(resolvedSnapshotId);
+        const capture = formatUtcTimestamp(detail.captureTimestamp);
+        const accessedDate = new Date().toISOString().slice(0, 10);
+        const localePrefix = locale === "fr" ? "/fr" : "";
+        const snapshotUrl = `${SITE_BASE_URL}${localePrefix}/snapshot/${detail.id}`;
+        citationSnapshotId = detail.id;
+        citationText = buildPrefilledCitation({
+          locale,
+          snapshotId: detail.id,
+          title: detail.title ?? "",
+          sourceName: detail.sourceName,
+          captureTimestamp: capture,
+          originalUrl: detail.originalUrl,
+          snapshotUrl,
+          accessedDate,
+        });
+      } catch {
+        prefillError =
+          locale === "fr"
+            ? "Impossible de charger les informations de citation pour cette capture."
+            : "Could not load citation information for that snapshot.";
+      }
+    } else {
+      prefillError =
+        locale === "fr"
+          ? "Aucune capture n’a été trouvée pour préremplir la citation."
+          : "No snapshot was found to prefill the citation.";
+    }
+  }
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
+      {(citationText || prefillError) && (
+        <section className="ha-callout">
+          <h2 className="ha-callout-title">
+            {locale === "fr" ? "Citation suggérée" : "Suggested citation"}
+          </h2>
+          {prefillError ? (
+            <p className="mt-2 text-xs leading-relaxed sm:text-sm">{prefillError}</p>
+          ) : (
+            <>
+              <p className="mt-2 text-xs leading-relaxed sm:text-sm">
+                {locale === "fr"
+                  ? "Copiez et adaptez la citation ci-dessous selon votre style."
+                  : "Copy and adapt the citation below to your preferred style."}
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <CopyButton
+                  text={citationText ?? ""}
+                  label={locale === "fr" ? "Copier la citation" : "Copy citation"}
+                  className="ha-btn-secondary text-xs"
+                >
+                  {locale === "fr" ? "Copier" : "Copy"}
+                </CopyButton>
+                {citationSnapshotId != null && (
+                  <Link
+                    href={`/snapshot/${citationSnapshotId}`}
+                    className="ha-btn-secondary text-xs"
+                  >
+                    {locale === "fr" ? "Ouvrir la capture" : "Open snapshot"}
+                  </Link>
+                )}
+              </div>
+              <div className="ha-card ha-home-panel mt-4 p-4 text-xs break-words whitespace-pre-wrap text-slate-800 sm:p-5 sm:text-sm">
+                {citationText}
+              </div>
+            </>
+          )}
+        </section>
+      )}
+
       <section className="ha-home-hero space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Note importante" : "Important note"}

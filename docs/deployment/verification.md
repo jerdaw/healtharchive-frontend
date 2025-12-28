@@ -18,6 +18,7 @@ frontend + backend with a focus on:
   - `https://healtharchive.ca`
   - `https://www.healtharchive.ca`
   - `https://healtharchive.vercel.app`
+  - `https://replay.healtharchive.ca` (for the optional replay banner and direct replay UX)
 
 Expected limitation (by design):
 
@@ -154,6 +155,13 @@ available as a fallback/debug path.
    - Confirm:
      - the Source filter updates to that source (not “All sources”), and
      - the page scrolls to the Search card without the fixed header covering its title.
+
+7. (Optional) Verify the direct replay banner (non-framed replay):
+   - From a snapshot page, click **Replay ↗** to open the replay service in a new tab.
+   - Confirm the replay banner:
+     - shows a compact snapshot summary,
+     - includes links like **View diff** / **Raw HTML** / **Metadata JSON**, and
+     - **← HealthArchive.ca** returns to the specific `/snapshot/<id>` page (not the homepage).
 
 ---
 

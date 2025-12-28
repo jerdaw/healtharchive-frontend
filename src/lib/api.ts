@@ -208,6 +208,7 @@ export type SnapshotTimelineItem = {
   title: string | null;
   statusCode: number | null;
   compareFromSnapshotId: number | null;
+  browseUrl: string | null;
 };
 
 export type SnapshotTimeline = {
