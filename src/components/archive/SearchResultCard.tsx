@@ -2,6 +2,7 @@ import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import type { ReactElement, ReactNode } from "react";
 
 import { CopyButton } from "@/components/archive/CopyButton";
+import { buildReplayUrl, isoToTimestamp14 } from "@/components/replay/replayUtils";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
 
 type SearchView = "pages" | "snapshots";
@@ -13,6 +14,8 @@ export type SearchResultCardRecord = {
   sourceName: string;
   language?: string;
   captureDate?: string | null;
+  captureTimestamp?: string | null;
+  jobId?: number | null;
   originalUrl: string;
   snippet?: string | null;
   pageSnapshotsCount?: number | null;
@@ -151,6 +154,24 @@ function CopyIcon(): ReactElement {
   );
 }
 
+function getReplayBaseUrl(): string {
+  return (process.env.NEXT_PUBLIC_REPLAY_BASE_URL ?? "https://replay.healtharchive.ca").replace(
+    /\/+$/,
+    "",
+  );
+}
+
+function buildViewUrl(record: SearchResultCardRecord): string | null {
+  const direct = record.browseUrl?.trim();
+  if (direct) return direct;
+  if (!record.jobId || !record.captureTimestamp) return null;
+
+  const ts14 = isoToTimestamp14(record.captureTimestamp);
+  const replayUrl = buildReplayUrl(getReplayBaseUrl(), record.jobId, ts14, record.originalUrl);
+  // Help the replay banner resolve the HealthArchive snapshot id.
+  return `${replayUrl}#ha_snapshot=${encodeURIComponent(record.id)}`;
+}
+
 export function SearchResultCard({
   record,
   view,
@@ -184,14 +205,30 @@ export function SearchResultCard({
 
   const urlParts = formatUrlParts(record.originalUrl);
 
+  const viewUrl = buildViewUrl(record);
+  const detailsUrl = `/snapshot/${record.id}`;
+  const primaryLabel = viewUrl
+    ? locale === "fr"
+      ? "Voir"
+      : "View"
+    : locale === "fr"
+      ? "Détails"
+      : "Details";
+
   return (
     <article className="ha-result-card">
       <div className="ha-result-row">
         <div className="ha-result-main">
           <h3 className="ha-result-title">
-            <Link href={`/browse/${record.id}`} className="ha-result-title-link">
-              {titleNodes}
-            </Link>
+            {viewUrl ? (
+              <a href={viewUrl} className="ha-result-title-link">
+                {titleNodes}
+              </a>
+            ) : (
+              <Link href={detailsUrl} className="ha-result-title-link">
+                {titleNodes}
+              </Link>
+            )}
           </h3>
 
           <div
@@ -230,9 +267,15 @@ export function SearchResultCard({
         </div>
 
         <div className="ha-result-actions flex flex-wrap justify-start gap-2 sm:justify-end">
-          <Link href={`/browse/${record.id}`} className="ha-btn-primary text-xs">
-            {locale === "fr" ? "Relecture" : "Replay"}
-          </Link>
+          {viewUrl ? (
+            <a href={viewUrl} className="ha-btn-primary text-xs">
+              {primaryLabel}
+            </a>
+          ) : (
+            <Link href={detailsUrl} className="ha-btn-primary text-xs">
+              {primaryLabel}
+            </Link>
+          )}
           {view === "pages" && (
             <Link
               href={`/archive?view=snapshots&source=${encodeURIComponent(

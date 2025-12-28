@@ -194,12 +194,16 @@ export default async function StatusPage({
                   {formatDate(locale, source.lastCapture)}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {source.entryRecordId != null ? (
+                  {source.entryBrowseUrl ? (
+                    <a href={source.entryBrowseUrl} className="ha-btn-secondary text-xs">
+                      {locale === "fr" ? "Voir le site archivé" : "View archived site"}
+                    </a>
+                  ) : source.entryRecordId != null ? (
                     <Link
                       href={`/browse/${source.entryRecordId}`}
                       className="ha-btn-secondary text-xs"
                     >
-                      {locale === "fr" ? "Relecture du site archivé" : "Replay archived site"}
+                      {locale === "fr" ? "Voir le site archivé" : "View archived site"}
                     </Link>
                   ) : null}
                   <Link
