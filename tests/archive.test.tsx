@@ -234,19 +234,14 @@ describe("/archive", () => {
     });
     const { container } = render(ui);
 
-    const replayLink = screen.getByRole("link", { name: "Replay ↗" });
-    expect(replayLink).toHaveAttribute(
-      "href",
-      "https://replay.healtharchive.ca/job-1/20240102000000/https://example.com#ha_snapshot=101",
-    );
-    expect(replayLink).toHaveAttribute("target", "_blank");
+    expect(screen.getByRole("link", { name: "Replay" })).toHaveAttribute("href", "/browse/101");
 
     const actions = container.querySelector(".ha-result-actions");
     expect(actions).toBeTruthy();
     const actionLabels = Array.from(actions!.querySelectorAll("a")).map((a) =>
       (a.textContent ?? "").trim(),
     );
-    expect(actionLabels).toEqual(["Browse", "Replay ↗", "All snapshots"]);
+    expect(actionLabels).toEqual(["Replay", "All snapshots"]);
   });
 
   it("renders the replay link label in French", async () => {
@@ -280,7 +275,7 @@ describe("/archive", () => {
     });
     render(ui);
 
-    expect(screen.getByRole("link", { name: "Relecture ↗" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Relecture" })).toBeInTheDocument();
   });
 
   it("passes source through to backend search", async () => {

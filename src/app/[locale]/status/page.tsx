@@ -196,10 +196,10 @@ export default async function StatusPage({
                 <div className="flex flex-wrap gap-2">
                   {source.entryRecordId != null ? (
                     <Link
-                      href={`/snapshot/${source.entryRecordId}`}
+                      href={`/browse/${source.entryRecordId}`}
                       className="ha-btn-secondary text-xs"
                     >
-                      {locale === "fr" ? "Parcourir le site archivé" : "Browse archived site"}
+                      {locale === "fr" ? "Relecture du site archivé" : "Replay archived site"}
                     </Link>
                   ) : null}
                   <Link
