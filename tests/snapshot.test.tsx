@@ -20,6 +20,7 @@ vi.mock("@/lib/api", () => ({
   fetchSnapshotTimeline: vi.fn(),
   fetchSourceEditions: vi.fn(),
   resolveReplayUrl: vi.fn(),
+  searchSnapshots: vi.fn(),
   getApiBaseUrl: () => "https://api.example.test",
 }));
 
