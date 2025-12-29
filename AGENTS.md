@@ -50,6 +50,21 @@ From the repo root:
 
 ---
 
+## Git workflow (commits & pushes)
+
+When you have full access (and `origin` is configured), **make regular best-practice commits and pushes as you go** — you do not need the user to explicitly ask you to commit/push.
+
+Guidelines:
+
+- Prefer small, logically grouped commits over big “catch-all” commits.
+- Use the existing message style (e.g., `fix: ...`, `docs: ...`).
+- Before pushing, run the closest relevant local checks (usually `npm run check`) and keep the branch reasonably up to date.
+- Never commit secrets, `.env` files, or machine-specific artifacts.
+
+If you do _not_ have full access or pushing would require approval, commit locally when helpful but ask before pushing.
+
+---
+
 ## Environment & API integration
 
 - The frontend talks to a backend API via `src/lib/api.ts`.
