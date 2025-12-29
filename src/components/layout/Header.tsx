@@ -81,6 +81,8 @@ export function Header() {
       ? "Ouvrir la navigation principale"
       : "Open main navigation";
 
+  const mobileMenuIconSizePx = `${Math.max(15, Math.min(20, 20 - 5 * shrink))}px`;
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handleScroll = () => {
@@ -327,7 +329,13 @@ export function Header() {
             <span className="sr-only">
               {locale === "fr" ? "Basculer la navigation" : "Toggle navigation"}
             </span>
-            <svg className="ha-mobile-menu-icon" viewBox="0 0 24 24" aria-hidden="true" role="img">
+            <svg
+              className="ha-mobile-menu-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              role="img"
+              style={{ width: mobileMenuIconSizePx, height: mobileMenuIconSizePx }}
+            >
               {mobileOpen ? (
                 <path
                   d="M6 6l12 12M18 6L6 18"
