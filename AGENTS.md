@@ -65,6 +65,18 @@ If you do _not_ have full access or pushing would require approval, commit local
 
 ---
 
+## Common engineering best practices (as you go)
+
+When you change behavior, do routine hygiene in the same series of commits:
+
+- Update relevant docs (`docs/**`) so future devs can follow the new reality.
+- Add/adjust tests for new behavior and bug fixes to prevent regressions.
+- Update `.gitignore` when you introduce new local artifacts, generated files, or caches.
+- Keep things tidy: remove dead code, unused imports, and accidental debug logging.
+- If you introduce new project conventions/workflows, update `AGENTS.md` to reflect them.
+
+---
+
 ## Environment & API integration
 
 - The frontend talks to a backend API via `src/lib/api.ts`.
