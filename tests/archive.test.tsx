@@ -236,7 +236,7 @@ describe("/archive", () => {
 
     expect(screen.getByRole("link", { name: "View" })).toHaveAttribute(
       "href",
-      "https://replay.healtharchive.ca/job-1/20240102000000/https://example.com#ha_snapshot=101",
+      "https://replay.healtharchive.ca/job-1/20240102000000/https://example.com#ha_snapshot=101&ha_return=%2Farchive%3Fq%3Dtest%26focus%3Dresults",
     );
 
     const actions = container.querySelector(".ha-result-actions");
@@ -244,7 +244,7 @@ describe("/archive", () => {
     const actionLabels = Array.from(actions!.querySelectorAll("a")).map((a) =>
       (a.textContent ?? "").trim(),
     );
-    expect(actionLabels).toEqual(["View", "All snapshots"]);
+    expect(actionLabels).toEqual(["View", "Details", "All snapshots"]);
   });
 
   it("renders the view link label in French", async () => {
