@@ -4,6 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useLocale } from "@/components/i18n/LocaleProvider";
 
+const LOADING_OVERLAY_DELAY_MS = 1600;
+const LONG_LOAD_NOTICE_SECONDS = 8;
+
 type SnapshotFrameProps = {
   src: string;
   title: string;
@@ -19,6 +22,69 @@ type ReplayHeightMessage = {
 };
 
 export function SnapshotFrame({
+  src,
+  title,
+  browseLink,
+  rawLink,
+  apiLink,
+  iframeClassName,
+}: SnapshotFrameProps) {
+  return (
+    <SnapshotFrameInner
+      key={src}
+      src={src}
+      title={title}
+      browseLink={browseLink}
+      rawLink={rawLink}
+      apiLink={apiLink}
+      iframeClassName={iframeClassName}
+    />
+  );
+}
+
+function LoadingOverlay({ locale }: { locale: ReturnType<typeof useLocale> }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+
+  useEffect(() => {
+    const showHandle = window.setTimeout(() => {
+      setIsVisible(true);
+    }, LOADING_OVERLAY_DELAY_MS);
+
+    const tickHandle = window.setInterval(() => {
+      setElapsedSeconds((seconds) => seconds + 1);
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(showHandle);
+      window.clearInterval(tickHandle);
+    };
+  }, []);
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="text-ha-muted pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/40 px-4 text-center text-xs">
+      <span
+        aria-hidden="true"
+        className="h-5 w-5 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700 motion-reduce:animate-none"
+      />
+      <span className="font-medium">
+        {locale === "fr" ? "Chargement de la capture…" : "Loading snapshot…"}
+        {elapsedSeconds >= 1 ? ` (${elapsedSeconds}s)` : ""}
+      </span>
+      {elapsedSeconds >= LONG_LOAD_NOTICE_SECONDS ? (
+        <span className="text-ha-muted">
+          {locale === "fr"
+            ? "Certaines captures peuvent prendre plus de temps à charger (WARC volumineux)."
+            : "Some captures can take longer to load (large WARC)."}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+function SnapshotFrameInner({
   src,
   title,
   browseLink,
@@ -133,11 +199,7 @@ export function SnapshotFrame({
           onError={() => setStatus("error")}
         />
       )}
-      {status === "loading" && (
-        <div className="text-ha-muted pointer-events-none absolute inset-0 flex items-center justify-center bg-white/40 text-xs">
-          {locale === "fr" ? "Chargement de la capture…" : "Loading snapshot…"}
-        </div>
-      )}
+      {status === "loading" ? <LoadingOverlay locale={locale} /> : null}
     </div>
   );
 }
