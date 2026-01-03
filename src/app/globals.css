@@ -9,7 +9,12 @@
 
 /* Design tokens via CSS variables */
 :root {
-  --page-bg: #f3f4f6;
+  --page-bg: #f5f7fb;
+  --page-bg-decoration:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 46%),
+    radial-gradient(1400px 900px at 12% -18%, rgba(37, 99, 235, 0.14), transparent 58%),
+    radial-gradient(1000px 700px at 88% -10%, rgba(14, 165, 233, 0.09), transparent 62%),
+    radial-gradient(1200px 900px at 50% 112%, rgba(37, 99, 235, 0.05), transparent 60%);
   --card-bg: #ffffff;
   --surface-bg: #ffffff;
   --surface-bg-soft: rgba(255, 255, 255, 0.9);
@@ -28,18 +33,23 @@
 
 html[data-theme="dark"] {
   /* Background layers derived from Dark Reader */
-  --page-bg: #1e2022;
-  --surface-bg: #181a1b;
-  --surface-bg-soft: rgba(24, 26, 27, 0.9);
-  --card-bg: #181a1b;
+  --page-bg: #0b0c0d;
+  --page-bg-decoration:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0) 52%),
+    radial-gradient(1400px 900px at 12% -18%, rgba(56, 143, 237, 0.22), transparent 58%),
+    radial-gradient(1000px 700px at 90% -10%, rgba(99, 102, 241, 0.18), transparent 62%),
+    radial-gradient(1200px 900px at 50% 112%, rgba(56, 143, 237, 0.1), transparent 60%);
+  --surface-bg: #14171b;
+  --surface-bg-soft: rgba(20, 23, 27, 0.9);
+  --card-bg: #181c22;
 
   /* Text and muted */
-  --text: #e8e6e3;
-  --muted: #b2aba1;
-  --muted-strong: #d6d1c9;
+  --text: #e6e9ef;
+  --muted: #a8b0bd;
+  --muted-strong: #c6cdd9;
 
   /* Borders */
-  --border: #363b3d;
+  --border: #303744;
 
   /* Brand and accents */
   --accent: #388fed;
@@ -67,10 +77,16 @@ html[data-theme="dark"] {
     min-height: 100vh;
   }
 
+  html {
+    background-color: var(--page-bg);
+    background-image: var(--page-bg-decoration);
+    background-repeat: no-repeat;
+  }
+
   /* Base body styles */
   body {
     font-family: var(--font-sans);
-    background-color: var(--page-bg);
+    background-color: transparent;
     color: var(--text);
   }
 
@@ -655,7 +671,7 @@ html[data-theme="dark"] {
 html[data-theme="dark"] .ha-page-intro-card {
   border-color: rgba(54, 59, 61, 0.9);
   background:
-    linear-gradient(0deg, rgba(56, 143, 237, 0.22), rgba(56, 143, 237, 0.22)), var(--surface-bg);
+    linear-gradient(0deg, rgba(56, 143, 237, 0.198), rgba(56, 143, 237, 0.198)), var(--card-bg);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
 }
 
@@ -1612,7 +1628,7 @@ html[data-theme="dark"] .ha-btn-secondary:hover {
 }
 
 html[data-theme="dark"] .ha-nav-link {
-  color: var(--muted);
+  color: color-mix(in srgb, var(--muted) 76%, var(--text));
 }
 
 html[data-theme="dark"] .ha-nav-link:hover {
@@ -1623,46 +1639,64 @@ html[data-theme="dark"] .ha-nav-link--active {
   color: var(--accent);
 }
 
+html[data-theme="dark"] .ha-utility-switch-item {
+  color: color-mix(in srgb, var(--muted) 76%, var(--text));
+}
+
+html[data-theme="dark"] .ha-shell-header {
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--surface-bg) 92%, transparent),
+    color-mix(in srgb, var(--surface-bg) 80%, transparent)
+  );
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
+}
+
 html[data-theme="dark"] .ha-nav-active-indicator {
-  background-color: rgba(148, 163, 184, 0.32);
+  background-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 html[data-theme="dark"] .ha-home-hero {
   border-color: rgba(54, 59, 61, 0.9);
   background:
-    radial-gradient(160% 160% at 0% 0%, rgba(56, 143, 237, 0.28), transparent 55%),
-    radial-gradient(160% 160% at 100% 0%, rgba(56, 143, 237, 0.18), transparent 55%),
-    var(--surface-bg);
+    radial-gradient(160% 160% at 0% 0%, rgba(56, 143, 237, 0.252), transparent 55%),
+    radial-gradient(160% 160% at 100% 0%, rgba(56, 143, 237, 0.162), transparent 55%),
+    var(--card-bg);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
 }
 
 html[data-theme="dark"] .ha-home-band-muted {
-  background-color: #181a1b;
+  background-color: color-mix(in srgb, var(--page-bg) 74%, var(--surface-bg));
   border-color: rgba(54, 59, 61, 0.9);
 }
 
 html[data-theme="dark"] .ha-home-band-shell {
-  background-color: #181a1b;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 60%), var(--card-bg);
   border-color: rgba(54, 59, 61, 0.9);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
 }
 
 html[data-theme="dark"] .ha-home-panel {
   border-color: rgba(54, 59, 61, 0.9);
-  background-color: #181a1b;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 60%), var(--card-bg);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
 }
 
 html[data-theme="dark"] .ha-home-panel-gradient {
   border-color: rgba(54, 59, 61, 0.9);
   background:
-    radial-gradient(160% 160% at 0% 0%, rgba(56, 143, 237, 0.28), transparent 55%),
-    radial-gradient(160% 160% at 100% 0%, rgba(56, 143, 237, 0.18), transparent 55%), #181a1b;
+    radial-gradient(160% 160% at 0% 0%, rgba(56, 143, 237, 0.252), transparent 55%),
+    radial-gradient(160% 160% at 100% 0%, rgba(56, 143, 237, 0.162), transparent 55%),
+    var(--card-bg);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
 }
 
 html[data-theme="dark"] .ha-home-hero-plain {
-  background: #181a1b;
+  background: var(--card-bg);
 }
 
 html[data-theme="dark"] .ha-shell-header::after {
@@ -1670,7 +1704,7 @@ html[data-theme="dark"] .ha-shell-header::after {
 }
 
 html[data-theme="dark"] .ha-audience-icon {
-  background: radial-gradient(circle at 30% 10%, rgba(56, 143, 237, 0.85), transparent 55%);
+  background: radial-gradient(circle at 30% 10%, rgba(56, 143, 237, 0.765), transparent 55%);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
 }
 
@@ -1679,5 +1713,5 @@ html[data-theme="dark"] .ha-metric-bar {
 }
 
 html[data-theme="dark"] .ha-metric-bar-fill {
-  background: linear-gradient(to right, rgba(56, 143, 237, 0.95), rgba(56, 143, 237, 0.6));
+  background: linear-gradient(to right, rgba(56, 143, 237, 0.855), rgba(56, 143, 237, 0.54));
 }
