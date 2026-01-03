@@ -50,3 +50,49 @@ jobs:
 
       - name: Security audit (npm)
         run: npm audit --audit-level=high || true
+
+  e2e-smoke:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:8001
+      NEXT_PUBLIC_SHOW_API_HEALTH_BANNER: "false"
+      NEXT_PUBLIC_LOG_API_HEALTH_FAILURE: "false"
+      NEXT_PUBLIC_SHOW_API_BASE_HINT: "false"
+
+    steps:
+      - name: Checkout frontend repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Checkout backend repository
+        uses: actions/checkout@v6
+        with:
+          repository: jerdaw/healtharchive-backend
+          path: healtharchive-backend
+          fetch-depth: 0
+          token: ${{ secrets.HEALTHARCHIVE_CI_READ_TOKEN || github.token }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20.19.0"
+          cache: "npm"
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Install backend dependencies
+        working-directory: healtharchive-backend
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: E2E smoke (backend + frontend)
+        working-directory: healtharchive-backend
+        run: ./scripts/ci-e2e-smoke.sh --frontend-dir ..
