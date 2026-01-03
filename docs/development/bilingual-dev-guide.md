@@ -59,6 +59,7 @@ in the PR if it is not obvious.
      Avoid hardcoded `/fr` or unprefixed paths.
 6. If the route is part of the “public surface” you rely on in production, add it to the backend verifier:
    - `healtharchive-backend/scripts/verify_public_surface.py`
+   - Include both unprefixed (EN) and `/fr/...` (FR) variants when applicable.
 
 ## Policy and legal pages
 
