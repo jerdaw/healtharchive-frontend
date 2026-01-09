@@ -16,6 +16,11 @@ This repository contains the **Next.js frontend** for the public site at:
 Public-facing narrative and workflow disclaimers (used across Home/Archive/Snapshot/Browse)
 are centralized in `src/lib/siteCopy.ts`.
 
+Related repositories (project is multi-repo):
+
+- Backend API + ops docs: https://github.com/jerdaw/healtharchive-backend
+- Dataset releases: https://github.com/jerdaw/healtharchive-datasets
+
 ---
 
 ## Localization (EN/FR)
