@@ -5,8 +5,12 @@ This folder contains documentation for the **HealthArchive frontend**
 
 ## Start here
 
+- Project docs portal (multi-repo navigation):
+  - https://github.com/jerdaw/healtharchive-backend/blob/main/docs/project.md
 - Main guide (architecture, design system, routes, deployment notes):
   - `implementation-guide.md`
+- Public changelog process:
+  - `changelog-process.md`
 - Copy work (inventory, glossary, disclaimers):
   - `copy-inventory.md`
   - `disclaimer-matrix.md`

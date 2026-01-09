@@ -18,7 +18,10 @@
   - `docs/implementation-guide.md` → architecture, routes, styling system, deployment details.
   - `docs/development/bilingual-dev-guide.md` → bilingual UI rules and “English governs” policy (EN/FR parity).
   - `docs/deployment/verification.md` → Preview/Production CSP/CORS/snapshot viewer verification.
+  - `docs/changelog-process.md` → when/how to update the public changelog.
   - Cross-repo wiring/backlog:
+    - Project docs portal (multi-repo navigation):
+      - https://github.com/jerdaw/healtharchive-backend/blob/main/docs/project.md
     - `../healtharchive-backend/docs/deployment/environments-and-configuration.md`
     - `../healtharchive-backend/docs/documentation-guidelines.md`
     - `../healtharchive-backend/docs/roadmaps/future-roadmap.md`
@@ -52,16 +55,14 @@ From the repo root:
 
 ## Git workflow (commits & pushes)
 
-When you have full access (and `origin` is configured), **make regular best-practice commits and pushes as you go** — you do not need the user to explicitly ask you to commit/push.
+Default for agentic work: **do not commit or push** unless the human operator explicitly asks.
 
 Guidelines:
 
-- Prefer small, logically grouped commits over big “catch-all” commits.
+- If asked to commit: prefer small, logically grouped commits over big “catch-all” commits.
 - Use the existing message style (e.g., `fix: ...`, `docs: ...`).
-- Before pushing, run the closest relevant local checks (usually `npm run check`) and keep the branch reasonably up to date.
+- Run the closest relevant local checks before pushing (usually `npm run check`).
 - Never commit secrets, `.env` files, or machine-specific artifacts.
-
-If you do _not_ have full access or pushing would require approval, commit locally when helpful but ask before pushing.
 
 ---
 
@@ -115,7 +116,7 @@ When wiring new API calls, keep the **public-only** contract and reuse `src/lib/
   - Tests that render server route components should `await Page(...)` and then `render(ui)`.
 - Routing:
   - Archive/search/browse: under `src/app/archive/**`
-  - Snapshot viewer: `src/app/snapshot/[id]/page.tsx`
+  - Snapshot viewer: `src/app/[locale]/snapshot/[id]/page.tsx`
   - Static content pages: `/methods`, `/researchers`, `/about`, `/contact`
   - Reporting pages: `/status`, `/impact`
   - Change tracking pages: `/changes`, `/compare`, `/digest`
