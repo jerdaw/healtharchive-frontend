@@ -174,21 +174,20 @@ Branches:
 
 - `main`
   - **Current production** branch.
-  - Contains the **Next.js app** plus a markdown `README-static-legacy.md` describing the old static site.
+  - Contains the **Next.js app**.
 
 - `next`
   - Was used as the working branch for the Next.js migration.
   - Has now been **fast-forward merged into `main`**.
 
-- `static-legacy`
-  - Frozen snapshot of the original static site (HTML/CSS/JS).
-  - Kept for reference only.
+Historical note:
+
+- The original static site existed earlier in this repo’s history. If you need to reference it, use git history (or a dedicated archive branch if one exists).
 
 Migration steps already done:
 
 - Old assets (`index.html`, `browse.html`, `search.html`, old `styles.css`, etc.) have been deleted or moved.
 - Demo HTML pages moved from `demo-archive/**` → `public/demo-archive/**`.
-- Old `README.md` renamed to `README-static-legacy.md`.
 - New `README.md` is the Next.js-focused one.
 
 ---
@@ -200,7 +199,6 @@ From the repo root:
 ```text
 .
 ├── README.md                  # Next.js app README (current)
-├── README-static-legacy.md    # Old static site README (historic)
 ├── package.json
 ├── package-lock.json
 ├── next.config.ts
