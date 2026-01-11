@@ -51,17 +51,6 @@ jobs:
       - name: Security audit (npm)
         run: npm audit --audit-level=high || true
 
-      - name: Upload Next build artifact
-        if: success()
-        uses: actions/upload-artifact@v6
-        with:
-          name: frontend-next-build
-          path: |
-            .next
-            !.next/cache/**
-          include-hidden-files: true
-          if-no-files-found: error
-
   e2e-smoke:
     runs-on: ubuntu-latest
     needs: lint-and-test
@@ -113,7 +102,7 @@ jobs:
 
       - name: E2E smoke (backend + frontend)
         working-directory: healtharchive-backend
-        run: ./scripts/ci-e2e-smoke.sh --frontend-dir .. --skip-frontend-build
+        run: ./scripts/ci-e2e-smoke.sh --frontend-dir ..
 
       - name: Upload e2e smoke artifacts (on failure)
         if: failure()

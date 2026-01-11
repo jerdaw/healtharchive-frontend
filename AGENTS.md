@@ -14,17 +14,19 @@
 - Homepage hero animation events:
   - `ha-trackchanges-finished` is dispatched by `TrackChangesPhrase` after the “before → after” typing sequence completes.
   - “Project snapshot” metrics start on that event and dispatch `ha-project-snapshot-finished` after all metric animations complete (used to trigger the final “before” fade-out).
-- Primary documentation for humans and agents:
+- Primary documentation (Unified Site):
+  - Documentation is hosted in the **Backend** repo using MkDocs Material.
+  - Run `make docs-serve` in the backend repo to view the full site.
+  - Sub-paths are symlinked: `backend-repo/docs/frontend/...`
+- Core Frontend Guides:
   - `docs/implementation-guide.md` → architecture, routes, styling system, deployment details.
-  - `docs/development/bilingual-dev-guide.md` → bilingual UI rules and “English governs” policy (EN/FR parity).
-  - `docs/deployment/verification.md` → Preview/Production CSP/CORS/snapshot viewer verification.
-  - `docs/changelog-process.md` → when/how to update the public changelog.
-  - Cross-repo wiring/backlog:
-    - Project docs portal (multi-repo navigation):
-      - https://github.com/jerdaw/healtharchive-backend/blob/main/docs/project.md
-    - `../healtharchive-backend/docs/deployment/environments-and-configuration.md`
-    - `../healtharchive-backend/docs/documentation-guidelines.md`
-    - `../healtharchive-backend/docs/roadmaps/future-roadmap.md`
+  - `docs/development/bilingual-dev-guide.md` → bilingual UI rules.
+  - `docs/deployment/verification.md` → Preview/Production verification.
+  - `docs/changelog-process.md` → changelog updates.
+- Central Documentation (Backend Repo):
+  - `../healtharchive-backend/mkdocs.yml` (Navigation Source of Truth)
+  - `../healtharchive-backend/docs/documentation-guidelines.md`
+  - `../healtharchive-backend/docs/roadmaps/future-roadmap.md`
 - Canonical public-facing copy (mission + workflow disclaimers) lives in `src/lib/siteCopy.ts` and should be reused rather than duplicated across pages.
 - Localization:
   - Locale-aware routes live under `src/app/[locale]/...`.
