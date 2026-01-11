@@ -16,10 +16,8 @@ This repository contains the **Next.js frontend** for the public site at:
 Public-facing narrative and workflow disclaimers (used across Home/Archive/Snapshot/Browse)
 are centralized in `src/lib/siteCopy.ts`.
 
-Related repositories (project is multi-repo):
-
 - Backend API + ops docs: https://github.com/jerdaw/healtharchive-backend
-- Dataset releases: https://github.com/jerdaw/healtharchive-datasets
+- **Unified Documentation Site**: Documentation for both repositories is now hosted in the [backend repository](https://github.com/jerdaw/healtharchive-backend). Run `make docs-serve` in the backend root to view the searchable UI.
 
 ---
 
@@ -250,6 +248,5 @@ Any push to `main` triggers a new Vercel deployment.
 ## Further documentation
 
 - **Architecture & project state:**
-  See [`docs/implementation-guide.md`](docs/implementation-guide.md) for a detailed overview
-  of the data model, routes, design system, accessibility primitives, and
-  planned milestones.
+  Detailed documentation is now unified in the **Backend** repository.
+  Run `make docs-serve` there to view the full Implementation Guide, i18n instructions, and deployment runbooks.
