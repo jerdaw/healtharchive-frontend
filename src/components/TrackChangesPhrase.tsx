@@ -243,9 +243,8 @@ export function TrackChangesPhrase() {
       }
 
       const isDeleted = index >= deletedFromIndex;
-      const baseClasses =
-        "inline-block text-slate-900 transition-colors transition-opacity duration-150 ease-out";
-      const deletedClasses = isDeleted ? "line-through" : "";
+      const baseClasses = "inline-block transition-colors transition-opacity duration-150 ease-out";
+      const deletedClasses = isDeleted ? "ha-before-word-text" : "";
 
       nodes.push(
         <span key={`before-${index}`} className={`${baseClasses} ${deletedClasses}`}>
@@ -271,7 +270,7 @@ export function TrackChangesPhrase() {
         className={`ha-before-word ${fading ? "ha-before-word--fading" : ""}`}
         style={{ ["--ha-before-width" as string]: widthVar }}
       >
-        <span className="ha-before-word-text text-slate-900">{beforeWord}</span>
+        <span className="ha-before-word-text">{beforeWord}</span>
         {"\u00a0"}
       </span>
     );
