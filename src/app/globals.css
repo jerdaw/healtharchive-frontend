@@ -230,10 +230,10 @@ html[data-theme="dark"] {
     font-weight: 650;
   }
 
-  .ha-utility-switch-item--locale::before {
+  .ha-utility-switch-item--locale::after {
     content: "";
     position: absolute;
-    left: -0.5px;
+    right: -0.5px;
     top: 12%;
     bottom: 12%;
     width: 1px;
