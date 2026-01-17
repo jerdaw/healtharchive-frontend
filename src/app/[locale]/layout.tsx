@@ -57,13 +57,13 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={localeToLanguageTag(locale)} data-theme="light" suppressHydrationWarning>
+    <html lang={localeToLanguageTag(locale)} suppressHydrationWarning>
       <body className="antialiased">
         <Script
           id="ha-theme-initializer"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var storageKey='ha-theme';var stored=window.localStorage.getItem(storageKey);var theme='light';if(stored==='light'||stored==='dark'){theme=stored;}document.documentElement.dataset.theme=theme;}catch(e){}})();`,
+            __html: `(function(){try{var storageKey='ha-theme';var stored=window.localStorage.getItem(storageKey);var root=document.documentElement;var prefersDark=false;try{prefersDark=!!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);}catch(e){}if(stored==='dark'||(!stored&&prefersDark)){root.setAttribute('data-theme','dark');}else{root.removeAttribute('data-theme');}}catch(e){}})();`,
           }}
         />
         <a
