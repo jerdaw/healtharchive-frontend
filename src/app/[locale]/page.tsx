@@ -166,7 +166,7 @@ export default async function HomePage({
             <div className="ha-card ha-audience-card p-4 sm:p-5">
               <div className="ha-audience-card-inner">
                 <span className="ha-audience-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                     <path d="M9.5 7a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0Z" />
                     <path d="M7 14.5a4.5 4.5 0 0 1 9 0V17H7z" />
                     <path d="M16 10.8 18.2 12l2.3-1.2v2.9c0 1.35-.78 2.52-2.3 3.2-1.52-.68-2.3-1.85-2.3-3.2z" />
@@ -187,7 +187,7 @@ export default async function HomePage({
             <div className="ha-card ha-audience-card p-4 sm:p-5">
               <div className="ha-audience-card-inner">
                 <span className="ha-audience-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                     <path d="M5 17.5h14" />
                     <path d="M8.5 17.5v-5.5M12 17.5v-8M15.5 17.5v-3.5" />
                     <path d="M7 10l3-2.5 2.5 2 3.5-3.5" />
@@ -209,7 +209,7 @@ export default async function HomePage({
             <div className="ha-card ha-audience-card p-4 sm:p-5">
               <div className="ha-audience-card-inner">
                 <span className="ha-audience-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                     <path d="M7 9.5h6.5a3.5 3.5 0 1 1 0 7H11l-2.5 2v-2H7a3.5 3.5 0 1 1 0-7Z" />
                     <path d="M9 12h4.5" />
                     <path d="M9 14.2h2.5" />
@@ -261,7 +261,7 @@ export default async function HomePage({
             <h3 className="text-sm font-semibold text-slate-900">
               {locale === "fr"
                 ? "Ce que ce site est (et n’est pas)"
-                : "What this site is (and isn&apos;t)"}
+                : "What this site is (and isn't)"}
             </h3>
             <ul className="text-ha-muted list-disc space-y-2 pl-5 text-xs leading-relaxed sm:text-sm">
               <li>
@@ -274,7 +274,7 @@ export default async function HomePage({
               <li>
                 {locale === "fr"
                   ? "La couverture est encore en expansion. Si vous ne trouvez pas une page, elle n’a peut-être pas encore été capturée."
-                  : "Coverage is still expanding. If you can&apos;t find a page, it may not have been captured yet."}
+                  : "Coverage is still expanding. If you can't find a page, it may not have been captured yet."}
               </li>
               <li>
                 {siteCopy.whatThisSiteIs.forCurrent} (
