@@ -168,11 +168,18 @@ export function Header() {
   }
 
   function toggleTheme() {
-    const next = theme === "light" ? "dark" : "light";
+    const root = document.documentElement;
+    const current = root.dataset.theme === "dark" ? "dark" : "light";
+    const next = current === "dark" ? "light" : "dark";
+
+    if (next === "dark") {
+      root.setAttribute("data-theme", "dark");
+    } else {
+      root.removeAttribute("data-theme");
+    }
     setTheme(next);
+
     try {
-      const root = document.documentElement;
-      root.dataset.theme = next;
       window.localStorage.setItem("ha-theme", next);
     } catch {
       // ignore
@@ -276,6 +283,14 @@ export function Header() {
           </nav>
 
           <div className="ha-utility-switch hidden md:inline-flex">
+            <NextLink
+              href={languageSwitchHref}
+              aria-label={languageSwitchAriaLabel}
+              className="ha-utility-switch-item ha-utility-switch-item--locale"
+            >
+              <span aria-hidden="true">{languageSwitchLabel}</span>
+              <span className="sr-only">{languageSwitchAriaLabel}</span>
+            </NextLink>
             <button
               type="button"
               onClick={toggleTheme}
@@ -306,14 +321,6 @@ export function Header() {
               )}
               <span className="sr-only">{themeToggleAriaLabel}</span>
             </button>
-            <NextLink
-              href={languageSwitchHref}
-              aria-label={languageSwitchAriaLabel}
-              className="ha-utility-switch-item ha-utility-switch-item--locale"
-            >
-              <span aria-hidden="true">{languageSwitchLabel}</span>
-              <span className="sr-only">{languageSwitchAriaLabel}</span>
-            </NextLink>
           </div>
 
           {/* Mobile menu button */}
@@ -400,6 +407,15 @@ export function Header() {
             </div>
             <div className="flex items-center justify-end gap-3 pt-2">
               <div className="ha-utility-switch inline-flex">
+                <NextLink
+                  href={languageSwitchHref}
+                  aria-label={languageSwitchAriaLabel}
+                  className="ha-utility-switch-item ha-utility-switch-item--locale"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span aria-hidden="true">{languageSwitchLabel}</span>
+                  <span className="sr-only">{languageSwitchAriaLabel}</span>
+                </NextLink>
                 <button
                   type="button"
                   onClick={() => {
@@ -433,15 +449,6 @@ export function Header() {
                   )}
                   <span className="sr-only">{themeToggleAriaLabel}</span>
                 </button>
-                <NextLink
-                  href={languageSwitchHref}
-                  aria-label={languageSwitchAriaLabel}
-                  className="ha-utility-switch-item ha-utility-switch-item--locale"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  <span aria-hidden="true">{languageSwitchLabel}</span>
-                  <span className="sr-only">{languageSwitchAriaLabel}</span>
-                </NextLink>
               </div>
             </div>
           </nav>
