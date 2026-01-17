@@ -36,9 +36,9 @@ html[data-theme="dark"] {
   --page-bg: #0b0c0d;
   --page-bg-decoration:
     linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0) 52%),
-    radial-gradient(1400px 900px at 12% -18%, rgba(56, 143, 237, 0.22), transparent 58%),
-    radial-gradient(1000px 700px at 90% -10%, rgba(99, 102, 241, 0.18), transparent 62%),
-    radial-gradient(1200px 900px at 50% 112%, rgba(56, 143, 237, 0.1), transparent 60%);
+    radial-gradient(1400px 900px at 12% -18%, rgba(56, 143, 237, 0.11), transparent 58%),
+    radial-gradient(1000px 700px at 90% -10%, rgba(99, 102, 241, 0.09), transparent 62%),
+    radial-gradient(1200px 900px at 50% 112%, rgba(56, 143, 237, 0.05), transparent 60%);
   --surface-bg: #14171b;
   --surface-bg-soft: rgba(20, 23, 27, 0.9);
   --card-bg: #181c22;
@@ -288,7 +288,8 @@ html[data-theme="dark"] {
 
 .ha-before-word-text {
   text-decoration: line-through;
-  text-decoration-thickness: 0.045em;
+  text-decoration-color: currentColor;
+  /* text-decoration-thickness: 0.045em; */
   /* text-decoration-color: rgba(15, 23, 42, 0.95); */
 }
 
@@ -1661,8 +1662,8 @@ html[data-theme="dark"] .ha-nav-active-indicator {
 html[data-theme="dark"] .ha-home-hero {
   border-color: rgba(54, 59, 61, 0.9);
   background:
-    radial-gradient(160% 160% at 0% 0%, #0071ea5c, transparent 55%),
-    radial-gradient(160% 160% at 100% 0%, #1b89ff29, transparent 55%), var(--card-bg);
+    radial-gradient(160% 160% at 0% 0%, #004b9b5c, transparent 55%),
+    radial-gradient(160% 160% at 100% 0%, #00367129, transparent 55%), var(--card-bg);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
 }
 
@@ -1688,8 +1689,8 @@ html[data-theme="dark"] .ha-home-panel {
 html[data-theme="dark"] .ha-home-panel-gradient {
   border-color: rgba(54, 59, 61, 0.9);
   background:
-    radial-gradient(160% 160% at 0% 0%, #0071ea5c, transparent 55%),
-    radial-gradient(160% 160% at 100% 0%, #1b89ff29, transparent 55%), var(--card-bg);
+    radial-gradient(160% 160% at 0% 0%, #004b9b5c, transparent 55%),
+    radial-gradient(160% 160% at 100% 0%, #00367129, transparent 55%), var(--card-bg);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
 }
 
@@ -1698,7 +1699,7 @@ html[data-theme="dark"] .ha-home-hero-plain {
 }
 
 html[data-theme="dark"] .ha-shell-header::after {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 html[data-theme="dark"] .ha-audience-icon {

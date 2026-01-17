@@ -37,11 +37,31 @@ export function Header() {
   const searchParams = useSearchParams();
   const queryString = searchParams.toString();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    if (typeof document === "undefined") return "light";
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    // Sync theme with localStorage/system preference on mount
     const root = document.documentElement;
-    return root.dataset.theme === "dark" ? "dark" : "light";
-  });
+    const storageKey = "ha-theme";
+    const stored = window.localStorage.getItem(storageKey);
+    const prefersDark =
+      window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    const isActive = stored === "dark" || (!stored && prefersDark);
+
+    if (isActive) {
+      setTheme("dark");
+      // Ensure DOM is in sync (in case hydration stripped the attribute)
+      if (root.getAttribute("data-theme") !== "dark") {
+        root.setAttribute("data-theme", "dark");
+      }
+    } else {
+      setTheme("light");
+      if (root.hasAttribute("data-theme")) {
+        root.removeAttribute("data-theme");
+      }
+    }
+  }, []);
   const [shrink, setShrink] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | null>(
     null,
