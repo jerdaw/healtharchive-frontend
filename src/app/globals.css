@@ -886,6 +886,7 @@ html[data-theme="dark"] .ha-page-intro-card {
 }
 
 .ha-metric-bar-fill {
+  display: block;
   height: 100%;
   width: 65%;
   border-radius: inherit;
@@ -1703,8 +1704,8 @@ html[data-theme="dark"] .ha-shell-header::after {
 }
 
 html[data-theme="dark"] .ha-audience-icon {
-  background: radial-gradient(circle at 30% 10%, rgba(56, 143, 237, 0.765), transparent 55%);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+  background: radial-gradient(circle at 30% 10%, rgba(0, 30, 61, 0.765), transparent 55%);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
 html[data-theme="dark"] .ha-metric-bar {
