@@ -23,10 +23,14 @@ export function FrenchTranslationBanner() {
 
   return (
     <div className="ha-container pt-6">
-      <div className="ha-callout border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-500 dark:bg-transparent dark:text-amber-100 py-2 px-3">
+      <div className="ha-callout border-amber-300 bg-amber-50 px-3 py-2 text-amber-900 dark:border-amber-500 dark:bg-transparent dark:text-amber-100">
         <p className="text-xs leading-snug">
-          <strong>Le français est une traduction alpha automatisée.</strong> Pour le texte officiel, consultez la{" "}
-          <NextLink href={englishHref} className="text-ha-accent font-medium hover:text-blue-700 underline">
+          <strong>Le français est une traduction alpha automatisée.</strong> Pour le texte officiel,
+          consultez la{" "}
+          <NextLink
+            href={englishHref}
+            className="text-ha-accent font-medium underline hover:text-blue-700"
+          >
             version anglaise
           </NextLink>
           .
