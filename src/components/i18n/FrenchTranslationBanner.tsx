@@ -22,16 +22,12 @@ export function FrenchTranslationBanner() {
   const englishHref = queryString ? `${canonicalPath}?${queryString}` : canonicalPath;
 
   return (
-    <div className="ha-container pt-4">
-      <div className="ha-callout border-amber-300 bg-amber-50 text-amber-900">
-        <h2 className="ha-callout-title">Version française (alpha)</h2>
-        <p className="mt-2 text-xs leading-relaxed sm:text-sm">
-          La version française est une traduction automatisée, fournie à titre informatif seulement,
-          et peut contenir des erreurs. La version anglaise fait foi.
-        </p>
-        <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-          <NextLink href={englishHref} className="text-ha-accent font-medium hover:text-blue-700">
-            Passer à la version anglaise de cette page
+    <div className="ha-container pt-6">
+      <div className="ha-callout border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-500 dark:bg-transparent dark:text-amber-100 py-2 px-3">
+        <p className="text-xs leading-snug">
+          <strong>Le français est une traduction alpha automatisée.</strong> Pour le texte officiel, consultez la{" "}
+          <NextLink href={englishHref} className="text-ha-accent font-medium hover:text-blue-700 underline">
+            version anglaise
           </NextLink>
           .
         </p>
