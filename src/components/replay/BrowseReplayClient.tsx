@@ -321,7 +321,7 @@ export function BrowseReplayClient({
 
   const browseLink = browseUrl ? (currentReplayUrl ?? browseUrl) : undefined;
   const rawLink = rawHtmlUrl ?? undefined;
-  const compareLiveHref = compareSnapshotId ? `/compare-live?to=${compareSnapshotId}&run=1` : null;
+  const compareLiveHref = compareSnapshotId ? `/compare-live?to=${compareSnapshotId}` : null;
 
   const otherSnapshotsCount =
     timeline?.snapshots && timelineSnapshotId != null
@@ -480,7 +480,12 @@ export function BrowseReplayClient({
               </a>
             )}
             {compareLiveHref && (
-              <Link href={compareLiveHref} prefetch={false} className="ha-btn-primary text-xs">
+              <Link
+                href={compareLiveHref}
+                prefetch={false}
+                rel="nofollow"
+                className="ha-btn-primary text-xs"
+              >
                 {locale === "fr" ? "Voir diff" : "View diff"}
               </Link>
             )}

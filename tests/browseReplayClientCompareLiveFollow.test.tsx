@@ -69,7 +69,7 @@ describe("BrowseReplayClient compare-live follow", () => {
 
     expect(screen.getByRole("link", { name: /View diff/i })).toHaveAttribute(
       "href",
-      "/compare-live?to=45&run=1",
+      "/compare-live?to=45",
     );
 
     await act(async () => {
@@ -78,7 +78,7 @@ describe("BrowseReplayClient compare-live follow", () => {
 
     expect(screen.getByRole("link", { name: /View diff/i })).toHaveAttribute(
       "href",
-      "/compare-live?to=1000&run=1",
+      "/compare-live?to=1000",
     );
   });
 

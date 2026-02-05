@@ -269,6 +269,9 @@ type FetchInit = RequestInit & {
 };
 
 const DEFAULT_FETCH_TIMEOUT_MS = 8000;
+const SHORT_REVALIDATE_SECONDS = 60;
+const STANDARD_REVALIDATE_SECONDS = 300;
+const LONG_REVALIDATE_SECONDS = 3600;
 
 async function fetchJson<T>(path: string, query?: URLSearchParams, init?: FetchInit): Promise<T> {
   const baseUrl = getApiBaseUrl();
@@ -318,7 +321,10 @@ async function fetchJson<T>(path: string, query?: URLSearchParams, init?: FetchI
 }
 
 export async function fetchSources(): Promise<SourceSummary[]> {
-  return fetchJson<SourceSummary[]>("/api/sources");
+  return fetchJson<SourceSummary[]>("/api/sources", undefined, {
+    cache: "force-cache",
+    next: { revalidate: STANDARD_REVALIDATE_SECONDS },
+  });
 }
 
 export async function fetchSourcesLocalized(args?: {
@@ -329,14 +335,24 @@ export async function fetchSourcesLocalized(args?: {
   if (lang === "en" || lang === "fr") {
     query.set("lang", lang);
   }
-  return fetchJson<SourceSummary[]>("/api/sources", query);
+  return fetchJson<SourceSummary[]>("/api/sources", query, {
+    cache: "force-cache",
+    next: { revalidate: STANDARD_REVALIDATE_SECONDS },
+  });
 }
 
 export async function fetchSourceEditions(sourceCode: string): Promise<SourceEdition[]> {
   const normalized = sourceCode.trim();
   if (!normalized) return [];
 
-  return fetchJson<SourceEdition[]>(`/api/sources/${encodeURIComponent(normalized)}/editions`);
+  return fetchJson<SourceEdition[]>(
+    `/api/sources/${encodeURIComponent(normalized)}/editions`,
+    undefined,
+    {
+      cache: "force-cache",
+      next: { revalidate: STANDARD_REVALIDATE_SECONDS },
+    },
+  );
 }
 
 export type SearchParams = {
@@ -370,22 +386,31 @@ export async function searchSnapshots(params: SearchParams): Promise<SearchRespo
 }
 
 export async function fetchSnapshotDetail(id: number): Promise<SnapshotDetail> {
-  return fetchJson<SnapshotDetail>(`/api/snapshot/${id}`);
+  return fetchJson<SnapshotDetail>(`/api/snapshot/${id}`, undefined, {
+    cache: "force-cache",
+    next: { revalidate: LONG_REVALIDATE_SECONDS },
+  });
 }
 
 export async function fetchHealth(): Promise<HealthResponse> {
-  return fetchJson<HealthResponse>("/api/health");
+  return fetchJson<HealthResponse>("/api/health", undefined, {
+    cache: "force-cache",
+    next: { revalidate: SHORT_REVALIDATE_SECONDS },
+  });
 }
 
 export async function fetchArchiveStats(): Promise<ArchiveStats> {
   return fetchJson<ArchiveStats>("/api/stats", undefined, {
     cache: "force-cache",
-    next: { revalidate: 300 },
+    next: { revalidate: STANDARD_REVALIDATE_SECONDS },
   });
 }
 
 export async function fetchUsageMetrics(): Promise<UsageMetrics> {
-  return fetchJson<UsageMetrics>("/api/usage");
+  return fetchJson<UsageMetrics>("/api/usage", undefined, {
+    cache: "force-cache",
+    next: { revalidate: STANDARD_REVALIDATE_SECONDS },
+  });
 }
 
 export type ChangeQueryParams = {
@@ -410,7 +435,10 @@ export async function fetchChanges(params: ChangeQueryParams): Promise<ChangeFee
   if (params.page && params.page > 1) query.set("page", String(params.page));
   if (params.pageSize) query.set("pageSize", String(params.pageSize));
 
-  return fetchJson<ChangeFeed>("/api/changes", query);
+  return fetchJson<ChangeFeed>("/api/changes", query, {
+    cache: "force-cache",
+    next: { revalidate: STANDARD_REVALIDATE_SECONDS },
+  });
 }
 
 export async function fetchChangeCompare(params: {
@@ -422,7 +450,10 @@ export async function fetchChangeCompare(params: {
   if (params.fromSnapshotId) {
     query.set("fromSnapshotId", String(params.fromSnapshotId));
   }
-  return fetchJson<ChangeCompare>("/api/changes/compare", query);
+  return fetchJson<ChangeCompare>("/api/changes/compare", query, {
+    cache: "force-cache",
+    next: { revalidate: LONG_REVALIDATE_SECONDS },
+  });
 }
 
 export async function fetchSnapshotCompareLive(
@@ -440,7 +471,10 @@ export async function fetchSnapshotCompareLive(
 }
 
 export async function fetchSnapshotTimeline(snapshotId: number): Promise<SnapshotTimeline> {
-  return fetchJson<SnapshotTimeline>(`/api/snapshots/${snapshotId}/timeline`);
+  return fetchJson<SnapshotTimeline>(`/api/snapshots/${snapshotId}/timeline`, undefined, {
+    cache: "force-cache",
+    next: { revalidate: LONG_REVALIDATE_SECONDS },
+  });
 }
 
 export async function resolveReplayUrl(params: {
@@ -467,5 +501,8 @@ export async function fetchSnapshotLatest(
     query.set("requireHtml", "0");
   }
 
-  return fetchJson<SnapshotLatest>(`/api/snapshots/${snapshotId}/latest`, query);
+  return fetchJson<SnapshotLatest>(`/api/snapshots/${snapshotId}/latest`, query, {
+    cache: "force-cache",
+    next: { revalidate: STANDARD_REVALIDATE_SECONDS },
+  });
 }

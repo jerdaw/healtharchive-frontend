@@ -178,7 +178,7 @@ export default async function SnapshotPage({
   const viewHref = browseUrl;
   const diffHref =
     canCompareLive && compareLiveSnapshotId != null
-      ? `/compare-live?to=${compareLiveSnapshotId}&run=1`
+      ? `/compare-live?to=${compareLiveSnapshotId}`
       : null;
   const citeHref =
     usingBackend && snapshotMeta?.id != null
@@ -325,7 +325,12 @@ export default async function SnapshotPage({
             </a>
           ) : null}
           {diffHref ? (
-            <Link href={diffHref} prefetch={false} className="ha-btn-secondary text-xs">
+            <Link
+              href={diffHref}
+              prefetch={false}
+              rel="nofollow"
+              className="ha-btn-secondary text-xs"
+            >
               {locale === "fr" ? "Voir diff" : "View diff"}
             </Link>
           ) : null}

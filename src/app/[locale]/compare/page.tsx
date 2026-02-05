@@ -116,7 +116,7 @@ export default async function ComparePage({
     } catch {
       latestSnapshotId = compare.toSnapshot.snapshotId;
     }
-    compareLiveHref = `/compare-live?to=${latestSnapshotId}&run=1`;
+    compareLiveHref = `/compare-live?to=${latestSnapshotId}`;
   }
 
   return (
@@ -167,7 +167,12 @@ export default async function ComparePage({
 
           <div className="flex flex-wrap gap-2">
             {compareLiveHref && (
-              <Link href={compareLiveHref} prefetch={false} className="ha-btn-secondary text-xs">
+              <Link
+                href={compareLiveHref}
+                prefetch={false}
+                rel="nofollow"
+                className="ha-btn-secondary text-xs"
+              >
                 {locale === "fr" ? "Comparer à la page en direct" : "Compare to the live page"}
               </Link>
             )}

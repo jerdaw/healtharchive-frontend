@@ -2,12 +2,13 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "../globals.css";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { FrenchTranslationBanner } from "@/components/i18n/FrenchTranslationBanner";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { isLocale, localeToLanguageTag } from "@/lib/i18n";
+import { isLocale, localeToLanguageTag, supportedLocales } from "@/lib/i18n";
 import { SITE_BASE_URL } from "@/lib/metadata";
 import { buildMetaDescription } from "@/lib/siteCopy";
 
@@ -42,6 +43,10 @@ export async function generateMetadata({
           }
         : undefined,
   };
+}
+
+export function generateStaticParams(): Array<{ locale: string }> {
+  return supportedLocales.map((locale) => ({ locale }));
 }
 
 import { Libre_Baskerville } from "next/font/google";
@@ -81,14 +86,18 @@ export default async function RootLayout({
           {locale === "fr" ? "Passer au contenu principal" : "Skip to main content"}
         </a>
         <LocaleProvider locale={locale}>
-          <Header />
+          <Suspense fallback={null}>
+            <Header />
+          </Suspense>
           <main
             id="main-content"
             role="main"
             tabIndex={-1}
             className="pt-20 pb-10 sm:pt-24 sm:pb-12"
           >
-            <FrenchTranslationBanner />
+            <Suspense fallback={null}>
+              <FrenchTranslationBanner />
+            </Suspense>
             {children}
           </main>
           <Footer locale={locale} />

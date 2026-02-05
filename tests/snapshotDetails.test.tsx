@@ -121,7 +121,7 @@ describe("/snapshot/[id] (details)", () => {
 
     expect(screen.getByRole("link", { name: "View diff" })).toHaveAttribute(
       "href",
-      "/compare-live?to=46&run=1",
+      "/compare-live?to=46",
     );
 
     expect(screen.getByRole("heading", { name: "Other snapshots" })).toBeInTheDocument();
