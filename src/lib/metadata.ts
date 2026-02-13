@@ -24,16 +24,31 @@ export function buildPageMetadata(
   const englishPath = normalizedPath;
   const frenchPath = normalizedPath === "/" ? "/fr" : `/fr${normalizedPath}`;
   const canonicalPath = locale === "fr" ? frenchPath : englishPath;
+  const fullUrl = `${SITE_BASE_URL}${canonicalPath}`;
+  const metaDescription = description ?? buildMetaDescription(locale);
 
   return {
     title,
-    description: description ?? buildMetaDescription(locale),
+    description: metaDescription,
     alternates: {
       canonical: canonicalPath,
       languages: {
         "en-CA": englishPath,
         "fr-CA": frenchPath,
       },
+    },
+    openGraph: {
+      title,
+      description: metaDescription,
+      url: fullUrl,
+      siteName: "HealthArchive.ca",
+      locale: locale === "fr" ? "fr_CA" : "en_CA",
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description: metaDescription,
     },
   };
 }
