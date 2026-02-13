@@ -8,6 +8,7 @@ import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { FrenchTranslationBanner } from "@/components/i18n/FrenchTranslationBanner";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { isLocale, localeToLanguageTag, supportedLocales } from "@/lib/i18n";
 import { SITE_BASE_URL } from "@/lib/metadata";
 import { buildMetaDescription } from "@/lib/siteCopy";
@@ -29,7 +30,7 @@ export async function generateMetadata({
     metadataBase: new URL(SITE_BASE_URL),
     title:
       normalizedLocale === "fr"
-        ? "HealthArchive.ca – Archive indépendante d’information de santé publique au Canada"
+        ? "HealthArchive.ca – Archive indépendante d'information de santé publique au Canada"
         : "HealthArchive.ca – Independent archive of Canadian public health information",
     description: buildMetaDescription(normalizedLocale),
     icons: {
@@ -42,6 +43,11 @@ export async function generateMetadata({
             follow: true,
           }
         : undefined,
+    alternates: {
+      types: {
+        "application/rss+xml": `${SITE_BASE_URL}/api/changes/rss`,
+      },
+    },
   };
 }
 
@@ -72,6 +78,7 @@ export default async function RootLayout({
   return (
     <html lang={localeToLanguageTag(locale)} suppressHydrationWarning>
       <body className={`antialiased ${libreBaskerville.variable}`}>
+        <JsonLd />
         <Script
           id="ha-theme-initializer"
           strategy="beforeInteractive"
