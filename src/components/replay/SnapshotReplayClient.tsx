@@ -185,7 +185,7 @@ export function SnapshotReplayClient({
           <div className="flex flex-wrap items-center gap-2">
             <label
               htmlFor="ha-snapshot-edition-select"
-              className="text-[11px] font-medium text-slate-800"
+              className="text-[11px] font-medium text-[var(--text)]"
             >
               {locale === "fr" ? "Édition" : "Edition"}
             </label>
@@ -209,7 +209,7 @@ export function SnapshotReplayClient({
               href={browseLink}
               target="_blank"
               rel="noreferrer"
-              className="text-ha-accent text-[11px] font-medium hover:text-blue-700"
+              className="text-ha-accent hover:text-ha-accent text-[11px] font-medium"
             >
               {locale === "fr" ? "Ouvrir la page actuelle ↗" : "Open current page ↗"}
             </a>
@@ -221,8 +221,8 @@ export function SnapshotReplayClient({
         <div
           className={
             editionNotice
-              ? "border-ha-border border-b bg-amber-50 px-4 py-2 text-[11px] font-medium text-amber-900 sm:px-5"
-              : "border-ha-border text-ha-muted border-b bg-white px-4 py-2 text-[11px] font-medium sm:px-5 dark:bg-[#0b0c0d]"
+              ? "border-ha-border bg-ha-warning text-ha-warning border-b px-4 py-2 text-[11px] font-medium sm:px-5"
+              : "border-ha-border text-ha-muted border-b bg-[var(--card-bg)] px-4 py-2 text-[11px] font-medium sm:px-5"
           }
         >
           {isResolvingEdition

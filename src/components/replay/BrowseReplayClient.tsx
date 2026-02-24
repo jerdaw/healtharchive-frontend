@@ -373,12 +373,14 @@ export function BrowseReplayClient({
     <div className="ha-container">
       <section className="space-y-4 pt-6 pb-10">
         <header className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
-          <dl className="space-y-1 text-xs text-slate-800 sm:text-sm">
+          <dl className="space-y-1 text-xs text-[var(--text)] sm:text-sm">
             <div className="flex gap-2">
               <dt className="text-ha-muted w-28">
                 {locale === "fr" ? "Titre de la page" : "Page title"}
               </dt>
-              <dd className="min-w-0 flex-1 font-semibold break-words text-slate-900">{title}</dd>
+              <dd className="min-w-0 flex-1 font-semibold break-words text-[var(--text)]">
+                {title}
+              </dd>
             </div>
             <div className="flex gap-2">
               <dt className="text-ha-muted w-28">{locale === "fr" ? "Source" : "Source"}</dt>
@@ -413,7 +415,7 @@ export function BrowseReplayClient({
                     href={entryOriginalUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-ha-accent font-medium hover:text-blue-700"
+                    className="text-ha-accent hover:text-ha-accent font-medium"
                   >
                     {entryOriginalUrl}
                   </a>
@@ -424,7 +426,7 @@ export function BrowseReplayClient({
             </div>
           </dl>
 
-          <p className="mt-2 text-[11px] font-medium text-amber-800">
+          <p className="text-ha-warning mt-2 text-[11px] font-medium">
             {locale === "fr"
               ? "Archive indépendante · Pas un site gouvernemental officiel."
               : "Independent archive · Not an official government website."}{" "}
@@ -461,7 +463,7 @@ export function BrowseReplayClient({
           {editionNotice && <p className="text-ha-muted text-xs">{editionNotice}</p>}
 
           {!browseUrl && (
-            <p className="mt-2 text-[11px] font-medium text-amber-800">
+            <p className="text-ha-warning mt-2 text-[11px] font-medium">
               {locale === "fr"
                 ? "La navigation en mode relecture n’est pas disponible pour cet enregistrement; affichage du HTML brut à la place."
                 : "Replay browsing is not available for this record; showing raw HTML instead."}
@@ -561,7 +563,7 @@ export function BrowseReplayClient({
                     );
                   }
                   return (
-                    <ul className="space-y-2 text-xs text-slate-800 sm:text-sm">
+                    <ul className="space-y-2 text-xs text-[var(--text)] sm:text-sm">
                       {otherItems.map((item) => {
                         const compareHref =
                           item.compareFromSnapshotId != null
@@ -573,7 +575,7 @@ export function BrowseReplayClient({
                             className="border-ha-border flex flex-wrap items-center justify-between gap-2 border-b pb-2 last:border-b-0 last:pb-0"
                           >
                             <div>
-                              <p className="font-medium text-slate-900">
+                              <p className="font-medium text-[var(--text)]">
                                 {dateIsoToLabel(item.captureDate, locale)}
                               </p>
                               <p className="text-ha-muted text-xs">

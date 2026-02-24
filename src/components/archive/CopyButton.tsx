@@ -131,7 +131,7 @@ export function CopyButton({
       {state !== "idle" && (
         <span
           className={`pointer-events-none absolute top-0 left-1/2 z-10 -translate-x-1/2 -translate-y-[calc(100%+0.4rem)] rounded-md px-2 py-1 text-[11px] whitespace-nowrap shadow ${
-            state === "copied" ? "bg-slate-900 text-white" : "bg-rose-700 text-white"
+            state === "copied" ? "ha-toast-success" : "ha-toast-error"
           }`}
         >
           {state === "copied"
