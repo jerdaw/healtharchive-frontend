@@ -59,7 +59,7 @@ export default async function ReportPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-4">
+      <section className="ha-content-section-lead space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Étapes suivantes" : "What happens next"}
         </h2>
@@ -72,10 +72,7 @@ export default async function ReportPage({
           {locale === "fr"
             ? "Vous pouvez aussi nous joindre directement à "
             : "You can also reach us directly at "}{" "}
-          <a
-            href="mailto:contact@healtharchive.ca"
-            className="text-ha-accent font-medium hover:text-blue-700"
-          >
+          <a href="mailto:contact@healtharchive.ca" className="ha-link">
             contact@healtharchive.ca
           </a>
           .
@@ -88,7 +85,7 @@ export default async function ReportPage({
         initialPageUrl={initialPageUrl}
       />
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <div className="ha-callout">
           <h3 className="ha-callout-title">
             {locale === "fr" ? "Vous cherchez les politiques ?" : "Looking for policies?"}
@@ -99,7 +96,7 @@ export default async function ReportPage({
               : "See the governance page for scope, corrections, and takedown policies."}
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link href="/governance" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/governance" className="ha-link">
               {locale === "fr"
                 ? "Lire la gouvernance et les politiques"
                 : "Read governance & policies"}

@@ -44,7 +44,7 @@ export default async function ContactPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-6">
+      <section className="ha-content-section-lead space-y-6">
         <div className="ha-grid-2 gap-4 sm:gap-5">
           <div className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
             <div className="flex items-center gap-3">
@@ -64,16 +64,13 @@ export default async function ContactPage({
                 : "The simplest way to express interest or ask questions is by email. The address below currently forwards to the project maintainers. For structured issue reports, use the report form."}
             </p>
             <p className="text-sm sm:text-base">
-              <Link href="/report" className="text-ha-accent font-medium hover:text-blue-700">
+              <Link href="/report" className="ha-link">
                 {locale === "fr" ? "Signaler un problème" : "Report an issue"}
               </Link>
             </p>
             <div className="mt-4 space-y-1 text-sm sm:text-base">
               <p>
-                <a
-                  href="mailto:contact@healtharchive.ca"
-                  className="text-ha-accent font-medium hover:text-blue-700"
-                >
+                <a href="mailto:contact@healtharchive.ca" className="ha-link">
                   contact@healtharchive.ca
                 </a>
               </p>
@@ -99,10 +96,7 @@ export default async function ContactPage({
                 : "The frontend you are viewing is open source. If you're comfortable with GitHub, you can watch the repository to follow changes."}
             </p>
             <p className="text-sm sm:text-base">
-              <Link
-                href="https://github.com/jerdaw/healtharchive-frontend"
-                className="text-ha-accent font-medium hover:text-blue-700"
-              >
+              <Link href="https://github.com/jerdaw/healtharchive-frontend" className="ha-link">
                 github.com/jerdaw/healtharchive-frontend
               </Link>
             </p>

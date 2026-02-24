@@ -52,7 +52,7 @@ export default async function ExportsPage({
     <>
       <DatasetJsonLd />
       <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-        <section className="ha-home-hero space-y-5">
+        <section className="ha-content-section-lead space-y-5">
           <h2 className="ha-section-heading">
             {locale === "fr" ? "Aperçu des exports" : "Exports overview"}
           </h2>
@@ -65,7 +65,7 @@ export default async function ExportsPage({
             <p className="text-ha-muted">
               {locale === "fr" ? "Manifeste des exports" : "Export manifest"}
             </p>
-            <a className="text-ha-accent font-medium hover:text-blue-700" href={manifestUrl}>
+            <a className="ha-link" href={manifestUrl}>
               {manifestUrl}
             </a>
           </div>
@@ -79,10 +79,7 @@ export default async function ExportsPage({
                 : "Quarterly metadata-only dataset releases are published on GitHub with checksums."}
             </p>
             <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-              <Link
-                className="text-ha-accent font-medium hover:text-blue-700"
-                href={datasetReleasesUrl}
-              >
+              <Link className="ha-link" href={datasetReleasesUrl}>
                 {locale === "fr"
                   ? "Publications de jeux de données HealthArchive"
                   : "HealthArchive dataset releases"}
@@ -96,17 +93,11 @@ export default async function ExportsPage({
             <p className="mt-2 text-xs leading-relaxed sm:text-sm">
               {locale === "fr" ? (
                 <>
-                  <a
-                    className="text-ha-accent font-medium hover:text-blue-700"
-                    href="/exports/healtharchive-data-dictionary.fr.md"
-                  >
+                  <a className="ha-link" href="/exports/healtharchive-data-dictionary.fr.md">
                     Télécharger le dictionnaire de données (Markdown, alpha)
                   </a>{" "}
                   ·{" "}
-                  <a
-                    className="text-ha-accent font-medium hover:text-blue-700"
-                    href="/exports/healtharchive-data-dictionary.md"
-                  >
+                  <a className="ha-link" href="/exports/healtharchive-data-dictionary.md">
                     Version anglaise (officielle)
                   </a>{" "}
                   · ou utilisez la boîte de dialogue d’impression de votre navigateur pour
@@ -114,10 +105,7 @@ export default async function ExportsPage({
                 </>
               ) : (
                 <>
-                  <a
-                    className="text-ha-accent font-medium hover:text-blue-700"
-                    href="/exports/healtharchive-data-dictionary.md"
-                  >
+                  <a className="ha-link" href="/exports/healtharchive-data-dictionary.md">
                     Download the data dictionary (Markdown)
                   </a>{" "}
                   or use your browser’s print dialog to save as PDF.
@@ -127,7 +115,7 @@ export default async function ExportsPage({
           </div>
         </section>
 
-        <section className="ha-home-hero ha-home-hero-plain space-y-5">
+        <section className="ha-content-section space-y-5">
           <h2 className="ha-section-heading">
             {locale === "fr" ? "Export des captures (champs)" : "Snapshots export (fields)"}
           </h2>
@@ -172,7 +160,7 @@ export default async function ExportsPage({
           </ul>
         </section>
 
-        <section className="ha-home-hero ha-home-hero-plain space-y-5">
+        <section className="ha-content-section space-y-5">
           <h2 className="ha-section-heading">
             {locale === "fr" ? "Export des changements (champs)" : "Changes export (fields)"}
           </h2>
@@ -217,7 +205,7 @@ export default async function ExportsPage({
           </ul>
         </section>
 
-        <section className="ha-home-hero ha-home-hero-plain space-y-5">
+        <section className="ha-content-section space-y-5">
           <h2 className="ha-section-heading">{locale === "fr" ? "Limites" : "Limitations"}</h2>
           <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
             <li>
@@ -240,7 +228,7 @@ export default async function ExportsPage({
             {locale === "fr"
               ? "Pour des exports en lot ou sur mesure, voir la "
               : "For bulk or custom exports, see the "}{" "}
-            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/researchers">
+            <Link className="ha-link" href="/researchers">
               {locale === "fr" ? "page Recherche" : "researchers page"}
             </Link>{" "}
             {locale === "fr" ? "pour le processus de demande." : "for the request workflow."}

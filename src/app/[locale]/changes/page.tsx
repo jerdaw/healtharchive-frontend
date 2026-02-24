@@ -4,7 +4,8 @@ import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { fetchChanges, fetchSourceEditions, fetchSources, fetchSourcesLocalized } from "@/lib/api";
-import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { formatDate } from "@/lib/format";
+import type { Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
@@ -35,19 +36,6 @@ export async function generateMetadata({
   const locale = await resolveLocale(params);
   const copy = getChangesCopy(locale);
   return buildPageMetadata(locale, "/changes", copy.title, copy.intro);
-}
-
-function formatDate(locale: Locale, value: string | null | undefined): string {
-  if (!value) return locale === "fr" ? "Inconnu" : "Unknown";
-  const parsed = new Date(value);
-  if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toLocaleDateString(localeToLanguageTag(locale), {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  }
-  return value;
 }
 
 export default async function ChangesPage({
@@ -109,7 +97,7 @@ export default async function ChangesPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-4">
+      <section className="ha-content-section-lead space-y-4">
         <div className="ha-callout">
           <h2 className="ha-callout-title">
             {locale === "fr" ? "Changements descriptifs seulement" : "Descriptive changes only"}
@@ -122,7 +110,7 @@ export default async function ChangesPage({
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
             {locale === "fr" ? "Pour des conseils de citation, voir" : "For citation guidance, see"}{" "}
-            <Link href="/cite" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/cite" className="ha-link">
               /cite
             </Link>
             .
@@ -130,7 +118,7 @@ export default async function ChangesPage({
         </div>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">{locale === "fr" ? "Portée" : "Scope"}</h2>
         <form className="ha-card space-y-4">
           <div className="grid gap-3 md:grid-cols-2">
@@ -181,7 +169,7 @@ export default async function ChangesPage({
         </form>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Fil des changements" : "Changes feed"}
         </h2>

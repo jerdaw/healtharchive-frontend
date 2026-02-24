@@ -30,40 +30,40 @@ export function Footer({ locale }: { locale: Locale }) {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3 text-[11px]">
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/governance">
+          <Link className="ha-link" href="/governance">
             {locale === "fr" ? "Gouvernance" : "Governance"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/status">
+          <Link className="ha-link" href="/status">
             {locale === "fr" ? "Statut" : "Status"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/impact">
+          <Link className="ha-link" href="/impact">
             {locale === "fr" ? "Impact" : "Impact"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/brief">
+          <Link className="ha-link" href="/brief">
             {locale === "fr" ? "Fiche" : "Brief"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/cite">
+          <Link className="ha-link" href="/cite">
             {locale === "fr" ? "Citer" : "Cite"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/exports">
+          <Link className="ha-link" href="/exports">
             {locale === "fr" ? "Exports" : "Exports"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/changes">
+          <Link className="ha-link" href="/changes">
             {locale === "fr" ? "Changements" : "Changes"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/digest">
+          <Link className="ha-link" href="/digest">
             {locale === "fr" ? "Bulletin" : "Digest"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/terms">
+          <Link className="ha-link" href="/terms">
             {locale === "fr" ? "Conditions" : "Terms"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/privacy">
+          <Link className="ha-link" href="/privacy">
             {locale === "fr" ? "Confidentialité" : "Privacy"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/changelog">
+          <Link className="ha-link" href="/changelog">
             {locale === "fr" ? "Journal des changements" : "Changelog"}
           </Link>
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/report">
+          <Link className="ha-link" href="/report">
             {locale === "fr" ? "Signaler un problème" : "Report an issue"}
           </Link>
         </div>

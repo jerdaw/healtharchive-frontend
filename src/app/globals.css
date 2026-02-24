@@ -683,6 +683,155 @@ html[data-theme="dark"] {
   margin-top: 1.25rem;
 }
 
+/* Page title (uses theme-aware color instead of hardcoded slate) */
+
+.ha-page-title {
+  color: var(--text);
+}
+
+/* Inner-page section wrappers (lighter alternatives to ha-home-hero) */
+
+.ha-content-section {
+  margin-top: 0;
+  padding: 2rem 1.5rem 2.4rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(160% 160% at 50% -10%, rgba(37, 99, 235, 0.04), transparent 55%),
+    var(--surface-bg);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.ha-content-section > * {
+  min-width: 0;
+}
+
+.ha-content-section h2 {
+  margin: 0;
+}
+
+.ha-content-section p {
+  margin: 0;
+}
+
+.ha-content-section p + p {
+  margin-top: 1.25rem;
+}
+
+.ha-content-section-lead {
+  margin-top: 0;
+  padding: 2rem 1.5rem 2.4rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(160% 160% at 0% 0%, rgba(37, 99, 235, 0.06), transparent 55%),
+    radial-gradient(160% 160% at 100% 0%, rgba(37, 99, 235, 0.03), transparent 55%),
+    var(--surface-bg);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.ha-content-section-lead > * {
+  min-width: 0;
+}
+
+.ha-content-section-lead h2 {
+  margin: 0;
+}
+
+.ha-content-section-lead p {
+  margin: 0;
+}
+
+.ha-content-section-lead p + p {
+  margin-top: 1.25rem;
+}
+
+/* Long-form prose wrapper for content-heavy pages */
+
+.ha-prose {
+  line-height: 1.75;
+}
+
+.ha-prose p {
+  margin: 0;
+}
+
+.ha-prose p + p {
+  margin-top: 1rem;
+}
+
+.ha-prose h2 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.ha-prose h3 {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+.ha-prose ul,
+.ha-prose ol {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.ha-prose li {
+  margin: 0.35rem 0;
+}
+
+.ha-prose ul {
+  list-style-type: disc;
+}
+
+.ha-prose ol {
+  list-style-type: decimal;
+}
+
+/* Key-value metadata grid (snapshot details, status metrics, compare panels) */
+
+.ha-meta-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.ha-meta-grid dt {
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.ha-meta-grid dd {
+  margin: 0;
+  color: var(--text);
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+html[data-theme="dark"] .ha-content-section {
+  border-color: rgba(54, 59, 61, 0.9);
+  background: var(--card-bg);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
+}
+
+html[data-theme="dark"] .ha-content-section-lead {
+  border-color: rgba(54, 59, 61, 0.9);
+  background:
+    radial-gradient(160% 160% at 0% 0%, #004b9b5c, transparent 55%),
+    radial-gradient(160% 160% at 100% 0%, #00367129, transparent 55%), var(--card-bg);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
+}
+
 /* Homepage bands & homepage-specific styling */
 
 .ha-page-intro-card {
@@ -747,7 +896,9 @@ html[data-theme="dark"] .ha-page-intro-card {
 }
 
 .ha-home-hero-plain {
-  background: var(--surface-bg);
+  background:
+    radial-gradient(160% 160% at 50% -10%, rgba(37, 99, 235, 0.04), transparent 55%),
+    var(--surface-bg);
 }
 
 .ha-home-hero-eyebrow {
@@ -948,6 +1099,19 @@ html[data-theme="dark"] div.ha-callout {
       margin-top: 0;
     }
   }
+}
+
+/* ====================================
+   Inline links (theme-aware hover)
+   ==================================== */
+
+.ha-link {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.ha-link:hover {
+  color: var(--accent-hover);
 }
 
 /* ====================================
@@ -1239,6 +1403,14 @@ html[data-theme="dark"] div.ha-callout {
     transform 150ms ease-out;
 }
 
+.ha-card:hover {
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+html[data-theme="dark"] .ha-card:hover {
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5);
+}
+
 .ha-card-elevated {
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
 }
@@ -1290,6 +1462,20 @@ html[data-theme="dark"] div.ha-callout {
 .ha-badge-amber {
   background-color: #fef3c7;
   color: #92400e;
+}
+
+/* "In development" status badge */
+.ha-badge-dev {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background-color: #fffbeb; /* amber-50 */
+  color: #92400e; /* amber-800 */
 }
 
 /* ====================================
@@ -1575,9 +1761,24 @@ html[data-theme="dark"] div.ha-callout {
   .ha-home-hero,
   .ha-home-panel,
   .ha-home-band-shell,
-  .ha-page-intro-card {
+  .ha-page-intro-card,
+  .ha-content-section,
+  .ha-content-section-lead {
     padding: 1.35rem 1rem 1.55rem;
     border-radius: 0.92rem;
+  }
+
+  .ha-meta-grid {
+    grid-template-columns: 1fr;
+    gap: 0.25rem 0;
+  }
+
+  .ha-meta-grid dt {
+    margin-top: 0.5rem;
+  }
+
+  .ha-meta-grid dt:first-child {
+    margin-top: 0;
   }
 
   .ha-home-band-muted {
@@ -1702,11 +1903,67 @@ html[data-theme="dark"] .ha-badge-amber {
   color: #fed7aa;
 }
 
+html[data-theme="dark"] .ha-badge-dev {
+  background-color: rgba(146, 64, 14, 0.25);
+  color: #fcd34d; /* amber-300 */
+}
+
+/* Warning callout (backend error, offline notice) */
+.ha-callout-warning {
+  border-radius: 0.5rem;
+  border: 1px solid #fde68a; /* amber-200 */
+  background-color: #fffbeb; /* amber-50  */
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  color: #92400e; /* amber-800 */
+}
+
+html[data-theme="dark"] .ha-callout-warning {
+  border-color: rgba(146, 64, 14, 0.4);
+  background-color: rgba(146, 64, 14, 0.15);
+  color: #fcd34d; /* amber-300 */
+}
+
+/* Warning color utilities — for inline/bar use; use .ha-callout-warning for box style */
+.text-ha-warning {
+  color: #92400e; /* amber-800 */
+}
+html[data-theme="dark"] .text-ha-warning {
+  color: #fcd34d; /* amber-300 */
+}
+.bg-ha-warning {
+  background-color: #fffbeb; /* amber-50 */
+}
+html[data-theme="dark"] .bg-ha-warning {
+  background-color: rgba(146, 64, 14, 0.15);
+}
+
+/* Current snapshot highlight in timeline lists */
+.ha-snapshot-current {
+  background-color: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* Copy-button toast */
+.ha-toast-success {
+  background-color: var(--text);
+  color: var(--surface-bg);
+}
+
+.ha-toast-error {
+  background-color: #be123c; /* rose-700 */
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .ha-toast-error {
+  background-color: #9f1239; /* rose-800 */
+}
+
 html[data-theme="dark"] .text-ha-accent {
   color: var(--accent) !important;
 }
 
-html[data-theme="dark"] .hover\:text-blue-700:hover {
+html[data-theme="dark"] .hover\:text-blue-700:hover,
+html[data-theme="dark"] .hover\:text-ha-accent:hover {
   color: var(--accent-hover) !important;
 }
 
@@ -1799,4 +2056,351 @@ html[data-theme="dark"] .ha-metric-bar {
 
 html[data-theme="dark"] .ha-metric-bar-fill {
   background: linear-gradient(to right, rgba(56, 143, 237, 0.855), rgba(56, 143, 237, 0.54));
+}
+
+/* ====================================
+   Homepage improvement components
+   ==================================== */
+
+/* --- How It Works step cards --- */
+
+.ha-step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+  position: relative;
+}
+
+.ha-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 70%, var(--brand))
+  );
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  flex-shrink: 0;
+}
+
+/* --- Homepage inline search --- */
+
+.ha-home-search {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 32rem;
+}
+
+.ha-home-search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  transition:
+    border-color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.ha-home-search-input::placeholder {
+  color: var(--muted);
+}
+
+.ha-home-search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* --- Change showcase diff preview --- */
+
+.ha-change-preview {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+  overflow: hidden;
+}
+
+.ha-change-label {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  background-color: color-mix(in srgb, var(--surface-bg) 50%, var(--card-bg));
+}
+
+.ha-change-lines {
+  padding: 0.6rem 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+/* --- FAQ accordion --- */
+
+.ha-faq-item {
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+  overflow: hidden;
+  transition: box-shadow 150ms ease-out;
+}
+
+.ha-faq-item[open] {
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.ha-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.ha-faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.ha-faq-question::after {
+  content: "+";
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--muted);
+  transition: transform 200ms ease-out;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.ha-faq-item[open] .ha-faq-question::after {
+  content: "\2212";
+}
+
+.ha-faq-question:hover {
+  color: var(--accent);
+}
+
+.ha-faq-question:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+  border-radius: 0.75rem;
+}
+
+.ha-faq-answer {
+  padding: 0 1.1rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* --- Scroll reveal --- */
+
+.ha-scroll-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 400ms ease-out,
+    transform 400ms ease-out;
+}
+
+.ha-scroll-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ha-scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- Audience card hover states --- */
+
+.ha-audience-card {
+  transition:
+    box-shadow 150ms ease-out,
+    transform 150ms ease-out,
+    border-color 150ms ease-out;
+}
+
+.ha-audience-card:hover {
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ha-audience-card:hover {
+    transform: none;
+  }
+}
+
+/* --- Bottom CTA band --- */
+
+.ha-home-cta-band {
+  padding: 2.5rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(160% 160% at 50% 0%, rgba(37, 99, 235, 0.08), transparent 55%),
+    var(--surface-bg);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+  text-align: center;
+}
+
+/* --- Example story callout --- */
+
+.ha-example-story {
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.04), rgba(37, 99, 235, 0.01));
+  padding: 1.25rem 1.5rem;
+}
+
+/* Recent activity status dots (theme-safe replacements for hardcoded Tailwind colors) */
+
+.ha-activity-dot {
+  display: inline-block;
+  width: 0.625rem;
+  height: 0.625rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+}
+
+.ha-activity-dot-capture {
+  background-color: var(--accent);
+}
+
+.ha-activity-dot-change {
+  background-color: #d97706;
+}
+
+html[data-theme="dark"] .ha-activity-dot-change {
+  background-color: #fbbf24;
+}
+
+/* --- Dark mode overrides for homepage improvement components --- */
+
+html[data-theme="dark"] .ha-step-number {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .ha-home-search-input {
+  background-color: var(--card-bg);
+  border-color: var(--border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .ha-home-search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(56, 143, 237, 0.2);
+}
+
+html[data-theme="dark"] .ha-change-preview {
+  border-color: rgba(54, 59, 61, 0.9);
+  background-color: var(--card-bg);
+}
+
+html[data-theme="dark"] .ha-change-label {
+  border-color: rgba(54, 59, 61, 0.9);
+  background-color: color-mix(in srgb, var(--surface-bg) 50%, var(--card-bg));
+}
+
+html[data-theme="dark"] .ha-faq-item {
+  border-color: rgba(54, 59, 61, 0.9);
+  background-color: var(--card-bg);
+}
+
+html[data-theme="dark"] .ha-faq-item[open] {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .ha-audience-card:hover {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+
+html[data-theme="dark"] .ha-home-cta-band {
+  border-color: rgba(54, 59, 61, 0.9);
+  background:
+    radial-gradient(160% 160% at 50% 0%, rgba(56, 143, 237, 0.12), transparent 55%), var(--card-bg);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7);
+}
+
+html[data-theme="dark"] .ha-example-story {
+  border-color: color-mix(in srgb, var(--accent) 30%, rgba(54, 59, 61, 0.9));
+  background: linear-gradient(135deg, rgba(56, 143, 237, 0.08), rgba(56, 143, 237, 0.02));
+}
+
+html[data-theme="dark"] .ha-diff-line-removed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+}
+
+html[data-theme="dark"] .ha-diff-line-added {
+  background: rgba(34, 197, 94, 0.15);
+  color: #86efac;
+}
+
+html[data-theme="dark"] .ha-diff-line-unchanged {
+  color: var(--muted);
+}
+
+/* --- Mobile responsive for homepage improvement components --- */
+
+@media (max-width: 640px) {
+  .ha-home-search {
+    flex-direction: column;
+  }
+
+  .ha-home-search-input {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .ha-home-cta-band {
+    padding: 2rem 1.25rem;
+  }
+
+  .ha-faq-question {
+    font-size: 0.88rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .ha-faq-answer {
+    padding: 0 0.9rem 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  .ha-change-lines {
+    font-size: 0.72rem;
+  }
 }

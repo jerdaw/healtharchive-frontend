@@ -12,6 +12,7 @@ type AnimatedMetricProps = {
   value: number;
   unit?: string;
   barPercent?: number;
+  showBar?: boolean;
   durationMs?: number;
   start?: boolean;
   startEvent?: string;
@@ -26,6 +27,7 @@ export function AnimatedMetric({
   value,
   unit,
   barPercent = 100,
+  showBar = true,
   durationMs = 900,
   start = true,
   startEvent,
@@ -115,9 +117,11 @@ export function AnimatedMetric({
         </span>
         {unit ? <span className="ha-metric-primary-unit">{unit}</span> : null}
       </dd>
-      <dd className="ha-metric-bar" aria-hidden="true">
-        <span className="ha-metric-bar-fill" style={{ width: `${fillPercent}%` }} />
-      </dd>
+      {showBar && (
+        <dd className="ha-metric-bar" aria-hidden="true">
+          <span className="ha-metric-bar-fill" style={{ width: `${fillPercent}%` }} />
+        </dd>
+      )}
     </div>
   );
 }

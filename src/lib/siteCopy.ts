@@ -1,5 +1,8 @@
 import type { Locale } from "@/lib/i18n";
 
+/** Base shape for per-page bilingual copy (eyebrow, title, intro). */
+export type PageCopyBase = { eyebrow: string; title: string; intro: string };
+
 export type SiteCopy = {
   mission: {
     line1: string;

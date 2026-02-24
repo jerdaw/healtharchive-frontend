@@ -48,7 +48,7 @@ export default async function ResearchersPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-5">
+      <section className="ha-content-section-lead space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr"
             ? "Exemples de cas d’usage en recherche"
@@ -116,7 +116,7 @@ export default async function ResearchersPage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Travailler avec l’archive" : "Working with the archive"}
         </h2>
@@ -159,7 +159,7 @@ export default async function ResearchersPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr"
             ? "Accès pour la recherche et exportations"
@@ -174,7 +174,7 @@ export default async function ResearchersPage({
           <p className="text-ha-muted">
             {locale === "fr" ? "Manifeste d’exportation" : "Export manifest"}
           </p>
-          <a className="text-ha-accent font-medium hover:text-blue-700" href={exportsManifestUrl}>
+          <a className="ha-link" href={exportsManifestUrl}>
             {exportsManifestUrl}
           </a>
         </div>
@@ -188,10 +188,7 @@ export default async function ResearchersPage({
               : "Quarterly metadata-only dataset releases are published on GitHub with checksums."}
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link
-              className="text-ha-accent font-medium hover:text-blue-700"
-              href={datasetReleasesUrl}
-            >
+            <Link className="ha-link" href={datasetReleasesUrl}>
               {locale === "fr"
                 ? "Publications de jeux de données HealthArchive"
                 : "HealthArchive dataset releases"}
@@ -202,7 +199,7 @@ export default async function ResearchersPage({
           {locale === "fr"
             ? "Pour les définitions de champs et les limites, voir "
             : "For field definitions and limitations, see "}
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/exports">
+          <Link className="ha-link" href="/exports">
             /exports
           </Link>
           .
@@ -242,7 +239,7 @@ export default async function ResearchersPage({
             <>
               Pour des exportations en lot ou des demandes personnalisées, contactez les
               responsables du projet via la page{" "}
-              <Link className="text-ha-accent font-medium hover:text-blue-700" href="/contact">
+              <Link className="ha-link" href="/contact">
                 Contact
               </Link>
               . Nous visons une réponse sous 7 jours, mais cela peut prendre plus de temps selon la
@@ -251,7 +248,7 @@ export default async function ResearchersPage({
           ) : (
             <>
               For bulk exports or custom requests, contact the project maintainers via the{" "}
-              <Link className="text-ha-accent font-medium hover:text-blue-700" href="/contact">
+              <Link className="ha-link" href="/contact">
                 contact page
               </Link>
               . We aim to respond within 7 days, but it may take longer depending on workload
@@ -261,7 +258,7 @@ export default async function ResearchersPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Citer HealthArchive.ca" : "Citing HealthArchive.ca"}
         </h2>
@@ -272,7 +269,7 @@ export default async function ResearchersPage({
         </p>
         <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
           {locale === "fr" ? "Voir " : "See "}
-          <Link className="text-ha-accent font-medium hover:text-blue-700" href="/cite">
+          <Link className="ha-link" href="/cite">
             /cite
           </Link>{" "}
           {locale === "fr"

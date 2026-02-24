@@ -86,7 +86,7 @@ export function SearchWithinResults({
               disabled={!open}
               defaultValue={within}
               placeholder={placeholder}
-              className="border-ha-border w-full min-w-0 rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm ring-0 outline-none placeholder:text-slate-400 focus:z-10 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+              className="border-ha-border w-full min-w-0 rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-sm text-[var(--text)] shadow-sm ring-0 outline-none placeholder:text-[var(--muted)] focus:z-10 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]"
             />
           </div>
         ) : null}
@@ -114,7 +114,7 @@ export function SearchWithinResults({
           aria-hidden={open}
           tabIndex={open ? -1 : 0}
           disabled={open}
-          className={`text-ha-accent col-start-1 row-start-1 text-left text-xs font-medium underline-offset-2 transition-all duration-300 hover:text-blue-700 hover:underline ${
+          className={`text-ha-accent hover:text-ha-accent col-start-1 row-start-1 text-left text-xs font-medium underline-offset-2 transition-all duration-300 hover:underline ${
             open ? "pointer-events-none translate-x-2 opacity-0" : "translate-x-0 opacity-100"
           }`}
         >

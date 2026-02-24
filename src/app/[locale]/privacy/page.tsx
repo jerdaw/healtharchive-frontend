@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
-import NextLink from "next/link";
-
 import { PageShell } from "@/components/layout/PageShell";
 import { EnglishControlsNotice } from "@/components/policy/EnglishControlsNotice";
 import type { Locale } from "@/lib/i18n";
@@ -40,7 +38,7 @@ export async function generateMetadata({
 function PrivacyEnglishContent() {
   return (
     <>
-      <section className="ha-home-hero space-y-4">
+      <section className="ha-content-section-lead space-y-4">
         <h2 className="ha-section-heading">What we collect</h2>
         <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>
@@ -62,7 +60,7 @@ function PrivacyEnglishContent() {
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">What we do not collect</h2>
         <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>No user accounts or login profiles.</li>
@@ -71,29 +69,29 @@ function PrivacyEnglishContent() {
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">Issue report submissions</h2>
         <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
           Reports are used only to evaluate metadata errors, broken snapshots, missing coverage, or
           takedown requests. Please do not include personal health information in your submission.
         </p>
         <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
-          <NextLink href="/report" className="text-ha-accent font-medium hover:text-blue-700">
+          <Link href="/report" className="ha-link">
             Report an issue
-          </NextLink>
+          </Link>
           .
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">Contact</h2>
         <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
           If you have privacy questions, contact the project team.
         </p>
         <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
-          <NextLink href="/contact" className="text-ha-accent font-medium hover:text-blue-700">
+          <Link href="/contact" className="ha-link">
             Contact HealthArchive
-          </NextLink>
+          </Link>
           .
         </p>
       </section>
@@ -114,7 +112,7 @@ export default async function PrivacyPage({
       <EnglishControlsNotice locale={locale} />
 
       {locale === "fr" && (
-        <section className="ha-home-hero space-y-4">
+        <section className="ha-content-section-lead space-y-4">
           <h2 className="ha-section-heading">Résumé (français, non officiel)</h2>
           <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
             Ce résumé est fourni à titre informatif. Pour la version officielle, consultez la
@@ -138,7 +136,7 @@ export default async function PrivacyPage({
           </ul>
           <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
             Pour plus d’informations, vous pouvez{" "}
-            <Link href="/contact" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/contact" className="ha-link">
               contacter le projet
             </Link>
             .
@@ -147,7 +145,7 @@ export default async function PrivacyPage({
       )}
 
       {locale === "fr" && (
-        <section className="ha-home-hero ha-home-hero-plain space-y-4" id="official-english">
+        <section className="ha-content-section space-y-4" id="official-english">
           <h2 className="ha-section-heading">Texte officiel (anglais)</h2>
           <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
             Le texte ci-dessous est fourni en anglais, car l’anglais fait foi.

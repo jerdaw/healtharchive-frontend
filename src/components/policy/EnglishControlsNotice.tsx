@@ -18,7 +18,7 @@ export function EnglishControlsNotice({ locale }: { locale: Locale }) {
         {locale === "fr"
           ? "Vous remarquez un problème de traduction?"
           : "Notice a translation issue?"}{" "}
-        <Link href="/contact" className="text-ha-accent font-medium hover:text-blue-700">
+        <Link href="/contact" className="ha-link">
           {locale === "fr" ? "Contacter le projet" : "Contact the project"}
         </Link>
         .

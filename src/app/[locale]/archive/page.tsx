@@ -11,6 +11,7 @@ import {
   type SearchParams as ApiSearchParams,
 } from "@/lib/api";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { formatDate } from "@/lib/format";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
@@ -93,37 +94,6 @@ function parseBoolean(value: string | undefined): boolean {
   if (!value) return false;
   const normalized = value.trim().toLowerCase();
   return normalized === "1" || normalized === "true" || normalized === "on";
-}
-
-function formatDate(locale: Locale, iso: string | undefined | null): string {
-  if (!iso) return locale === "fr" ? "Inconnu" : "Unknown";
-  const parts = iso.split("-");
-  if (parts.length === 3) {
-    const [yearStr, monthStr, dayStr] = parts;
-    const year = Number(yearStr);
-    const month = Number(monthStr);
-    const day = Number(dayStr);
-    if (year && month && day) {
-      const d = new Date(year, month - 1, day);
-      if (!Number.isNaN(d.getTime())) {
-        return d.toLocaleDateString(localeToLanguageTag(locale), {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-      }
-    }
-  }
-
-  const parsed = new Date(iso);
-  if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toLocaleDateString(localeToLanguageTag(locale), {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  }
-  return iso;
 }
 
 export default async function ArchivePage({
@@ -493,7 +463,7 @@ export default async function ArchivePage({
             {locale === "fr"
               ? "Pour plus de contexte sur la couverture et les méthodes de capture, voir"
               : "For background on coverage and capture methods, see"}{" "}
-            <Link href="/methods" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/methods" className="text-ha-accent hover:text-ha-accent font-medium">
               {locale === "fr" ? "Méthodes et couverture" : "Methods & coverage"}
             </Link>
             .
@@ -504,13 +474,13 @@ export default async function ArchivePage({
         <section className="ha-home-panel-gradient ha-home-panel-gradient-compact mb-4 space-y-3">
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <div>
-              <h2 className="text-sm font-semibold text-slate-900">
+              <h2 className="text-sm font-semibold text-[var(--text)]">
                 {locale === "fr" ? "Parcourir les sites archivés" : "Browse archived sites"}
               </h2>
             </div>
             <Link
               href="/archive/browse-by-source"
-              className="text-ha-accent text-xs font-medium hover:text-blue-700"
+              className="text-ha-accent hover:text-ha-accent text-xs font-medium"
             >
               {locale === "fr" ? "Parcourir toutes les sources →" : "Browse all sources →"}
             </Link>
@@ -537,7 +507,7 @@ export default async function ArchivePage({
                       browseId ? (
                         <Link
                           href={`/browse/${browseId}`}
-                          className="border-ha-border relative block h-[4.5rem] overflow-hidden border-b bg-white"
+                          className="border-ha-border relative block h-[4.5rem] overflow-hidden border-b bg-[var(--card-bg)]"
                           aria-label={
                             locale === "fr"
                               ? `Voir ${summary.sourceName}`
@@ -558,7 +528,7 @@ export default async function ArchivePage({
                           />
                         </Link>
                       ) : (
-                        <div className="border-ha-border relative h-[4.5rem] overflow-hidden border-b bg-white">
+                        <div className="border-ha-border relative h-[4.5rem] overflow-hidden border-b bg-[var(--card-bg)]">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={previewSrc}
@@ -576,7 +546,7 @@ export default async function ArchivePage({
                     ) : browseId ? (
                       <Link
                         href={`/browse/${browseId}`}
-                        className="border-ha-border text-ha-muted flex h-[4.5rem] items-center justify-center border-b bg-white px-4 text-xs dark:bg-[#0b0c0d]"
+                        className="border-ha-border text-ha-muted flex h-[4.5rem] items-center justify-center border-b bg-[var(--card-bg)] px-4 text-xs"
                         aria-label={
                           locale === "fr"
                             ? `Voir ${summary.sourceName}`
@@ -586,7 +556,7 @@ export default async function ArchivePage({
                         {locale === "fr" ? "Aperçu indisponible" : "Preview unavailable"}
                       </Link>
                     ) : (
-                      <div className="border-ha-border text-ha-muted flex h-[4.5rem] items-center justify-center border-b bg-white px-4 text-xs dark:bg-[#0b0c0d]">
+                      <div className="border-ha-border text-ha-muted flex h-[4.5rem] items-center justify-center border-b bg-[var(--card-bg)] px-4 text-xs">
                         {locale === "fr" ? "Aperçu indisponible" : "Preview unavailable"}
                       </div>
                     )}
@@ -595,14 +565,14 @@ export default async function ArchivePage({
                       {browseId ? (
                         <Link
                           href={`/browse/${browseId}`}
-                          className="block truncate text-[13px] font-semibold tracking-tight text-slate-900 hover:underline"
+                          className="block truncate text-[13px] font-semibold tracking-tight text-[var(--text)] hover:underline"
                           title={summary.sourceName}
                         >
                           {summary.sourceName}
                         </Link>
                       ) : (
                         <h3
-                          className="truncate text-[13px] font-semibold tracking-tight text-slate-900"
+                          className="truncate text-[13px] font-semibold tracking-tight text-[var(--text)]"
                           title={summary.sourceName}
                         >
                           {summary.sourceName}
@@ -625,7 +595,7 @@ export default async function ArchivePage({
                       </p>
                       {summary.baseUrl && (
                         <div className="text-ha-muted mt-1.5 flex min-w-0 items-baseline gap-1 text-[11px]">
-                          <span className="flex-shrink-0 font-medium text-slate-800">
+                          <span className="flex-shrink-0 font-medium text-[var(--muted)]">
                             {locale === "fr" ? "Page d’accueil :" : "Homepage:"}
                           </span>
                           {summary.entryBrowseUrl ? (
@@ -657,14 +627,14 @@ export default async function ArchivePage({
                           {summary.entryBrowseUrl ? (
                             <a
                               href={summary.entryBrowseUrl}
-                              className="text-ha-accent hover:text-blue-700"
+                              className="text-ha-accent hover:text-ha-accent"
                             >
                               {locale === "fr" ? "Voir" : "View"}
                             </a>
                           ) : browseId ? (
                             <Link
                               href={`/browse/${browseId}`}
-                              className="text-ha-accent hover:text-blue-700"
+                              className="text-ha-accent hover:text-ha-accent"
                             >
                               {locale === "fr" ? "Voir" : "View"}
                             </Link>
@@ -676,7 +646,7 @@ export default async function ArchivePage({
                               href={summary.entryBrowseUrl}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-ha-accent hover:text-blue-700"
+                              className="text-ha-accent hover:text-ha-accent"
                               title={
                                 locale === "fr"
                                   ? "Ouvrir la page d’accueil de cette source dans le service de relecture (nouvel onglet)"
@@ -693,7 +663,7 @@ export default async function ArchivePage({
                               summary.sourceCode,
                             )}&focus=filters`}
                             scroll={false}
-                            className="text-ha-accent hover:text-blue-700"
+                            className="text-ha-accent hover:text-ha-accent"
                           >
                             {locale === "fr" ? "Rechercher" : "Search"}
                           </Link>
@@ -707,11 +677,11 @@ export default async function ArchivePage({
           </div>
         </section>
       )}
-      <div className="ha-home-hero grid gap-4 lg:grid-cols-[minmax(0,280px),minmax(0,1fr)] lg:items-start">
+      <div className="ha-content-section-lead grid gap-4 lg:grid-cols-[minmax(0,280px),minmax(0,1fr)] lg:items-start">
         {/* Filters panel */}
         <aside id="archive-filters" className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h2 className="flex items-baseline gap-2 text-sm font-semibold text-slate-900">
+            <h2 className="flex items-baseline gap-2 text-sm font-semibold text-[var(--text)]">
               {hasActiveSearch ? (
                 <>
                   <span className="text-ha-accent font-semibold">
@@ -723,13 +693,13 @@ export default async function ArchivePage({
                         ? "Page"
                         : "Snapshot"}
                   </span>
-                  <span className="text-slate-900">
+                  <span className="text-[var(--text)]">
                     {locale === "fr" ? "résultats de recherche" : "search results"}
                   </span>
                   <span className="group relative inline-flex">
                     <button
                       type="button"
-                      className="border-ha-border text-ha-muted inline-flex h-4 w-4 items-center justify-center rounded-full border bg-white text-[10px] leading-none font-semibold transition-colors hover:border-[#11588f] hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f]"
+                      className="border-ha-border text-ha-muted inline-flex h-4 w-4 items-center justify-center rounded-full border bg-[var(--card-bg)] text-[10px] leading-none font-semibold transition-colors hover:border-[var(--accent)] hover:text-[var(--muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                       aria-label={
                         locale === "fr"
                           ? "Info sur les pages et les captures"
@@ -738,7 +708,7 @@ export default async function ArchivePage({
                     >
                       i
                     </button>
-                    <span className="border-ha-border pointer-events-none absolute top-full left-1/2 z-10 mt-2 w-60 -translate-x-1/2 rounded-lg border bg-white px-3 py-2 text-[11px] leading-relaxed text-slate-700 opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
+                    <span className="border-ha-border pointer-events-none absolute top-full left-1/2 z-10 mt-2 w-60 -translate-x-1/2 rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-[11px] leading-relaxed text-[var(--muted)] opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
                       {view === "pages"
                         ? locale === "fr"
                           ? "La vue Pages affiche la dernière capture pour chaque URL (regroupées par URL sans chaînes de requête)."
@@ -811,7 +781,7 @@ export default async function ArchivePage({
             )}
             {/* Text search */}
             <div className="space-y-1">
-              <label htmlFor="q" className="text-xs font-medium text-slate-800">
+              <label htmlFor="q" className="text-xs font-medium text-[var(--text)]">
                 {locale === "fr" ? "Mots-clés" : "Keywords"}
               </label>
               <div className="flex flex-col gap-2 sm:flex-row">
@@ -825,7 +795,7 @@ export default async function ArchivePage({
                       ? "p. ex. grippe, https://www.canada.ca/…, covid AND vaccin, -archived, url:covid"
                       : "e.g. influenza, https://www.canada.ca/…, covid AND vaccine, -archived, url:covid"
                   }
-                  className="border-ha-border min-w-0 flex-1 rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm ring-0 outline-none placeholder:text-slate-400 focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                  className="border-ha-border min-w-0 flex-1 rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-sm text-[var(--text)] shadow-sm ring-0 outline-none placeholder:text-[var(--muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]"
                 />
                 <HoverGlowButton type="submit" className="ha-btn-primary w-full text-xs sm:w-auto">
                   {locale === "fr" ? "Rechercher" : "Search"}
@@ -836,14 +806,14 @@ export default async function ArchivePage({
             {/* Source select */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
               <div className="space-y-1 sm:col-span-2">
-                <label htmlFor="source" className="text-xs font-medium text-slate-800">
+                <label htmlFor="source" className="text-xs font-medium text-[var(--text)]">
                   {locale === "fr" ? "Source" : "Source"}
                 </label>
                 <select
                   id="source"
                   name="source"
                   defaultValue={source}
-                  className="border-ha-border h-10 w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                  className="border-ha-border h-10 w-full rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-sm text-[var(--text)] shadow-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]"
                 >
                   <option value="">{locale === "fr" ? "Toutes les sources" : "All sources"}</option>
                   {sourceOptions.map((opt) => (
@@ -854,7 +824,7 @@ export default async function ArchivePage({
                 </select>
               </div>
               <div className="space-y-1 sm:col-span-1">
-                <label htmlFor="from" className="text-xs font-medium text-slate-800">
+                <label htmlFor="from" className="text-xs font-medium text-[var(--text)]">
                   {locale === "fr" ? "Du" : "From"}
                 </label>
                 <input
@@ -862,11 +832,11 @@ export default async function ArchivePage({
                   name="from"
                   type="date"
                   defaultValue={fromDate}
-                  className="border-ha-border h-10 w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                  className="border-ha-border h-10 w-full rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-sm text-[var(--text)] shadow-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]"
                 />
               </div>
               <div className="space-y-1 sm:col-span-1">
-                <label htmlFor="to" className="text-xs font-medium text-slate-800">
+                <label htmlFor="to" className="text-xs font-medium text-[var(--text)]">
                   {locale === "fr" ? "Au" : "To"}
                 </label>
                 <input
@@ -874,7 +844,7 @@ export default async function ArchivePage({
                   name="to"
                   type="date"
                   defaultValue={toDate}
-                  className="border-ha-border h-10 w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-sm outline-none focus:border-[#11588f] focus:ring-2 focus:ring-[#11588f]"
+                  className="border-ha-border h-10 w-full rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-sm text-[var(--text)] shadow-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]"
                 />
               </div>
             </div>
@@ -888,7 +858,7 @@ export default async function ArchivePage({
                     <span className="group relative inline-flex">
                       <button
                         type="button"
-                        className="border-ha-border text-ha-muted inline-flex h-4 w-4 items-center justify-center rounded-full border bg-white text-[10px] leading-none font-semibold transition-colors hover:border-[#11588f] hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f]"
+                        className="border-ha-border text-ha-muted inline-flex h-4 w-4 items-center justify-center rounded-full border bg-[var(--card-bg)] text-[10px] leading-none font-semibold transition-colors hover:border-[var(--accent)] hover:text-[var(--muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                         aria-label={
                           locale === "fr"
                             ? "Info sur le regroupement des pages"
@@ -897,7 +867,7 @@ export default async function ArchivePage({
                       >
                         i
                       </button>
-                      <span className="border-ha-border pointer-events-none absolute top-full left-1/2 z-10 mt-2 w-56 -translate-x-1/2 rounded-lg border bg-white px-3 py-2 text-[11px] leading-relaxed text-slate-700 opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
+                      <span className="border-ha-border pointer-events-none absolute top-full left-1/2 z-10 mt-2 w-56 -translate-x-1/2 rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-[11px] leading-relaxed text-[var(--muted)] opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
                         {locale === "fr"
                           ? "La vue Pages affiche la dernière capture pour chaque URL. La vue Captures affiche chaque capture."
                           : "Pages view shows the latest capture for each URL. Snapshots view shows every capture."}
@@ -967,7 +937,7 @@ export default async function ArchivePage({
                     <span className="group relative inline-flex">
                       <button
                         type="button"
-                        className="border-ha-border text-ha-muted inline-flex h-4 w-4 items-center justify-center rounded-full border bg-white text-[10px] leading-none font-semibold transition-colors hover:border-[#11588f] hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f]"
+                        className="border-ha-border text-ha-muted inline-flex h-4 w-4 items-center justify-center rounded-full border bg-[var(--card-bg)] text-[10px] leading-none font-semibold transition-colors hover:border-[var(--accent)] hover:text-[var(--muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                         aria-label={
                           locale === "fr"
                             ? "Info sur l’inclusion des erreurs"
@@ -976,7 +946,7 @@ export default async function ArchivePage({
                       >
                         i
                       </button>
-                      <span className="border-ha-border pointer-events-none absolute top-full left-1/2 z-10 mt-2 w-64 -translate-x-1/2 rounded-lg border bg-white px-3 py-2 text-[11px] leading-relaxed text-slate-700 opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
+                      <span className="border-ha-border pointer-events-none absolute top-full left-1/2 z-10 mt-2 w-64 -translate-x-1/2 rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-[11px] leading-relaxed text-[var(--muted)] opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
                         {locale === "fr"
                           ? "Inclut les captures dont le code HTTP n’est pas 2xx (ex. 404 ou 500)."
                           : "Includes snapshots with non-2xx HTTP status codes (e.g. 404 or 500)."}
@@ -1001,7 +971,7 @@ export default async function ArchivePage({
                       <span className="group relative inline-flex">
                         <button
                           type="button"
-                          className="border-ha-border text-ha-muted inline-flex h-4 w-4 items-center justify-center rounded-full border bg-white text-[10px] leading-none font-semibold transition-colors hover:border-[#11588f] hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#11588f]"
+                          className="border-ha-border text-ha-muted inline-flex h-4 w-4 items-center justify-center rounded-full border bg-[var(--card-bg)] text-[10px] leading-none font-semibold transition-colors hover:border-[var(--accent)] hover:text-[var(--muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
                           aria-label={
                             locale === "fr"
                               ? "Info sur l’inclusion des doublons"
@@ -1010,7 +980,7 @@ export default async function ArchivePage({
                         >
                           i
                         </button>
-                        <span className="border-ha-border pointer-events-none absolute top-full left-1/2 z-10 mt-2 w-64 -translate-x-1/2 rounded-lg border bg-white px-3 py-2 text-[11px] leading-relaxed text-slate-700 opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
+                        <span className="border-ha-border pointer-events-none absolute top-full left-1/2 z-10 mt-2 w-64 -translate-x-1/2 rounded-lg border bg-[var(--card-bg)] px-3 py-2 text-[11px] leading-relaxed text-[var(--muted)] opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
                           {locale === "fr"
                             ? "Affiche aussi des captures identiques répétées (même URL + même contenu), souvent prises le même jour."
                             : "Also shows repeated identical captures (same URL + same content), often taken on the same day."}
@@ -1025,7 +995,7 @@ export default async function ArchivePage({
 
                   <Link
                     href="/archive"
-                    className="text-ha-muted ml-auto text-xs font-medium hover:text-slate-900"
+                    className="text-ha-muted ml-auto text-xs font-medium hover:text-[var(--text)]"
                   >
                     {locale === "fr" ? "Effacer" : "Clear"}
                   </Link>
@@ -1035,12 +1005,9 @@ export default async function ArchivePage({
           </form>
 
           {backendError && (
-            <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            <div className="ha-callout-warning">
               {backendError}{" "}
-              <Link
-                href="/archive"
-                className="font-medium underline underline-offset-2 hover:text-amber-900"
-              >
+              <Link href="/archive" className="font-medium underline underline-offset-2">
                 {locale === "fr" ? "Effacer les filtres" : "Clear filters"}
               </Link>
             </div>
@@ -1068,12 +1035,10 @@ export default async function ArchivePage({
         <section id="archive-results" className="space-y-4">
           <ArchiveFiltersAutoscroll targetId="archive-results" focusParam="results" />
           {!usingBackend && (
-            <div className="ha-card ha-home-panel p-4 sm:p-5">
-              <p className="text-[11px] font-medium text-amber-800">
-                {locale === "fr"
-                  ? "API en direct indisponible; affichage d’un échantillon hors ligne limité."
-                  : "Live API unavailable; showing a limited offline sample."}
-              </p>
+            <div className="ha-callout-warning font-medium">
+              {locale === "fr"
+                ? "API en direct indisponible; affichage d’un échantillon hors ligne limité."
+                : "Live API unavailable; showing a limited offline sample."}
             </div>
           )}
 
@@ -1084,7 +1049,7 @@ export default async function ArchivePage({
                   {locale === "fr"
                     ? "Aucun enregistrement ne correspond aux filtres actuels. Essayez de retirer certains filtres, d’utiliser des mots-clés plus généraux ou de"
                     : "No records match the current filters. Try removing some filters, using broader keywords, or"}{" "}
-                  <Link href="/archive" className="text-ha-accent font-medium hover:text-blue-700">
+                  <Link href="/archive" className="text-ha-accent hover:text-ha-accent font-medium">
                     {locale === "fr" ? "réinitialiser la recherche" : "resetting the search"}
                   </Link>
                   .

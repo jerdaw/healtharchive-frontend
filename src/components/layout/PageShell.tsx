@@ -32,7 +32,7 @@ export function PageShell({
       <section className={sectionClassName}>
         <header className={hideHeaderVisually ? "sr-only" : headerClassName}>
           {eyebrow && <p className="ha-eyebrow">{eyebrow}</p>}
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="ha-page-title text-2xl font-semibold tracking-tight sm:text-3xl">
             {title}
           </h1>
         </header>

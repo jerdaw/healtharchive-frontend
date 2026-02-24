@@ -10,26 +10,11 @@ import {
   fetchSourcesLocalized,
   fetchUsageMetrics,
 } from "@/lib/api";
+import { formatDate, formatNumber } from "@/lib/format";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
-
-function formatNumber(locale: Locale, value: number | null | undefined): string {
-  if (value == null || Number.isNaN(value)) return "-";
-  return new Intl.NumberFormat(localeToLanguageTag(locale)).format(value);
-}
-
-function formatDate(locale: Locale, value: string | null | undefined): string {
-  if (!value) return locale === "fr" ? "Inconnu" : "Unknown";
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return parsed.toLocaleDateString(localeToLanguageTag(locale), {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
 
 function getStatusCopy(locale: Locale) {
   if (locale === "fr") {
@@ -112,7 +97,7 @@ export default async function StatusPage({
         </div>
       )}
 
-      <section className="ha-home-hero space-y-4">
+      <section className="ha-content-section-lead space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Statut actuel" : "Current status"}
         </h2>
@@ -131,7 +116,7 @@ export default async function StatusPage({
         </div>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Aperçu de la couverture" : "Coverage snapshot"}
         </h2>
@@ -165,7 +150,7 @@ export default async function StatusPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Couverture par source" : "Per-source coverage"}
         </h2>
@@ -227,7 +212,7 @@ export default async function StatusPage({
         )}
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Aperçu de l’utilisation" : "Usage snapshot"}
         </h2>
@@ -284,7 +269,7 @@ export default async function StatusPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Définitions des métriques" : "Metrics definitions"}
         </h2>
@@ -317,7 +302,7 @@ export default async function StatusPage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <div className="ha-callout">
           <h3 className="ha-callout-title">
             {locale === "fr" ? "Rapport d’impact mensuel" : "Monthly impact report"}
@@ -328,7 +313,7 @@ export default async function StatusPage({
               : "A short monthly report summarizes coverage, reliability, and usage trends."}
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link href="/impact" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/impact" className="ha-link">
               {locale === "fr"
                 ? "Voir le dernier rapport d’impact"
                 : "View the latest impact report"}

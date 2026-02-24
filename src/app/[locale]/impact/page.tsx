@@ -4,25 +4,10 @@ import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { fetchArchiveStats, fetchUsageMetrics } from "@/lib/api";
+import { formatDate, formatNumber } from "@/lib/format";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
-
-function formatNumber(locale: Locale, value: number | null | undefined): string {
-  if (value == null || Number.isNaN(value)) return "-";
-  return new Intl.NumberFormat(localeToLanguageTag(locale)).format(value);
-}
-
-function formatDate(locale: Locale, value: string | null | undefined): string {
-  if (!value) return locale === "fr" ? "Inconnu" : "Unknown";
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return parsed.toLocaleDateString(localeToLanguageTag(locale), {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
 
 function getImpactCopy(locale: Locale) {
   const monthLabel = new Date().toLocaleDateString(localeToLanguageTag(locale), {
@@ -71,7 +56,7 @@ export default async function ImpactPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-4">
+      <section className="ha-content-section-lead space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Aperçu de la couverture" : "Coverage snapshot"}
         </h2>
@@ -105,7 +90,7 @@ export default async function ImpactPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Mises à jour du projet" : "Project updates"}
         </h2>
@@ -115,14 +100,14 @@ export default async function ImpactPage({
             : "Major public-facing changes (features, policies, and dataset releases) are recorded in the project changelog."}
         </p>
         <p className="text-ha-muted text-sm leading-relaxed">
-          <Link href="/changelog" className="text-ha-accent font-medium hover:text-blue-700">
+          <Link href="/changelog" className="ha-link">
             {locale === "fr" ? "Voir le journal des changements" : "View the changelog"}
           </Link>
           .
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Notes de fiabilité" : "Reliability notes"}
         </h2>
@@ -132,14 +117,14 @@ export default async function ImpactPage({
             : "Live service health and coverage metrics are available on the status page. This project is still in active development; intermittent gaps in coverage or replay fidelity are expected as the archive expands."}
         </p>
         <p className="text-ha-muted text-sm leading-relaxed">
-          <Link href="/status" className="text-ha-accent font-medium hover:text-blue-700">
+          <Link href="/status" className="ha-link">
             {locale === "fr" ? "Voir le statut et les métriques" : "View status & metrics"}
           </Link>
           .
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Aperçu de l’utilisation" : "Usage snapshot"}
         </h2>
@@ -191,7 +176,7 @@ export default async function ImpactPage({
         )}
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Comment interpréter l’utilisation" : "How to interpret usage"}
         </h2>
@@ -202,7 +187,7 @@ export default async function ImpactPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Priorités à court terme" : "Near-term focus"}
         </h2>
@@ -225,7 +210,7 @@ export default async function ImpactPage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <div className="ha-callout">
           <h3 className="ha-callout-title">
             {locale === "fr" ? "Besoin de plus de détails?" : "Want more detail?"}
@@ -236,7 +221,7 @@ export default async function ImpactPage({
               : "See the status page for live coverage metrics."}
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link href="/status" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/status" className="ha-link">
               {locale === "fr" ? "Voir le statut et les métriques" : "View status & metrics"}
             </Link>
             .
