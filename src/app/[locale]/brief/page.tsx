@@ -47,7 +47,7 @@ export default async function BriefPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-5">
+      <section className="ha-content-section-lead space-y-5">
         <h2 className="ha-section-heading">{locale === "fr" ? "En bref" : "At a glance"}</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
           {siteCopy.mission.line1}
@@ -64,17 +64,11 @@ export default async function BriefPage({
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
             {locale === "fr" ? (
               <>
-                <a
-                  className="text-ha-accent font-medium hover:text-blue-700"
-                  href="/partner-kit/healtharchive-brief.fr.md"
-                >
+                <a className="ha-link" href="/partner-kit/healtharchive-brief.fr.md">
                   Télécharger cette fiche (Markdown, alpha)
                 </a>{" "}
                 ·{" "}
-                <a
-                  className="text-ha-accent font-medium hover:text-blue-700"
-                  href="/partner-kit/healtharchive-brief.md"
-                >
+                <a className="ha-link" href="/partner-kit/healtharchive-brief.md">
                   Version anglaise (officielle)
                 </a>{" "}
                 · ou utilisez la boîte de dialogue d’impression de votre navigateur pour enregistrer
@@ -82,10 +76,7 @@ export default async function BriefPage({
               </>
             ) : (
               <>
-                <a
-                  className="text-ha-accent font-medium hover:text-blue-700"
-                  href="/partner-kit/healtharchive-brief.md"
-                >
+                <a className="ha-link" href="/partner-kit/healtharchive-brief.md">
                   Download this brief (Markdown)
                 </a>{" "}
                 or use your browser’s print dialog to save as PDF.
@@ -95,7 +86,7 @@ export default async function BriefPage({
         </div>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Ce que fait le projet" : "What it does"}
         </h2>
@@ -118,7 +109,7 @@ export default async function BriefPage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Ce que ce n’est pas" : "What it is not"}
         </h2>
@@ -142,7 +133,7 @@ export default async function BriefPage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Publics visés" : "Intended audiences"}
         </h2>
@@ -174,64 +165,61 @@ export default async function BriefPage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">{locale === "fr" ? "Liens clés" : "Key links"}</h2>
         <ul className="text-ha-muted list-disc space-y-1 pl-5 text-sm leading-relaxed sm:text-base">
           <li>
             {locale === "fr" ? "Accueil" : "Home"}:{" "}
-            <a
-              className="text-ha-accent font-medium hover:text-blue-700"
-              href="https://www.healtharchive.ca/"
-            >
+            <a className="ha-link" href="https://www.healtharchive.ca/">
               https://www.healtharchive.ca/
             </a>
           </li>
           <li>
             {locale === "fr" ? "Recherche dans l’archive" : "Archive search"}:{" "}
-            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/archive">
+            <Link className="ha-link" href="/archive">
               /archive
             </Link>
           </li>
           <li>
             {locale === "fr" ? "Fil des changements" : "Changes feed"}:{" "}
-            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/changes">
+            <Link className="ha-link" href="/changes">
               /changes
             </Link>
           </li>
           <li>
             {locale === "fr" ? "Bulletin et RSS" : "Digest + RSS"}:{" "}
-            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/digest">
+            <Link className="ha-link" href="/digest">
               /digest
             </Link>
           </li>
           <li>
             {locale === "fr" ? "Méthodes et portée" : "Methods and scope"}:{" "}
-            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/methods">
+            <Link className="ha-link" href="/methods">
               /methods
             </Link>
           </li>
           <li>
             {locale === "fr" ? "Gouvernance et politiques" : "Governance and policies"}:{" "}
-            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/governance">
+            <Link className="ha-link" href="/governance">
               /governance
             </Link>
           </li>
           <li>
             {locale === "fr" ? "Statut et métriques" : "Status and metrics"}:{" "}
-            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/status">
+            <Link className="ha-link" href="/status">
               /status
             </Link>
           </li>
           <li>
             {locale === "fr" ? "Rapport d’impact mensuel" : "Monthly impact report"}:{" "}
-            <Link className="text-ha-accent font-medium hover:text-blue-700" href="/impact">
+            <Link className="ha-link" href="/impact">
               /impact
             </Link>
           </li>
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr"
             ? "Posture de sécurité (langage simple)"
@@ -252,7 +240,7 @@ export default async function BriefPage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <div className="ha-callout">
           <h3 className="ha-callout-title">
             {locale === "fr" ? "Contact et signalements" : "Contact and reporting"}
@@ -263,11 +251,11 @@ export default async function BriefPage({
               : "For collaboration, feedback, missing pages, or corrections, use the contact page or submit an issue report."}
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link href="/contact" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/contact" className="ha-link">
               {locale === "fr" ? "Contact" : "Contact"}
             </Link>{" "}
             ·{" "}
-            <Link href="/report" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/report" className="ha-link">
               {locale === "fr" ? "Signaler un problème" : "Report an issue"}
             </Link>
           </p>

@@ -62,7 +62,7 @@ export default async function ChangelogPage({
         ))}
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <div className="ha-callout">
           <h3 className="ha-callout-title">
             {locale === "fr" ? "Vous cherchez plus de détails ?" : "Looking for more detail?"}
@@ -73,23 +73,17 @@ export default async function ChangelogPage({
               : "The changelog is a public-facing summary. For deeper technical details, see the project repositories."}
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <Link
-              href="https://github.com/jerdaw/healtharchive-frontend"
-              className="text-ha-accent font-medium hover:text-blue-700"
-            >
+            <Link href="https://github.com/jerdaw/healtharchive-frontend" className="ha-link">
               {locale === "fr" ? "Dépôt frontend" : "Frontend repository"}
             </Link>{" "}
             {locale === "fr" ? "et" : "and"}{" "}
-            <Link
-              href="https://github.com/jerdaw/healtharchive-backend"
-              className="text-ha-accent font-medium hover:text-blue-700"
-            >
+            <Link href="https://github.com/jerdaw/healtharchive-backend" className="ha-link">
               {locale === "fr" ? "dépôt backend" : "backend repository"}
             </Link>{" "}
             {locale === "fr" ? "et" : "and"}{" "}
             <Link
               href="https://github.com/jerdaw/healtharchive-datasets/releases"
-              className="text-ha-accent font-medium hover:text-blue-700"
+              className="ha-link"
             >
               {locale === "fr" ? "versions des jeux de données" : "dataset releases"}
             </Link>

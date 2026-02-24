@@ -183,7 +183,7 @@ export default async function CitePage({
         </section>
       )}
 
-      <section className="ha-home-hero space-y-5">
+      <section className="ha-content-section-lead space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Note importante" : "Important note"}
         </h2>
@@ -202,17 +202,11 @@ export default async function CitePage({
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
             {locale === "fr" ? (
               <>
-                <a
-                  className="text-ha-accent font-medium hover:text-blue-700"
-                  href="/partner-kit/healtharchive-citation.fr.md"
-                >
+                <a className="ha-link" href="/partner-kit/healtharchive-citation.fr.md">
                   Télécharger la fiche de citation (Markdown, alpha)
                 </a>{" "}
                 ·{" "}
-                <a
-                  className="text-ha-accent font-medium hover:text-blue-700"
-                  href="/partner-kit/healtharchive-citation.md"
-                >
+                <a className="ha-link" href="/partner-kit/healtharchive-citation.md">
                   Version anglaise (officielle)
                 </a>{" "}
                 · ou utilisez la boîte de dialogue d’impression de votre navigateur pour enregistrer
@@ -220,10 +214,7 @@ export default async function CitePage({
               </>
             ) : (
               <>
-                <a
-                  className="text-ha-accent font-medium hover:text-blue-700"
-                  href="/partner-kit/healtharchive-citation.md"
-                >
+                <a className="ha-link" href="/partner-kit/healtharchive-citation.md">
                   Download citation handout (Markdown)
                 </a>{" "}
                 or use your browser’s print dialog to save as PDF.
@@ -233,7 +224,7 @@ export default async function CitePage({
         </div>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "1) Citer une capture" : "1) Cite a snapshot"}
         </h2>
@@ -273,7 +264,7 @@ export default async function CitePage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "2) Citer une vue de comparaison" : "2) Cite a compare view"}
         </h2>
@@ -307,7 +298,7 @@ export default async function CitePage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <div className="ha-callout">
           <h3 className="ha-callout-title">
             {locale === "fr"
@@ -347,7 +338,7 @@ export default async function CitePage({
             {locale === "fr"
               ? "Besoin d’un exemple? Commencez par l’"
               : "Want help finding an example? Start from the"}{" "}
-            <Link href="/archive" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/archive" className="ha-link">
               {locale === "fr" ? "explorateur d’archives" : "archive explorer"}
             </Link>{" "}
             {locale === "fr" ? "et ouvrez n’importe quelle capture." : "and open any snapshot."}

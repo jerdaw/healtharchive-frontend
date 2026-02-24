@@ -54,7 +54,7 @@ export default async function DigestPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-4">
+      <section className="ha-content-section-lead space-y-4">
         <div className="ha-callout">
           <h2 className="ha-callout-title">
             {locale === "fr" ? "Ce qu’est le bulletin" : "What the digest is"}
@@ -72,7 +72,7 @@ export default async function DigestPage({
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
             {locale === "fr" ? "Pour des conseils de citation, voir" : "For citation guidance, see"}{" "}
-            <Link href="/cite" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/cite" className="ha-link">
               /cite
             </Link>
             .
@@ -80,13 +80,13 @@ export default async function DigestPage({
         </div>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">{locale === "fr" ? "Flux RSS" : "RSS feeds"}</h2>
         <div className="ha-card space-y-2">
           <p className="text-ha-muted text-xs">
             {locale === "fr" ? "Changements de la dernière édition" : "Latest edition changes"}
           </p>
-          <a href={globalRss} className="text-ha-accent font-medium hover:text-blue-700">
+          <a href={globalRss} className="ha-link">
             {locale === "fr" ? "Flux RSS global" : "Global RSS feed"}
           </a>
         </div>
@@ -100,7 +100,7 @@ export default async function DigestPage({
               return (
                 <div key={source.sourceCode} className="ha-card space-y-2">
                   <p className="text-ha-muted text-xs">{source.sourceName}</p>
-                  <a href={rssUrl} className="text-ha-accent font-medium hover:text-blue-700">
+                  <a href={rssUrl} className="ha-link">
                     {locale === "fr" ? "Flux RSS" : "RSS feed"}
                   </a>
                   <p className="text-ha-muted text-xs">
@@ -123,7 +123,7 @@ export default async function DigestPage({
         )}
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Prochaines étapes" : "Next steps"}
         </h2>

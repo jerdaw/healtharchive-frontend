@@ -43,7 +43,7 @@ export default async function AboutPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-5">
+      <section className="ha-content-section-lead space-y-5">
         <h2 className="ha-section-heading">{locale === "fr" ? "Motivation" : "Motivation"}</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
           {locale === "fr"
@@ -57,7 +57,7 @@ export default async function AboutPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr"
             ? "Indépendance et non‑partisanerie"
@@ -75,7 +75,7 @@ export default async function AboutPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Statut du projet" : "Project status"}
         </h2>
