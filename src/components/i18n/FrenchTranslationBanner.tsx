@@ -27,10 +27,7 @@ export function FrenchTranslationBanner() {
         <p className="text-xs leading-snug">
           <strong>Le français est une traduction alpha automatisée.</strong> Pour le texte officiel,
           consultez la{" "}
-          <NextLink
-            href={englishHref}
-            className="text-ha-accent font-medium underline hover:text-blue-700"
-          >
+          <NextLink href={englishHref} className="ha-link underline">
             version anglaise
           </NextLink>
           .
