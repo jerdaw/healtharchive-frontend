@@ -9,6 +9,7 @@ import {
   searchSnapshots,
   type CompareLiveTextMode,
 } from "@/lib/api";
+import { formatPercent } from "@/lib/format";
 import { type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
@@ -37,12 +38,6 @@ function formatUtcTimestamp(locale: Locale, value: string | null | undefined): s
     return parsed.toISOString().replace(".000Z", "Z");
   }
   return value;
-}
-
-function formatPercent(value: number | null | undefined): string {
-  if (value == null) return "";
-  const rounded = Math.round(value * 100);
-  return `${rounded}%`;
 }
 
 export async function generateMetadata({
@@ -240,7 +235,7 @@ export default async function CompareLivePage({
                   href={compare.archivedSnapshot.originalUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-ha-accent text-xs font-medium hover:text-blue-700"
+                  className="ha-link text-xs"
                 >
                   {locale === "fr" ? "URL originale ↗" : "Original URL ↗"}
                 </a>
@@ -267,7 +262,7 @@ export default async function CompareLivePage({
                     href={compare.liveFetch.finalUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-ha-accent font-medium hover:text-blue-700"
+                    className="ha-link"
                   >
                     {compare.liveFetch.finalUrl}
                   </a>
@@ -293,7 +288,7 @@ export default async function CompareLivePage({
               {locale === "fr"
                 ? "Archive indépendante · Changements descriptifs seulement; la page en direct n’est pas archivée. Citez plutôt la capture ("
                 : "Independent archive · Descriptive changes only; the live page is not archived. Cite the snapshot ("}
-              <Link href="/cite" className="text-ha-accent font-medium hover:text-blue-700">
+              <Link href="/cite" className="ha-link">
                 /cite
               </Link>
               {locale === "fr" ? ")." : ")."}

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
-import NextLink from "next/link";
-
 import { PageShell } from "@/components/layout/PageShell";
 import { EnglishControlsNotice } from "@/components/policy/EnglishControlsNotice";
 import type { Locale } from "@/lib/i18n";
@@ -41,7 +39,7 @@ export async function generateMetadata({
 function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
   return (
     <>
-      <section className="ha-home-hero space-y-5">
+      <section className="ha-content-section-lead space-y-5">
         <h2 className="ha-section-heading" id="mission">
           Mission & audience
         </h2>
@@ -62,7 +60,7 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
         </div>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading" id="scope">
           Scope & inclusion criteria
         </h2>
@@ -90,7 +88,7 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading" id="cadence">
           Capture cadence policy
         </h2>
@@ -111,7 +109,7 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading" id="provenance">
           Provenance commitments
         </h2>
@@ -129,7 +127,7 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading" id="change-tracking">
           Change tracking policy
         </h2>
@@ -150,7 +148,7 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading" id="corrections">
           Corrections policy
         </h2>
@@ -171,7 +169,7 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading" id="takedown">
           Takedown / opt-out
         </h2>
@@ -198,7 +196,7 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading" id="advisory">
           Advisory circle
         </h2>
@@ -217,7 +215,7 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <div className="ha-callout">
           <h3 className="ha-callout-title">Questions or concerns?</h3>
           <p className="mt-2 text-xs leading-relaxed sm:text-sm">
@@ -225,13 +223,13 @@ function GovernanceEnglishContent({ copy }: { copy: SiteCopy }) {
             intake form. For general inquiries, see the contact page.
           </p>
           <p className="mt-3 text-xs leading-relaxed sm:text-sm">
-            <NextLink href="/report" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/report" className="ha-link">
               Report an issue
-            </NextLink>{" "}
+            </Link>{" "}
             or{" "}
-            <NextLink href="/contact" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/contact" className="ha-link">
               Contact the project
-            </NextLink>
+            </Link>
             .
           </p>
         </div>
@@ -255,7 +253,7 @@ export default async function GovernancePage({
       <EnglishControlsNotice locale={locale} />
 
       {locale === "fr" && (
-        <section className="ha-home-hero space-y-5">
+        <section className="ha-content-section-lead space-y-5">
           <h2 className="ha-section-heading">Résumé (français, non officiel)</h2>
           <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
             Ce résumé est fourni à titre informatif. Pour le texte officiel, consultez la version
@@ -291,34 +289,34 @@ export default async function GovernancePage({
           </div>
           <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
             Accès rapide au texte officiel (anglais) :{" "}
-            <a href="#mission" className="text-ha-accent font-medium hover:text-blue-700">
+            <a href="#mission" className="ha-link">
               Mission
             </a>
             ,{" "}
-            <a href="#scope" className="text-ha-accent font-medium hover:text-blue-700">
+            <a href="#scope" className="ha-link">
               Portée
             </a>
             ,{" "}
-            <a href="#cadence" className="text-ha-accent font-medium hover:text-blue-700">
+            <a href="#cadence" className="ha-link">
               Cadence
             </a>
             ,{" "}
-            <a href="#provenance" className="text-ha-accent font-medium hover:text-blue-700">
+            <a href="#provenance" className="ha-link">
               Provenance
             </a>
             ,{" "}
-            <a href="#corrections" className="text-ha-accent font-medium hover:text-blue-700">
+            <a href="#corrections" className="ha-link">
               Corrections
             </a>
             ,{" "}
-            <a href="#takedown" className="text-ha-accent font-medium hover:text-blue-700">
+            <a href="#takedown" className="ha-link">
               Retrait
             </a>
             .
           </p>
           <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
             Pour signaler un problème ou une demande de retrait :{" "}
-            <Link href="/report" className="text-ha-accent font-medium hover:text-blue-700">
+            <Link href="/report" className="ha-link">
               /report
             </Link>
             .
@@ -327,7 +325,7 @@ export default async function GovernancePage({
       )}
 
       {locale === "fr" && (
-        <section className="ha-home-hero ha-home-hero-plain space-y-4" id="official-english">
+        <section className="ha-content-section space-y-4" id="official-english">
           <h2 className="ha-section-heading">Texte officiel (anglais)</h2>
           <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
             Le texte ci-dessous est fourni en anglais, car l’anglais fait foi.

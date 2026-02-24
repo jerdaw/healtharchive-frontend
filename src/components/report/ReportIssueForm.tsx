@@ -359,7 +359,7 @@ export function ReportIssueForm({
               {locale === "fr"
                 ? "Vous pouvez plutôt envoyer un courriel : "
                 : "You can email the report instead: "}{" "}
-              <a href={fallbackMailto} className="text-ha-accent font-medium hover:text-blue-700">
+              <a href={fallbackMailto} className="ha-link">
                 {locale === "fr" ? "ouvrir un courriel prérempli" : "open a pre-filled email"}
               </a>
               .

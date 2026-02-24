@@ -135,11 +135,26 @@ When wiring new API calls, keep the **public-only** contract and reuse `src/lib/
   - Cards (`.ha-card`, `.ha-card-title`, `.ha-card-body`, …)
   - Buttons (`.ha-btn-primary`, `.ha-btn-secondary`)
   - Badges (`.ha-badge`, `.ha-tag`)
+  - Links (`.ha-link` — theme-aware accent color with proper dark-mode hover)
   - Layout sections (`.ha-main`, `.ha-grid-2`, `.ha-grid-3`, `.ha-section-heading`, …)
+  - Inner-page sections (`.ha-content-section`, `.ha-content-section-lead` — NOT `.ha-home-hero`)
+  - Long-form prose (`.ha-prose` — consistent typography for content pages)
+  - Metadata grids (`.ha-meta-grid` with `<dl>/<dt>/<dd>`)
 - Use Tailwind utilities mainly for:
   - Layout/spacing (`flex`, `grid`, `gap-*`, `px-*`, `py-*`)
   - Typography (`text-sm`, `text-xs`, `font-semibold`, etc.)
 - Don’t reintroduce broken `bg-ha-*` style Tailwind classes. Color tokens live in CSS variables; `.ha-*` classes should consume them.
+- Don’t use `hover:text-blue-700` or other hardcoded Tailwind color classes for links — use `.ha-link` instead.
+- Don’t use `.ha-home-hero` on inner pages — use `.ha-content-section` (plain) or `.ha-content-section-lead` (first section, subtle blue tint). Reserve `.ha-home-hero` for the homepage only.
+
+### Shared utilities
+
+- **`src/lib/format.ts`** — Shared formatting functions. Use these instead of defining local copies:
+  - `formatDate(locale, value)` — locale-aware date formatting
+  - `formatNumber(locale, value)` — locale-aware number formatting
+  - `formatUtcTimestamp(value)` — normalize ISO timestamps
+  - `formatPercent(value)` — decimal to percentage string
+- **`src/lib/siteCopy.ts`** — Shared bilingual copy and the `PageCopyBase` type for per-page copy objects.
 
 ### Theme / accessibility
 

@@ -1,28 +1,24 @@
 import type { Metadata } from "next";
 
-import { demoRecords } from "@/data/demo-records";
+import { demoRecords, getSourcesSummary } from "@/data/demo-records";
 import { TrackChangesPhrase } from "@/components/TrackChangesPhrase";
 import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import { AnimatedMetric } from "@/components/home/AnimatedMetric";
+import { ChangeShowcase } from "@/components/home/ChangeShowcase";
+import { FAQ } from "@/components/home/FAQ";
+import { FeaturedSources } from "@/components/home/FeaturedSources";
+import { HomeSearch } from "@/components/home/HomeSearch";
 import { HoverGlowLink } from "@/components/home/HoverGlowLink";
+import { HowItWorks } from "@/components/home/HowItWorks";
 import { ProjectSnapshotOrchestrator } from "@/components/home/ProjectSnapshotOrchestrator";
-import { fetchArchiveStats } from "@/lib/api";
+import { RecentActivity, type ActivityItem } from "@/components/home/RecentActivity";
+import { ScrollReveal } from "@/components/home/ScrollReveal";
+import { fetchArchiveStats, fetchChanges, fetchSources, type SourceSummary } from "@/lib/api";
+import { formatDate } from "@/lib/format";
+import { getHomeCopy } from "@/lib/homeCopy";
 import type { Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
-import { getSiteCopy } from "@/lib/siteCopy";
-
-function getHomeCopy(locale: Locale) {
-  if (locale === "fr") {
-    return {
-      title: "HealthArchive.ca – Archive indépendante d’information de santé publique au Canada",
-    };
-  }
-
-  return {
-    title: "HealthArchive.ca – Independent archive of Canadian public health information",
-  };
-}
 
 export async function generateMetadata({
   params,
@@ -31,7 +27,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = await resolveLocale(params);
   const copy = getHomeCopy(locale);
-  return buildPageMetadata(locale, "/", copy.title);
+  return buildPageMetadata(locale, "/", copy.meta.title);
 }
 
 export default async function HomePage({
@@ -40,7 +36,7 @@ export default async function HomePage({
   params?: Promise<{ locale: string }>;
 } = {}) {
   const locale = await resolveLocale(params);
-  const siteCopy = getSiteCopy(locale);
+  const copy = getHomeCopy(locale);
   const fallbackRecordCount = demoRecords.length;
   const fallbackPageCount = new Set(demoRecords.map((r) => r.originalUrl)).size;
 
@@ -48,251 +44,258 @@ export default async function HomePage({
   const usingBackendStats = stats != null;
   const recordCount = stats?.snapshotsTotal ?? fallbackRecordCount;
   const pageCount = stats?.pagesTotal ?? fallbackPageCount;
+  const sourceCount = stats?.sourcesTotal ?? 2;
+
+  const apiSources = await fetchSources().catch(() => null);
+  const featuredSources: SourceSummary[] =
+    apiSources ??
+    getSourcesSummary().map((s) => ({
+      ...s,
+      latestRecordId: s.latestRecordId ? Number(s.latestRecordId) : null,
+      baseUrl: null,
+      description: null,
+      entryRecordId: null,
+      entryBrowseUrl: null,
+    }));
+
+  const recentChanges = await fetchChanges({ pageSize: 5 }).catch(() => null);
+  const activityItems: ActivityItem[] = (recentChanges?.results ?? []).map((event) => ({
+    id: event.toSnapshotId,
+    title: event.summary ?? event.normalizedUrlGroup ?? "Page change",
+    sourceName: event.sourceName ?? event.sourceCode ?? "Unknown",
+    timestamp: event.toCaptureTimestamp ?? "",
+    type: "change" as const,
+  }));
 
   return (
     <div className="ha-container space-y-6 pt-6">
-      {/* Hero */}
+      {/* ========== Hero ========== */}
       <section>
         <div className="ha-home-hero grid gap-10 lg:grid-cols-[minmax(0,1.7fr),minmax(0,1fr)] lg:items-center">
           <div className="space-y-9">
-            <p className="ha-eyebrow ha-home-hero-eyebrow">
-              {locale === "fr"
-                ? "Archive de santé publique basée sur des captures"
-                : "Snapshot-based public health archive"}
-            </p>
-            <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl md:text-[2.6rem] md:leading-snug">
-              {locale === "fr" ? (
-                <>
-                  Voyez ce que les sites Web de santé publique au Canada{" "}
-                  <span className="text-ha-accent">disaient autrefois</span>,
-                  <span className="block sm:inline">
-                    {" "}
-                    même <TrackChangesPhrase /> qu’ils changent.
-                  </span>
-                </>
-              ) : (
-                <>
-                  See what Canadian public health websites{" "}
-                  <span className="text-ha-accent">used to say</span>,
-                  <span className="block sm:inline">
-                    {" "}
-                    even <TrackChangesPhrase /> they change.
-                  </span>
-                </>
-              )}
+            <p className="ha-eyebrow ha-home-hero-eyebrow">{copy.hero.eyebrow}</p>
+            <h1 className="text-3xl font-semibold tracking-tight text-[var(--text)] sm:text-4xl md:text-[2.6rem] md:leading-snug">
+              {copy.hero.h1Before} <span className="text-ha-accent">{copy.hero.h1Accent}</span>,
+              <span className="block sm:inline">
+                {" "}
+                {copy.hero.h1Middle} <TrackChangesPhrase /> {copy.hero.h1Suffix}
+              </span>
             </h1>
             <p className="text-ha-muted ha-home-hero-lede text-sm leading-relaxed sm:text-base">
-              {locale === "fr"
-                ? "HealthArchive.ca est un projet indépendant, porté par des bénévoles, qui préserve des captures horodatées de pages Web de santé publique canadiennes sélectionnées. Il aide les chercheurs, journalistes, éducateurs, cliniciens et le grand public à citer ce qui a été publié à des moments précis — même si les pages sont déplacées, mises à jour ou disparaissent."
-                : "HealthArchive.ca is an independent, volunteer-led project that preserves time-stamped snapshots of selected Canadian public health web pages. It helps researchers, journalists, educators, clinicians, and the public cite what was published at specific points in time—even if pages move, are updated, or disappear."}
+              {copy.hero.lede}
             </p>
-            <div className="ha-home-hero-meta text-ha-muted pt-1 text-xs">
-              <span className="inline-flex items-center rounded-full bg-amber-50 px-2 py-1 text-[11px] font-semibold tracking-wide text-amber-800 uppercase">
-                {locale === "fr" ? "En développement" : "In development"}
-              </span>
-              <span className="ha-home-hero-meta-text">
-                {locale === "fr"
-                  ? "La couverture et les fonctionnalités s’élargissent; le contenu archivé peut être incomplet, périmé ou remplacé."
-                  : "Coverage and features are expanding; archived content may be incomplete, outdated, or superseded."}
-              </span>
-            </div>
+            <HomeSearch />
             <div className="flex flex-wrap gap-3 pt-1">
-              <HoverGlowLink href="/archive">
-                {locale === "fr" ? "Parcourir l’archive" : "Browse the archive"}
-              </HoverGlowLink>
-              <Link href="/methods" className="ha-btn-secondary">
-                {locale === "fr" ? "Méthodes et portée" : "Methods & scope"}
+              <HoverGlowLink href="/archive">{copy.hero.ctaPrimary}</HoverGlowLink>
+              <Link href="#how-it-works" className="ha-btn-secondary">
+                {copy.hero.ctaSecondary}
               </Link>
             </div>
           </div>
 
-          {/* Side card */}
+          {/* Side card — Project snapshot */}
           <div className="ha-card ha-card-elevated p-4 sm:p-5">
-            <ProjectSnapshotOrchestrator expectedIds={["records", "pages"]} />
+            <ProjectSnapshotOrchestrator expectedIds={["records", "pages", "sources"]} />
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-sm font-semibold text-slate-900">
-                  {locale === "fr" ? "Aperçu du projet" : "Project snapshot"}
+                <h2 className="text-sm font-semibold text-[var(--text)]">
+                  {copy.projectSnapshot.heading}
                 </h2>
                 <p className="text-ha-muted text-xs">
                   {usingBackendStats
-                    ? locale === "fr"
-                      ? "Métriques en direct depuis le backend de l’archive."
-                      : "Live metrics from the archive backend."
-                    : locale === "fr"
-                      ? "Affichage d’un échantillon hors ligne limité pendant que l’API en direct est indisponible."
-                      : "Showing a limited offline sample while the live API is unavailable."}
+                    ? copy.projectSnapshot.liveSubtext
+                    : copy.projectSnapshot.offlineSubtext}
                 </p>
               </div>
             </div>
             <dl className="ha-metric-grid ha-metric-grid-2 mt-4 text-xs sm:text-sm">
               <AnimatedMetric
                 id="records"
-                label={locale === "fr" ? "Captures archivées" : "Archived snapshots"}
+                label={copy.projectSnapshot.archivedSnapshots}
                 value={recordCount}
-                unit={locale === "fr" ? "captures" : "snapshots"}
-                barPercent={Math.min(100, (recordCount / 200_000) * 100)}
+                unit={copy.projectSnapshot.snapshotsUnit}
+                showBar={false}
                 start={false}
                 startEvent="ha-trackchanges-finished"
                 completeEvent="ha-metric-finished"
               />
               <AnimatedMetric
                 id="pages"
-                label={locale === "fr" ? "Pages uniques" : "Unique pages"}
+                label={copy.projectSnapshot.uniquePages}
                 value={pageCount}
-                unit={locale === "fr" ? "pages" : "pages"}
-                barPercent={Math.min(100, (pageCount / 100_000) * 100)}
+                unit={copy.projectSnapshot.pagesUnit}
+                showBar={false}
+                start={false}
+                startEvent="ha-trackchanges-finished"
+                completeEvent="ha-metric-finished"
+              />
+              <AnimatedMetric
+                id="sources"
+                label={copy.projectSnapshot.sourcesTracked}
+                value={sourceCount}
+                unit={copy.projectSnapshot.sourcesUnit}
+                showBar={false}
                 start={false}
                 startEvent="ha-trackchanges-finished"
                 completeEvent="ha-metric-finished"
               />
             </dl>
-          </div>
-        </div>
-      </section>
-
-      {/* Who this is for */}
-      <section>
-        <div className="ha-home-hero space-y-7">
-          <h2 className="ha-section-heading">
-            {locale === "fr" ? "À qui s’adresse ce site ?" : "Who is this for?"}
-          </h2>
-          <p className="ha-section-subtitle ha-section-lede leading-relaxed">
-            {locale === "fr"
-              ? "L’archive est conçue d’abord pour les chercheurs, journalistes et éducateurs, et est aussi utile aux cliniciens et au grand public qui ont besoin d’anciennes directives de santé publique afin qu’elles restent citables et repérables au fil des changements des sites Web."
-              : "The archive is designed first for researchers, journalists, and educators, and is also useful for clinicians and the public who need past public health guidance to stay citable and discoverable as websites shift over time."}
-          </p>
-          <div className="ha-grid-3 gap-4 pt-5 md:gap-5 md:pt-6">
-            <div className="ha-card ha-audience-card p-4 sm:p-5">
-              <div className="ha-audience-card-inner">
-                <span className="ha-audience-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
-                    <path d="M9.5 7a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0Z" />
-                    <path d="M7 14.5a4.5 4.5 0 0 1 9 0V17H7z" />
-                    <path d="M16 10.8 18.2 12l2.3-1.2v2.9c0 1.35-.78 2.52-2.3 3.2-1.52-.68-2.3-1.85-2.3-3.2z" />
-                  </svg>
-                </span>
-                <h3 className="text-sm font-semibold text-slate-900">
-                  {locale === "fr"
-                    ? "Cliniciens et praticiens de santé publique"
-                    : "Clinicians & public health practitioners"}
-                </h3>
-              </div>
-              <p className="ha-audience-body text-ha-muted text-sm sm:text-base">
-                {locale === "fr"
-                  ? "Revoir des directives passées sur des sujets comme la vaccination contre la COVID-19, la grippe saisonnière, la distribution de naloxone ou la variole simienne (mpox) afin de comprendre comment les recommandations ont évolué."
-                  : "Revisit past guidance on subjects such as COVID-19 vaccination, seasonal influenza, naloxone distribution, or mpox to understand how recommendations have evolved."}
+            {stats?.latestCaptureDate && (
+              <p className="text-ha-muted mt-3 text-xs">
+                {copy.projectSnapshot.lastUpdatedLabel}:{" "}
+                {formatDate(locale, stats.latestCaptureDate)}
               </p>
-            </div>
-            <div className="ha-card ha-audience-card p-4 sm:p-5">
-              <div className="ha-audience-card-inner">
-                <span className="ha-audience-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
-                    <path d="M5 17.5h14" />
-                    <path d="M8.5 17.5v-5.5M12 17.5v-8M15.5 17.5v-3.5" />
-                    <path d="M7 10l3-2.5 2.5 2 3.5-3.5" />
-                    <path d="M15 5.5h3v3" />
-                  </svg>
-                </span>
-                <h3 className="text-sm font-semibold text-slate-900">
-                  {locale === "fr"
-                    ? "Chercheurs et journalistes de données"
-                    : "Researchers & data journalists"}
-                </h3>
+            )}
+            <div className="mt-3 space-y-1">
+              <div className="flex items-center justify-between">
+                <Link href="/status" className="ha-link text-xs">
+                  {copy.projectSnapshot.viewStatus}
+                </Link>
+                <span className="ha-badge-dev">{copy.hero.inDevelopment}</span>
               </div>
-              <p className="ha-audience-body text-ha-muted text-sm sm:text-base">
-                {locale === "fr"
-                  ? "Relier les analyses et publications au libellé exact, aux tableaux et aux tableaux de bord visibles à une date donnée, afin d’améliorer la reproductibilité et la vérifiabilité."
-                  : "Link analyses and publications to the exact wording, tables, and dashboards that were visible on a given date, improving reproducibility and auditability."}
-              </p>
-            </div>
-            <div className="ha-card ha-audience-card p-4 sm:p-5">
-              <div className="ha-audience-card-inner">
-                <span className="ha-audience-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
-                    <path d="M7 9.5h6.5a3.5 3.5 0 1 1 0 7H11l-2.5 2v-2H7a3.5 3.5 0 1 1 0-7Z" />
-                    <path d="M9 12h4.5" />
-                    <path d="M9 14.2h2.5" />
-                  </svg>
-                </span>
-                <h3 className="text-sm font-semibold text-slate-900">
-                  {locale === "fr" ? "Grand public" : "Members of the public"}
-                </h3>
-              </div>
-              <p className="ha-audience-body text-ha-muted text-sm sm:text-base">
-                {locale === "fr"
-                  ? "Explorer comment les messages clés de santé publique et la communication des risques ont changé au fil du temps, tout en gardant les sites officiels comme source principale des directives à jour."
-                  : "Explore how key public health messages and risk communication have changed across time while keeping official sites as the primary source of up-to-date guidance."}
-              </p>
+              <p className="text-ha-muted text-xs">{copy.hero.developmentNote}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Short explainer */}
-      <section>
-        <div className="ha-home-hero grid gap-8 lg:grid-cols-[minmax(0,1.6fr),minmax(0,1.2fr)]">
-          <div className="space-y-7">
-            <h2 className="ha-section-heading">
-              {locale === "fr" ? "Qu’est-ce que HealthArchive.ca ?" : "What is HealthArchive.ca?"}
-            </h2>
-            <p className="ha-section-subtitle ha-section-lede mb-12 leading-relaxed sm:mb-14">
-              {locale === "fr"
-                ? "HealthArchive.ca est une archive indépendante et non gouvernementale de contenu Web de santé publique au Canada. Elle utilise des outils modernes d’archivage Web pour capturer, stocker et relire des captures de sites de santé publique clés, en commençant par des sources fédérales comme l’Agence de la santé publique du Canada et Santé Canada."
-                : "HealthArchive.ca is an independent, non-governmental archive of Canadian public health web content. It uses modern web-archiving tools to capture, store, and replay snapshots of key public health websites, starting with federal sources such as the Public Health Agency of Canada and Health Canada."}
-            </p>
-            <p className="text-ha-muted mt-4 text-sm leading-relaxed sm:mt-6 sm:text-base">
-              {locale === "fr"
-                ? "Les sites gouvernementaux sont des documents vivants : les pages se déplacent, le contenu change et des tableaux de bord apparaissent et disparaissent. HealthArchive existe pour préserver un dossier transparent et vérifiable de ce qui était public à un moment donné — pas pour remplacer les directives officielles ou offrir un avis médical."
-                : "Government websites are living documents: pages move, content changes, and dashboards appear and disappear. HealthArchive exists to preserve a transparent, verifiable record of what was publicly available at a point in time—not to replace official guidance or offer medical advice."}
-            </p>
-            <div className="pt-2">
-              <Link
-                href="/methods"
-                className="text-ha-accent inline-flex text-xs font-medium hover:text-blue-700"
-              >
-                {locale === "fr"
-                  ? "En savoir plus sur les méthodes et la couverture →"
-                  : "Read more about methods & coverage →"}
+      {/* ========== How it works ========== */}
+      <ScrollReveal>
+        <HowItWorks locale={locale} />
+      </ScrollReveal>
+
+      {/* ========== Audience cards ========== */}
+      <ScrollReveal>
+        <AudienceSection locale={locale} />
+      </ScrollReveal>
+
+      {/* ========== Featured sources ========== */}
+      <ScrollReveal>
+        <FeaturedSources locale={locale} sources={featuredSources} />
+      </ScrollReveal>
+
+      {/* ========== Change tracking showcase (includes example story) ========== */}
+      <ScrollReveal>
+        <ChangeShowcase />
+      </ScrollReveal>
+
+      {/* ========== Recent activity ========== */}
+      <ScrollReveal>
+        <section>
+          <div className="ha-home-hero ha-home-hero-plain space-y-4">
+            <RecentActivity items={activityItems} />
+          </div>
+        </section>
+      </ScrollReveal>
+
+      {/* ========== FAQ ========== */}
+      <ScrollReveal>
+        <FAQ locale={locale} />
+      </ScrollReveal>
+
+      {/* ========== Bottom CTA ========== */}
+      <ScrollReveal>
+        <BottomCta locale={locale} />
+      </ScrollReveal>
+    </div>
+  );
+}
+
+/* ================================================================
+   Inline sub-components (small, page-specific, not worth separate files)
+   ================================================================ */
+
+function AudienceSection({ locale }: { locale: Locale }) {
+  const copy = getHomeCopy(locale);
+  const audiences = [
+    {
+      key: "clinicians",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
+          <path d="M9.5 7a2.5 2.5 0 1 1 5 0 2.5 2.5 0 0 1-5 0Z" />
+          <path d="M7 14.5a4.5 4.5 0 0 1 9 0V17H7z" />
+          <path d="M16 10.8 18.2 12l2.3-1.2v2.9c0 1.35-.78 2.52-2.3 3.2-1.52-.68-2.3-1.85-2.3-3.2z" />
+        </svg>
+      ),
+      ...copy.audience.clinicians,
+      href: "/archive",
+    },
+    {
+      key: "researchers",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
+          <path d="M5 17.5h14" />
+          <path d="M8.5 17.5v-5.5M12 17.5v-8M15.5 17.5v-3.5" />
+          <path d="M7 10l3-2.5 2.5 2 3.5-3.5" />
+          <path d="M15 5.5h3v3" />
+        </svg>
+      ),
+      ...copy.audience.researchers,
+      href: "/researchers",
+    },
+    {
+      key: "public",
+      icon: (
+        <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
+          <path d="M7 9.5h6.5a3.5 3.5 0 1 1 0 7H11l-2.5 2v-2H7a3.5 3.5 0 1 1 0-7Z" />
+          <path d="M9 12h4.5" />
+          <path d="M9 14.2h2.5" />
+        </svg>
+      ),
+      ...copy.audience.public,
+      href: "/archive",
+    },
+  ];
+
+  return (
+    <section>
+      <div className="ha-home-hero ha-home-hero-plain space-y-7">
+        <h2 className="ha-section-heading">{copy.audience.heading}</h2>
+        <p className="ha-section-subtitle ha-section-lede leading-relaxed">
+          {copy.audience.subtitle}
+        </p>
+        <div className="ha-grid-3 gap-4 pt-5 md:gap-5 md:pt-6">
+          {audiences.map((a) => (
+            <div className="ha-card ha-audience-card p-4 sm:p-5" key={a.key}>
+              <div className="ha-audience-card-inner">
+                <span className="ha-audience-icon" aria-hidden="true">
+                  {a.icon}
+                </span>
+                <h3 className="text-sm font-semibold text-[var(--text)]">{a.title}</h3>
+              </div>
+              <p className="ha-audience-body text-ha-muted text-sm sm:text-base">{a.body}</p>
+              <Link href={a.href} className="ha-link mt-1 inline-block text-xs">
+                {a.cta}
               </Link>
             </div>
-          </div>
-          <div className="ha-card ha-card-elevated space-y-3 p-4 sm:p-5">
-            <h3 className="text-sm font-semibold text-slate-900">
-              {locale === "fr"
-                ? "Ce que ce site est (et n’est pas)"
-                : "What this site is (and isn't)"}
-            </h3>
-            <ul className="text-ha-muted list-disc space-y-2 pl-5 text-xs leading-relaxed sm:text-sm">
-              <li>
-                <strong>{locale === "fr" ? "Est :" : "Is:"}</strong> {siteCopy.whatThisSiteIs.is}
-              </li>
-              <li>
-                <strong>{locale === "fr" ? "N’est pas :" : "Is not:"}</strong>{" "}
-                {siteCopy.whatThisSiteIs.isNot}
-              </li>
-              <li>
-                {locale === "fr"
-                  ? "La couverture est encore en expansion. Si vous ne trouvez pas une page, elle n’a peut-être pas encore été capturée."
-                  : "Coverage is still expanding. If you can't find a page, it may not have been captured yet."}
-              </li>
-              <li>
-                {siteCopy.whatThisSiteIs.forCurrent} (
-                {locale === "fr" ? (
-                  <>
-                    p. ex. <span className="font-medium">canada.ca/sante-publique</span>
-                  </>
-                ) : (
-                  <>
-                    e.g., <span className="font-medium">canada.ca/public-health</span>
-                  </>
-                )}
-                ).
-              </li>
-            </ul>
-          </div>
+          ))}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+  );
+}
+
+function BottomCta({ locale }: { locale: Locale }) {
+  const copy = getHomeCopy(locale);
+
+  return (
+    <section>
+      <div className="ha-home-cta-band space-y-5">
+        <h2 className="text-xl font-semibold text-[var(--text)] sm:text-2xl">
+          {copy.bottomCta.heading}
+        </h2>
+        <p className="text-ha-muted mx-auto max-w-lg text-sm leading-relaxed sm:text-base">
+          {copy.bottomCta.subheading}
+        </p>
+        <div className="mx-auto max-w-lg pt-2">
+          <HomeSearch ariaLabel={copy.search.bottomCtaAriaLabel} />
+        </div>
+        <p className="text-center">
+          <Link href="/archive/browse-by-source" className="ha-link text-xs">
+            {copy.bottomCta.cta}
+          </Link>
+        </p>
+      </div>
+    </section>
   );
 }

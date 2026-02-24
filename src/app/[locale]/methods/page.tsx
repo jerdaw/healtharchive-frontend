@@ -43,7 +43,7 @@ export default async function MethodsPage({
 
   return (
     <PageShell eyebrow={copy.eyebrow} title={copy.title} intro={copy.intro}>
-      <section className="ha-home-hero space-y-5">
+      <section className="ha-content-section-lead space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr"
             ? "Portée de l’archive (phase initiale)"
@@ -96,7 +96,7 @@ export default async function MethodsPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Méthodes de capture" : "Capture methods"}
         </h2>
@@ -134,7 +134,7 @@ export default async function MethodsPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Stockage et relecture" : "Storage & replay"}
         </h2>
@@ -167,7 +167,7 @@ export default async function MethodsPage({
         </p>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-5">
+      <section className="ha-content-section space-y-5">
         <h2 className="ha-section-heading">
           {locale === "fr" ? "Suivi des changements" : "Change tracking"}
         </h2>
@@ -195,7 +195,7 @@ export default async function MethodsPage({
         </ul>
       </section>
 
-      <section className="ha-home-hero ha-home-hero-plain space-y-4">
+      <section className="ha-content-section space-y-4">
         <div className="ha-callout">
           <h3 className="ha-callout-title">
             {locale === "fr" ? "Limites et interprétation" : "Limitations and interpretation"}

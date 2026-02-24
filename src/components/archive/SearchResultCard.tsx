@@ -3,7 +3,8 @@ import type { ReactElement, ReactNode } from "react";
 
 import { CopyButton } from "@/components/archive/CopyButton";
 import { buildReplayUrl, isoToTimestamp14 } from "@/components/replay/replayUtils";
-import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { formatDate } from "@/lib/format";
+import type { Locale } from "@/lib/i18n";
 
 type SearchView = "pages" | "snapshots";
 
@@ -21,39 +22,6 @@ export type SearchResultCardRecord = {
   pageSnapshotsCount?: number | null;
   browseUrl?: string | null;
 };
-
-function formatDate(locale: Locale, iso: string | undefined | null): string {
-  if (!iso) return locale === "fr" ? "Inconnu" : "Unknown";
-
-  const parts = iso.split("-");
-  if (parts.length === 3) {
-    const [yearStr, monthStr, dayStr] = parts;
-    const year = Number(yearStr);
-    const month = Number(monthStr);
-    const day = Number(dayStr);
-    if (year && month && day) {
-      const d = new Date(year, month - 1, day);
-      if (!Number.isNaN(d.getTime())) {
-        return d.toLocaleDateString(localeToLanguageTag(locale), {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-      }
-    }
-  }
-
-  const parsed = new Date(iso);
-  if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toLocaleDateString(localeToLanguageTag(locale), {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  }
-
-  return iso;
-}
 
 function normalizeSpaces(text: string): string {
   return text.replace(/\s+/g, " ").trim();

@@ -20,9 +20,39 @@ vi.mock("next/image", () => ({
   },
 }));
 
+// Mock API calls used by the homepage and its child components
+vi.mock("@/lib/api", () => ({
+  fetchArchiveStats: vi.fn(),
+  fetchChanges: vi.fn(),
+  fetchSources: vi.fn(),
+  resolveReplayUrl: vi.fn(),
+  getApiBaseUrl: () => "https://api.example.test",
+}));
+
+import { fetchArchiveStats, fetchChanges, fetchSources } from "@/lib/api";
+
+const mockFetchArchiveStats = vi.mocked(fetchArchiveStats);
+const mockFetchChanges = vi.mocked(fetchChanges);
+const mockFetchSources = vi.mocked(fetchSources);
+
 describe("Home page accessibility", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockFetchArchiveStats.mockResolvedValue({
+      snapshotsTotal: 100,
+      pagesTotal: 50,
+      sourcesTotal: 3,
+      latestCaptureDate: "2026-01-15",
+      latestCaptureAgeDays: 2,
+    });
+    mockFetchChanges.mockResolvedValue({
+      enabled: true,
+      total: 0,
+      page: 1,
+      pageSize: 5,
+      results: [],
+    });
+    mockFetchSources.mockResolvedValue([]);
   });
 
   it("should have no accessibility violations (English)", { timeout: 10000 }, async () => {

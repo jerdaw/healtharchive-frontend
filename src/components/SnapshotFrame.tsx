@@ -64,10 +64,10 @@ function LoadingOverlay({ locale }: { locale: ReturnType<typeof useLocale> }) {
   if (!isVisible) return null;
 
   return (
-    <div className="text-ha-muted pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/40 px-4 text-center text-xs">
+    <div className="text-ha-muted pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[var(--surface-bg)]/40 px-4 text-center text-xs">
       <span
         aria-hidden="true"
-        className="h-5 w-5 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700 motion-reduce:animate-none"
+        className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--border)] border-t-[var(--accent)] motion-reduce:animate-none"
       />
       <span className="font-medium">
         {locale === "fr" ? "Chargement de la capture…" : "Loading snapshot…"}
@@ -145,7 +145,7 @@ function SnapshotFrameInner({
       {status === "error" ? (
         <div className="text-ha-muted flex h-full min-h-[320px] items-center justify-center px-4 text-center text-xs sm:min-h-[560px] sm:text-sm">
           <div className="space-y-2">
-            <p className="font-semibold text-slate-900">
+            <p className="font-semibold text-[var(--text)]">
               {locale === "fr" ? "Contenu archivé indisponible" : "Archived content unavailable"}
             </p>
             <p>
@@ -159,7 +159,7 @@ function SnapshotFrameInner({
                   href={browseLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-ha-accent hover:text-blue-700"
+                  className="text-ha-accent hover:text-ha-accent"
                 >
                   {locale === "fr" ? "Ouvrir la page archivée →" : "Open archived page →"}
                 </a>
@@ -169,7 +169,7 @@ function SnapshotFrameInner({
                   href={rawLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-ha-accent hover:text-blue-700"
+                  className="text-ha-accent hover:text-ha-accent"
                 >
                   {locale === "fr" ? "Ouvrir le HTML brut →" : "Open raw HTML →"}
                 </a>
@@ -179,7 +179,7 @@ function SnapshotFrameInner({
                   href={apiLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-ha-accent hover:text-blue-700"
+                  className="text-ha-accent hover:text-ha-accent"
                 >
                   {locale === "fr" ? "Voir les métadonnées (JSON)" : "View metadata JSON"}
                 </a>
