@@ -4,29 +4,11 @@ import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { fetchChangeCompare, fetchSnapshotLatest } from "@/lib/api";
-import { localeToLanguageTag, type Locale } from "@/lib/i18n";
+import { formatDate, formatPercent } from "@/lib/format";
+import { type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
-
-function formatDate(locale: Locale, value: string | null | undefined): string {
-  if (!value) return locale === "fr" ? "Inconnu" : "Unknown";
-  const parsed = new Date(value);
-  if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toLocaleDateString(localeToLanguageTag(locale), {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  }
-  return value;
-}
-
-function formatPercent(value: number | null | undefined): string {
-  if (value == null) return "";
-  const rounded = Math.round(value * 100);
-  return `${rounded}%`;
-}
 
 function getCompareMetadataCopy(locale: Locale) {
   if (locale === "fr") {
@@ -158,7 +140,7 @@ export default async function ComparePage({
               {locale === "fr"
                 ? "Besoin de citer cette comparaison? Voir"
                 : "Need to cite this comparison? See"}{" "}
-              <Link href="/cite" className="text-ha-accent font-medium hover:text-blue-700">
+              <Link href="/cite" className="ha-link">
                 /cite
               </Link>
               .
@@ -208,7 +190,7 @@ export default async function ComparePage({
                       href={compare.fromSnapshot.originalUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-ha-accent font-medium hover:text-blue-700"
+                      className="ha-link"
                     >
                       {locale === "fr" ? "URL originale ↗" : "Original URL ↗"}
                     </a>
@@ -251,7 +233,7 @@ export default async function ComparePage({
                   href={compare.toSnapshot.originalUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-ha-accent font-medium hover:text-blue-700"
+                  className="ha-link"
                 >
                   {locale === "fr" ? "URL originale ↗" : "Original URL ↗"}
                 </a>

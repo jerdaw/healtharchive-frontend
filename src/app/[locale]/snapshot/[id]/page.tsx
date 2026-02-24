@@ -18,7 +18,7 @@ import { LocalizedLink as Link } from "@/components/i18n/LocalizedLink";
 import { CopyButton } from "@/components/archive/CopyButton";
 import { PageShell } from "@/components/layout/PageShell";
 import { SnapshotFrame } from "@/components/SnapshotFrame";
-import { localeToLanguageTag } from "@/lib/i18n";
+import { formatDate, formatUtcTimestamp } from "@/lib/format";
 import { getSiteCopy } from "@/lib/siteCopy";
 
 function getSnapshotDetailsMetadataCopy(locale: Locale) {
@@ -34,37 +34,6 @@ function getSnapshotDetailsMetadataCopy(locale: Locale) {
     title: "Snapshot details",
     description: "Review snapshot details (metadata, links, and related captures).",
   };
-}
-
-function formatDate(locale: Locale, iso: string | null | undefined): string {
-  if (!iso) return locale === "fr" ? "Inconnu" : "Unknown";
-  const parts = iso.split("-");
-  if (parts.length === 3) {
-    const [yearStr, monthStr, dayStr] = parts;
-    const year = Number(yearStr);
-    const month = Number(monthStr);
-    const day = Number(dayStr);
-    if (year && month && day) {
-      const d = new Date(Date.UTC(year, month - 1, day));
-      if (!Number.isNaN(d.getTime())) {
-        return d.toLocaleDateString(localeToLanguageTag(locale), {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-      }
-    }
-  }
-  return iso;
-}
-
-function formatUtcTimestamp(value: string | null | undefined): string {
-  if (!value) return "";
-  const parsed = new Date(value);
-  if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toISOString().replace(".000Z", "Z");
-  }
-  return value;
 }
 
 export async function generateMetadata({
@@ -222,7 +191,7 @@ export default async function SnapshotPage({
       compact
     >
       <section className="ha-card ha-home-panel space-y-4 p-4 sm:p-5">
-        <dl className="space-y-1 text-xs text-slate-800 sm:text-sm">
+        <dl className="space-y-1 text-xs text-[var(--text)] sm:text-sm">
           <div className="flex gap-2">
             <dt className="text-ha-muted w-28">{locale === "fr" ? "Source" : "Source"}</dt>
             <dd>{sourceName}</dd>
@@ -266,7 +235,7 @@ export default async function SnapshotPage({
                   href={originalUrl}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-ha-accent font-medium hover:text-blue-700"
+                  className="text-ha-accent hover:text-ha-accent font-medium"
                 >
                   {originalUrl}
                 </a>
@@ -283,7 +252,7 @@ export default async function SnapshotPage({
                   href={browseUrl}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-ha-accent font-medium hover:text-blue-700"
+                  className="text-ha-accent hover:text-ha-accent font-medium"
                 >
                   {browseUrl}
                 </a>
@@ -311,7 +280,7 @@ export default async function SnapshotPage({
           ) : null}
         </dl>
 
-        <p className="text-[11px] font-medium text-amber-800">
+        <p className="text-ha-warning text-[11px] font-medium">
           {locale === "fr"
             ? "Archive indépendante · Pas un site officiel du gouvernement."
             : "Independent archive · Not an official government website."}{" "}
@@ -377,7 +346,7 @@ export default async function SnapshotPage({
       </section>
 
       <section id="other-snapshots" className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
-        <h2 className="text-sm font-semibold text-slate-900">
+        <h2 className="text-sm font-semibold text-[var(--text)]">
           {locale === "fr" ? "Autres captures" : "Other snapshots"}
         </h2>
         {!usingBackend ? (
@@ -387,7 +356,7 @@ export default async function SnapshotPage({
               : "History is not available for demo snapshots."}
           </p>
         ) : timeline?.snapshots?.length ? (
-          <ul className="space-y-2 text-xs text-slate-800 sm:text-sm">
+          <ul className="space-y-2 text-xs text-[var(--text)] sm:text-sm">
             {timeline.snapshots
               .slice()
               .reverse()
@@ -401,11 +370,11 @@ export default async function SnapshotPage({
                   <li
                     key={item.snapshotId}
                     className={`border-ha-border flex flex-wrap items-center justify-between gap-2 border-b pb-2 last:border-b-0 last:pb-0 ${
-                      isCurrent ? "rounded-lg bg-blue-50/40 px-2 py-1.5" : ""
+                      isCurrent ? "ha-snapshot-current rounded-lg px-2 py-1.5" : ""
                     }`}
                   >
                     <div className="min-w-0">
-                      <p className="font-medium text-slate-900">
+                      <p className="font-medium text-[var(--text)]">
                         {formatDate(locale, item.captureDate)}
                         {isCurrent
                           ? locale === "fr"
@@ -459,7 +428,7 @@ export default async function SnapshotPage({
 
       {browseUrl || rawHtmlUrl ? (
         <section className="ha-card ha-home-panel space-y-3 p-4 sm:p-5">
-          <h2 className="text-sm font-semibold text-slate-900">
+          <h2 className="text-sm font-semibold text-[var(--text)]">
             {locale === "fr" ? "Aperçu de la page archivée" : "Archived page preview"}
           </h2>
           <SnapshotFrame

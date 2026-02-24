@@ -9,41 +9,12 @@ import {
   getApiBaseUrl,
   type SourceSummary as ApiSourceSummary,
 } from "@/lib/api";
+import { formatDate } from "@/lib/format";
 import { localeToLanguageTag, type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { resolveLocale } from "@/lib/resolveLocale";
 import { getSiteCopy } from "@/lib/siteCopy";
 import { getLocalizedSourceHomepage, getLocalizedSourceName } from "@/lib/sources";
-
-function formatDate(locale: Locale, iso: string | undefined | null): string {
-  if (!iso) return locale === "fr" ? "Inconnu" : "Unknown";
-  const parts = iso.split("-");
-  if (parts.length === 3) {
-    const [yearStr, monthStr, dayStr] = parts;
-    const year = Number(yearStr);
-    const month = Number(monthStr);
-    const day = Number(dayStr);
-    if (year && month && day) {
-      const d = new Date(year, month - 1, day);
-      if (!Number.isNaN(d.getTime())) {
-        return d.toLocaleDateString(localeToLanguageTag(locale), {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
-      }
-    }
-  }
-  const parsed = new Date(iso);
-  if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toLocaleDateString(localeToLanguageTag(locale), {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  }
-  return iso;
-}
 
 type SourceSummaryLike = {
   sourceCode: string;
