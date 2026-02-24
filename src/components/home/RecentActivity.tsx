@@ -53,7 +53,7 @@ export function RecentActivity({ items }: Props) {
 
   return (
     <section>
-      <h2 className="ha-section-heading text-lg sm:text-xl">{copy.recentActivity.heading}</h2>
+      <h2 className="ha-section-heading">{copy.recentActivity.heading}</h2>
 
       {items.length === 0 ? (
         <p className="text-ha-muted mt-4 text-sm">{copy.recentActivity.noActivity}</p>

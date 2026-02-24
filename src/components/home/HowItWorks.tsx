@@ -15,7 +15,7 @@ export function HowItWorks({ locale }: Props) {
   return (
     <section id="how-it-works">
       <div className="ha-home-hero ha-home-hero-plain space-y-7">
-        <h2 className="ha-section-heading text-lg sm:text-xl">{copy.howItWorks.heading}</h2>
+        <h2 className="ha-section-heading">{copy.howItWorks.heading}</h2>
         <p className="ha-section-subtitle">{copy.howItWorks.subtitle}</p>
         <div className="ha-grid-3 gap-4 pt-4 md:gap-5">
           {steps.map((step) => (

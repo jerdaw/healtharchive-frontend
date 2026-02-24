@@ -13,7 +13,7 @@ export function FeaturedSources({ locale, sources }: Props) {
   return (
     <section>
       <div className="ha-home-hero ha-home-hero-plain space-y-7">
-        <h2 className="ha-section-heading text-lg sm:text-xl">{copy.featuredSources.heading}</h2>
+        <h2 className="ha-section-heading">{copy.featuredSources.heading}</h2>
         <p className="ha-section-subtitle">{copy.featuredSources.subtitle}</p>
         {displaySources.length === 0 ? (
           <p className="text-ha-muted text-sm">{copy.featuredSources.noSources}</p>

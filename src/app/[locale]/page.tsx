@@ -68,7 +68,7 @@ export default async function HomePage({
   }));
 
   return (
-    <div className="ha-container space-y-10 pt-8 pb-8 sm:space-y-12 sm:pt-10">
+    <div className="ha-container space-y-6 pt-6">
       {/* ========== Hero ========== */}
       <section>
         <div className="ha-home-hero grid gap-10 lg:grid-cols-[minmax(0,1.7fr),minmax(0,1fr)] lg:items-center">
@@ -182,7 +182,9 @@ export default async function HomePage({
       {/* ========== Recent activity ========== */}
       <ScrollReveal>
         <section>
-          <RecentActivity items={activityItems} />
+          <div className="ha-home-hero ha-home-hero-plain space-y-4">
+            <RecentActivity items={activityItems} />
+          </div>
         </section>
       </ScrollReveal>
 
@@ -247,8 +249,8 @@ function AudienceSection({ locale }: { locale: Locale }) {
 
   return (
     <section>
-      <div className="space-y-7">
-        <h2 className="ha-section-heading text-lg sm:text-xl">{copy.audience.heading}</h2>
+      <div className="ha-home-hero ha-home-hero-plain space-y-7">
+        <h2 className="ha-section-heading">{copy.audience.heading}</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
           {copy.audience.subtitle}
         </p>

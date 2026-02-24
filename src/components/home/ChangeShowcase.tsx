@@ -38,8 +38,8 @@ export function ChangeShowcase() {
 
   return (
     <section>
-      <div className="space-y-7">
-        <h2 className="ha-section-heading text-lg sm:text-xl">{copy.changeShowcase.heading}</h2>
+      <div className="ha-home-hero ha-home-hero-plain space-y-7">
+        <h2 className="ha-section-heading">{copy.changeShowcase.heading}</h2>
         <p className="ha-section-subtitle">{copy.changeShowcase.subtitle}</p>
 
         <div className="grid gap-4 sm:grid-cols-2">
