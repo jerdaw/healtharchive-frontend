@@ -25,6 +25,7 @@ export type HomeCopy = {
     sourcesTracked: string;
     sourcesUnit: string;
     viewStatus: string;
+    lastUpdatedLabel: string;
   };
   audience: {
     heading: string;
@@ -86,6 +87,7 @@ export type HomeCopy = {
   search: {
     placeholder: string;
     button: string;
+    bottomCtaAriaLabel: string;
   };
 };
 
@@ -117,6 +119,7 @@ const homeCopyEn: HomeCopy = {
     sourcesTracked: "Sources tracked",
     sourcesUnit: "sources",
     viewStatus: "View live status \u2192",
+    lastUpdatedLabel: "Last capture",
   },
   audience: {
     heading: "Who is this for?",
@@ -162,7 +165,7 @@ const homeCopyEn: HomeCopy = {
     noSources: "No sources available.",
   },
   exampleStory: {
-    heading: "Why this matters",
+    heading: "When guidance changes, the record should remain",
     body: "In 2024, public health agencies updated their mpox guidance pages. The previous versions\u2009\u2014\u2009with different risk categories and recommendations\u2009\u2014\u2009are no longer on the live sites. But they\u2019re preserved in HealthArchive, citable and searchable.",
     cta: "See the archived snapshot \u2192",
   },
@@ -197,11 +200,11 @@ const homeCopyEn: HomeCopy = {
       },
       {
         q: "Can I request a page to be archived?",
-        a: "Yes. Use the Report an Issue form to suggest new pages or sources for inclusion. We prioritize Canadian public health content.",
+        a: "Yes. Use the Contact page to suggest new pages or sources for inclusion. We prioritize Canadian public health content.",
       },
       {
         q: "How do I cite a snapshot?",
-        a: "Each archived snapshot has a permanent URL. You can cite it like any web resource, including the capture date and the HealthArchive URL. See our citation guide for suggested formats.",
+        a: "Each archived snapshot has a permanent URL and a copy-citation button. You can cite it like any web resource, including the capture date and the HealthArchive URL.",
       },
       {
         q: "How is this different from the Wayback Machine?",
@@ -214,13 +217,15 @@ const homeCopyEn: HomeCopy = {
     ],
   },
   bottomCta: {
-    heading: "Ready to explore?",
-    subheading: "Search the archive to find what Canadian public health websites used to say.",
-    cta: "Search the archive",
+    heading: "Start searching",
+    subheading:
+      "Find the exact version of any archived page\u2009\u2014\u2009by keyword, source, or date.",
+    cta: "or browse all sources \u2192",
   },
   search: {
     placeholder: "Search archived health pages\u2026",
     button: "Search",
+    bottomCtaAriaLabel: "Search the archive from the bottom of the page",
   },
 };
 
@@ -254,6 +259,7 @@ const homeCopyFr: HomeCopy = {
     sourcesTracked: "Sources suivies",
     sourcesUnit: "sources",
     viewStatus: "Voir le statut en direct \u2192",
+    lastUpdatedLabel: "Derni\u00e8re capture",
   },
   audience: {
     heading: "\u00c0 qui s\u2019adresse ce site ?",
@@ -299,7 +305,7 @@ const homeCopyFr: HomeCopy = {
     noSources: "Aucune source disponible.",
   },
   exampleStory: {
-    heading: "Pourquoi c\u2019est important",
+    heading: "Quand les directives changent, le dossier doit rester",
     body: "En 2024, les agences de sant\u00e9 publique ont mis \u00e0 jour leurs pages sur la variole simienne (mpox). Les versions pr\u00e9c\u00e9dentes\u2009\u2014\u2009avec des cat\u00e9gories de risque et des recommandations diff\u00e9rentes\u2009\u2014\u2009ne sont plus sur les sites officiels. Mais elles sont pr\u00e9serv\u00e9es dans HealthArchive, citables et consultables.",
     cta: "Voir la capture archiv\u00e9e \u2192",
   },
@@ -334,11 +340,11 @@ const homeCopyFr: HomeCopy = {
       },
       {
         q: "Puis-je demander l\u2019archivage d\u2019une page\u00a0?",
-        a: "Oui. Utilisez le formulaire Signaler un probl\u00e8me pour sugg\u00e9rer de nouvelles pages ou sources. Nous priorisons le contenu canadien de sant\u00e9 publique.",
+        a: "Oui. Utilisez la page Contact pour sugg\u00e9rer de nouvelles pages ou sources. Nous priorisons le contenu canadien de sant\u00e9 publique.",
       },
       {
         q: "Comment citer une capture\u00a0?",
-        a: "Chaque capture archiv\u00e9e poss\u00e8de un URL permanent. Vous pouvez la citer comme toute ressource Web, en incluant la date de capture et l\u2019URL HealthArchive. Consultez notre guide de citation pour les formats sugg\u00e9r\u00e9s.",
+        a: "Chaque capture archiv\u00e9e poss\u00e8de un URL permanent et un bouton de copie de citation. Vous pouvez la citer comme toute ressource Web, en incluant la date de capture et l\u2019URL HealthArchive.",
       },
       {
         q: "En quoi est-ce diff\u00e9rent du Wayback Machine\u00a0?",
@@ -351,14 +357,15 @@ const homeCopyFr: HomeCopy = {
     ],
   },
   bottomCta: {
-    heading: "Pr\u00eat \u00e0 explorer\u00a0?",
+    heading: "Commencez votre recherche",
     subheading:
-      "Recherchez dans l\u2019archive pour d\u00e9couvrir ce que les sites de sant\u00e9 publique canadiens affichaient.",
-    cta: "Rechercher dans l\u2019archive",
+      "Trouvez la version exacte de toute page archiv\u00e9e\u2009\u2014\u2009par mot-cl\u00e9, source ou date.",
+    cta: "ou parcourir toutes les sources \u2192",
   },
   search: {
     placeholder: "Rechercher dans les pages archiv\u00e9es\u2026",
     button: "Rechercher",
+    bottomCtaAriaLabel: "Rechercher dans l\u2019archive depuis le bas de la page",
   },
 };
 

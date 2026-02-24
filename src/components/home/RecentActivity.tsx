@@ -53,7 +53,7 @@ export function RecentActivity({ items }: Props) {
 
   return (
     <section>
-      <h2 className="ha-section-heading">{copy.recentActivity.heading}</h2>
+      <h2 className="ha-section-heading text-lg sm:text-xl">{copy.recentActivity.heading}</h2>
 
       {items.length === 0 ? (
         <p className="text-ha-muted mt-4 text-sm">{copy.recentActivity.noActivity}</p>
@@ -88,7 +88,7 @@ export function RecentActivity({ items }: Props) {
       )}
 
       <p className="mt-4">
-        <Link href="/changes" className="text-ha-accent hover:text-ha-accent text-xs font-medium">
+        <Link href="/changes" className="ha-link text-xs">
           {copy.recentActivity.seeAll}
         </Link>
       </p>

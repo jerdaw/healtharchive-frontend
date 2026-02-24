@@ -14,6 +14,7 @@ import { ProjectSnapshotOrchestrator } from "@/components/home/ProjectSnapshotOr
 import { RecentActivity, type ActivityItem } from "@/components/home/RecentActivity";
 import { ScrollReveal } from "@/components/home/ScrollReveal";
 import { fetchArchiveStats, fetchChanges, fetchSources, type SourceSummary } from "@/lib/api";
+import { formatDate } from "@/lib/format";
 import { getHomeCopy } from "@/lib/homeCopy";
 import type { Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
@@ -67,7 +68,7 @@ export default async function HomePage({
   }));
 
   return (
-    <div className="ha-container space-y-6 pt-6">
+    <div className="ha-container space-y-10 pt-8 pb-8 sm:space-y-12 sm:pt-10">
       {/* ========== Hero ========== */}
       <section>
         <div className="ha-home-hero grid gap-10 lg:grid-cols-[minmax(0,1.7fr),minmax(0,1fr)] lg:items-center">
@@ -113,7 +114,7 @@ export default async function HomePage({
                 label={copy.projectSnapshot.archivedSnapshots}
                 value={recordCount}
                 unit={copy.projectSnapshot.snapshotsUnit}
-                barPercent={Math.min(100, (recordCount / 200_000) * 100)}
+                showBar={false}
                 start={false}
                 startEvent="ha-trackchanges-finished"
                 completeEvent="ha-metric-finished"
@@ -123,7 +124,7 @@ export default async function HomePage({
                 label={copy.projectSnapshot.uniquePages}
                 value={pageCount}
                 unit={copy.projectSnapshot.pagesUnit}
-                barPercent={Math.min(100, (pageCount / 100_000) * 100)}
+                showBar={false}
                 start={false}
                 startEvent="ha-trackchanges-finished"
                 completeEvent="ha-metric-finished"
@@ -133,20 +134,26 @@ export default async function HomePage({
                 label={copy.projectSnapshot.sourcesTracked}
                 value={sourceCount}
                 unit={copy.projectSnapshot.sourcesUnit}
-                barPercent={Math.min(100, (sourceCount / 20) * 100)}
+                showBar={false}
                 start={false}
                 startEvent="ha-trackchanges-finished"
                 completeEvent="ha-metric-finished"
               />
             </dl>
-            <div className="mt-3 flex items-center justify-between">
-              <Link
-                href="/status"
-                className="text-ha-accent hover:text-ha-accent text-xs font-medium"
-              >
-                {copy.projectSnapshot.viewStatus}
-              </Link>
-              <span className="ha-badge-dev">{copy.hero.inDevelopment}</span>
+            {stats?.latestCaptureDate && (
+              <p className="text-ha-muted mt-3 text-xs">
+                {copy.projectSnapshot.lastUpdatedLabel}:{" "}
+                {formatDate(locale, stats.latestCaptureDate)}
+              </p>
+            )}
+            <div className="mt-3 space-y-1">
+              <div className="flex items-center justify-between">
+                <Link href="/status" className="ha-link text-xs">
+                  {copy.projectSnapshot.viewStatus}
+                </Link>
+                <span className="ha-badge-dev">{copy.hero.inDevelopment}</span>
+              </div>
+              <p className="text-ha-muted text-xs">{copy.hero.developmentNote}</p>
             </div>
           </div>
         </div>
@@ -167,26 +174,17 @@ export default async function HomePage({
         <FeaturedSources locale={locale} sources={featuredSources} />
       </ScrollReveal>
 
-      {/* ========== Change tracking showcase ========== */}
+      {/* ========== Change tracking showcase (includes example story) ========== */}
       <ScrollReveal>
         <ChangeShowcase />
       </ScrollReveal>
 
-      {/* ========== Example story ========== */}
-      <ScrollReveal>
-        <ExampleStory locale={locale} />
-      </ScrollReveal>
-
       {/* ========== Recent activity ========== */}
-      {activityItems.length > 0 && (
-        <ScrollReveal>
-          <section>
-            <div className="ha-home-hero ha-home-hero-plain space-y-4">
-              <RecentActivity items={activityItems} />
-            </div>
-          </section>
-        </ScrollReveal>
-      )}
+      <ScrollReveal>
+        <section>
+          <RecentActivity items={activityItems} />
+        </section>
+      </ScrollReveal>
 
       {/* ========== FAQ ========== */}
       <ScrollReveal>
@@ -249,8 +247,8 @@ function AudienceSection({ locale }: { locale: Locale }) {
 
   return (
     <section>
-      <div className="ha-home-hero ha-home-hero-plain space-y-7">
-        <h2 className="ha-section-heading">{copy.audience.heading}</h2>
+      <div className="space-y-7">
+        <h2 className="ha-section-heading text-lg sm:text-xl">{copy.audience.heading}</h2>
         <p className="ha-section-subtitle ha-section-lede leading-relaxed">
           {copy.audience.subtitle}
         </p>
@@ -264,37 +262,11 @@ function AudienceSection({ locale }: { locale: Locale }) {
                 <h3 className="text-sm font-semibold text-[var(--text)]">{a.title}</h3>
               </div>
               <p className="ha-audience-body text-ha-muted text-sm sm:text-base">{a.body}</p>
-              <Link
-                href={a.href}
-                className="text-ha-accent hover:text-ha-accent mt-1 inline-block text-xs font-medium"
-              >
+              <Link href={a.href} className="ha-link mt-1 inline-block text-xs">
                 {a.cta}
               </Link>
             </div>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ExampleStory({ locale }: { locale: Locale }) {
-  const copy = getHomeCopy(locale);
-
-  return (
-    <section>
-      <div className="ha-home-hero ha-home-hero-plain">
-        <div className="ha-example-story space-y-3">
-          <h2 className="text-sm font-semibold text-[var(--text)]">{copy.exampleStory.heading}</h2>
-          <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
-            {copy.exampleStory.body}
-          </p>
-          <Link
-            href="/snapshot/phac-2024-07-10-mpox-update"
-            className="text-ha-accent hover:text-ha-accent inline-block text-xs font-medium"
-          >
-            {copy.exampleStory.cta}
-          </Link>
         </div>
       </div>
     </section>
@@ -313,9 +285,14 @@ function BottomCta({ locale }: { locale: Locale }) {
         <p className="text-ha-muted mx-auto max-w-lg text-sm leading-relaxed sm:text-base">
           {copy.bottomCta.subheading}
         </p>
-        <div className="flex justify-center pt-2">
-          <HoverGlowLink href="/archive">{copy.bottomCta.cta}</HoverGlowLink>
+        <div className="mx-auto max-w-lg pt-2">
+          <HomeSearch ariaLabel={copy.search.bottomCtaAriaLabel} />
         </div>
+        <p className="text-center">
+          <Link href="/archive/browse-by-source" className="ha-link text-xs">
+            {copy.bottomCta.cta}
+          </Link>
+        </p>
       </div>
     </section>
   );

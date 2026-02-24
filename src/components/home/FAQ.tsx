@@ -9,7 +9,7 @@ export function FAQ({ locale }: Props) {
   return (
     <section>
       <div className="ha-home-hero ha-home-hero-plain space-y-7">
-        <h2 className="ha-section-heading">{copy.faq.heading}</h2>
+        <h2 className="ha-section-heading text-lg sm:text-xl">{copy.faq.heading}</h2>
         <div className="space-y-3">
           {copy.faq.items.map((item, i) => (
             <details className="ha-faq-item" key={i}>

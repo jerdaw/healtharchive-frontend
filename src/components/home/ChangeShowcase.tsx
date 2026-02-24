@@ -38,8 +38,8 @@ export function ChangeShowcase() {
 
   return (
     <section>
-      <div className="ha-home-hero ha-home-hero-plain space-y-7">
-        <h2 className="ha-section-heading">{copy.changeShowcase.heading}</h2>
+      <div className="space-y-7">
+        <h2 className="ha-section-heading text-lg sm:text-xl">{copy.changeShowcase.heading}</h2>
         <p className="ha-section-subtitle">{copy.changeShowcase.subtitle}</p>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -65,10 +65,21 @@ export function ChangeShowcase() {
         </div>
 
         <p>
-          <Link href="/changes" className="text-ha-accent hover:text-ha-accent text-xs font-medium">
+          <Link href="/changes" className="ha-link text-xs">
             {copy.changeShowcase.seeAll}
           </Link>
         </p>
+
+        {/* Inline example story */}
+        <div className="ha-example-story space-y-3">
+          <h3 className="text-sm font-semibold text-[var(--text)]">{copy.exampleStory.heading}</h3>
+          <p className="text-ha-muted text-sm leading-relaxed sm:text-base">
+            {copy.exampleStory.body}
+          </p>
+          <Link href="/snapshot/phac-2024-07-10-mpox-update" className="ha-link text-xs">
+            {copy.exampleStory.cta}
+          </Link>
+        </div>
       </div>
     </section>
   );

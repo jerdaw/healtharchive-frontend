@@ -4,7 +4,7 @@ import { useLocale } from "@/components/i18n/LocaleProvider";
 import { getHomeCopy } from "@/lib/homeCopy";
 import { localizeHref } from "@/lib/i18n";
 
-export function HomeSearch() {
+export function HomeSearch({ ariaLabel }: { ariaLabel?: string } = {}) {
   const locale = useLocale();
   const copy = getHomeCopy(locale);
 
@@ -14,6 +14,7 @@ export function HomeSearch() {
       action={localizeHref(locale, "/archive")}
       className="ha-home-search"
       role="search"
+      aria-label={ariaLabel}
     >
       <input
         type="text"

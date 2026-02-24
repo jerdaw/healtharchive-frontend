@@ -8,12 +8,12 @@ type Props = { locale: Locale; sources: SourceSummary[] };
 export function FeaturedSources({ locale, sources }: Props) {
   const copy = getHomeCopy(locale);
 
-  const displaySources = sources.slice(0, 5);
+  const displaySources = sources.slice(0, 6);
 
   return (
     <section>
       <div className="ha-home-hero ha-home-hero-plain space-y-7">
-        <h2 className="ha-section-heading">{copy.featuredSources.heading}</h2>
+        <h2 className="ha-section-heading text-lg sm:text-xl">{copy.featuredSources.heading}</h2>
         <p className="ha-section-subtitle">{copy.featuredSources.subtitle}</p>
         {displaySources.length === 0 ? (
           <p className="text-ha-muted text-sm">{copy.featuredSources.noSources}</p>
@@ -28,20 +28,14 @@ export function FeaturedSources({ locale, sources }: Props) {
                 <p className="text-ha-muted text-xs">
                   {copy.featuredSources.latestCapture}: {source.lastCapture}
                 </p>
-                <Link
-                  href={`/archive?source=${source.sourceCode}`}
-                  className="text-ha-accent hover:text-ha-accent text-xs font-medium"
-                >
+                <Link href={`/archive?source=${source.sourceCode}`} className="ha-link text-xs">
                   {copy.featuredSources.browse}
                 </Link>
               </div>
             ))}
           </div>
         )}
-        <Link
-          href="/archive/browse-by-source"
-          className="text-ha-accent hover:text-ha-accent text-xs font-medium"
-        >
+        <Link href="/archive/browse-by-source" className="ha-link text-xs">
           {copy.featuredSources.seeAll}
         </Link>
       </div>
