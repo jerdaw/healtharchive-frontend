@@ -4,5 +4,5 @@
     "silent": true,
     "autoJobCancelation": true
   },
-  "ignoreCommand": "bash scripts/vercel-ignore-build.sh"
+  "ignoreCommand": "if [ -f scripts/vercel-ignore-build.sh ]; then bash scripts/vercel-ignore-build.sh; elif [ -f web/scripts/vercel-ignore-build.sh ]; then bash web/scripts/vercel-ignore-build.sh; else echo 'Ignore script missing; build will proceed'; exit 1; fi"
 }
