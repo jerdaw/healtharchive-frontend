@@ -6,7 +6,6 @@ historical versions of **Canadian public health web content** (e.g., PHAC, Healt
 This repository contains the **Next.js frontend** for the public site at:
 
 - https://healtharchive.ca (production)
-- https://healtharchive.vercel.app (Vercel default domain)
 
 > **Status:** Production (active)
 > The UI now prefers live backend APIs for search, browse, and snapshot detail
@@ -36,7 +35,7 @@ are centralized in `src/lib/siteCopy.ts`.
   - TailwindCSS for layout/spacing
   - Custom `.ha-*` utility classes in `src/app/globals.css` for the design system
 - **Package manager:** npm
-- **Hosting target:** Hetzner VPS frontend service (Coolify-managed container behind host Caddy)
+- **Hosting target:** Hetzner VPS frontend service (direct Docker runtime behind host Caddy)
 
 ### Key UI/UX features
 
@@ -101,15 +100,14 @@ NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8001
 Set `NEXT_PUBLIC_API_BASE_URL` in the frontend runtime environment. Recommended
 values:
 
-| Environment | Frontend URL                       | Backend URL                    | `NEXT_PUBLIC_API_BASE_URL`     |
-| ----------- | ---------------------------------- | ------------------------------ | ------------------------------ |
-| Local       | `http://localhost:3000`            | `http://127.0.0.1:8001`        | `http://127.0.0.1:8001`        |
-| Preview     | `https://healtharchive.vercel.app` | `https://api.healtharchive.ca` | `https://api.healtharchive.ca` |
-| Production  | `https://healtharchive.ca`         | `https://api.healtharchive.ca` | `https://api.healtharchive.ca` |
+| Environment | Frontend URL               | Backend URL                    | `NEXT_PUBLIC_API_BASE_URL`     |
+| ----------- | -------------------------- | ------------------------------ | ------------------------------ |
+| Local       | `http://localhost:3000`    | `http://127.0.0.1:8001`        | `http://127.0.0.1:8001`        |
+| Production  | `https://healtharchive.ca` | `https://api.healtharchive.ca` | `https://api.healtharchive.ca` |
 
-> Expected limitation (by design): branch preview URLs like
-> `https://healtharchive-git-...vercel.app` may fall back to offline sample mode until we
-> decide to loosen the backend CORS allowlist.
+> Historical note: older Vercel-hosted preview URLs may still appear in git
+> history or rollback notes, but they are not part of the current production
+> path.
 
 > `NEXT_PUBLIC_BACKEND_URL` is still supported for backward-compatibility, but
 > `NEXT_PUBLIC_API_BASE_URL` is the preferred and documented way to configure
@@ -249,8 +247,9 @@ Current target production model:
 
 - GitHub repo: [https://github.com/jerdaw/healtharchive-frontend](https://github.com/jerdaw/healtharchive-frontend)
 - Production branch: `main`
-- Runtime: Coolify-managed container on the Hetzner VPS
+- Runtime: direct Docker container on the Hetzner VPS
 - Public ingress: host Caddy
+- Current authoritative DNS: Namecheap
 - Domains:
   - `healtharchive.ca` (canonical apex frontend)
   - `www.healtharchive.ca` (redirect alias to apex)
@@ -277,6 +276,14 @@ NEXT_PUBLIC_REPLAY_BASE_URL=https://replay.healtharchive.ca
 PORT=3000
 HOSTNAME=0.0.0.0
 ```
+
+Historical/deferred artifacts:
+
+- `vercel.json`
+- `scripts/vercel-ignore-build.sh`
+
+These remain in the repo only for historical context and old preview
+experiments. They are not part of the current production deployment path.
 
 ---
 
