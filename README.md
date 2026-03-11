@@ -174,6 +174,11 @@ bash scripts/setup-hooks.sh
 - Optional diagnostics envs (`NEXT_PUBLIC_SHOW_API_HEALTH_BANNER`,
   `NEXT_PUBLIC_LOG_API_HEALTH_FAILURE`, `NEXT_PUBLIC_SHOW_API_BASE_HINT`) are
   normally disabled in CI and production to keep logs quiet.
+- GitHub Actions also provides:
+  - `Workflow Lint` for `.github/workflows/**`
+  - `Production Smoke` as a manual public-surface verification workflow
+- Production deploys remain manual on the VPS; GitHub Actions is used for CI
+  and public smoke verification, not for automatic production deploys.
 
 ---
 
