@@ -9,6 +9,11 @@ repo. It covers:
 - Routes/pages and the snapshot viewer
 - Deployment notes (VPS + Caddy)
 
+Documentation boundary note:
+
+- Shared VPS facts that are not specific to the frontend alone are canonical in `/home/jer/repos/platform-ops`.
+- Use `/home/jer/repos/platform-ops/PLAT-009-shared-vps-documentation-boundary.md` when deciding whether a host fact belongs here or in the shared ops workspace.
+
 ## 1. High-level project summary
 
 **Project name:** HealthArchive.ca frontend

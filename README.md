@@ -19,6 +19,21 @@ are centralized in `src/lib/siteCopy.ts`.
 - **Unified Documentation Site**: Documentation for both repositories is now hosted in the [backend repository](https://github.com/jerdaw/healtharchive-backend). Run `make docs-serve` in the backend root to view the searchable UI.
 - **Shared VPS ops workspace**: `/home/jer/repos/platform-ops` (historical local alias: `/home/jer/repos/projects-merge`) contains the shared inventory, roadmap, handoff, and cross-project runbooks.
 
+## Shared documentation boundary
+
+- `platform-ops/` is the default home for shared VPS facts that are not specific to the HealthArchive frontend alone:
+  - shared host access posture
+  - shared ingress ownership
+  - cross-project service inventory
+  - shared host path conventions
+  - host-wide hardening and maintenance state
+- `healtharchive-frontend/` owns the frontend-specific subset:
+  - runtime and env wiring for the frontend
+  - deployment and verification steps for the frontend
+  - route behavior, UX, and browser-facing integration details
+- Boundary reference:
+  - `/home/jer/repos/platform-ops/PLAT-009-shared-vps-documentation-boundary.md`
+
 ---
 
 ## Localization (EN/FR)

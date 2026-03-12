@@ -23,4 +23,25 @@ describe("production docs alignment", () => {
       "Host Caddy remains the public ingress owner on the VPS.",
     );
   });
+
+  it("points shared VPS facts to platform-ops in active entry points", () => {
+    const readme = readRepoFile("README.md");
+    const agents = readRepoFile("AGENTS.md");
+    const docsIndex = readRepoFile("docs/README.md");
+    const implementationGuide = readRepoFile("docs/implementation-guide.md");
+    const verificationGuide = readRepoFile("docs/deployment/verification.md");
+
+    for (const content of [readme, agents, docsIndex]) {
+      expect(content).toContain(
+        "/home/jer/repos/platform-ops/PLAT-009-shared-vps-documentation-boundary.md",
+      );
+    }
+
+    expect(implementationGuide).toContain(
+      "Shared VPS facts that are not specific to the frontend alone are canonical in `/home/jer/repos/platform-ops`.",
+    );
+    expect(verificationGuide).toContain(
+      "Shared host topology, ingress ownership, and other cross-project VPS facts are canonical in `/home/jer/repos/platform-ops`.",
+    );
+  });
 });
