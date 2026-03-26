@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint --max-warnings=0",
     "lint:fix": "eslint --fix",
@@ -20,8 +20,8 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "diff": "^8.0.3",
-    "next": "16.1.6",
+    "diff": "^8.0.4",
+    "next": "16.1.7",
     "react": "^19.2.3",
     "react-dom": "19.2.4"
   },
@@ -30,13 +30,13 @@
     "@testing-library/dom": "^10",
     "@testing-library/jest-dom": "^6",
     "@testing-library/react": "^16",
-    "@types/node": "^25.3.3",
+    "@types/node": "^25.5.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "^16.1.6",
+    "eslint": "^10.1.0",
+    "eslint-config-next": "^16.1.7",
     "eslint-plugin-react": "^7.37.5",
-    "jsdom": "^28",
+    "jsdom": "^29",
     "patch-package": "^8.0.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
