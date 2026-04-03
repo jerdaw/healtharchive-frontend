@@ -3,6 +3,12 @@
 HealthArchive.ca is an independent, non-governmental project to preserve and surface
 historical versions of **Canadian public health web content** (e.g., PHAC, Health Canada).
 
+Shared VPS inventory, ingress ownership, canonical public hosts, and cross-project
+operations state live in `/home/jer/repos/platform-ops`. Use
+`/home/jer/repos/platform-ops/docs/standards/PLAT-009-shared-vps-documentation-boundary.md`
+as the default rule for what belongs in this repo versus shared ops
+documentation.
+
 This repository contains the **Next.js frontend** for the public site at:
 
 - https://healtharchive.ca (production)

@@ -14,6 +14,12 @@ Documentation boundary note:
 - Shared VPS facts that are not specific to the frontend alone are canonical in `/home/jer/repos/platform-ops`.
 - Use `/home/jer/repos/platform-ops/PLAT-009-shared-vps-documentation-boundary.md` when deciding whether a host fact belongs here or in the shared ops workspace.
 
+Shared VPS inventory, ingress ownership, canonical public hosts, and cross-project
+operations state live in `/home/jer/repos/platform-ops`. Use
+`/home/jer/repos/platform-ops/docs/standards/PLAT-009-shared-vps-documentation-boundary.md`
+as the default rule for what belongs in this repo versus shared ops
+documentation.
+
 ## 1. High-level project summary
 
 **Project name:** HealthArchive.ca frontend
