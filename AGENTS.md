@@ -1,5 +1,15 @@
 # AGENTS.md – HealthArchive.ca frontend
 
+## Historical repo notice
+
+- This repository is historical only.
+- The canonical live frontend now lives in `jerdaw/healtharchive-backend` under
+  `frontend/`.
+- Do not add new product changes, CI workflows, or release automation here
+  unless the task is explicitly about preserving historical reference material.
+- New issues, pull requests, and active implementation work belong in the
+  monorepo.
+
 ## Project overview
 
 - Next.js 16 App Router frontend for **HealthArchive.ca**, a public-facing UI for an independent archive of Canadian public health websites.

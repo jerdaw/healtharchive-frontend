@@ -14,5 +14,10 @@ Production frontend releases are now sourced from the monorepo `frontend/`
 directory on the VPS. Legacy Vercel and GitHub Pages integration for this repo
 was intentionally retired during the monorepo consolidation.
 
-This repository is kept only for historical reference during the transition
-window and will be archived after the planned stabilization period.
+This repository is kept only for historical reference.
+
+It is intentionally retired as a live development target. Ongoing code,
+documentation, CI, and release work belong in:
+
+- https://github.com/jerdaw/healtharchive-backend
+- https://github.com/jerdaw/healtharchive-backend/tree/main/frontend
