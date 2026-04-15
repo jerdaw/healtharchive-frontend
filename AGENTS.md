@@ -3,7 +3,7 @@
 ## Historical repo notice
 
 - This repository is historical only.
-- The canonical live frontend now lives in `jerdaw/healtharchive-backend` under
+- The canonical live frontend now lives in `jerdaw/healtharchive` under
   `frontend/`.
 - Do not add new product changes, CI workflows, or release automation here
   unless the task is explicitly about preserving historical reference material.
@@ -38,9 +38,9 @@
 - Shared cross-project VPS ops:
   - `/home/jer/repos/platform-ops` → shared inventory, roadmap, handoff, and runbooks
 - Central Documentation (Backend Repo):
-  - `../healtharchive-backend/mkdocs.yml` (Navigation Source of Truth)
-  - `../healtharchive-backend/docs/documentation-guidelines.md`
-  - `../healtharchive-backend/docs/roadmaps/roadmap.md`
+  - `../healtharchive/mkdocs.yml` (Navigation Source of Truth)
+  - `../healtharchive/docs/documentation-guidelines.md`
+  - `../healtharchive/docs/roadmaps/roadmap.md`
 - Canonical public-facing copy (mission + workflow disclaimers) lives in `src/lib/siteCopy.ts` and should be reused rather than duplicated across pages.
 - Localization:
   - Locale-aware routes live under `src/app/[locale]/...`.
