@@ -5,8 +5,8 @@ to avoid common “CI passed locally but failed on GitHub” issues.
 
 For backend-specific setup and local API testing flows, also read:
 
-- `healtharchive-backend/docs/development/dev-environment-setup.md`
-- `healtharchive-backend/docs/development/live-testing.md`
+- `healtharchive/docs/development/dev-environment-setup.md`
+- `healtharchive/docs/development/live-testing.md`
 
 ---
 
@@ -55,7 +55,7 @@ pre-commit run --all-files
 Mono-repo convenience: if you already have the backend venv, you can run:
 
 ```bash
-../healtharchive-backend/.venv/bin/pre-commit run --all-files
+../healtharchive/.venv/bin/pre-commit run --all-files
 ```
 
 ### Pre-push hook (recommended)

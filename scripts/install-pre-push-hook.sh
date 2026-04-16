@@ -95,9 +95,9 @@ cd "\${repo_root}"
 pre_commit_cmd=""
 if command -v pre-commit >/dev/null 2>&1; then
   pre_commit_cmd="pre-commit"
-elif [[ -x "../healtharchive-backend/.venv/bin/pre-commit" ]]; then
+elif [[ -x "../healtharchive/.venv/bin/pre-commit" ]]; then
   # Mono-repo convenience: reuse backend venv's pre-commit if available.
-  pre_commit_cmd="../healtharchive-backend/.venv/bin/pre-commit"
+  pre_commit_cmd="../healtharchive/.venv/bin/pre-commit"
 else
   echo "ERROR: pre-commit is required for this repo's pre-push checks." >&2
   echo "Install it once with: pipx install pre-commit" >&2

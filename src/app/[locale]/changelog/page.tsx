@@ -73,7 +73,7 @@ export default async function ChangelogPage({ params }: { params: Promise<{ loca
               {locale === "fr" ? "Dépôt frontend" : "Frontend repository"}
             </Link>{" "}
             {locale === "fr" ? "et" : "and"}{" "}
-            <Link href="https://github.com/jerdaw/healtharchive-backend" className="ha-link">
+            <Link href="https://github.com/jerdaw/healtharchive" className="ha-link">
               {locale === "fr" ? "dépôt backend" : "backend repository"}
             </Link>{" "}
             {locale === "fr" ? "et" : "and"}{" "}
